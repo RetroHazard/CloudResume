@@ -1,6 +1,6 @@
-/*@config "./tailwindcss-config.js";*/
-
-/*! tailwindcss v3.4.3 | MIT License | https://tailwindcss.com*/
+/*
+! tailwindcss v3.4.3 | MIT License | https://tailwindcss.com
+*/
 
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -588,8 +588,12 @@ video {
   }
 }
 
-.col-span-2 {
-  grid-column: span 2 / span 2;
+.row-span-1 {
+  grid-row: span 1 / span 1;
+}
+
+.row-span-2 {
+  grid-row: span 2 / span 2;
 }
 
 .mx-auto {
@@ -597,20 +601,40 @@ video {
   margin-right: auto;
 }
 
+.flex {
+  display: flex;
+}
+
 .grid {
   display: grid;
 }
 
-.grid-cols-1 {
-  grid-template-columns: repeat(1, minmax(0, 1fr));
+.min-h-72 {
+  min-height: 18rem;
 }
 
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.min-h-80 {
+  min-height: 20rem;
+}
+
+.w-1\/4 {
+  width: 25%;
+}
+
+.w-3\/4 {
+  width: 75%;
 }
 
 .grid-rows-2 {
   grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .bg-primary-500 {
@@ -633,6 +657,14 @@ video {
   background-color: rgb(51 65 85 / var(--tw-bg-opacity));
 }
 
+.p-3 {
+  padding: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
 .p-5 {
   padding: 1.25rem;
 }
@@ -640,6 +672,11 @@ video {
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
+}
+
+.text-secondary-50 {
+  --tw-text-opacity: 1;
+  color: rgb(248 250 252 / var(--tw-text-opacity));
 }
 
 @media (min-width: 1024px) {
