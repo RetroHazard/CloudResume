@@ -4,33 +4,85 @@
     <meta charset="UTF-8">
     <title>Cloud Resume - Home</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- FontAwesome Icon Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/7d7a79b0f6.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-<div class="container lg:w-9/12 mx-auto px-4">
-    <div class="bg-secondary-500 h-13">
-        <div class="p-5 text-secondary-50">
-            01 - Navigation
-        </div>
-    </div>
-    <div class="min-h-80">
-        <div class="flex flex-row gap-2">
-            <div class="w-1/4 min-h-80 bg-primary-800 p-4">
-                <div class="w-90% min-h-72 bg-primary-500 p-4">
-                    02 - Sidebar Container
+<div class="flex justify-center bg-secondary-900">
+    <div class="lg:py-20 lg:space-y-8 max-w-5xl px-2 py-3 sm:px-8 sm:py-12 sm:space-y-6 space-y-4 w-full">
+            <nav class="flex flex-col gap-4 items-center bg-secondary-500 text-primary-100 p-4 rounded-2xl shadow-md" id="navigation">
+                Header/Navigation Test
+            </nav>
+        <div class="flex flex-col gap-6 bg-secondary-700 p-8 rounded-2xl shadow-md" id="profile">
+            <div class="flex flex-col gap-6 items-start sm:flex-row">
+                <div class="flex items-center gap-4 sm:flex-col">
+                    <img class="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="./images/placeholder.png" alt="" />
+                    <button class="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                        <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+                        <span>Download CV</span>
+                    </button>
+                </div>
+                <div class="flex flex-col w-full gap-5">
+                    <div class="flex flex-col w-full gap-2 justify-between sm:flex-row">
+                        <div class="w-full">
+                            <h1 class="h1 font-extrabold text-secondary-200 mb-0">{NAME}</h1>
+                            <h2 class="sm:text-lg text-base font-medium text-secondary-200 mb-0">{JOB_TITLE}</h2>
+                        </div>
+                        <div class="flex gap-3 flex-wrap sm:flex-nowrap">
+                            <a class="flex items-center rounded active:translate-y-px bg-gray-600 text-secondary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 h-7 justify-center w-7" href="{LINKEDIN_LINK}" aria-label="LinkedIn">
+                                <i class="text-base text-primary-100 fab fa-linkedin-in fa-lg"></i>
+                            </a>
+                            <a class="flex items-center rounded active:translate-y-px bg-gray-600 text-secondary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 h-7 justify-center w-7" href="{GITHUB_LINK}" aria-label="Github">
+                                <i class="text-base text-primary-100 fab fa-github fa-lg"></i>
+                            </a>
+                            <a class="flex items-center rounded active:translate-y-px bg-gray-600 text-secondary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 h-7 justify-center w-7" href="{ARTSTATION_LINK}" aria-label="ArtStation">
+                                <i class="text-base text-primary-100 fab fa-artstation fa-lg"></i>
+                            </a>
+                            <a class="flex items-center rounded active:translate-y-px bg-gray-600 text-secondary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 h-7 justify-center w-7" href="{MEDIUM_LINK}" aria-label="Medium">
+                                <i class="text-base text-primary-100 fab fa-medium fa-lg"></i>
+                            </a>
+                            <a class="flex items-center rounded active:translate-y-px bg-gray-600 text-secondary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 h-7 justify-center w-7" href="{INSTAGRAM_LINK}" aria-label="Instagram">
+                                <i class="text-base text-primary-100 fab fa-instagram fa-lg"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-6">
+                        <div class="inline-grid xl:grid-cols-[auto_auto]">
+                            <div>
+                                <span class="font-medium text-secondary-400">Phone:</span>
+                                <a href="tel:{PHONE_NUM}" class="text-secondary-300 text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base underline hover:text-secondary-400" target="_self">{PHONE_NUM}</a>
+                            </div>
+                            <div>
+                                <span class="font-medium text-secondary-400">Email:</span>
+                                <a href="mailto:{EMAIL}" class="text-secondary-300 text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base underline hover:text-secondary-400" target="_self">{EMAIL}</a>
+                            </div>
+                            <div>
+                                <span class="font-medium text-secondary-400">Location:</span>
+                                <span class="text-secondary-400">{LOC}</span>
+                            </div>
+                            <div>
+                                <span class="font-medium text-secondary-400">Salary Range:</span>
+                                <span class="text-secondary-400">{SALARY} {CURRENCY}</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4">
+                            <p class="leading-relaxed mb-0 text-sm sm:text-base text-secondary-300 sm:leading-relaxed">
+                                Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a class="text-secondary-400 underline hover:text-secondary-400" href="/">vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
+                            </p>
+                            <p class="leading-relaxed mb-0 text-sm sm:text-base text-secondary-300 sm:leading-relaxed">
+                                Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a class="text-secondary-400 underline hover:text-secondary-400" href="/">vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
+                            </p>
+                            <div class="flex gap-3 flex-wrap">
+                                <div class="flex items-center rounded bg-secondary-500 text-secondary-300 font-medium gap-x-1.5 h-6 px-2.5 text-sm tracking-wide w-fit">Open for freelance</div>
+                                <div class="flex items-center rounded bg-secondary-500 text-secondary-300 font-medium gap-x-1.5 h-6 px-2.5 text-sm tracking-wide w-fit">Available for consulting</div>
+                                <div class="flex items-center rounded bg-secondary-500 text-secondary-300 font-medium gap-x-1.5 h-6 px-2.5 text-sm tracking-wide w-fit">Working on side project</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="w-3/4 min-h-80 bg-primary-800 p-4">
-                    03 - Main Content
-            </div>
-        </div>
-    </div>
-    <div class="grid grid-rows-2 bg-secondary-700">
-        <div class="row-span-1 p-3 text-secondary-50">
-            04 - Footer
-        </div>
-        <div class="row-span-2 p-3 text-secondary-50">
-            05 - Sub Footer
         </div>
     </div>
 </div>
