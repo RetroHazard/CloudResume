@@ -12,7 +12,8 @@
 
 <div class="flex justify-center">
     <div class="lg:py-20 lg:space-y-8 max-w-5xl px-2 py-3 sm:px-8 sm:py-12 sm:space-y-6 space-y-4 w-full">
-            <nav class="flex flex-row gap-1.5 items-center justify-center space-x-3 bg-secondary-500 text-primary-100 p-3 rounded-xl shadow-md w-3/4" id="navigation">
+        <div class="flow-root" id="header">
+            <nav class="float-left gap-1.5 bg-secondary-500 text-primary-100 p-3 rounded-xl shadow-md w-fit" id="navigation">
                 <a href="#" class="font-bold">
                     <button class="bg-secondary-400 hover:bg-primary-400 text-secondary-800 font-bold py-1 px-2 rounded inline-flex items-center">
                         <span>Home</span>
@@ -44,14 +45,24 @@
                     </button>
                 </a>
             </nav>
+            <div class="float-right gap-1.5 bg-secondary-500 text-secondary-800 p-3 rounded-xl shadow-md w-fit" id="views">
+                <button class="bg-secondary-400 font-bold py-1 px-2 rounded inline-flex items-center">
+                    <span>{HITS}</span>
+                    <svg class="w-5 h-5 ml-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2"><path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3"/><circle cx="12" cy="10" r="3"/><circle cx="12" cy="12" r="10"/></svg>
+                </button>
+            </div>
+        </div>
+
         <div class="flex flex-col gap-6 bg-secondary-700 p-8 rounded-2xl shadow-md" id="profile">
             <div class="flex flex-col gap-6 items-start sm:flex-row">
                 <div class="flex items-center gap-4 sm:flex-col">
                     <img class="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="./images/placeholder.png" alt="" />
+                    <a href="#" class="font-bold">
                     <button class="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
-                        <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+                        <svg class="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
                         <span>Download CV</span>
                     </button>
+                    </a>
                 </div>
                 <div class="flex flex-col w-full gap-5">
                     <div class="flex flex-col w-full gap-2 justify-between sm:flex-row">
