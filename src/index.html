@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-secondary-900">
 <head>
     <meta charset="UTF-8">
     <title>Cloud Resume - Home</title>
@@ -10,10 +10,39 @@
 </head>
 <body>
 
-<div class="flex justify-center bg-secondary-900">
+<div class="flex justify-center">
     <div class="lg:py-20 lg:space-y-8 max-w-5xl px-2 py-3 sm:px-8 sm:py-12 sm:space-y-6 space-y-4 w-full">
-            <nav class="flex flex-col gap-4 items-center bg-secondary-500 text-primary-100 p-4 rounded-2xl shadow-md" id="navigation">
-                Header/Navigation Test
+            <nav class="flex flex-row gap-3 items-center justify-center space-x-3 bg-secondary-500 text-primary-100 p-3 rounded-xl shadow-md w-3/4" id="navigation">
+                <a href="#" class="font-bold">
+                    <button class="bg-secondary-400 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                        <span>Home</span>
+                    </button>
+                </a>
+                <a href="#" class="font-bold">
+                    <button class="bg-secondary-400 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                        <span>Education</span>
+                    </button>
+                </a>
+                <a href="#" class="font-bold">
+                    <button class="bg-secondary-400 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                        <span>Experience</span>
+                    </button>
+                </a>
+                <a href="#" class="font-bold">
+                    <button class="bg-secondary-400 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                        <span>Skills</span>
+                    </button>
+                </a>
+                <a href="#" class="font-bold">
+                    <button class="bg-secondary-400 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                        <span>Certifications</span>
+                    </button>
+                </a>
+                <a href="#" class="font-bold">
+                    <button class="bg-secondary-400 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                        <span>Projects</span>
+                    </button>
+                </a>
             </nav>
         <div class="flex flex-col gap-6 bg-secondary-700 p-8 rounded-2xl shadow-md" id="profile">
             <div class="flex flex-col gap-6 items-start sm:flex-row">
@@ -50,10 +79,10 @@
                     </div>
                     <div class="flex flex-col gap-6">
                         <div class="inline-grid xl:grid-cols-[auto_auto]">
-                            <div>
+                            <!--<div>
                                 <span class="font-medium text-secondary-400">Phone:</span>
                                 <a href="tel:{PHONE_NUM}" class="text-secondary-300 text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base underline hover:text-secondary-400" target="_self">{PHONE_NUM}</a>
-                            </div>
+                            </div>-->
                             <div>
                                 <span class="font-medium text-secondary-400">Email:</span>
                                 <a href="mailto:{EMAIL}" class="text-secondary-300 text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base underline hover:text-secondary-400" target="_self">{EMAIL}</a>
@@ -63,7 +92,7 @@
                                 <span class="text-secondary-400">{LOC}</span>
                             </div>
                             <div>
-                                <span class="font-medium text-secondary-400">Salary Range:</span>
+                                <span class="font-medium text-secondary-400">Compensation Target:</span>
                                 <span class="text-secondary-400">{SALARY} {CURRENCY}</span>
                             </div>
                         </div>
