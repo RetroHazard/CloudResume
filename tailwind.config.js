@@ -27,6 +27,13 @@ module.exports = {
         800: '#1e293b',
         900: '#0f172a',
       },
+      skill: {
+        1: '#65758b',
+        2: '#7b8da4',
+        3: '#94a5ba',
+        4: '#afbdce',
+        5: '#cbd5e1',
+      },
     },
     fontFamily: {
       display: ['Inter', 'system-ui', 'sans-serif'],
