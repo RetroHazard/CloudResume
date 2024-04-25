@@ -1,20 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,js}'],
-  plugins: [
-    require('tailwindcss-animated')
-  ],
   theme: {
     colors: {
-      content: {
-        title: '#e2e8f0',
-        subtitle: '#cbd5e1',
-        header: '#f1f5f9',
-        body: '#cbd5e1',
-        accent: '#94a3b8',
-        date: '#94a3b8',
-        skill: '#f1f5f9',
-      },
       primary: {
         50: '#eff6ff',
         100: '#dbeafe',
@@ -69,6 +57,21 @@ module.exports = {
         'xl': '1280px',
         '2xl': '1536px',
       },
-    }
+      colors: {
+        current: 'currentColor',
+        content: {
+          title: '#e2e8f0',
+          subtitle: '#cbd5e1',
+          header: '#f1f5f9',
+          body: '#cbd5e1',
+          accent: '#94a3b8',
+          date: '#94a3b8',
+          skill: '#f1f5f9',
+          boxbg: '#475569',
+          boxhl: '#64748b',
+          icons: '#e2e8f0',
+        },  
+      }
+    }    
   },
 }
