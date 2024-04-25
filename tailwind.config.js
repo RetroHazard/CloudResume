@@ -3,6 +3,15 @@ module.exports = {
   content: ['./src/**/*.{html,js}'],
   theme: {
     colors: {
+      content: {
+        title: '#e2e8f0',
+        subtitle: '#cbd5e1',
+        header: '#f1f5f9',
+        body: '#cbd5e1',
+        accent: '#94a3b8',
+        date: '#94a3b8',
+        skill: '#f1f5f9',
+      },
       primary: {
         50: '#eff6ff',
         100: '#dbeafe',
@@ -28,11 +37,9 @@ module.exports = {
         900: '#0f172a',
       },
       skill: {
-        1: '#65758b',
-        2: '#7b8da4',
-        3: '#94a5ba',
-        4: '#afbdce',
-        5: '#cbd5e1',
+        0: '#64748b',
+        1: '#93c5fd',
+        2: '#3b82f6',
       },
     },
     fontFamily: {
