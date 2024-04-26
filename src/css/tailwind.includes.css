@@ -14,7 +14,7 @@
 
 @layer components {
     .social-link {
-        @apply flex items-center rounded no-underline active:translate-y-px bg-content-boxbg text-content-icons focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-content-icons h-7 justify-center w-7;
+        @apply flex items-center rounded no-underline active:translate-y-px bg-content-boxbg hover:bg-content-boxhl text-content-icons h-7 justify-center w-7;
     }
 
     .open-for-block {
@@ -23,5 +23,13 @@
 
     .skill-block {
         @apply flex items-center rounded no-underline bg-content-boxbg text-content-icons font-medium gap-x-1.5 h-6 px-2.5 text-sm tracking-wide w-fit hover:text-content-icons hover:bg-content-boxhl;
+    }
+
+    .nav-block-active {
+        @apply no-underline inline-flex items-center px-4 py-3 mt-1 mb-1.5 text-content-title bg-secondary-500 rounded-lg w-full;
+    }
+
+    .nav-block-inactive {
+        @apply no-underline inline-flex items-center px-4 py-3 mt-1 mb-1.5 rounded-lg hover:text-content-title bg-secondary-800 hover:bg-secondary-600 w-full;
     }
 }
