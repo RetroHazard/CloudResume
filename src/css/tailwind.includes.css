@@ -32,4 +32,8 @@
     .nav-block-inactive {
         @apply no-underline inline-flex items-center px-4 py-3 mt-1 mb-1.5 rounded-lg hover:text-content-title bg-secondary-800 hover:bg-secondary-600 w-full;
     }
+
+    .content-block {
+        @apply flex flex-col gap-6 bg-secondary-700 p-8 rounded-2xl shadow-md;
+    }
 }
