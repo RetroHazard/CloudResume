@@ -67,6 +67,7 @@ module.exports = {
           accent: '#94a3b8',
           date: '#94a3b8',
           skill: '#f1f5f9',
+          outline: '#e2e8f0',
           boxbg: '#475569',
           boxhl: '#64748b',
           icons: '#e2e8f0',
