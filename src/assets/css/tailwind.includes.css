@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    a {
+        @apply text-content-accent underline hover:text-content-body;
+    }
+
+    body {
+        @apply text-content-body;
+    }
+}
+
+@layer components {
+    .social-link {
+        @apply flex items-center rounded no-underline active:translate-y-px bg-content-boxbg hover:bg-content-boxhl text-content-icons h-7 justify-center w-7;
+    }
+
+    .open-for-block {
+        @apply flex items-center rounded no-underline bg-content-boxbg hover:bg-content-boxhl font-medium gap-x-1.5 h-6 px-2.5 text-sm tracking-wide w-fit;
+    }
+
+    .skill-block {
+        @apply flex items-center rounded no-underline bg-content-boxbg text-content-icons font-medium gap-x-1.5 h-6 px-2.5 text-sm tracking-wide w-fit hover:text-content-icons hover:bg-content-boxhl;
+    }
+
+    .skill-progress-bar {
+        @apply bg-gradient-to-r from-skill-2 from-35% to-skill-1 h-2.5 rounded-full;
+    }
+
+    .skill-progress-bar-outline {
+        @apply w-48 rounded-full ring-2 ring-content-outline/35 h-2.5 mb-4 bg-skill-0;
+    }
+
+    .nav-block-active {
+        @apply no-underline inline-flex items-center px-4 py-3 mt-1 mb-1.5 text-content-title bg-secondary-500 rounded-lg w-full;
+    }
+
+    .nav-icon-active {
+        @apply w-5 h-5 mr-2.5 text-content-icons text-base;
+    }
+
+    .nav-icon-inactive {
+        @apply w-5 h-5 mr-2.5 text-content-accent text-base;
+    }
+
+    .nav-block-inactive {
+        @apply no-underline inline-flex items-center px-4 py-3 mt-1 mb-1.5 rounded-lg hover:text-content-title bg-secondary-800 hover:bg-secondary-600 w-full;
+    }
+
+    .content-block {
+        @apply flex flex-col gap-6 bg-secondary-700 p-8 rounded-2xl shadow-md;
+    }
+}
