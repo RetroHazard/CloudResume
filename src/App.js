@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React from "react"
+import { Route, Routes } from "react-router-dom"
+// We will create these two pages in a moment
+import Home from "./pages/Home"
+import Education from "./pages/Education"
+import Experience from "./pages/Experience"
+import Skills from "./pages/Skills"
+import Projects from "./pages/Projects"
+import Certifications from "./pages/Certifications"
+import Contact from "./pages/Contact"
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Routes>
+      <Route exact path="/" component={Home} />
+      <Route path="/:id" component={Education} />
+      <Route path="/:id" component={Experience} />
+      <Route path="/:id" component={Skills} />
+      <Route path="/:id" component={Projects} />
+      <Route path="/:id" component={Certifications} />
+      <Route path="/:id" component={Contact} />
+    </Routes>
+  )
 }
-
-export default App;
