@@ -1,7 +1,7 @@
 import React from 'react';
-// import { useState } from 'react'
+import { useState } from 'react'
 
-function navbar() {
+function Navigation() {
     return (
     <>
     <nav className="flex float-left bg-secondary-700 p-2 rounded-lg mr-5 mt-28 h-fit" id="navbar">
@@ -48,6 +48,6 @@ function navbar() {
     )
 }
 
-export default navbar;
+export default Navigation;
 
 ;

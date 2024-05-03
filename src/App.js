@@ -5,13 +5,14 @@ import Navigation from "./components/navbar"
 
 // Import Content Pages
 import Home from "./pages/Home"
+/* 
 import Education from "./pages/Education"
 import Experience from "./pages/Experience"
 import Skills from "./pages/Skills"
 import Projects from "./pages/Projects"
 import Certifications from "./pages/Certifications"
 import Contact from "./pages/Contact" 
-
+ */
 export default function App() {
   return (
     <>
