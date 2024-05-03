@@ -1,11 +1,12 @@
 import React from "react";
-export default function Home() {
+
+function Home() {
 return (
-  <>
+    <>
     <div className="content-block" id="profile">
         <div className="flex flex-col gap-6 items-start sm:flex-row">
             <div className="flex items-center gap-4 sm:flex-col">
-                <img className="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="../../assets/images/placeholder.png" alt="" />
+                <img className="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="placeholder.png" alt="" />
                 <a href="." className="font-bold">
                     <button className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
                         <i className="w-5 h-5 mt-1 mr-2 fas fa-cloud-arrow-down"></i>
@@ -40,19 +41,19 @@ return (
                 <div className="flex flex-col gap-6">
                     <div className="inline-grid xl:grid-cols-[auto_auto]">
                         <div>
-                            <span className="font-medium text-content-subtitle">Phone:</span>
+                            <span className="font-medium text-content-subtitle">Phone: </span>
                             <a href="tel:{PHONE_NUM}" className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base" target="_self">(PHONE)</a>
                         </div>
                         <div>
-                            <span className="font-medium text-content-subtitle">Email:</span>
+                            <span className="font-medium text-content-subtitle">Email: </span>
                             <a href="mailto:{EMAIL}" className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base" target="_self">(EMAIL)</a>
                         </div>
                         <div>
-                            <span className="font-medium text-content-subtitle">Location:</span>
+                            <span className="font-medium text-content-subtitle">Location: </span>
                             <span className="text-content-accent">(LOCATION)</span>
                         </div>
                         <div>
-                            <span className="font-medium text-content-subtitle">Salary:</span>
+                            <span className="font-medium text-content-subtitle">Salary: </span>
                             <span className="text-content-accent">(SALARY) (CURRENCY)</span>
                         </div>
                     </div>
@@ -73,6 +74,8 @@ return (
             </div>
         </div>
     </div>
-  </>
-);
+    </>
+    );
 }
+
+export default Home;
