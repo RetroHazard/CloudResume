@@ -11,7 +11,7 @@ return (
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center h-5 justify-between">
                         <a href="#" className="flex gap-2.5 h-5" target="_blank" rel="noopener noreferrer">
-                            <img className="w-5	h-5" src="../../assets/images/placeholder.png" alt="" />
+                            <img className="w-5	h-5" src="./images/placeholder.png" alt="" />
                             <span className="font-medium text-sm text-content-subtitle">Skill Name</span>
                         </a>
                     </div>
@@ -24,7 +24,7 @@ return (
                 <div className="flex flex-col gap-2.5">
                     <div className="flex items-center h-5 justify-between">
                         <a href="#" className="flex gap-2.5 h-5" target="_blank" rel="noopener noreferrer">
-                            <img className="w-5	h-5" src="../../assets/images/placeholder.png" alt="" />
+                            <img className="w-5	h-5" src="./images/placeholder.png" alt="" />
                             <span className="font-medium text-sm text-content-subtitle">Skill Name</span>
                         </a>
                     </div>
@@ -37,7 +37,7 @@ return (
                 <div className="flex flex-col gap-2.5">
                     <div className="flex items-center h-5 justify-between">
                         <a href="#" className="flex gap-2.5 h-5" target="_blank" rel="noopener noreferrer">
-                            <img className="w-5	h-5" src="../../assets/images/placeholder.png" alt="" />
+                            <img className="w-5	h-5" src="./images/placeholder.png" alt="" />
                             <span className="font-medium text-sm text-content-subtitle">Skill Name</span>
                         </a>
                     </div>
@@ -50,7 +50,7 @@ return (
                 <div className="flex flex-col gap-2.5">
                     <div className="flex items-center h-5 justify-between">
                         <a href="#" className="flex gap-2.5 h-5" target="_blank" rel="noopener noreferrer">
-                            <img className="w-5	h-5" src="../../assets/images/placeholder.png" alt="" />
+                            <img className="w-5	h-5" src="./images/placeholder.png" alt="" />
                             <span className="font-medium text-sm text-content-subtitle">Skill Name</span>
                         </a>
                     </div>
@@ -66,16 +66,16 @@ return (
             <h3 className="h3 text-content-subtitle font-extrabold mb-0">Interested in:</h3>
             <div className="flex gap-3 flex-wrap">
                 <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                    <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                 </a>
                 <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                    <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                 </a>
                 <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                    <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                 </a>
                 <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                    <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                 </a>
             </div>
         </div>

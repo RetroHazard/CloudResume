@@ -10,7 +10,7 @@ return (
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col w-full gap-4">
                     <div className="flex gap-4">
-                        <img className="hidden rounded-md sm:block h-12 w-12" src="../../assets/images/placeholder.png" alt="" />
+                        <img className="hidden rounded-md sm:block h-12 w-12" src="./images/placeholder.png" alt="" />
                         <div className="flex justify-between w-full">
                             <div className="flex justify-between w-full">
                                 <div>
@@ -55,16 +55,16 @@ return (
                 <span className="font-medium text-content-subtitle">Technologies:</span>
                 <div className="flex gap-3 flex-wrap">
                     <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                        <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                        <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                     </a>
                     <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                        <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                        <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                     </a>
                     <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                        <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                        <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                     </a>
                     <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                        <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                        <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                     </a>
                 </div>
             </div>
@@ -74,7 +74,7 @@ return (
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col w-full gap-4">
                     <div className="flex gap-4">
-                        <img className="hidden rounded-md sm:block h-12 w-12" src="../../assets/images/placeholder.png" alt="" />
+                        <img className="hidden rounded-md sm:block h-12 w-12" src="./images/placeholder.png" alt="" />
                         <div className="flex justify-between w-full">
                             <div className="flex justify-between w-full">
                                 <div>
@@ -119,16 +119,16 @@ return (
                 <span className="font-medium text-content-subtitle">Technologies:</span>
                 <div className="flex gap-3 flex-wrap">
                     <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                        <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                        <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                     </a>
                     <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                        <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                        <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                     </a>
                     <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                        <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                        <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                     </a>
                     <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                        <img className="w-4	h-4" src="../../assets/images/placeholder.png" alt="" />Skill
+                        <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                     </a>
                 </div>
             </div>

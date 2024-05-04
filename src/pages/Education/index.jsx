@@ -8,7 +8,7 @@ return (
     <div className="flex flex-col gap-3">
         <div className="flex gap-2 justify-between w-full">
             <div className="flex gap-4">
-                <img className="hidden rounded-md sm:block h-[4.5rem] w-[4.5rem]" src="../../assets/images/placeholder.png" alt="" />
+                <img className="hidden rounded-md sm:block h-[4.5rem] w-[4.5rem]" src="./images/placeholder.png" alt="" />
                 <div className="flex flex-col">
                     <h3 className="h3 font-extrabold text-content-title mb-0">(CATEGORY)</h3>
                     <p className="text-content-subtitle font-semibold leading-snug mb-0.5">(SCHOOL_NAME)</p>
@@ -29,7 +29,7 @@ return (
     <div className="flex flex-col gap-3">
         <div className="flex gap-2 justify-between w-full">
             <div className="flex gap-4">
-                <img className="hidden rounded-md sm:block h-[4.5rem] w-[4.5rem]" src="../../assets/images/placeholder.png" alt="" />
+                <img className="hidden rounded-md sm:block h-[4.5rem] w-[4.5rem]" src="./images/placeholder.png" alt="" />
                 <div className="flex flex-col">
                     <h3 className="h3 font-extrabold text-content-title mb-0">(CATEGORY)</h3>
                     <p className="text-content-subtitle font-semibold leading-snug mb-0.5">(SCHOOL_NAME)</p>
@@ -50,7 +50,7 @@ return (
     <div className="flex flex-col gap-3">
         <div className="flex gap-2 justify-between w-full">
             <div className="flex gap-4">
-                <img className="hidden rounded-md sm:block h-[4.5rem] w-[4.5rem]" src="../../assets/images/placeholder.png" alt="" />
+                <img className="hidden rounded-md sm:block h-[4.5rem] w-[4.5rem]" src="./images/placeholder.png" alt="" />
                 <div className="flex flex-col">
                     <h3 className="h3 font-extrabold text-content-title mb-0">(CATEGORY)</h3>
                     <p className="text-content-subtitle font-semibold leading-snug mb-0.5">(SCHOOL_NAME)</p>

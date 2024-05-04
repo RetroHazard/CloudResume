@@ -6,7 +6,7 @@ return (
     <div className="content-block" id="profile">
         <div className="flex flex-col gap-6 items-start sm:flex-row">
             <div className="flex items-center gap-4 sm:flex-col">
-                <img className="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="placeholder.png" alt="" />
+                <img className="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="./images/placeholder.png" alt="" />
                 <a href="." className="font-bold">
                     <button className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
                         <i className="w-5 h-5 mt-1 mr-2 fas fa-cloud-arrow-down"></i>
