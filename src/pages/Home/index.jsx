@@ -1,5 +1,9 @@
 import React from "react";
 
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faCloudDownload, } from "@fortawesome/free-solid-svg-icons";
+import { faLinkedinIn, faGithub, faArtstation, faMedium, faInstagram } from "@fortawesome/free-brands-svg-icons";
+
 function Home() {
 return (
     <>
@@ -9,7 +13,9 @@ return (
                 <img className="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="./images/placeholder.png" alt="" />
                 <a href="." className="font-bold">
                     <button className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
-                        <i className="w-5 h-5 mt-1 mr-2 fas fa-cloud-arrow-down"></i>
+                       <div className="icon-box">
+                        <i className="w-5 h-5 mr-2"><FontAwesomeIcon icon={faCloudDownload} size="lg" /></i>
+                       </div>
                         <span>Download CV</span>
                     </button>
                 </a>
@@ -22,19 +28,19 @@ return (
                     </div>
                     <div className="flex gap-3 flex-wrap sm:flex-nowrap">
                         <a className="social-link" href="{LINKEDIN_LINK}" aria-label="LinkedIn">
-                            <i className="text-base text-content-icons fab fa-linkedin-in fa-lg"></i>
+                            <i className="text-base text-content-icons"><FontAwesomeIcon icon={faLinkedinIn} size={"lg"}/></i>
                         </a>
                         <a className="social-link" href="{GITHUB_LINK}" aria-label="Github">
-                            <i className="text-base text-content-icons fab fa-github fa-lg"></i>
+                            <i className="text-base text-content-icons"><FontAwesomeIcon icon={faGithub} size={"lg"}/></i>
                         </a>
                         <a className="social-link" href="{ARTSTATION_LINK}" aria-label="ArtStation">
-                            <i className="text-base text-content-icons fab fa-artstation fa-lg"></i>
+                            <i className="text-base text-content-icons"><FontAwesomeIcon icon={faArtstation} size={"lg"}/></i>
                         </a>
                         <a className="social-link" href="{MEDIUM_LINK}" aria-label="Medium">
-                            <i className="text-base text-content-icons fab fa-medium fa-lg"></i>
+                            <i className="text-base text-content-icons"><FontAwesomeIcon icon={faMedium} size={"lg"}/></i>
                         </a>
                         <a className="social-link" href="{INSTAGRAM_LINK}" aria-label="Instagram">
-                            <i className="text-base text-content-icons fab fa-instagram fa-lg"></i>
+                            <i className="text-base text-content-icons"><FontAwesomeIcon icon={faInstagram} size={"lg"}/></i>
                         </a>
                     </div>
                 </div>

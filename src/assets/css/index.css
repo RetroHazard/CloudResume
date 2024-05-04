@@ -34,7 +34,11 @@
     }
 
     .nav-block-active {
-        @apply no-underline inline-flex items-center px-4 py-3 mt-1 mb-1.5 text-content-title bg-secondary-500 rounded-lg w-full;
+        @apply no-underline inline-flex items-center max-h-10 px-4 py-3 mt-1 mb-1.5 text-content-title bg-secondary-500 rounded-lg w-full;
+    }
+
+    .nav-block-inactive {
+        @apply no-underline inline-flex items-center max-h-10 px-4 py-3 mt-1 mb-1.5 rounded-lg hover:text-content-title bg-secondary-800 hover:bg-secondary-600 w-full;
     }
 
     .nav-icon-active {
@@ -45,8 +49,8 @@
         @apply w-5 h-5 mr-2.5 text-content-accent text-base;
     }
 
-    .nav-block-inactive {
-        @apply no-underline inline-flex items-center px-4 py-3 mt-1 mb-1.5 rounded-lg hover:text-content-title bg-secondary-800 hover:bg-secondary-600 w-full;
+    .icon-box {
+        @apply content-center justify-center justify-items-center m-0
     }
 
     .content-block {
