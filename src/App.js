@@ -5,6 +5,7 @@ import Navigation from "./components/navbar"
 
 // Import Content Pages
 import Home from "./pages/Home"
+import Education from "./pages/Education";
 /* 
 import Education from "./pages/Education"
 import Experience from "./pages/Experience"
@@ -20,7 +21,7 @@ export default function App() {
       <Navigation />
       <div className="px-2 py-20 space-y-8 max-w-5xl">
         <section id="content">
-        <Home />
+        <Education />
         </section>
       </div>
     </div>

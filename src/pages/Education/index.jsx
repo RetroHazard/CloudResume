@@ -1,5 +1,8 @@
 import React from "react";
 
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faGlobe } from "@fortawesome/free-solid-svg-icons";
+
 function Education() {
 return (
   <>
@@ -17,12 +20,17 @@ return (
             </div>
             <div className="flex gap-3 flex-wrap sm:flex-nowrap">
                 <a href="#" className="social-link" target="_blank" aria-label="Website">
-                    <i className="text-base text-content-icons fas fa-globe fa-lg"></i>
+                    <i className="text-base text-content-icons"><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
                 </a>
             </div>
         </div>
         <p className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-0">
-            (DESCRIPTION)
+            Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui
+            at <em>vestibulum</em>.
+            <ul>
+                <li><em>Major</em>: </li>
+                <li><em>Minor</em>: </li>
+            </ul>
         </p>
     </div>
     <div className="bg-secondary-600 h-px w-full"></div>

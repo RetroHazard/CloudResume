@@ -36,9 +36,11 @@ return (
                         <a className="social-link" href="{ARTSTATION_LINK}" aria-label="ArtStation">
                             <i className="text-base text-content-icons"><FontAwesomeIcon icon={faArtstation} size={"lg"}/></i>
                         </a>
+                        {/*
                         <a className="social-link" href="{MEDIUM_LINK}" aria-label="Medium">
                             <i className="text-base text-content-icons"><FontAwesomeIcon icon={faMedium} size={"lg"}/></i>
                         </a>
+                        */}
                         <a className="social-link" href="{INSTAGRAM_LINK}" aria-label="Instagram">
                             <i className="text-base text-content-icons"><FontAwesomeIcon icon={faInstagram} size={"lg"}/></i>
                         </a>
@@ -46,6 +48,7 @@ return (
                 </div>
                 <div className="flex flex-col gap-6">
                     <div className="inline-grid xl:grid-cols-[auto_auto]">
+                        {/*
                         <div>
                             <span className="font-medium text-content-subtitle">Phone: </span>
                             <a href="tel:{PHONE_NUM}" className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base" target="_self">(PHONE)</a>
@@ -54,9 +57,13 @@ return (
                             <span className="font-medium text-content-subtitle">Email: </span>
                             <a href="mailto:{EMAIL}" className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base" target="_self">(EMAIL)</a>
                         </div>
+                        */}
                         <div>
                             <span className="font-medium text-content-subtitle">Location: </span>
                             <span className="text-content-accent">(LOCATION)</span>
+                        </div>
+                        <div>
+                            <span className="font-medium text-content-subtitle"></span>
                         </div>
                         <div>
                             <span className="font-medium text-content-subtitle">Salary: </span>
@@ -65,7 +72,8 @@ return (
                     </div>
                     <div className="flex flex-col gap-4">
                         <p className="leading-relaxed mb-0 text-sm sm:text-base sm:leading-relaxed">
-                            Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a href="/public">vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
+                            Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui
+                            at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a href="/public">vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
                         </p>
                         <p className="leading-relaxed mb-0 text-sm sm:text-base sm:leading-relaxed">
                             Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a href="/public">vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
