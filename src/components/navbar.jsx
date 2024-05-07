@@ -18,13 +18,7 @@ function Navigation() {
                         }
                         >
                             <div className="icon-box">
-                                <i className={({ isActive }) =>
-                                [
-                                    isActive ? "nav-icon-active" : "nav-icon-inactive",
-                                ].join(" ")
-                                }
-                                >
-                                    <FontAwesomeIcon icon={faHouse}/></i>
+                                <i className="nav-icon-active"><FontAwesomeIcon icon={faHouse}/></i>
                             </div>
                             Home
                         </NavLink>
