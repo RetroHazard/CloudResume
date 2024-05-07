@@ -1,8 +1,8 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faHouse, faGraduationCap, faBriefcase, faChartSimple, faClipboardCheck, faLayerGroup, faMessage } from "@fortawesome/free-solid-svg-icons";
+
 
 function Navigation() {
     return (
@@ -10,7 +10,7 @@ function Navigation() {
             <nav className="flex float-left bg-secondary-700 p-2 rounded-lg mr-5 mt-28 h-fit" id="navbar">
                 <ul className="flex-col text-sm font-medium text-content-accent">
                     <li>
-                        <a href="#" className="nav-block-active" aria-current="page">
+                        <a href="#" className="nav-block-active">
                             <div className="icon-box">
                                 <i className="nav-icon-active"><FontAwesomeIcon icon={faHouse}/></i>
                             </div>
