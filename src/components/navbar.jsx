@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faHouse, faGraduationCap, faBriefcase, faChartSimple, faClipboardCheck, faLayerGroup, faMessage } from "@fortawesome/free-solid-svg-icons";
+import { NavLink } from "react-router-dom";
 
 
 function Navigation() {
@@ -10,60 +11,101 @@ function Navigation() {
             <nav className="flex float-left bg-secondary-700 p-2 rounded-lg mr-5 mt-28 h-fit" id="navbar">
                 <ul className="flex-col text-sm font-medium text-content-accent">
                     <li>
-                        <a href="#" className="nav-block-active">
+                        <NavLink to={"/"} className={({ isActive }) =>
+                            [
+                                isActive ? "nav-block-active" : "nav-block-inactive",
+                            ].join(" ")
+                        }
+                        >
                             <div className="icon-box">
-                                <i className="nav-icon-active"><FontAwesomeIcon icon={faHouse}/></i>
+                                <i className={({ isActive }) =>
+                                [
+                                    isActive ? "nav-icon-active" : "nav-icon-inactive",
+                                ].join(" ")
+                                }
+                                >
+                                    <FontAwesomeIcon icon={faHouse}/></i>
                             </div>
                             Home
-                        </a>
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="#" className="nav-block-inactive">
+                        <NavLink to={"/education"} className={({ isActive }) =>
+                            [
+                                isActive ? "nav-block-active" : "nav-block-inactive",
+                            ].join(" ")
+                        }
+                        >
                             <div className="icon-box">
                                 <i className="nav-icon-inactive"><FontAwesomeIcon icon={faGraduationCap}/></i>
                             </div>
                             Education
-                        </a>
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="#" className="nav-block-inactive">
+                        <NavLink to={"/experience"} className={({ isActive }) =>
+                            [
+                                isActive ? "nav-block-active" : "nav-block-inactive",
+                            ].join(" ")
+                        }
+                        >
                             <div className="icon-box">
                                 <i className="nav-icon-inactive"><FontAwesomeIcon icon={faBriefcase}/></i>
                             </div>
                             Experience
-                        </a>
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="#" className="nav-block-inactive">
+                        <NavLink to={"/skills"} className={({ isActive }) =>
+                            [
+                                isActive ? "nav-block-active" : "nav-block-inactive",
+                            ].join(" ")
+                        }
+                        >
                             <div className="icon-box">
                                 <i className="nav-icon-inactive"><FontAwesomeIcon icon={faChartSimple}/></i>
                             </div>
                             Skills
-                        </a>
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="#" className="nav-block-inactive">
+                        <NavLink to={"/certifications"} className={({ isActive }) =>
+                            [
+                                isActive ? "nav-block-active" : "nav-block-inactive",
+                            ].join(" ")
+                        }
+                        >
                             <div className="icon-box">
                                 <i className="nav-icon-inactive"><FontAwesomeIcon icon={faClipboardCheck}/></i>
                             </div>
                             Certifications
-                        </a>
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="#" className="nav-block-inactive">
+                        <NavLink to={"/projects"} className={({ isActive }) =>
+                            [
+                                isActive ? "nav-block-active" : "nav-block-inactive",
+                            ].join(" ")
+                        }
+                        >
                             <div className="icon-box">
                                 <i className="nav-icon-inactive"><FontAwesomeIcon icon={faLayerGroup}/></i>
                             </div>
                             Projects
-                        </a>
+                        </NavLink>
                     </li>
                     <li>
-                        <a href="#" className="nav-block-inactive">
+                        <NavLink to={"/contact"} className={({ isActive }) =>
+                            [
+                                isActive ? "nav-block-active" : "nav-block-inactive",
+                            ].join(" ")
+                        }
+                        >
                             <div className="icon-box">
                                 <i className="nav-icon-inactive"><FontAwesomeIcon icon={faMessage}/></i>
                             </div>
                             Contact
-                        </a>
+                        </NavLink>
                     </li>
                 </ul>
             </nav>

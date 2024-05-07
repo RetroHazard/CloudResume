@@ -54,6 +54,7 @@
     }
 
     .content-block {
-        @apply flex flex-col gap-6 bg-secondary-700 p-8 rounded-2xl shadow-md;
+        @apply flex flex-col gap-6 bg-secondary-700 p-8 rounded-2xl shadow-md w-full justify-center;
     }
+
 }

@@ -17,7 +17,7 @@ return (
                     </div>
                     <div className="flex gap-1">
                         <div className="skill-progress-bar-outline">
-                            <div className="skill-progress-bar" style="width: 25%"></div>
+                            <div className="skill-progress-bar" style={{width: '25%'}}></div>
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@ return (
                     </div>
                     <div className="flex gap-1">
                         <div className="skill-progress-bar-outline">
-                            <div className="skill-progress-bar" style="width: 75%"></div>
+                            <div className="skill-progress-bar" style={{width: '75%'}}></div>
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@ return (
                     </div>
                     <div className="flex gap-1">
                         <div className="skill-progress-bar-outline">
-                            <div className="skill-progress-bar" style="width: 45%"></div>
+                            <div className="skill-progress-bar" style={{width: '45%'}}></div>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@ return (
                     </div>
                     <div className="flex gap-1">
                         <div className="skill-progress-bar-outline">
-                            <div className="skill-progress-bar" style="width: 90%"></div>
+                            <div className="skill-progress-bar" style={{width: '90%'}}></div>
                         </div>
                     </div>
                 </div>

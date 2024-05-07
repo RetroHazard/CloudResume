@@ -18,11 +18,12 @@ import Contact from "./pages/Contact";
 export default function App() {
   return (
       <>
+      <BrowserRouter>
         <div className="flex justify-center">
           <Navigation />
-          <div className="px-2 py-20 space-y-8 max-w-5xl">
+          <div className="px-2 py-20 space-y-8 min-w-96 w-3/5">
             <section id="content">
-              <BrowserRouter>
+
                 <Routes>
                   <Route path="/" element={<Home/>} />
                   <Route path="/education" element={<Education/>} />
@@ -32,10 +33,11 @@ export default function App() {
                   <Route path="/projects" element={<Projects/>} />
                   <Route path="/contact" element={<Contact/>} />
                 </Routes>
-              </BrowserRouter>
+
             </section>
           </div>
         </div>
+      </BrowserRouter>
       </>
   )
 }
