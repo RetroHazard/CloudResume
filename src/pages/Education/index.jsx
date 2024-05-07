@@ -27,10 +27,6 @@ return (
         <p className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-0">
             Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui
             at <em>vestibulum</em>.
-            <ul>
-                <li><em>Major</em>: </li>
-                <li><em>Minor</em>: </li>
-            </ul>
         </p>
     </div>
     <div className="bg-secondary-600 h-px w-full"></div>

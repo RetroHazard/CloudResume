@@ -41,12 +41,10 @@
         @apply no-underline inline-flex items-center max-h-10 px-4 py-3 mt-1 mb-1.5 rounded-lg hover:text-content-title bg-secondary-800 hover:bg-secondary-600 w-full;
     }
 
-    .nav-icon-active {
-        @apply w-5 h-5 mr-2.5 text-content-icons text-base;
-    }
-
-    .nav-icon-inactive {
-        @apply w-5 h-5 mr-2.5 text-content-accent text-base;
+    #navbar {
+        i {
+            @apply w-5 h-5 mr-2.5 text-base;
+        }
     }
 
     .icon-box {

@@ -2,7 +2,7 @@ import React from "react";
 
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faCloudDownload, } from "@fortawesome/free-solid-svg-icons";
-import { faLinkedinIn, faGithub, faArtstation, faMedium, faInstagram } from "@fortawesome/free-brands-svg-icons";
+import { faLinkedinIn, faGithub, faArtstation, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
 function Home() {
 return (
@@ -11,10 +11,10 @@ return (
         <div className="flex flex-col gap-6 items-start sm:flex-row">
             <div className="flex items-center gap-4 sm:flex-col">
                 <img className="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="./images/placeholder.png" alt="" />
-                <a href="." className="font-bold">
+                <a href="#" className="font-bold">
                     <button className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
                        <div className="icon-box">
-                        <i className="w-5 h-5 mr-2"><FontAwesomeIcon icon={faCloudDownload} size="lg" /></i>
+                        <i className="w-5 h-5 mr-2 text-content-icons"><FontAwesomeIcon icon={faCloudDownload} size="lg" /></i>
                        </div>
                         <span>Download CV</span>
                     </button>
@@ -36,11 +36,6 @@ return (
                         <a className="social-link" href="{ARTSTATION_LINK}" aria-label="ArtStation">
                             <i className="text-base text-content-icons"><FontAwesomeIcon icon={faArtstation} size={"lg"}/></i>
                         </a>
-                        {/*
-                        <a className="social-link" href="{MEDIUM_LINK}" aria-label="Medium">
-                            <i className="text-base text-content-icons"><FontAwesomeIcon icon={faMedium} size={"lg"}/></i>
-                        </a>
-                        */}
                         <a className="social-link" href="{INSTAGRAM_LINK}" aria-label="Instagram">
                             <i className="text-base text-content-icons"><FontAwesomeIcon icon={faInstagram} size={"lg"}/></i>
                         </a>
@@ -48,16 +43,6 @@ return (
                 </div>
                 <div className="flex flex-col gap-6">
                     <div className="inline-grid xl:grid-cols-[auto_auto]">
-                        {/*
-                        <div>
-                            <span className="font-medium text-content-subtitle">Phone: </span>
-                            <a href="tel:{PHONE_NUM}" className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base" target="_self">(PHONE)</a>
-                        </div>
-                        <div>
-                            <span className="font-medium text-content-subtitle">Email: </span>
-                            <a href="mailto:{EMAIL}" className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base" target="_self">(EMAIL)</a>
-                        </div>
-                        */}
                         <div>
                             <span className="font-medium text-content-subtitle">Location: </span>
                             <span className="text-content-accent">(LOCATION)</span>
