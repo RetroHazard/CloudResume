@@ -1,5 +1,8 @@
 import React from "react";
 
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faPaintBrush, faDesktop } from "@fortawesome/free-solid-svg-icons";
+
 function Projects() {
 return (
   <>
@@ -19,10 +22,10 @@ return (
                                 </div>
                                 <div className="flex gap-2">
                                     <a href="#" className="social-link" target="_blank" aria-label="Design">
-                                        <i className="text-base text-content-icons fas fa-paint-brush"></i>
+                                    <i><FontAwesomeIcon icon={faPaintBrush} size={"lg"}/></i>
                                     </a>
                                     <a href="#" className="social-link" target="_blank" aria-label="Project">
-                                        <i className="text-base text-content-icons fas fa-desktop"></i>
+                                    <i><FontAwesomeIcon icon={faDesktop} size={"lg"}/></i>
                                     </a>
                                 </div>
                             </div>
@@ -30,19 +33,19 @@ return (
                     </div>
                     <div className="inline-grid xl:grid-cols-[auto_auto] w-full">
                         <div>
-                            <span className="font-medium text-content-subtitle">Team Size:</span>
+                            <span className="font-medium text-content-subtitle">Team Size: </span>
                             <span className="text-content-accent">(PROJECT_SIZE)</span>
                         </div>
                         <div>
-                            <span className="font-medium text-content-subtitle">My Role:</span>
+                            <span className="font-medium text-content-subtitle">My Role: </span>
                             <span className="text-content-accent">(PROJECT_ROLE)</span>
                         </div>
                         <div>
-                            <span className="font-medium text-content-subtitle">Company:</span>
+                            <span className="font-medium text-content-subtitle">Company: </span>
                             <span className="text-content-accent">(PROJECT_COMPANY)</span>
                         </div>
                         <div>
-                            <span className="font-medium text-content-subtitle">Category:</span>
+                            <span className="font-medium text-content-subtitle">Category: </span>
                             <span className="text-content-accent">(PROJECT_CATEGORY)</span>
                         </div>
                     </div>
@@ -83,30 +86,30 @@ return (
                                 </div>
                                 <div className="flex gap-2">
                                     <a href="#" className="social-link" target="_blank" aria-label="Design">
-                                        <i className="text-base text-content-icons fas fa-paint-brush"></i>
+                                    <i><FontAwesomeIcon icon={faPaintBrush} size={"lg"}/></i>
                                     </a>
                                     <a href="#" className="social-link" target="_blank" aria-label="Project">
-                                        <i className="text-base text-content-icons fas fa-desktop"></i>
+                                    <i><FontAwesomeIcon icon={faDesktop} size={"lg"}/></i>
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="inline-grid xl:grid-cols-[auto_auto] w-full">
-                        <div>
-                            <span className="font-medium text-content-subtitle">Team Size:</span>
+                    <div>
+                            <span className="font-medium text-content-subtitle">Team Size: </span>
                             <span className="text-content-accent">(PROJECT_SIZE)</span>
                         </div>
                         <div>
-                            <span className="font-medium text-content-subtitle">My Role:</span>
+                            <span className="font-medium text-content-subtitle">My Role: </span>
                             <span className="text-content-accent">(PROJECT_ROLE)</span>
                         </div>
                         <div>
-                            <span className="font-medium text-content-subtitle">Company:</span>
+                            <span className="font-medium text-content-subtitle">Company: </span>
                             <span className="text-content-accent">(PROJECT_COMPANY)</span>
                         </div>
                         <div>
-                            <span className="font-medium text-content-subtitle">Category:</span>
+                            <span className="font-medium text-content-subtitle">Category: </span>
                             <span className="text-content-accent">(PROJECT_CATEGORY)</span>
                         </div>
                     </div>

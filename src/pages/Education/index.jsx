@@ -20,7 +20,7 @@ return (
             </div>
             <div className="flex gap-3 flex-wrap sm:flex-nowrap">
                 <a href="#" className="social-link" target="_blank" aria-label="Website">
-                    <i className="text-base text-content-icons"><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
+                    <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
                 </a>
             </div>
         </div>
@@ -42,7 +42,7 @@ return (
             </div>
             <div className="flex gap-3 flex-wrap sm:flex-nowrap">
                 <a href="#" className="social-link" target="_blank" aria-label="Website">
-                    <i className="text-base text-content-icons fas fa-globe fa-lg"></i>
+                <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
                 </a>
             </div>
         </div>
@@ -63,7 +63,7 @@ return (
             </div>
             <div className="flex gap-3 flex-wrap sm:flex-nowrap">
                 <a href="#" className="social-link" target="_blank" aria-label="Website">
-                    <i className="text-base text-content-icons fas fa-globe fa-lg"></i>
+                <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
                 </a>
             </div>
         </div>

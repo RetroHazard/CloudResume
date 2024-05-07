@@ -1,5 +1,8 @@
 import React from "react";
 
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faGlobe } from "@fortawesome/free-solid-svg-icons";
+
 function Experience() {
 return (
   <>
@@ -16,6 +19,11 @@ return (
                           <p className="font-medium text-sm text-content-date mb-0">(START) - (END)</p>
                       </div>
                   </div>
+                  <div className="flex gap-3 flex-wrap sm:flex-nowrap">
+                <a href="#" className="social-link" target="_blank" aria-label="Website">
+                <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
+                </a>
+            </div>
               </div>
               <div className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-3">
                   <ul className="list-disc pl-5">
@@ -59,6 +67,11 @@ return (
                           <p className="font-medium text-sm text-content-date mb-0">(START) - (END)</p>
                       </div>
                   </div>
+                  <div className="flex gap-3 flex-wrap sm:flex-nowrap">
+                <a href="#" className="social-link" target="_blank" aria-label="Website">
+                <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
+                </a>
+            </div>
               </div>
               <div className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-3">
                   <ul className="list-disc pl-5">
@@ -83,7 +96,9 @@ return (
                   </div>
               </div>
           </div>
+          
           <div className="bg-secondary-600 h-px w-full"></div>
+
           <div className="flex flex-col gap-3">
               <div className="flex gap-2 justify-between w-full">
                   <div className="flex gap-4">
@@ -94,6 +109,11 @@ return (
                           <p className="font-medium text-sm text-content-date mb-0">(START) - (END)</p>
                       </div>
                   </div>
+                  <div className="flex gap-3 flex-wrap sm:flex-nowrap">
+                <a href="#" className="social-link" target="_blank" aria-label="Website">
+                <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
+                </a>
+            </div>
               </div>
               <div className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-3">
                   <p className="mb-0">Nulla volutpat justo ante, rhoncus posuere massa egestas in:</p>

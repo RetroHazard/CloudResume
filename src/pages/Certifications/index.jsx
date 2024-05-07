@@ -1,5 +1,8 @@
 import React from "react";
 
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import { faAward, faGlobe } from "@fortawesome/free-solid-svg-icons";
+
 function Certifications() {
 return (
   <>
@@ -16,8 +19,11 @@ return (
                 </div>
             </div>
             <div className="flex gap-3 flex-wrap sm:flex-nowrap">
+                <a href="#" className="social-link" target="_blank" aria-label="Certificate">
+                <i><FontAwesomeIcon icon={faAward} size={"lg"}/></i>
+                </a>
                 <a href="#" className="social-link" target="_blank" aria-label="Website">
-                    <i className="text-base text-content-icons fas fa-globe fa-lg"></i>
+                <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
                 </a>
             </div>
         </div>
@@ -37,8 +43,11 @@ return (
                 </div>
             </div>
             <div className="flex gap-3 flex-wrap sm:flex-nowrap">
+                <a href="#" className="social-link" target="_blank" aria-label="Certificate">
+                <i><FontAwesomeIcon icon={faAward} size={"lg"}/></i>
+                </a>
                 <a href="#" className="social-link" target="_blank" aria-label="Website">
-                    <i className="text-base text-content-icons fas fa-globe fa-lg"></i>
+                <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
                 </a>
             </div>
         </div>
@@ -58,8 +67,11 @@ return (
                 </div>
             </div>
             <div className="flex gap-3 flex-wrap sm:flex-nowrap">
+                <a href="#" className="social-link" target="_blank" aria-label="Certificate">
+                <i><FontAwesomeIcon icon={faAward} size={"lg"}/></i>
+                </a>
                 <a href="#" className="social-link" target="_blank" aria-label="Website">
-                    <i className="text-base text-content-icons fas fa-globe fa-lg"></i>
+                <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
                 </a>
             </div>
         </div>
