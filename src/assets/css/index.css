@@ -43,6 +43,10 @@ html.disable-fix {
         @apply w-48 rounded-full ring-2 ring-content-outline/35 h-2.5 mb-4 bg-skill-0;
     }
 
+    .text-entry {
+        @apply shadow-sm bg-secondary-100 border border-secondary-300 text-secondary-600 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5;
+    }
+
     .nav-block-active {
         @apply no-underline inline-flex items-center max-h-10 px-4 py-3 mt-1 mb-1.5 text-content-title bg-secondary-500 rounded-lg w-full;
     }
