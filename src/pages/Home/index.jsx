@@ -16,7 +16,7 @@ function Home() {
                                 <div className="icon-box">
                                     <i className="w-5 h-5 mr-2 text-content-icons"><FontAwesomeIcon icon={faCloudDownload} size="lg" /></i>
                                 </div>
-                                <span>Download CV</span>
+                                <span className="text-content-header text-sm">Download CV</span>
                             </button>
                         </a>
                     </div>
