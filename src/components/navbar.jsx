@@ -24,9 +24,9 @@ function Navigation() {
                     <li>
                         <NavLink to={"/education"} className={({ isActive }) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                    }}
-                    >
-                        <div className="icon-box">
+                        }}
+                        >
+                            <div className="icon-box">
                                 <i><FontAwesomeIcon icon={faGraduationCap}/></i>
                             </div>
                             Education
@@ -35,8 +35,8 @@ function Navigation() {
                     <li>
                         <NavLink to={"/experience"} className={({ isActive }) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                    }}
-                    >
+                        }}
+                        >
                             <div className="icon-box">
                                 <i><FontAwesomeIcon icon={faBriefcase}/></i>
                             </div>
@@ -46,8 +46,8 @@ function Navigation() {
                     <li>
                         <NavLink to={"/skills"} className={({ isActive }) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                    }}
-                    >
+                        }}
+                        >
                             <div className="icon-box">
                                 <i><FontAwesomeIcon icon={faChartSimple}/></i>
                             </div>
@@ -57,8 +57,8 @@ function Navigation() {
                     <li>
                         <NavLink to={"/certifications"} className={({ isActive }) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                    }}
-                    >
+                        }}
+                        >
                             <div className="icon-box">
                                 <i><FontAwesomeIcon icon={faClipboardCheck}/></i>
                             </div>
@@ -68,8 +68,8 @@ function Navigation() {
                     <li>
                         <NavLink to={"/projects"} className={({ isActive }) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                    }}
-                    >
+                        }}
+                        >
                             <div className="icon-box">
                                 <i><FontAwesomeIcon icon={faLayerGroup}/></i>
                             </div>
@@ -79,8 +79,8 @@ function Navigation() {
                     <li>
                         <NavLink to={"/contact"} className={({ isActive }) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                    }}
-                    >
+                        }}
+                        >
                             <div className="icon-box">
                                 <i><FontAwesomeIcon icon={faMessage}/></i>
                             </div>
