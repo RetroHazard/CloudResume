@@ -91,7 +91,7 @@ function Navigation() {
                     <div className="justify-between bg-secondary-600 h-0.5 mt-2 mb-2 w-full"></div>
                     <li className="flex-col text-sm font-medium text-content-accent">
                         <div
-                            className="inline-flex items-center max-h-8 px-4 py-3 mt-1 mb-1.5 rounded-lg bg-secondary-800 w-full">
+                            className="inline-flex items-center px-4 py-1 mt-1 mb-1 bg-secondary-700 w-full">
                             <div className="icon-box">
                                 <i><FontAwesomeIcon icon={faUsers}/></i>
                             </div>
