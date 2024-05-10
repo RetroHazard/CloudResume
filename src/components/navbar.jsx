@@ -4,7 +4,24 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faHouse, faGraduationCap, faBriefcase, faChartSimple, faClipboardCheck, faLayerGroup, faMessage, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
 
-const NUM_VISITS = 0; //TODO: Record and Get Value from DynamoDB
+// GET API REQUEST
+async function get_visitors() {
+    // call post api request function
+    //await post_visitor();
+    try {
+        let response = await fetch('https://knr52endfj.execute-api.ap-northeast-1.amazonaws.com/default/visitorCounter', {
+            method: 'GET',
+        });
+        let data = await response.json()
+        document.getElementById("visitors").innerHTML = data['count'];
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.error(err);
+    }
+}
+get_visitors();
+
 
 function Navigation() {
     return (
@@ -90,12 +107,11 @@ function Navigation() {
                     </li>
                     <div className="justify-between bg-secondary-600 h-0.5 mt-2 mb-2 w-full"></div>
                     <li className="flex-col text-sm font-medium text-content-accent">
-                        <div
-                            className="inline-flex items-center px-4 py-1 mt-1 mb-1 bg-secondary-700 w-full">
+                        <div className="inline-flex items-center px-4 py-1 mt-1 mb-1 bg-secondary-700 w-full">
                             <div className="icon-box">
                                 <i><FontAwesomeIcon icon={faUsers}/></i>
                             </div>
-                            {NUM_VISITS} Visitors
+                            <span className="text-base font-sans" id="visitors"></span>
                         </div>
                     </li>
                 </ul>
