@@ -4,6 +4,7 @@ import {BrowserRouter} from "react-router-dom";
 
 // Import Navigation
 import Navigation from "./components/navbar";
+import NoticeBanner from "./components/noticebanner";
 
 // Import Content Pages
 import Home from "./pages/Home"
@@ -18,6 +19,7 @@ import Contact from "./pages/Contact";
 export default function App() {
     return (
         <>
+        <NoticeBanner/>
             <BrowserRouter>
                 <div className="flex justify-center">
                     <Navigation />
