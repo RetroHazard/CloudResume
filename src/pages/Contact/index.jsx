@@ -11,10 +11,10 @@ const ContactForm = () => {
     const [subject, setSubject] = useState('')
     const [message, setMessage] = useState('')
 
-    const endpoint = '' //TODO: Add API Endpoint/Lambda call
+    const endpoint = 'https://4t4geg10ee.execute-api.ap-northeast-1.amazonaws.com/default/handleFormSubmit'
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
         const data = { firstName, lastName, email, subject, message }
 
         const fetchPromise = fetch(endpoint, {
