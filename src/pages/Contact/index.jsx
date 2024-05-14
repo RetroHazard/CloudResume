@@ -10,25 +10,41 @@ const ContactForm = () => {
     const [email, setEmail] = useState('')
     const [subject, setSubject] = useState('')
     const [message, setMessage] = useState('')
+    const [status, setStatus] = useState('')
 
     const endpoint = 'https://4t4geg10ee.execute-api.ap-northeast-1.amazonaws.com/default/handleFormSubmit'
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        const data = { firstName, lastName, email, subject, message }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const data = { firstName, lastName, email, subject, message };
 
-        const fetchPromise = fetch(endpoint, {
+        fetch(endpoint, {
             method: 'POST',
             mode: 'cors',
             cache: 'no-cache',
             body: JSON.stringify(data)
-          });
-          fetchPromise
-            .then(response => response.json())
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
-              console.log(data); // handle response, catch errors
-          })
-    }
+                console.log(data); // handle response data
+                setStatus('Message sent successfully!\nPlease allow me a short time to review your message.\nThank You!');
+                // Clear form fields
+                setFirstName('');
+                setLastName('');
+                setEmail('');
+                setSubject('');
+                setMessage('');
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+                setStatus('Failed to send message.\nA notification has been sent to the Administrator for investigation.\nIf the issue persists, please try again later.');
+            });
+    };
 
     return (
         <form action={endpoint} onSubmit={handleSubmit} method="POST" className="space-y-8">
@@ -59,9 +75,9 @@ const ContactForm = () => {
                 </div>
                 <span className="text-content-header text-sm">Send Message</span>
             </button>
+            {status && <div className="mt-4 text-sm font-medium whitespace-pre">{status}</div>}
         </form>
     )
-
 }
 
 
