@@ -18,7 +18,7 @@ const EducationList = () => {
                         logo={item.logo}
                         website={item.website}
                     />
-                    {index < educationData.length - 1 && <div className="bg-secondary-600 h-px my-5 w-full"></div>}
+                    {index < educationData.length - 1 && <div className="bg-secondary-600 h-px my-6 w-full"></div>}
                 </React.Fragment>
             ))}
         </div>
