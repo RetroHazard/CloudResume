@@ -1,0 +1,24 @@
+{
+  "Socials": [
+    {
+      "name": "LinkedIn",
+      "link": "https://www.linkedin.com/in/agbracken/",
+      "icon": ""
+    },
+    {
+      "name": "GitHub",
+      "link": "https://github.com/RetroHazard",
+      "icon": ""
+    },
+    {
+      "name": "ArtStation",
+      "link": "BA. Communications and Media",
+      "icon": "https://www.artstation.com/retrohazard"
+    },
+    {
+      "name": "Instagram",
+      "link": "https://www.instagram.com/warabiphotography",
+      "icon": ""
+    }
+  ]
+}

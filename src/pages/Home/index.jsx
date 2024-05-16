@@ -29,6 +29,7 @@ function Home() {
                                 <h1 className="h1 font-extrabold text-content-header mb-0">{personalData.fullName}</h1>
                                 <h2 className="sm:text-lg text-base font-medium text-content-header mb-0">{personalData.jobTitle}</h2>
                             </div>
+                            {/* Begin Social Links Section */}
                             <div className="flex gap-3 flex-wrap sm:flex-nowrap"> {/* TODO: Write Component Function to Automatically Build Social Buttons */}
                                 <a className="social-link" href={socialData.LinkedIn} aria-label="LinkedIn">
                                     <i className="text-base text-content-icons"><FontAwesomeIcon icon={faLinkedinIn} size={"lg"}/></i>
@@ -43,6 +44,7 @@ function Home() {
                                     <i className="text-base text-content-icons"><FontAwesomeIcon icon={faInstagram} size={"lg"}/></i>
                                 </a>
                             </div>
+                            {/* End Social Links Section */}
                         </div>
                         <div className="flex flex-col gap-6">
                             <div className="inline-grid xl:grid-cols-[auto_auto]">
