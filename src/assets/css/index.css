@@ -62,7 +62,7 @@ html.disable-fix {
     }
 
     .icon-box {
-        @apply content-center justify-center justify-items-center m-0
+        @apply content-center justify-center justify-items-center align-middle m-0
     }
 
     .content-block {
