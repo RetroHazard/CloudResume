@@ -1,7 +1,9 @@
 import React from "react";
 
+import resumeData from '../../assets/json/resume_data.json';
+
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faCloudDownload, } from "@fortawesome/free-solid-svg-icons";
+import {faCloudDownload, faYenSign,} from "@fortawesome/free-solid-svg-icons";
 import { faLinkedinIn, faGithub, faArtstation, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
 function Home() {
@@ -10,7 +12,7 @@ function Home() {
             <div className="content-block" id="profile">
                 <div className="flex flex-col gap-6 items-start sm:flex-row">
                     <div className="flex items-center gap-4 sm:flex-col">
-                        <img className="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="/images/placeholder.png" alt="" />
+                        <img className="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24" src="/images/placeholder.png" alt="" /> {/* TODO: Replace Placeholder Profile Picture */}
                         <a href="." className="font-bold"> {/* TODO: Retrieve CV File from S3 */}
                             <button className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
                                 <div className="icon-box">
@@ -22,37 +24,40 @@ function Home() {
                     </div>
                     <div className="flex flex-col w-full gap-5">
                         <div className="flex flex-col w-full gap-2 justify-between sm:flex-row">
-                            <div className="w-full"> {/* TODO: Write Function to Automatically Retrieve Name and Job Title */}
-                                <h1 className="h1 font-extrabold text-content-header mb-0">(NAME)</h1>
-                                <h2 className="sm:text-lg text-base font-medium text-content-header mb-0">(JOB_TITLE)</h2>
+                            <div className="w-full">
+                                <h1 className="h1 font-extrabold text-content-header mb-0">{resumeData.Home[0].personalDetails.fullName}</h1>
+                                <h2 className="sm:text-lg text-base font-medium text-content-header mb-0">{resumeData.Home[0].personalDetails.jobTitle}</h2>
                             </div>
-                            <div className="flex gap-3 flex-wrap sm:flex-nowrap"> {/* TODO: Write Function to Automatically Build Social Buttons */}
-                                <a className="social-link" href="." aria-label="LinkedIn">
+                            <div className="flex gap-3 flex-wrap sm:flex-nowrap"> {/* TODO: Write Component Function to Automatically Build Social Buttons */}
+                                <a className="social-link" href={resumeData.Home[0].socialLinks.LinkedIn} aria-label="LinkedIn">
                                     <i className="text-base text-content-icons"><FontAwesomeIcon icon={faLinkedinIn} size={"lg"}/></i>
                                 </a>
-                                <a className="social-link" href="." aria-label="Github">
+                                <a className="social-link" href={resumeData.Home[0].socialLinks.GitHub} aria-label="Github">
                                     <i className="text-base text-content-icons"><FontAwesomeIcon icon={faGithub} size={"lg"}/></i>
                                 </a>
-                                <a className="social-link" href="." aria-label="ArtStation">
+                                <a className="social-link" href={resumeData.Home[0].socialLinks.ArtStation} aria-label="ArtStation">
                                     <i className="text-base text-content-icons"><FontAwesomeIcon icon={faArtstation} size={"lg"}/></i>
                                 </a>
-                                <a className="social-link" href="." aria-label="Instagram">
+                                <a className="social-link" href={resumeData.Home[0].socialLinks.Instagram} aria-label="Instagram">
                                     <i className="text-base text-content-icons"><FontAwesomeIcon icon={faInstagram} size={"lg"}/></i>
                                 </a>
                             </div>
                         </div>
                         <div className="flex flex-col gap-6">
-                            <div className="inline-grid xl:grid-cols-[auto_auto]"> {/* TODO: Write Function to Automatically Retrieve Location and Salary */}
+                            <div className="inline-grid xl:grid-cols-[auto_auto]">
                                 <div>
                                     <span className="font-medium text-content-subtitle">Location: </span>
-                                    <span className="text-content-accent">(LOCATION)</span>
+                                    <span className="text-content-accent">{resumeData.Home[0].personalDetails.location}</span>
                                 </div>
                                 <div>
                                     <span className="font-medium text-content-subtitle"></span>
                                 </div>
                                 <div>
                                     <span className="font-medium text-content-subtitle">Salary: </span>
-                                    <span className="text-content-accent">(SALARY) (CURRENCY)</span>
+                                    <span className="text-content-accent">
+                                        <FontAwesomeIcon icon={faYenSign} className="mr-1"/>
+                                        {resumeData.Home[0].compensationData.salary} {resumeData.Home[0].compensationData.currency}
+                                    </span>
                                 </div>
                             </div>
                             <div className="flex flex-col gap-4"> {/* TODO: Write Function to Automatically Retrieve Content from File(?) */}
