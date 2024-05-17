@@ -1,7 +1,6 @@
 import React from "react";
 
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons";
+import {Icon} from "@iconify-icon/react";
 
 function Experience() {
     return (
@@ -12,7 +11,7 @@ function Experience() {
                     <div className="flex flex-col gap-3">
                         <div className="flex gap-2 justify-between w-full">
                             <div className="flex gap-4">
-                                <img className="hidden rounded-md sm:block h-[4.5rem] w-[4.5rem]" src="./images/placeholder.png" alt="" />
+                                <img className="hidden rounded-md sm:block h-[8rem] w-[8rem]" src="./images/placeholder.png" alt="" />
                                 <div className="flex flex-col">
                                     <h3 className="h3 text-content-title font-extrabold mb-0">(JOB_TITLE)</h3>
                                     <p className="text-content-subtitle font-semibold leading-snug mb-0.5">(COMPANY)</p>
@@ -21,7 +20,7 @@ function Experience() {
                             </div>
                             <div className="flex gap-3 flex-wrap sm:flex-nowrap">
                                 <a href="#" className="social-link" target="_blank" aria-label="Website">
-                                    <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
+                                    <Icon icon="fa6-solid:globe" height="1.25em" width="1.25em"/>
                                 </a>
                             </div>
                         </div>
@@ -57,89 +56,6 @@ function Experience() {
                         </div>
                     </div>
                     <div className="bg-secondary-600 h-px w-full"></div>
-                    <div className="flex flex-col gap-3">
-                        <div className="flex gap-2 justify-between w-full">
-                            <div className="flex gap-4">
-                                <img className="hidden rounded-md sm:block h-[4.5rem] w-[4.5rem]" src="./images/placeholder.png" alt="" />
-                                <div className="flex flex-col">
-                                    <h3 className="h3 text-content-title font-extrabold mb-0">(JOB_TITLE)</h3>
-                                    <p className="text-content-subtitle font-semibold leading-snug mb-0.5">(COMPANY)</p>
-                                    <p className="font-medium text-sm text-content-date mb-0">(START) - (END)</p>
-                                </div>
-                            </div>
-                            <div className="flex gap-3 flex-wrap sm:flex-nowrap">
-                                <a href="#" className="social-link" target="_blank" aria-label="Website">
-                                    <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-3">
-                            <ul className="list-disc pl-5">
-                                <li>Aenean eget ultricies felis. Pellentesque dictum massa ut tellus eleifend, sed posuere massa mattis.</li>
-                                <li>Ut posuere massa lacus, eleifend molestie tortor auctor vel.</li>
-                                <li>Sed sed sollicitudin eros, id ultricies mi. Aliquam sodales elit vel ante tempor, non vehicula nibh facilisis.</li>
-                                <li>Cras feugiat ultricies maximus. Aliquam tristique ex odio, ac semper urna accumsan a.</li>
-                            </ul>
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                            <span className="font-medium text-content-accent">Technologies:</span>
-                            <div className="flex gap-3 flex-wrap">
-                                <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" /> Skill
-                                </a>
-                                <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" /> Skill
-                                </a>
-                                <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" /> Skill
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-secondary-600 h-px w-full"></div>
-
-                    <div className="flex flex-col gap-3">
-                        <div className="flex gap-2 justify-between w-full">
-                            <div className="flex gap-4">
-                                <img className="hidden rounded-md sm:block h-[4.5rem] w-[4.5rem]" src="./images/placeholder.png" alt="" />
-                                <div className="flex flex-col">
-                                    <h3 className="h3 text-content-title font-extrabold mb-0">(JOB_TITLE)</h3>
-                                    <p className="text-content-subtitle font-semibold leading-snug mb-0.5">(COMPANY)</p>
-                                    <p className="font-medium text-sm text-content-date mb-0">(START) - (END)</p>
-                                </div>
-                            </div>
-                            <div className="flex gap-3 flex-wrap sm:flex-nowrap">
-                                <a href="#" className="social-link" target="_blank" aria-label="Website">
-                                    <i><FontAwesomeIcon icon={faGlobe} size={"lg"}/></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-3">
-                            <p className="mb-0">Nulla volutpat justo ante, rhoncus posuere massa egestas in:</p>
-                            <ul className="list-disc pl-5">
-                                <li>Quisque pellentesque, dolor nec sollicitudin iaculis, sem velit consequat ligula, eget tempus ligula leo et est.</li>
-                                <li>Maecenas ut elit sit amet nibh maximus condimentum in nec lorem. Pellentesque tincidunt odio vel leo suscipit, in interdum mi gravida.</li>
-                            </ul>
-                        </div>
-                        <div className="flex flex-col gap-1.5">
-                            <span className="font-medium text-content-accent">Technologies:</span>
-                            <div className="flex gap-3 flex-wrap">
-                                <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" /> Skill
-                                </a>
-                                <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" /> Skill
-                                </a>
-                                <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" /> Skill
-                                </a>
-                                <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" /> Skill
-                                </a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </>
