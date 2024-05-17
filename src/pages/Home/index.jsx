@@ -1,5 +1,4 @@
 import React from "react";
-import { Icon } from '@iconify-icon/react';
 
 import personalData from '../../assets/json/personal_data.json';
 import SocialLinks from "../../components/social_links";
