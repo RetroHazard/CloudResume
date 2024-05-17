@@ -1,0 +1,65 @@
+{
+  "Experience": [
+    {
+      "company": "Company 1",
+      "job_title": "FullStack Developer",
+      "type": "Full Time",
+      "start": "2016",
+      "end": "2021",
+      "logo": "./images/placeholder.png",
+      "website": "https://www.demo.com/",
+      "technologies": [
+        {
+          "AWS": {
+            "name": "AWS",
+            "logo": "skill-icons:aws-dark",
+            "website": "https://aws.amazon.com/"
+          },
+          "React": {
+            "name": "react.js",
+            "logo": "skill-icons:react-dark",
+            "website": "https://react.dev/"
+          },
+          "tailwindCSS": {
+            "name": "tailwindCSS",
+            "logo": "skill-icons:tailwindcss-dark",
+            "website": "https://tailwindcss.com/"
+          }
+        }
+      ]
+    },
+    {
+      "company": "Company 2",
+      "job_title": "Frontend Developer",
+      "type": "Contract",
+      "start": "2014",
+      "end": "2016",
+      "logo": "./images/placeholder.png",
+      "website": "https://www.demo.com/",
+      "technologies": [
+        {
+          "Node": {
+            "name": "node.js",
+            "logo": "skill-icons:nodejs-dark",
+            "website": "https://nodejs.org/en"
+          },
+          "React": {
+            "name": "react.js",
+            "logo": "skill-icons:react-dark",
+            "website": "https://react.dev/"
+          },
+          "tailwindCSS": {
+            "name": "tailwindCSS",
+            "logo": "skill-icons:tailwindcss-dark",
+            "website": "https://tailwindcss.com/"
+          },
+          "WebStorm": {
+            "name": "WebStorm",
+            "logo": "skill-icons:webstorm-dark",
+            "website": "https://www.jetbrains.com/webstorm/"
+          }
+        }
+      ]
+    }
+  ]
+}
