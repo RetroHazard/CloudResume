@@ -7,7 +7,7 @@ const ExperienceItem = ({ company, job_title, type, start, end, logo, website, t
         <div className="flex flex-col gap-3">
             <div className="flex gap-2 justify-between w-full">
                 <div className="flex gap-4">
-                    <img className="hidden rounded-md sm:block h-[8rem] w-[8rem]" src={logo} alt={`${company} logo`} />
+                    <img className="hidden rounded-xl sm:block h-[8rem] w-[8rem]" src={logo} alt={`${company} logo`} />
                     <div className="flex flex-col">
                         <h3 className="h3 text-content-title font-extrabold mb-0">{job_title}</h3>
                         <p className="text-content-subtitle font-semibold leading-snug mb-0.5">{company}</p>

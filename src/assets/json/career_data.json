@@ -1,62 +1,262 @@
 {
   "Experience": [
     {
-      "company": "Company 1",
-      "job_title": "FullStack Developer",
-      "type": "Full Time",
-      "start": "2016",
-      "end": "2021",
-      "logo": "./images/placeholder.png",
-      "website": "https://www.demo.com/",
+      "company": "Hollow Souls",
+      "job_title": "Independant Developer",
+      "type": "Freelance",
+      "start": "2020",
+      "end": "NOW",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "website": "https://www.hollowsouls.com",
       "technologies": [
         {
+          "C++": {
+            "name": "C++",
+            "logo": "ph:file-cpp-fill",
+            "website": "https://cplusplus.com/"
+          },
+          "Blender": {
+            "name": "Blender",
+            "logo": "simple-icons:blender",
+            "website": "https://www.blender.org/"
+          },
+          "Unreal Engine": {
+            "name": "Unreal Engine",
+            "logo": "simple-icons:unrealengine",
+            "website": "https://www.unrealengine.com/"
+          },
+          "Perforce": {
+            "name": "Perforce",
+            "logo": "simple-icons:perforce",
+            "website": "https://www.perforce.com/"
+          },
+          "Jetbrains Rider": {
+            "name": "Jetbrains Rider",
+            "logo": "simple-icons:rider",
+            "website": "https://www.jetbrains.com/rider/"
+          },
+          "Creative Cloud": {
+            "name": "Creative Cloud",
+            "logo": "simple-icons:adobecreativecloud",
+            "website": "https://www.adobe.com/creativecloud.html"
+          },
+          "Houdini": {
+            "name": "Houdini",
+            "logo": "simple-icons:houdini",
+            "website": "https://www.sidefx.com/"
+          },
           "AWS": {
             "name": "AWS",
-            "logo": "skill-icons:aws-dark",
+            "logo": "simple-icons:amazonaws",
             "website": "https://aws.amazon.com/"
-          },
-          "React": {
-            "name": "react.js",
-            "logo": "skill-icons:react-dark",
-            "website": "https://react.dev/"
-          },
-          "tailwindCSS": {
-            "name": "tailwindCSS",
-            "logo": "skill-icons:tailwindcss-dark",
-            "website": "https://tailwindcss.com/"
           }
         }
       ]
     },
     {
-      "company": "Company 2",
-      "job_title": "Frontend Developer",
-      "type": "Contract",
-      "start": "2014",
-      "end": "2016",
-      "logo": "./images/placeholder.png",
-      "website": "https://www.demo.com/",
+      "company": "Indeed",
+      "job_title": "Lead, IT Support",
+      "type": "Full Time",
+      "start": "2023",
+      "end": "NOW",
+      "logo": "./images/logos/companies/indeed.png",
+      "website": "https://www.indeed.com/",
       "technologies": [
         {
-          "Node": {
-            "name": "node.js",
-            "logo": "skill-icons:nodejs-dark",
-            "website": "https://nodejs.org/en"
+          "AWS": {
+            "name": "AWS",
+            "logo": "simple-icons:amazonaws",
+            "website": "https://aws.amazon.com/"
           },
-          "React": {
-            "name": "react.js",
-            "logo": "skill-icons:react-dark",
-            "website": "https://react.dev/"
+          "Atlassian": {
+            "name": "Atlassian Suite",
+            "logo": "simple-icons:atlassian",
+            "website": "https://www.atlassian.com"
           },
-          "tailwindCSS": {
-            "name": "tailwindCSS",
-            "logo": "skill-icons:tailwindcss-dark",
-            "website": "https://tailwindcss.com/"
+          "CloudFlare": {
+            "name": "CloudFlare",
+            "logo": "simple-icons:cloudflare",
+            "website": "https://www.cloudflare.com"
           },
-          "WebStorm": {
-            "name": "WebStorm",
-            "logo": "skill-icons:webstorm-dark",
-            "website": "https://www.jetbrains.com/webstorm/"
+          "Google": {
+            "name": "Google Suite",
+            "logo": "simple-icons:google",
+            "website": "https://www.google.com"
+          },
+          "GitLab": {
+            "name": "GitLab",
+            "logo": "simple-icons:gitlab",
+            "website": "https://about.gitlab.com/"
+          },
+          "Linux": {
+            "name": "Linux",
+            "logo": "simple-icons:linux",
+            "website": "https://www.linux.org/"
+          }
+        }
+      ]
+    },
+    {
+      "company": "Indeed",
+      "job_title": "L2 Service Engineer",
+      "type": "Full Time",
+      "start": "2021",
+      "end": "2023",
+      "logo": "./images/logos/companies/indeed.png",
+      "website": "https://www.indeed.com/",
+      "technologies": [
+        {
+          "Atlassian": {
+            "name": "Atlassian Suite",
+            "logo": "simple-icons:atlassian",
+            "website": "https://www.atlassian.com"
+          },
+          "Google": {
+            "name": "Google Suite",
+            "logo": "simple-icons:google",
+            "website": "https://www.google.com"
+          },
+          "Python": {
+            "name": "Python",
+            "logo": "simple-icons:python",
+            "website": "https://www.python.org/"
+          },
+          "Linux": {
+            "name": "Linux",
+            "logo": "simple-icons:linux",
+            "website": "https://www.linux.org/"
+          },
+          "Mac": {
+            "name": "macOS",
+            "logo": "simple-icons:apple",
+            "website": "https://www.apple.com"
+          }
+        }
+      ]
+    },
+    {
+      "company": "University of Calgary",
+      "job_title": "Systems Support Specialist",
+      "type": "Contract",
+      "start": "2017",
+      "end": "2021",
+      "logo": "./images/logos/companies/uofc.png",
+      "website": "https://www.ucalgary.ca/",
+      "technologies": [
+        {
+          "Microsoft Windows": {
+            "name": "Windows",
+            "logo": "simple-icons:windows",
+            "website": "https://www.microsoft.com/en-us/windows"
+          },
+          "macOS": {
+            "name": "macOS",
+            "logo": "simple-icons:apple",
+            "website": "https://www.apple.com"
+          },
+          "Office 365": {
+            "name": "Office 365",
+            "logo": "hugeicons:office-365",
+            "website": "https://www.office.com/"
+          },
+          "Sharepoint": {
+            "name": "Sharepoint",
+            "logo": "simple-icons:microsoftsharepoint",
+            "website": "https://www.microsoft.com/en-us/microsoft-365/sharepoint/collaboration"
+          }
+        }
+      ]
+    },
+    {
+      "company": "Pythian",
+      "job_title": "Systems Administrator",
+      "type": "Contract",
+      "start": "2014",
+      "end": "2014",
+      "logo": "./images/logos/companies/pythian.png",
+      "website": "https://www.pythian.com/",
+      "technologies": [
+        {
+          "Linux": {
+            "name": "Linux",
+            "logo": "simple-icons:linux",
+            "website": "https://www.linux.org/"
+          },
+          "BASh": {
+            "name": "BASh",
+            "logo": "simple-icons:gnubash",
+            "website": "https://www.gnu.org/software/bash/"
+          },
+          "Windows": {
+            "name": "Windows",
+            "logo": "simple-icons:windows",
+            "website": "https://www.microsoft.com/en-us/windows"
+          },
+          "Exchange": {
+            "name": "Exchange",
+            "logo": "simple-icons:microsoftexchange",
+            "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
+          }
+        }
+      ]
+    },
+    {
+      "company": "Long View Systems",
+      "job_title": "Systems Consultant",
+      "type": "Full Time",
+      "start": "2012",
+      "end": "2014",
+      "logo": "./images/logos/companies/longviewsystems.png",
+      "website": "https://www.longviewsystems.com/",
+      "technologies": [
+        {
+          "Linux": {
+            "name": "Linux",
+            "logo": "simple-icons:linux",
+            "website": "https://www.linux.org/"
+          },
+          "BASh": {
+            "name": "BASh",
+            "logo": "simple-icons:gnubash",
+            "website": "https://www.gnu.org/software/bash/"
+          },
+          "Windows": {
+            "name": "Windows",
+            "logo": "simple-icons:windows",
+            "website": "https://www.microsoft.com/en-us/windows"
+          }
+        }
+      ]
+    },
+    {
+      "company": "Cloudwerx Data Solutions",
+      "job_title": "Technical Analyst",
+      "type": "Full Time",
+      "start": "2011",
+      "end": "2012",
+      "logo": "./images/logos/companies/cloudwerx.png",
+      "website": "https://cloudwerx.com/",
+      "technologies": [
+        {
+          "Linux": {
+            "name": "Linux",
+            "logo": "simple-icons:linux",
+            "website": "https://www.linux.org/"
+          },
+          "Citrix": {
+            "name": "Citrix",
+            "logo": "simple-icons:citrix",
+            "website": "https://www.citrix.com/"
+          },
+          "Windows": {
+            "name": "Windows",
+            "logo": "simple-icons:windows",
+            "website": "https://www.microsoft.com/en-us/windows"
+          },
+          "Exchange": {
+            "name": "Exchange",
+            "logo": "simple-icons:microsoftexchange",
+            "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
           }
         }
       ]
