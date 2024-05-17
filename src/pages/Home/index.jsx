@@ -15,7 +15,7 @@ function Home() {
                             <button className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
                                 <div className="icon-box">
                                     <i className="w-5 h-5 mr-2 text-content-icons">
-                                        <Icon className="mb-1 icon-box" icon="fa6-solid:cloud-arrow-down"/>
+                                        <iconify-icon inline="" className="mb-1 icon-box" icon="fa6-solid:cloud-arrow-down"/>
                                     </i>
                                 </div>
                                 <span className="text-content-header text-sm">Download CV</span>
@@ -65,7 +65,7 @@ function Home() {
                                 <div>
                                     <span className="font-medium text-content-subtitle">Salary: </span>
                                     <span className="text-content-accent">
-                                        <Icon className="icon-box pb-1" icon={personalData.currency_icon}/>
+                                        <iconify-icon inline="" className="icon-box" icon={personalData.currency_icon}/>
                                         {personalData.salary} {personalData.currency}
                                     </span>
                                 </div>

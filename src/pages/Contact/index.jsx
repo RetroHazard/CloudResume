@@ -69,7 +69,7 @@ const ContactForm = () => {
             <button type="submit" className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
                 <div className="icon-box">
                     <i className="w-5 h-5 mr-2 text-content-icons">
-                        <Icon className="mb-1 icon-box" icon="fa6-solid:paper-plane"/>
+                        <iconify-icon inline="" icon="fa6-solid:paper-plane"/>
                     </i>
                 </div>
                 <span className="text-content-header text-sm">Send Message</span>

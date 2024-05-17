@@ -31,8 +31,8 @@ function Navigation() {
                         <NavLink to={"/"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
                         }}>
-                        <i className="icon-box mt-0.5">
-                            <Icon icon="fa6-solid:house"/>
+                        <i className="icon-box">
+                            <iconify-icon inline="" icon="fa6-solid:house"/>
                         </i>
                             Home
                         </NavLink>
@@ -41,8 +41,8 @@ function Navigation() {
                         <NavLink to={"/education"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
                         }}>
-                            <i className="icon-box mt-0.5">
-                                <Icon icon="fa6-solid:graduation-cap"/>
+                            <i className="icon-box">
+                                <iconify-icon inline="" icon="fa6-solid:graduation-cap"/>
                             </i>
                                 Education
                         </NavLink>
@@ -51,8 +51,8 @@ function Navigation() {
                         <NavLink to={"/experience"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
                         }}>
-                            <i className="icon-box mt-0.5">
-                                <Icon icon="fa6-solid:briefcase"/>
+                            <i className="icon-box">
+                                <iconify-icon inline="" icon="fa6-solid:briefcase"/>
                             </i>
                             Experience
                         </NavLink>
@@ -61,8 +61,8 @@ function Navigation() {
                         <NavLink to={"/skills"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
                         }}>
-                            <i className="icon-box mt-0.5">
-                                <Icon icon="fa6-solid:chart-simple"/>
+                            <i className="icon-box">
+                                <iconify-icon inline="" icon="fa6-solid:chart-simple"/>
                             </i>
                             Skills
                         </NavLink>
@@ -71,8 +71,8 @@ function Navigation() {
                         <NavLink to={"/certifications"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
                         }}>
-                            <i className="icon-box mt-0.5">
-                                <Icon icon="fa6-solid:certificate"/>
+                            <i className="icon-box">
+                                <iconify-icon inline="" icon="fa6-solid:certificate"/>
                             </i>
                             Certifications
                         </NavLink>
@@ -81,8 +81,8 @@ function Navigation() {
                         <NavLink to={"/projects"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
                         }}>
-                            <i className="icon-box mt-0.5">
-                                <Icon icon="fa6-solid:layer-group"/>
+                            <i className="icon-box">
+                                <iconify-icon inline="" icon="fa6-solid:layer-group"/>
                             </i>
                             Projects
                         </NavLink>
@@ -91,8 +91,8 @@ function Navigation() {
                         <NavLink to={"/contact"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
                         }}>
-                            <i className="icon-box mt-0.5">
-                                <Icon icon="fa6-solid:message"/>
+                            <i className="icon-box">
+                                <iconify-icon inline="" icon="fa6-solid:message"/>
                             </i>
                             Contact
                         </NavLink>
@@ -100,8 +100,8 @@ function Navigation() {
                     <div className="justify-between bg-secondary-600 h-0.5 mt-2 mb-2 w-full"></div>
                     <li className="flex-col text-sm font-medium text-content-accent">
                         <div className="inline-flex items-center px-4 py-1 mt-1 mb-1 bg-secondary-700 w-full">
-                            <i className="icon-box mt-0.5">
-                                <Icon icon="fa6-solid:users"/>
+                            <i className="icon-box">
+                                <iconify-icon inline="" icon="fa6-solid:users"/>
                             </i>
                             <span className="text-base font-sans" id="visitors"></span>
                         </div>

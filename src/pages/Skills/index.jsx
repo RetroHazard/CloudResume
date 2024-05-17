@@ -85,11 +85,11 @@ function Skills() {
                         <h3 className="h3 text-content-subtitle font-extrabold mb-0">I speak</h3>
                         <div className="flex gap-3 flex-wrap">
                             <div className="skill-block">
-                                <Icon icon="circle-flags:ca" width="1.25em" height="1.25em"/>
+                                <iconify-icon inline=""  icon="circle-flags:ca" width="1.25em" height="1.25em"/>
                                 English - Native
                             </div>
                             <div className="skill-block">
-                                <Icon icon="circle-flags:jp" width="1.25em" height="1.25em"/>
+                                <iconify-icon inline="" icon="circle-flags:jp" width="1.25em" height="1.25em"/>
                                 Japanese - N5
                             </div>
                         </div>
