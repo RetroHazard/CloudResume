@@ -2,7 +2,7 @@ import React from "react";
 import { Icon } from '@iconify-icon/react';
 
 import personalData from '../../assets/json/personal_data.json';
-import socialData from '../../assets/json/social_data.json';
+import SocialLinks from "../../components/social_links";
 
 function Home() {
     return (
@@ -29,28 +29,7 @@ function Home() {
                                 <h2 className="sm:text-lg text-base font-medium text-content-header mb-0">{personalData.jobTitle}</h2>
                             </div>
                             {/* Begin Social Links Section */}
-                            <div className="flex gap-3 flex-wrap sm:flex-nowrap">  {/*TODO: Write Component Function to Automatically Build Social Buttons*/}
-                                <a className="social-link" href={socialData.LinkedIn} aria-label="LinkedIn">
-                                    <i className="text-base text-content-icons">
-                                        <Icon className="social-link" icon="fa6-brands:linkedin-in" height="1.25em" width="1.25em"/>
-                                    </i>
-                                </a>
-                                <a className="social-link" href={socialData.GitHub} aria-label="Github">
-                                    <i className="text-base text-content-icons">
-                                        <Icon className="social-link" icon="fa6-brands:github" height="1.25em" width="1.25em"/>
-                                    </i>
-                                </a>
-                                <a className="social-link" href={socialData.ArtStation} aria-label="ArtStation">
-                                    <i className="text-base text-content-icons">
-                                        <Icon className="social-link" icon="fa6-brands:artstation" height="1.25em" width="1.25em"/>
-                                    </i>
-                                </a>
-                                <a className="social-link" href={socialData.Instagram} aria-label="Instagram">
-                                    <i className="text-base text-content-icons">
-                                        <Icon className="social-link" icon="fa6-brands:instagram" height="1.25em" width="1.25em"/>
-                                    </i>
-                                </a>
-                            </div>
+                            <SocialLinks/>
                             {/* End Social Links Section */}
                         </div>
                         <div className="flex flex-col gap-6">

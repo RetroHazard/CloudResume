@@ -3,22 +3,26 @@
     {
       "name": "LinkedIn",
       "link": "https://www.linkedin.com/in/agbracken/",
-      "icon": ""
+      "logo": "fa6-brands:linkedin-in",
+      "display": true
     },
     {
       "name": "GitHub",
       "link": "https://github.com/RetroHazard",
-      "icon": ""
+      "logo": "fa6-brands:github",
+      "display": true
     },
     {
       "name": "ArtStation",
-      "link": "BA. Communications and Media",
-      "icon": "https://www.artstation.com/retrohazard"
+      "link": "https://www.artstation.com/retrohazard",
+      "logo": "fa6-brands:artstation",
+      "display": true
     },
     {
       "name": "Instagram",
       "link": "https://www.instagram.com/warabiphotography",
-      "icon": ""
+      "logo": "fa6-brands:instagram",
+      "display": false
     }
   ]
 }
