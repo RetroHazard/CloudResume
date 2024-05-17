@@ -1,8 +1,7 @@
 import React from 'react';
-
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faHouse, faGraduationCap, faBriefcase, faChartSimple, faClipboardCheck, faLayerGroup, faMessage, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { NavLink } from "react-router-dom";
+
+import {Icon} from "@iconify-icon/react";
 
 // GET API REQUEST
 async function get_visitors() {
@@ -31,86 +30,79 @@ function Navigation() {
                     <li>
                         <NavLink to={"/"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}
-                        >
-                            <div className="icon-box">
-                                <i><FontAwesomeIcon icon={faHouse}/></i>
-                            </div>
+                        }}>
+                        <i className="icon-box mt-0.5">
+                            <Icon icon="fa6-solid:house"/>
+                        </i>
                             Home
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to={"/education"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}
-                        >
-                            <div className="icon-box">
-                                <i><FontAwesomeIcon icon={faGraduationCap}/></i>
-                            </div>
-                            Education
+                        }}>
+                            <i className="icon-box mt-0.5">
+                                <Icon icon="fa6-solid:graduation-cap"/>
+                            </i>
+                                Education
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to={"/experience"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}
-                        >
-                            <div className="icon-box">
-                                <i><FontAwesomeIcon icon={faBriefcase}/></i>
-                            </div>
+                        }}>
+                            <i className="icon-box mt-0.5">
+                                <Icon icon="fa6-solid:briefcase"/>
+                            </i>
                             Experience
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to={"/skills"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}
-                        >
-                            <div className="icon-box">
-                                <i><FontAwesomeIcon icon={faChartSimple}/></i>
-                            </div>
+                        }}>
+                            <i className="icon-box mt-0.5">
+                                <Icon icon="fa6-solid:chart-simple"/>
+                            </i>
                             Skills
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to={"/certifications"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}
-                        >
-                            <div className="icon-box">
-                                <i><FontAwesomeIcon icon={faClipboardCheck}/></i>
-                            </div>
+                        }}>
+                            <i className="icon-box mt-0.5">
+                                <Icon icon="fa6-solid:certificate"/>
+                            </i>
                             Certifications
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to={"/projects"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}
-                        >
-                            <div className="icon-box">
-                                <i><FontAwesomeIcon icon={faLayerGroup}/></i>
-                            </div>
+                        }}>
+                            <i className="icon-box mt-0.5">
+                                <Icon icon="fa6-solid:layer-group"/>
+                            </i>
                             Projects
                         </NavLink>
                     </li>
                     <li>
                         <NavLink to={"/contact"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}
-                        >
-                            <div className="icon-box">
-                                <i><FontAwesomeIcon icon={faMessage}/></i>
-                            </div>
+                        }}>
+                            <i className="icon-box mt-0.5">
+                                <Icon icon="fa6-solid:message"/>
+                            </i>
                             Contact
                         </NavLink>
                     </li>
                     <div className="justify-between bg-secondary-600 h-0.5 mt-2 mb-2 w-full"></div>
                     <li className="flex-col text-sm font-medium text-content-accent">
                         <div className="inline-flex items-center px-4 py-1 mt-1 mb-1 bg-secondary-700 w-full">
-                            <div className="icon-box">
-                                <i><FontAwesomeIcon icon={faUsers}/></i>
-                            </div>
+                            <i className="icon-box mt-0.5">
+                                <Icon icon="fa6-solid:users"/>
+                            </i>
                             <span className="text-base font-sans" id="visitors"></span>
                         </div>
                     </li>

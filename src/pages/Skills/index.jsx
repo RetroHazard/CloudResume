@@ -1,5 +1,7 @@
 import React from "react";
 
+import {Icon} from "@iconify-icon/react";
+
 function Skills() {
     return (
         <>
@@ -83,10 +85,12 @@ function Skills() {
                         <h3 className="h3 text-content-subtitle font-extrabold mb-0">I speak</h3>
                         <div className="flex gap-3 flex-wrap">
                             <div className="skill-block">
-                                <img className="w-5	h-5 object-cover rounded-full" src="https://raw.githubusercontent.com/lipis/flag-icons/38dbe5f294c9692804d3516d617b3dd991c17ecc/flags/4x3/ca.svg" alt="" /> English - Native
+                                <Icon icon="circle-flags:ca" width="1.25em" height="1.25em"/>
+                                English - Native
                             </div>
                             <div className="skill-block">
-                                <img className="w-5	h-5 object-cover rounded-full" src="https://raw.githubusercontent.com/lipis/flag-icons/38dbe5f294c9692804d3516d617b3dd991c17ecc/flags/4x3/jp.svg" alt="" /> Japanese - N5
+                                <Icon icon="circle-flags:jp" width="1.25em" height="1.25em"/>
+                                Japanese - N5
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ function Home() {
                             <button className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
                                 <div className="icon-box">
                                     <i className="w-5 h-5 mr-2 text-content-icons">
-                                        <Icon className="icon-box" icon="ic:outline-cloud-download" width={25} height={25}/>
+                                        <Icon className="mb-1 icon-box" icon="fa6-solid:cloud-arrow-down"/>
                                     </i>
                                 </div>
                                 <span className="text-content-header text-sm">Download CV</span>
@@ -32,22 +32,22 @@ function Home() {
                             <div className="flex gap-3 flex-wrap sm:flex-nowrap">  {/*TODO: Write Component Function to Automatically Build Social Buttons*/}
                                 <a className="social-link" href={socialData.LinkedIn} aria-label="LinkedIn">
                                     <i className="text-base text-content-icons">
-                                        <Icon className="social-link" icon="akar-icons:linkedin-v2-fill"/>
+                                        <Icon className="social-link" icon="fa6-brands:linkedin-in" height="1.25em" width="1.25em"/>
                                     </i>
                                 </a>
                                 <a className="social-link" href={socialData.GitHub} aria-label="Github">
                                     <i className="text-base text-content-icons">
-                                        <Icon className="social-link" icon="akar-icons:github-fill"/>
+                                        <Icon className="social-link" icon="fa6-brands:github" height="1.25em" width="1.25em"/>
                                     </i>
                                 </a>
                                 <a className="social-link" href={socialData.ArtStation} aria-label="ArtStation">
                                     <i className="text-base text-content-icons">
-                                        <Icon className="social-link" icon="mdi:artstation"/>
+                                        <Icon className="social-link" icon="fa6-brands:artstation" height="1.25em" width="1.25em"/>
                                     </i>
                                 </a>
                                 <a className="social-link" href={socialData.Instagram} aria-label="Instagram">
                                     <i className="text-base text-content-icons">
-                                        <Icon className="social-link" icon="akar-icons:instagram-fill"/>
+                                        <Icon className="social-link" icon="fa6-brands:instagram" height="1.25em" width="1.25em"/>
                                     </i>
                                 </a>
                             </div>
@@ -73,7 +73,7 @@ function Home() {
                             <div className="flex flex-col gap-4"> {/* TODO: Write Function to Automatically Retrieve Content from File(?) */}
                                 <p className="leading-relaxed mb-0 text-sm sm:text-base sm:leading-relaxed">
                                     Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui
-                                    at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a href="/public">vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
+                                    at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a href=".">vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
                                 </p>
                                 <p className="leading-relaxed mb-0 text-sm sm:text-base sm:leading-relaxed">
                                     Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a href="/public">vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
