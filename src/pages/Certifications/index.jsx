@@ -10,7 +10,7 @@ function Certifications() {
                 <div className="flex flex-col gap-3">
                     <div className="flex gap-2 justify-between w-full">
                         <div className="flex gap-4">
-                            <img className="hidden rounded-md sm:block h-[8rem] w-[8rem]" src="./images/placeholder.png" alt="" />
+                            <img className="hidden rounded-xl sm:block h-[8rem] w-[8rem]" src="./images/placeholder.png" alt="" />
                             <div className="flex flex-col">
                                 <h3 className="h3 font-extrabold text-content-title mb-0">(CERTIFICATION)</h3>
                                 <p className="text-content-subtitle font-semibold leading-snug mb-0.5">(ISSUER)</p>

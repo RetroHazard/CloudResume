@@ -12,7 +12,7 @@ function Projects() {
                         <div className="flex flex-col gap-4">
                             <div className="flex flex-col w-full gap-4">
                                 <div className="flex gap-4">
-                                    <img className="hidden rounded-md sm:block h-[6rem] w-[6rem]" src="./images/placeholder.png" alt="" />
+                                    <img className="hidden rounded-xl sm:block h-[6rem] w-[6rem]" src="./images/placeholder.png" alt="" />
                                     <div className="flex justify-between w-full">
                                         <div className="flex justify-between w-full">
                                             <div>
