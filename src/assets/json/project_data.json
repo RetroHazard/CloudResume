@@ -14,13 +14,13 @@
           "demo": [
             {
               "website": "https://www.cloudresume-agb.jp",
-              "icon": ""
+              "icon": "fa6-solid:paintbrush"
             }
           ],
-          "description": [
+          "spec": [
             {
               "website": "https://cloudresumechallenge.dev/",
-              "icon": ""
+              "icon": "fa6-solid:desktop"
             }
           ]
         }
@@ -34,23 +34,77 @@
           },
           "react.js": {
             "name": "react.js",
-            "logo": "simple-icons:amazonaws",
-            "website": "https://aws.amazon.com/"
+            "logo": "simple-icons:react",
+            "website": "https://react.dev/"
           },
-          "node.js": {
-            "name": "node.js",
-            "logo": "simple-icons:amazonaws",
-            "website": "https://aws.amazon.com/"
+          "Node.js": {
+            "name": "Node.js",
+            "logo": "simple-icons:nodedotjs",
+            "website": "https://nodejs.org/en"
           },
           "tailwindCSS": {
             "name": "tailwindCSS",
-            "logo": "simple-icons:amazonaws",
-            "website": "https://aws.amazon.com/"
+            "logo": "simple-icons:tailwindcss",
+            "website": "https://tailwindcss.com"
           },
           "Python": {
             "name": "Python",
-            "logo": "simple-icons:amazonaws",
-            "website": "https://aws.amazon.com/"
+            "logo": "simple-icons:python",
+            "website": "https://www.python.org"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Interactive Switches",
+      "company": "Hollow Souls",
+      "category": "Unreal Engine Blueprint",
+      "role": "Project Lead",
+      "size": "1",
+      "start": "2022",
+      "end": "2022",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "links": [
+        {
+          "demo": [
+            {
+              "website": "https://www.unrealengine.com/marketplace/en-US/product/interactive-switches",
+              "icon": "fa6-solid:paintbrush"
+            }
+          ]
+        }
+      ],
+      "technologies": [
+        {
+          "Unreal Engine": {
+            "name": "Unreal Engine",
+            "logo": "simple-icons:unrealengine",
+            "website": "https://www.unrealengine.com/"
+          },
+          "Blender": {
+            "name": "Blender",
+            "logo": "simple-icons:blender",
+            "website": "https://www.blender.org/"
+          },
+          "C++": {
+            "name": "C++",
+            "logo": "ph:file-cpp-fill",
+            "website": "https://cplusplus.com/"
+          },
+          "Perforce": {
+            "name": "Perforce",
+            "logo": "simple-icons:perforce",
+            "website": "https://www.perforce.com/"
+          },
+          "Jetbrains Rider": {
+            "name": "Jetbrains Rider",
+            "logo": "simple-icons:rider",
+            "website": "https://www.jetbrains.com/rider/"
+          },
+          "Creative Cloud": {
+            "name": "Creative Cloud",
+            "logo": "simple-icons:adobecreativecloud",
+            "website": "https://www.adobe.com/creativecloud.html"
           }
         }
       ]

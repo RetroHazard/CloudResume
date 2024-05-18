@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+
 import EducationItem from '../components/education_item';
 import data from '../assets/json/education_data.json';
 

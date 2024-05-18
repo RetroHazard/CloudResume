@@ -22,7 +22,7 @@ const ExperienceItem = ({ company, job_title, type, start, end, logo, website, t
                 </div>
             </div>
             <div className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-3">
-                <ul className="list-disc pl-5">
+                <ul className="list-disc pl-5"> {/* TODO: Retrieve List Items from JSON */}
                     <li>In tristique vulputate augue vel egestas.</li>
                     <li>Quisque ac imperdiet tortor, at lacinia ex.</li>
                     <li>Duis vel ex hendrerit, commodo odio sed, aliquam enim.</li>

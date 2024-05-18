@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {Icon} from "@iconify-icon/react";
+import { Icon } from "@iconify-icon/react";
 
 const EducationItem = ({ school, degree, category, start, end, logo, website }) => (
     <div className="flex flex-col gap-3">
@@ -24,7 +24,7 @@ const EducationItem = ({ school, degree, category, start, end, logo, website }) 
                 </a>
             </div>
         </div>
-        <p className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-0">
+        <p className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-0"> {/* TODO: Retrieve Additional Text from JSON */}
             Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui at <em>vestibulum</em>.
         </p>
     </div>
