@@ -1,0 +1,59 @@
+{
+  "Projects": [
+    {
+      "name": "Cloud Resume Challenge",
+      "company": "Hollow Souls",
+      "category": "Full Stack",
+      "role": "Project Lead",
+      "size": "1",
+      "start": "2024",
+      "end": "NOW",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "links": [
+        {
+          "demo": [
+            {
+              "website": "https://www.cloudresume-agb.jp",
+              "icon": ""
+            }
+          ],
+          "description": [
+            {
+              "website": "https://cloudresumechallenge.dev/",
+              "icon": ""
+            }
+          ]
+        }
+      ],
+      "technologies": [
+        {
+          "AWS": {
+            "name": "AWS",
+            "logo": "simple-icons:amazonaws",
+            "website": "https://aws.amazon.com/"
+          },
+          "react.js": {
+            "name": "react.js",
+            "logo": "simple-icons:amazonaws",
+            "website": "https://aws.amazon.com/"
+          },
+          "node.js": {
+            "name": "node.js",
+            "logo": "simple-icons:amazonaws",
+            "website": "https://aws.amazon.com/"
+          },
+          "tailwindCSS": {
+            "name": "tailwindCSS",
+            "logo": "simple-icons:amazonaws",
+            "website": "https://aws.amazon.com/"
+          },
+          "Python": {
+            "name": "Python",
+            "logo": "simple-icons:amazonaws",
+            "website": "https://aws.amazon.com/"
+          }
+        }
+      ]
+    }
+  ]
+}
