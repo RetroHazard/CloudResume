@@ -12,61 +12,58 @@ function Projects() {
                         <div className="flex flex-col gap-4">
                             <div className="flex flex-col w-full gap-4">
                                 <div className="flex gap-4">
-                                    <img className="hidden rounded-xl sm:block h-[6rem] w-[6rem]" src="./images/placeholder.png" alt="" />
+                                    <img className="hidden rounded-xl sm:block h-[6rem] w-[6rem]"
+                                         src="./images/placeholder.png" alt=""/>
                                     <div className="flex justify-between w-full">
-                                        <div className="flex justify-between w-full">
+                                        <div className="flex flex-col w-full">
                                             <div>
                                                 <h3 className="h3 text-content-subtitle font-extrabold mb-0">(PROJECT_NAME)</h3>
-                                                <div>
-                                                    <span className="text-content-accent">(PROJECT_COMPANY)</span>
-                                                </div>
-                                                <div>
-                                                    <span className="text-content-accent">(PROJECT_CATEGORY)</span>
-                                                </div>
-                                                <p className="font-medium text-sm text-content-date mb-0">(START) -
-                                                    (END)</p>
                                             </div>
-                                            <div className="flex gap-2">
-                                                <a href="#" className="social-link" target="_blank" aria-label="Design">
-                                                    <Icon icon="fa6-solid:paintbrush" height="1.25em" width="1.25em"/>
-                                                </a>
-                                                <a href="#" className="social-link" target="_blank"
-                                                   aria-label="Project">
-                                                    <Icon icon="fa6-solid:desktop" height="1.25em" width="1.25em"/>
-                                                </a>
+                                            <div className="flex gap-24">
+                                                <div className="flex flex-col">
+                                                    <span className="text-content-accent">Company: (PROJECT_COMPANY)</span>
+                                                    <span className="text-content-accent">Category: (PROJECT_CATEGORY)</span>
+                                                </div>
+                                                <div className="flex flex-col">
+                                                    <span className="text-content-accent">Team Role: (PROJECT_ROLE)</span>
+                                                    <span className="text-content-accent">Team Size: (PROJECT_SIZE)</span>
+                                                </div>
                                             </div>
+                                            <p className="font-medium text-sm text-content-date mb-0">(START) -
+                                                (END)</p>
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <a href="#" className="social-link" target="_blank" aria-label="Design">
+                                                <Icon icon="fa6-solid:paintbrush" height="1.25em" width="1.25em"/>
+                                            </a>
+                                            <a href="#" className="social-link" target="_blank" aria-label="Project">
+                                                <Icon icon="fa6-solid:desktop" height="1.25em" width="1.25em"/>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="inline-grid xl:grid-cols-[auto_auto] w-full">
-                                    <div>
-                                        <span className="font-medium text-content-subtitle">Team Size: </span>
-                                        <span className="text-content-accent">(PROJECT_SIZE)</span>
-                                    </div>
-                                    <div>
-                                        <span className="font-medium text-content-subtitle">My Role: </span>
-                                        <span className="text-content-accent">(PROJECT_ROLE)</span>
-                                    </div>
-                                </div>
                             </div>
+
                             <div className="text-sm leading-relaxed sm:leading-relaxed sm:text-base">
-                                <p>In tristique vulputate augue vel egestas. Quisque ac imperdiet tortor, at lacinia ex. Duis vel ex hendrerit, commodo odio sed, aliquam enim. Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi. Nunc malesuada leo et est iaculis facilisis.</p>
+                                <p>In tristique vulputate augue vel egestas. Quisque ac imperdiet tortor, at lacinia ex.
+                                    Duis vel ex hendrerit, commodo odio sed, aliquam enim. Ut arcu nulla, tincidunt eget
+                                    arcu eget, molestie vulputate nisi. Nunc malesuada leo et est iaculis facilisis.</p>
                             </div>
                         </div>
                         <div className="flex flex-col gap-1.5">
                             <span className="font-medium text-content-subtitle">Technologies:</span>
                             <div className="flex gap-3 flex-wrap">
                                 <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
+                                    <img className="w-4	h-4" src="./images/placeholder.png" alt=""/>Skill
                                 </a>
                                 <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
+                                    <img className="w-4	h-4" src="./images/placeholder.png" alt=""/>Skill
                                 </a>
                                 <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
+                                    <img className="w-4	h-4" src="./images/placeholder.png" alt=""/>Skill
                                 </a>
                                 <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                    <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
+                                <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
                                 </a>
                             </div>
                         </div>
