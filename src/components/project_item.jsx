@@ -44,6 +44,7 @@ const ProjectItem = ({ project }) => {
                 </div>
 
                 <div className="text-sm leading-relaxed sm:leading-relaxed sm:text-base">
+                    {/* TODO: Add Project Details to JSON Data */}
                     <p>In tristique vulputate augue vel egestas. Quisque ac imperdiet tortor, at lacinia ex. Duis vel ex hendrerit, commodo odio sed, aliquam enim. Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi. Nunc malesuada leo et est iaculis facilisis.</p>
                 </div>
             </div>
