@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Icon } from '@iconify-icon/react';
+import SkillButton from "./skill_button";
 
 const ExperienceItem = ({ company, job_title, type, start, end, logo, website, technologies }) => {
     return (
@@ -33,14 +34,7 @@ const ExperienceItem = ({ company, job_title, type, start, end, logo, website, t
             </div>
             <div className="flex flex-col gap-1.5">
                 <span className="font-medium text-content-accent">Technologies:</span>
-                <div className="flex gap-3 flex-wrap">
-                    {technologies.map((tech, index) => (
-                        <a key={index} className="skill-block" href={tech.website} target="_blank" rel="noopener noreferrer">
-                            <Icon className="icon-box" icon={tech.logo} width="1.1rem" height="1.1rem" />
-                            {tech.name}
-                        </a>
-                    ))}
-                </div>
+                <SkillButton skills={technologies} />
             </div>
         </div>
     );
