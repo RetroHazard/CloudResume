@@ -1,6 +1,7 @@
 import React from "react";
 
 import LanguageItem from "../../components/language_item";
+import SkillButton from "../../components/skill_button";
 
 function Skills() {
     return (
@@ -66,20 +67,7 @@ function Skills() {
                     </div>
                     <div className="flex flex-col gap-3">
                         <h3 className="h3 text-content-subtitle font-extrabold mb-0">Interested in:</h3>
-                        <div className="flex gap-3 flex-wrap">
-                            <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
-                            </a>
-                            <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
-                            </a>
-                            <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
-                            </a>
-                            <a href="#" className="skill-block" target="_blank" rel="noopener noreferrer">
-                                <img className="w-4	h-4" src="./images/placeholder.png" alt="" />Skill
-                            </a>
-                        </div>
+                        <SkillButton/>
                     </div>
                     <div className="flex flex-col gap-3">
                         <h3 className="h3 text-content-subtitle font-extrabold mb-0">I speak</h3>

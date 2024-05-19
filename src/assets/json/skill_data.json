@@ -23,20 +23,24 @@
   ],
   "target_skills": [
     {
-      "name": "",
-      "logo": ""
+      "name": "Skill",
+      "logo": "ph:placeholder-fill",
+      "website": "."
     },
     {
-      "name": "",
-      "logo": ""
+      "name": "Skill",
+      "logo": "ph:placeholder-fill",
+      "website": "."
     },
     {
-      "name": "",
-      "logo": ""
+      "name": "Skill",
+      "logo": "ph:placeholder-fill",
+      "website": "."
     },
     {
-      "name": "",
-      "logo": ""
+      "name": "Skill",
+      "logo": "ph:placeholder-fill",
+      "website": "."
     }
   ],
   "language_skills": [
