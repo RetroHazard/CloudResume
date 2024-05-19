@@ -10,46 +10,44 @@
       "website": "https://www.hollowsouls.com",
       "technologies": [
         {
-          "C++": {
-            "name": "C++",
-            "logo": "ph:file-cpp-fill",
-            "website": "https://cplusplus.com/"
-          },
-          "Blender": {
-            "name": "Blender",
-            "logo": "simple-icons:blender",
-            "website": "https://www.blender.org/"
-          },
-          "Unreal Engine": {
-            "name": "Unreal Engine",
-            "logo": "simple-icons:unrealengine",
-            "website": "https://www.unrealengine.com/"
-          },
-          "Perforce": {
-            "name": "Perforce",
-            "logo": "simple-icons:perforce",
-            "website": "https://www.perforce.com/"
-          },
-          "Jetbrains Rider": {
-            "name": "Jetbrains Rider",
-            "logo": "simple-icons:rider",
-            "website": "https://www.jetbrains.com/rider/"
-          },
-          "Creative Cloud": {
-            "name": "Creative Cloud",
-            "logo": "simple-icons:adobecreativecloud",
-            "website": "https://www.adobe.com/creativecloud.html"
-          },
-          "Houdini": {
-            "name": "Houdini",
-            "logo": "simple-icons:houdini",
-            "website": "https://www.sidefx.com/"
-          },
-          "AWS": {
-            "name": "AWS",
-            "logo": "simple-icons:amazonaws",
-            "website": "https://aws.amazon.com/"
-          }
+          "name": "C++",
+          "logo": "ph:file-cpp-fill",
+          "website": "https://cplusplus.com/"
+        },
+        {
+          "name": "Blender",
+          "logo": "simple-icons:blender",
+          "website": "https://www.blender.org/"
+        },
+        {
+          "name": "Unreal Engine",
+          "logo": "simple-icons:unrealengine",
+          "website": "https://www.unrealengine.com/"
+        },
+        {
+          "name": "Perforce",
+          "logo": "simple-icons:perforce",
+          "website": "https://www.perforce.com/"
+        },
+        {
+          "name": "Jetbrains Rider",
+          "logo": "simple-icons:rider",
+          "website": "https://www.jetbrains.com/rider/"
+        },
+        {
+          "name": "Creative Cloud",
+          "logo": "simple-icons:adobecreativecloud",
+          "website": "https://www.adobe.com/creativecloud.html"
+        },
+        {
+          "name": "Houdini",
+          "logo": "simple-icons:houdini",
+          "website": "https://www.sidefx.com/"
+        },
+        {
+          "name": "AWS",
+          "logo": "simple-icons:amazonaws",
+          "website": "https://aws.amazon.com/"
         }
       ]
     },
@@ -63,36 +61,34 @@
       "website": "https://www.indeed.com/",
       "technologies": [
         {
-          "AWS": {
-            "name": "AWS",
-            "logo": "simple-icons:amazonaws",
-            "website": "https://aws.amazon.com/"
-          },
-          "Atlassian": {
-            "name": "Atlassian Suite",
-            "logo": "simple-icons:atlassian",
-            "website": "https://www.atlassian.com"
-          },
-          "CloudFlare": {
-            "name": "CloudFlare",
-            "logo": "simple-icons:cloudflare",
-            "website": "https://www.cloudflare.com"
-          },
-          "Google": {
-            "name": "Google Suite",
-            "logo": "simple-icons:google",
-            "website": "https://www.google.com"
-          },
-          "GitLab": {
-            "name": "GitLab",
-            "logo": "simple-icons:gitlab",
-            "website": "https://about.gitlab.com/"
-          },
-          "Linux": {
-            "name": "Linux",
-            "logo": "simple-icons:linux",
-            "website": "https://www.linux.org/"
-          }
+          "name": "AWS",
+          "logo": "simple-icons:amazonaws",
+          "website": "https://aws.amazon.com/"
+        },
+        {
+          "name": "Atlassian Suite",
+          "logo": "simple-icons:atlassian",
+          "website": "https://www.atlassian.com"
+        },
+        {
+          "name": "CloudFlare",
+          "logo": "simple-icons:cloudflare",
+          "website": "https://www.cloudflare.com"
+        },
+        {
+          "name": "Google Suite",
+          "logo": "simple-icons:google",
+          "website": "https://www.google.com"
+        },
+        {
+          "name": "GitLab",
+          "logo": "simple-icons:gitlab",
+          "website": "https://about.gitlab.com/"
+        },
+        {
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
         }
       ]
     },
@@ -106,31 +102,29 @@
       "website": "https://www.indeed.com/",
       "technologies": [
         {
-          "Atlassian": {
-            "name": "Atlassian Suite",
-            "logo": "simple-icons:atlassian",
-            "website": "https://www.atlassian.com"
-          },
-          "Google": {
-            "name": "Google Suite",
-            "logo": "simple-icons:google",
-            "website": "https://www.google.com"
-          },
-          "Python": {
-            "name": "Python",
-            "logo": "simple-icons:python",
-            "website": "https://www.python.org/"
-          },
-          "Linux": {
-            "name": "Linux",
-            "logo": "simple-icons:linux",
-            "website": "https://www.linux.org/"
-          },
-          "Mac": {
-            "name": "macOS",
-            "logo": "simple-icons:apple",
-            "website": "https://www.apple.com"
-          }
+          "name": "Atlassian Suite",
+          "logo": "simple-icons:atlassian",
+          "website": "https://www.atlassian.com"
+        },
+        {
+          "name": "Google Suite",
+          "logo": "simple-icons:google",
+          "website": "https://www.google.com"
+        },
+        {
+          "name": "Python",
+          "logo": "simple-icons:python",
+          "website": "https://www.python.org/"
+        },
+        {
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
+        },
+        {
+          "name": "macOS",
+          "logo": "simple-icons:apple",
+          "website": "https://www.apple.com"
         }
       ]
     },
@@ -144,26 +138,24 @@
       "website": "https://www.ucalgary.ca/",
       "technologies": [
         {
-          "Microsoft Windows": {
-            "name": "Windows",
-            "logo": "simple-icons:windows",
-            "website": "https://www.microsoft.com/en-us/windows"
-          },
-          "macOS": {
-            "name": "macOS",
-            "logo": "simple-icons:apple",
-            "website": "https://www.apple.com"
-          },
-          "Office 365": {
-            "name": "Office 365",
-            "logo": "hugeicons:office-365",
-            "website": "https://www.office.com/"
-          },
-          "Sharepoint": {
-            "name": "Sharepoint",
-            "logo": "simple-icons:microsoftsharepoint",
-            "website": "https://www.microsoft.com/en-us/microsoft-365/sharepoint/collaboration"
-          }
+          "name": "Windows",
+          "logo": "simple-icons:windows",
+          "website": "https://www.microsoft.com/en-us/windows"
+        },
+        {
+          "name": "macOS",
+          "logo": "simple-icons:apple",
+          "website": "https://www.apple.com"
+        },
+        {
+          "name": "Office 365",
+          "logo": "hugeicons:office-365",
+          "website": "https://www.office.com/"
+        },
+        {
+          "name": "Sharepoint",
+          "logo": "simple-icons:microsoftsharepoint",
+          "website": "https://www.microsoft.com/en-us/microsoft-365/sharepoint/collaboration"
         }
       ]
     },
@@ -177,26 +169,24 @@
       "website": "https://www.pythian.com/",
       "technologies": [
         {
-          "Linux": {
-            "name": "Linux",
-            "logo": "simple-icons:linux",
-            "website": "https://www.linux.org/"
-          },
-          "BASh": {
-            "name": "BASh",
-            "logo": "simple-icons:gnubash",
-            "website": "https://www.gnu.org/software/bash/"
-          },
-          "Windows": {
-            "name": "Windows",
-            "logo": "simple-icons:windows",
-            "website": "https://www.microsoft.com/en-us/windows"
-          },
-          "Exchange": {
-            "name": "Exchange",
-            "logo": "simple-icons:microsoftexchange",
-            "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
-          }
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
+        },
+        {
+          "name": "BASh",
+          "logo": "simple-icons:gnubash",
+          "website": "https://www.gnu.org/software/bash/"
+        },
+        {
+          "name": "Windows",
+          "logo": "simple-icons:windows",
+          "website": "https://www.microsoft.com/en-us/windows"
+        },
+        {
+          "name": "Exchange",
+          "logo": "simple-icons:microsoftexchange",
+          "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
         }
       ]
     },
@@ -210,21 +200,19 @@
       "website": "https://www.longviewsystems.com/",
       "technologies": [
         {
-          "Linux": {
-            "name": "Linux",
-            "logo": "simple-icons:linux",
-            "website": "https://www.linux.org/"
-          },
-          "BASh": {
-            "name": "BASh",
-            "logo": "simple-icons:gnubash",
-            "website": "https://www.gnu.org/software/bash/"
-          },
-          "Windows": {
-            "name": "Windows",
-            "logo": "simple-icons:windows",
-            "website": "https://www.microsoft.com/en-us/windows"
-          }
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
+        },
+        {
+          "name": "BASh",
+          "logo": "simple-icons:gnubash",
+          "website": "https://www.gnu.org/software/bash/"
+        },
+        {
+          "name": "Windows",
+          "logo": "simple-icons:windows",
+          "website": "https://www.microsoft.com/en-us/windows"
         }
       ]
     },
@@ -238,26 +226,24 @@
       "website": "https://cloudwerx.com/",
       "technologies": [
         {
-          "Linux": {
-            "name": "Linux",
-            "logo": "simple-icons:linux",
-            "website": "https://www.linux.org/"
-          },
-          "Citrix": {
-            "name": "Citrix",
-            "logo": "simple-icons:citrix",
-            "website": "https://www.citrix.com/"
-          },
-          "Windows": {
-            "name": "Windows",
-            "logo": "simple-icons:windows",
-            "website": "https://www.microsoft.com/en-us/windows"
-          },
-          "Exchange": {
-            "name": "Exchange",
-            "logo": "simple-icons:microsoftexchange",
-            "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
-          }
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
+        },
+        {
+          "name": "Citrix",
+          "logo": "simple-icons:citrix",
+          "website": "https://www.citrix.com/"
+        },
+        {
+          "name": "Windows",
+          "logo": "simple-icons:windows",
+          "website": "https://www.microsoft.com/en-us/windows"
+        },
+        {
+          "name": "Exchange",
+          "logo": "simple-icons:microsoftexchange",
+          "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
         }
       ]
     }

@@ -9,7 +9,6 @@ const ExperienceList = () => {
             {data.Experience.map((experience, index) => (
                 <React.Fragment key={index}>
                 <ExperienceItem
-                    key={index}
                     company={experience.company}
                     job_title={experience.job_title}
                     type={experience.type}

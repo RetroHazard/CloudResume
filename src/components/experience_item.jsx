@@ -35,12 +35,10 @@ const ExperienceItem = ({ company, job_title, type, start, end, logo, website, t
                 <span className="font-medium text-content-accent">Technologies:</span>
                 <div className="flex gap-3 flex-wrap">
                     {technologies.map((tech, index) => (
-                        Object.values(tech).map((skill, i) => (
-                            <a className="skill-block" href={skill.website} target="_blank" rel="noopener noreferrer">
-                                <Icon className="icon-box" icon={skill.logo} width="1.1rem" height="1.1rem" />
-                                {skill.name}
-                            </a>
-                        ))
+                        <a key={index} className="skill-block" href={tech.website} target="_blank" rel="noopener noreferrer">
+                            <Icon className="icon-box" icon={tech.logo} width="1.1rem" height="1.1rem" />
+                            {tech.name}
+                        </a>
                     ))}
                 </div>
             </div>
