@@ -1,0 +1,54 @@
+{
+  "core_skills": [
+    {
+      "name": "Skill",
+      "level": "25%",
+      "logo": ""
+    },
+    {
+      "name": "Skill",
+      "level": "75%",
+      "logo": ""
+    },
+    {
+      "name": "Skill",
+      "level": "45%",
+      "logo": ""
+    },
+    {
+      "name": "Skill",
+      "level": "90%",
+      "logo": ""
+    }
+  ],
+  "target_skills": [
+    {
+      "name": "",
+      "logo": ""
+    },
+    {
+      "name": "",
+      "logo": ""
+    },
+    {
+      "name": "",
+      "logo": ""
+    },
+    {
+      "name": "",
+      "logo": ""
+    }
+  ],
+  "language_skills": [
+    {
+      "language": "English",
+      "level": "Native",
+      "flag": "circle-flags:ca"
+    },
+    {
+      "language": "Japanese",
+      "level": "N5",
+      "flag": "circle-flags:jp"
+    }
+  ]
+}
