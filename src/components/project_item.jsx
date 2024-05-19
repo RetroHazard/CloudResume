@@ -28,16 +28,15 @@ const ProjectItem = ({ project }) => {
                                 <p className="font-medium text-sm text-content-date mb-0">{start} - {end}</p>
                             </div>
                             <div className="flex gap-2">
-                                {links[0]?.demo && links[0].demo.map((link, index) => (
-                                    <a href={link.website} className="social-link" target="_blank" aria-label="Demo" rel="noopener noreferrer">
-                                        <Icon icon={link.icon} height="1.25em" width="1.25em" />
-                                    </a>
-                                ))}
-                                {links[0]?.spec && links[0].spec.map((link, index) => (
-                                    <a href={link.website} className="social-link" target="_blank" aria-label="Spec" rel="noopener noreferrer">
-                                        <Icon icon={link.icon} height="1.25em" width="1.25em" />
-                                    </a>
-                                ))}
+                                {links && links.map((linkGroup, index) =>
+                                    Object.keys(linkGroup).map((linkType) => (
+                                        linkGroup[linkType].map((link, idx) => (
+                                            <a key={`${index}-${linkType}-${idx}`} href={link.website} className="social-link" target="_blank" aria-label={linkType} rel="noopener noreferrer">
+                                                <Icon icon={link.icon} height="1.25em" width="1.25em" />
+                                            </a>
+                                        ))
+                                    ))
+                                )}
                             </div>
                         </div>
                     </div>
@@ -51,7 +50,7 @@ const ProjectItem = ({ project }) => {
             <div className="flex flex-col gap-1.5">
                 <span className="font-medium text-content-subtitle">Technologies:</span>
                 <div className="flex gap-3 flex-wrap">
-                    {Object.values(technologies[0]).map((tech, index) => (
+                    {technologies.map((tech, index) => (
                         <a key={index} href={tech.website} className="skill-block" target="_blank" rel="noopener noreferrer">
                             <Icon className="icon-box" icon={tech.logo} width="1.1rem" height="1.1rem" />
                             {tech.name}
