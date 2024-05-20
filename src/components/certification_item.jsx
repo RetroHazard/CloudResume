@@ -27,8 +27,8 @@ const CertificationItem = ({ issuer, certification, credential_id, date, logo, l
                     )}
                 </div>
             </div>
-            <p className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-0">
-                (DESCRIPTION)
+            <p className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-0"> {/* TODO: Retrieve Additional Text from JSON */}
+                Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui at <em>vestibulum</em>.
             </p>
         </div>
 );

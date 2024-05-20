@@ -59,6 +59,7 @@ function Home() {
                                 <div className="flex gap-3 flex-wrap">
                                     <div className="open-for-block">Open for work</div>
                                     <div className="open-for-block">Available for consulting</div>
+                                    <div className="open-for-block">Looking to learn</div>
                                     <div className="open-for-block">Working on side project</div>
                                 </div>
                             </div>
