@@ -8,18 +8,18 @@
       "logo": "./images/logos/certifications/sscp.png",
       "links": [
         {
-          "credential_info": [
-            {
-              "website": "https://www.isc2.org/certifications/sscp",
-              "icon": "fa6-solid:info",
-              "display": true
-            }
-          ],
           "verification": [
             {
               "website": "",
               "icon": "fa6-solid:award",
               "display": false
+            }
+          ],
+          "credential_info": [
+            {
+              "website": "https://www.isc2.org/certifications/sscp",
+              "icon": "fa6-solid:info",
+              "display": true
             }
           ]
         }
@@ -33,18 +33,18 @@
       "logo": "./images/logos/certifications/itil-foundation.png",
       "links": [
         {
-          "credential_info": [
-            {
-              "website": "https://www.axelos.com/certifications/itil/itil-v3-foundation-certification/",
-              "icon": "fa6-solid:info",
-              "display": true
-            }
-          ],
           "verification": [
             {
               "website": "",
               "icon": "fa6-solid:award",
               "display": false
+            }
+          ],
+          "credential_info": [
+            {
+              "website": "https://www.axelos.com/certifications/itil/itil-v3-foundation-certification/",
+              "icon": "fa6-solid:info",
+              "display": true
             }
           ]
         }
@@ -58,17 +58,17 @@
       "logo": "./images/logos/certifications/mcts.png",
       "links": [
         {
-          "credential_info": [
-            {
-              "website": "",
-              "icon": "fa6-solid:info",
-              "display": false
-            }
-          ],
           "verification": [
             {
               "website": "",
               "icon": "fa6-solid:award",
+              "display": false
+            }
+          ],
+          "credential_info": [
+            {
+              "website": "",
+              "icon": "fa6-solid:info",
               "display": false
             }
           ]
@@ -83,17 +83,17 @@
       "logo": "./images/logos/certifications/mcts.png",
       "links": [
         {
-          "credential_info": [
-            {
-              "website": "",
-              "icon": "fa6-solid:info",
-              "display": false
-            }
-          ],
           "verification": [
             {
               "website": "",
               "icon": "fa6-solid:award",
+              "display": false
+            }
+          ],
+          "credential_info": [
+            {
+              "website": "",
+              "icon": "fa6-solid:info",
               "display": false
             }
           ]
