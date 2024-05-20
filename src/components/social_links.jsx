@@ -4,7 +4,6 @@ import { Icon } from '@iconify-icon/react';
 import socialData from '../assets/json/socials_data.json';
 
 const SocialLinks = () => {
-
     const displayedSocials = socialData.Socials.filter(social => social.display);
 
     return (
