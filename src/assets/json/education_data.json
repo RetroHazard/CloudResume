@@ -2,30 +2,93 @@
   "Education": [
     {
       "school": "University of Calgary",
-      "degree": "BA. Communications and Media",
+      "degree": "BA. Communications and Media Studies",
       "category": "Liberal Arts",
       "start": "2016",
       "end": "2021",
       "logo": "./images/logos/education/uofc.png",
-      "website": "https://www.ucalgary.ca/"
+      "details": [
+        "In tristique vulputate augue vel egestas.",
+        "Quisque ac imperdiet tortor, at lacinia ex.",
+        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
+        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+      ],
+      "links": [
+        {
+          "program": [
+            {
+              "website": "https://www.ucalgary.ca/future-students/undergraduate/explore-programs/communication-media-studies",
+              "icon": "fa6-solid:circle-info"
+            }
+          ],
+          "school": [
+            {
+              "website": "https://www.ucalgary.ca/",
+              "icon": "fa6-solid:globe"
+            }
+          ]
+        }
+      ]
     },
     {
       "school": "Waseda University",
-      "degree": "International Studies",
+      "degree": "EX. International Studies",
       "category": "Liberal Arts",
       "start": "2018",
       "end": "2019",
       "logo": "./images/logos/education/waseda.png",
-      "website": "https://www.waseda.jp/top/en"
+      "details": [
+        "In tristique vulputate augue vel egestas.",
+        "Quisque ac imperdiet tortor, at lacinia ex.",
+        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
+        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+      ],
+      "links": [
+        {
+          "program": [
+            {
+              "website": "https://www.waseda.jp/fire/sils/en/students/study-abroad/",
+              "icon": "fa6-solid:circle-info"
+            }
+          ],
+          "school": [
+            {
+              "website": "https://www.waseda.jp/top/en",
+              "icon": "fa6-solid:globe"
+            }
+          ]
+        }
+      ]
     },
     {
       "school": "Centre for Arts and Technology",
-      "degree": "Associates Degree, Network Security",
+      "degree": "AS. Network Administration and Security",
       "category": "Computer Science",
       "start": "2009",
       "end": "2011",
       "logo": "./images/logos/education/cato.png",
-      "website": "https://digitalartschool.com/"
+      "details": [
+        "In tristique vulputate augue vel egestas.",
+        "Quisque ac imperdiet tortor, at lacinia ex.",
+        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
+        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+      ],
+      "links": [
+        {
+          "program": [
+            {
+              "website": "https://digitalartschool.com/program/network-administration-security/",
+              "icon": "fa6-solid:circle-info"
+            }
+          ],
+          "school": [
+            {
+              "website": "https://digitalartschool.com/",
+              "icon": "fa6-solid:globe"
+            }
+          ]
+        }
+      ]
     }
-    ]
+  ]
  }

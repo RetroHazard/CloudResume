@@ -4,11 +4,9 @@ import EducationItem from '../components/education_item';
 import data from '../assets/json/education_data.json';
 
 const EducationList = () => {
-    const educationData = data.Education;
-
     return (
         <div>
-            {educationData.map((item, index) => (
+            {data.Education.map((item, index) => (
                 <React.Fragment key={index}>
                     <EducationItem
                         school={item.school}
@@ -17,9 +15,10 @@ const EducationList = () => {
                         start={item.start}
                         end={item.end}
                         logo={item.logo}
-                        website={item.website}
+                        details={item.details}
+                        links={item.links}
                     />
-                    {index < educationData.length - 1 && <div className="bg-secondary-600 h-px my-6 w-full"></div>}
+                    {index < data.Education.length - 1 && <div className="bg-secondary-600 h-px my-6 w-full"></div>}
                 </React.Fragment>
             ))}
         </div>
