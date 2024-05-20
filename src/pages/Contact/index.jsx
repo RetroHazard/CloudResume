@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 
-import {Icon} from "@iconify-icon/react";
-
 const ContactForm = () => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
