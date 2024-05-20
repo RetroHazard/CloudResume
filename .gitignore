@@ -1,5 +1,8 @@
 **/.DS_Store
 
+# JetBrains Ignore
+.idea/*
+
 # Logs
 logs
 *.log
