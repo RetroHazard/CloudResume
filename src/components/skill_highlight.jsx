@@ -11,12 +11,11 @@ const SkillHighlight =() => {
             {skillData.map((skill, index) => (
                 <div className="flex flex-col gap-2">
                     <div className="flex items-center justify-between">
-                        <a key={index} className="flex gap-2.5 items-center no-underline" href={skill.website} target="_blank"
-                           rel="noopener noreferrer">
+                        <a key={index} className="flex gap-2.5 items-center no-underline" href={skill.website} target="_blank" rel="noopener noreferrer">
                             <Icon inline icon={skill.logo} width="1.6em" height="1.6em"/>
                             <div className="flex flex-col">
-                                <span className="text-base text-content-subtitle hover:text-secondary-100">{skill.name}</span>
-                                <span className="p-0 text-xs text-content-accent">{skill.category}</span>
+                                <span className="font-semibold text-base text-content-subtitle hover:text-secondary-100">{skill.name}</span>
+                                <span className="font-light text-xs text-content-accent">{skill.category}</span>
                             </div>
                         </a>
                     </div>
