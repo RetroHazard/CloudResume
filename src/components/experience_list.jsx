@@ -8,16 +8,17 @@ const ExperienceList = () => {
         <div className="skill-list">
             {data.Experience.map((experience, index) => (
                 <React.Fragment key={index}>
-                <ExperienceItem
-                    company={experience.company}
-                    job_title={experience.job_title}
-                    type={experience.type}
-                    start={experience.start}
-                    end={experience.end}
-                    logo={experience.logo}
-                    website={experience.website}
-                    technologies={experience.technologies}
-                />
+                    <ExperienceItem
+                        company={experience.company}
+                        job_title={experience.job_title}
+                        type={experience.type}
+                        start={experience.start}
+                        end={experience.end}
+                        logo={experience.logo}
+                        website={experience.website}
+                        details={experience.details}
+                        technologies={experience.technologies}
+                    />
                     {index < data.Experience.length - 1 && <div className="bg-secondary-600 h-px my-6 w-full"></div>}
                 </React.Fragment>
             ))}

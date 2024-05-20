@@ -8,6 +8,11 @@
       "end": "NOW",
       "logo": "./images/logos/companies/hollowsouls.png",
       "website": "https://www.hollowsouls.com",
+      "details": [
+        "",
+        "",
+        ""
+      ],
       "technologies": [
         {
           "name": "C++",
@@ -59,6 +64,11 @@
       "end": "NOW",
       "logo": "./images/logos/companies/indeed.png",
       "website": "https://www.indeed.com/",
+      "details": [
+        "",
+        "",
+        ""
+      ],
       "technologies": [
         {
           "name": "AWS",
@@ -100,6 +110,11 @@
       "end": "2023",
       "logo": "./images/logos/companies/indeed.png",
       "website": "https://www.indeed.com/",
+      "details": [
+        "",
+        "",
+        ""
+      ],
       "technologies": [
         {
           "name": "Atlassian Suite",
@@ -136,6 +151,11 @@
       "end": "2021",
       "logo": "./images/logos/companies/uofc.png",
       "website": "https://www.ucalgary.ca/",
+      "details": [
+        "",
+        "",
+        ""
+      ],
       "technologies": [
         {
           "name": "Windows",
@@ -167,6 +187,11 @@
       "end": "2014",
       "logo": "./images/logos/companies/pythian.png",
       "website": "https://www.pythian.com/",
+      "details": [
+        "",
+        "",
+        ""
+      ],
       "technologies": [
         {
           "name": "Linux",
@@ -198,6 +223,11 @@
       "end": "2014",
       "logo": "./images/logos/companies/longviewsystems.png",
       "website": "https://www.longviewsystems.com/",
+      "details": [
+        "",
+        "",
+        ""
+      ],
       "technologies": [
         {
           "name": "Linux",
@@ -224,6 +254,11 @@
       "end": "2012",
       "logo": "./images/logos/companies/cloudwerx.png",
       "website": "https://cloudwerx.com/",
+      "details": [
+        "",
+        "",
+        ""
+      ],
       "technologies": [
         {
           "name": "Linux",

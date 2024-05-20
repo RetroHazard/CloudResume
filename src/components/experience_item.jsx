@@ -3,12 +3,12 @@ import React from 'react';
 import { Icon } from '@iconify-icon/react';
 import SkillButton from "./skill_button";
 
-const ExperienceItem = ({ company, job_title, type, start, end, logo, website, technologies }) => {
+const ExperienceItem = ({ company, job_title, type, start, end, logo, website, details, technologies }) => {
     return (
         <div className="flex flex-col gap-3">
             <div className="flex gap-2 justify-between w-full">
                 <div className="flex gap-4">
-                    <img className="hidden rounded-xl sm:block h-[8rem] w-[8rem]" src={logo} alt={`${company} logo`} />
+                    <img className="hidden rounded-xl sm:block h-[6rem] w-[6rem]" src={logo} alt={`${company} logo`} />
                     <div className="flex flex-col">
                         <h3 className="h3 text-content-title font-extrabold mb-0">{job_title}</h3>
                         <p className="text-content-subtitle font-semibold leading-snug mb-0.5">{company}</p>
@@ -24,17 +24,14 @@ const ExperienceItem = ({ company, job_title, type, start, end, logo, website, t
             </div>
             <div className="text-sm font-normal leading-relaxed sm:leading-relaxed sm:text-base mb-3">
                 <ul className="list-disc pl-5"> {/* TODO: Retrieve List Items from JSON */}
-                    <li>In tristique vulputate augue vel egestas.</li>
-                    <li>Quisque ac imperdiet tortor, at lacinia ex.</li>
-                    <li>Duis vel ex hendrerit, commodo odio sed, aliquam enim.</li>
-                    <li>Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi.</li>
-                    <li>Nunc malesuada leo et est iaculis facilisis.</li>
-                    <li>Fusce eu urna ut magna malesuada fringilla.</li>
+                    {details.map((detail, index) => (
+                        <li key={index}>{detail}</li>
+                    ))}
                 </ul>
             </div>
             <div className="flex flex-col gap-1.5">
                 <span className="font-medium text-content-accent">Technologies:</span>
-                <SkillButton skills={technologies} />
+                <SkillButton skills={technologies}/>
             </div>
         </div>
     );
