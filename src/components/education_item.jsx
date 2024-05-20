@@ -16,10 +16,10 @@ const EducationItem = ({ school, degree, category, start, end, logo, website }) 
             </div>
             {/* TODO: Add Conditional, Edit Program Data Link */}
             <div className="flex gap-3 flex-wrap sm:flex-nowrap" id={`${school} Links`}>
-                <a href={website} className="social-link" target="_blank" aria-label={`${school} Program Info`}>
+                <a href={website} className="social-link" target="_blank" rel="noopener noreferrer" aria-label={`${school} Program Info`}>
                     <Icon icon="fa6-solid:circle-info" height="1.25em" width="1.25em"/>
                 </a>
-                <a href={website} className="social-link" target="_blank" aria-label={`${school} Website`}>
+                <a href={website} className="social-link" target="_blank" rel="noopener noreferrer" aria-label={`${school} Website`}>
                     <Icon icon="fa6-solid:globe" height="1.25em" width="1.25em"/>
                 </a>
             </div>
