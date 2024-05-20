@@ -9,18 +9,30 @@
       "start": "2024",
       "end": "NOW",
       "logo": "./images/logos/companies/hollowsouls.png",
+      "details": [
+        "In tristique vulputate augue vel egestas.",
+        "Quisque ac imperdiet tortor, at lacinia ex.",
+        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
+        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+      ],
       "links": [
         {
           "demo": [
             {
               "website": "https://www.cloudresume-agb.jp",
-              "icon": "fa6-solid:paintbrush"
+              "icon": "fa-solid:external-link-alt"
+            }
+          ],
+          "repo": [
+            {
+              "website": "https://github.com/RetroHazard",
+              "icon": "simple-icons:git"
             }
           ],
           "spec": [
             {
               "website": "https://cloudresumechallenge.dev/",
-              "icon": "fa6-solid:desktop"
+              "icon": "fa6-solid:info"
             }
           ]
         }
@@ -62,6 +74,12 @@
       "start": "2022",
       "end": "2022",
       "logo": "./images/logos/companies/hollowsouls.png",
+      "details": [
+        "In tristique vulputate augue vel egestas.",
+        "Quisque ac imperdiet tortor, at lacinia ex.",
+        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
+        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+      ],
       "links": [
         {
           "release": [

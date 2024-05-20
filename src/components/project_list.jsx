@@ -8,7 +8,19 @@ const ProjectList = () => {
         <div>
             {data.Projects.map((project, index) => (
                 <React.Fragment key={index}>
-                    <ProjectItem project={project} />
+                    <ProjectItem
+                        name={project.name}
+                        company={project.company}
+                        category={project.category}
+                        role={project.role}
+                        size={project.size}
+                        start={project.start}
+                        end={project.end}
+                        logo={project.logo}
+                        details={project.details}
+                        links={project.links}
+                        technologies={project.technologies}
+                    />
                     {index < data.Projects.length - 1 && <div className="bg-secondary-600 h-px my-6 w-full"></div>}
                 </React.Fragment>
             ))}
