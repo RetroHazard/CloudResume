@@ -1,6 +1,5 @@
 import React from "react";
 
-import {Icon} from "@iconify-icon/react";
 import CertificationList from "../../components/certification_list";
 
 function Certifications() {

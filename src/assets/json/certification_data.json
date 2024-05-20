@@ -11,7 +11,7 @@
           "credential_info": [
             {
               "website": "https://www.isc2.org/certifications/sscp",
-              "icon": "fluent-emoji-high-contrast:information",
+              "icon": "fa6-solid:info",
               "display": true
             }
           ],
@@ -36,7 +36,7 @@
           "credential_info": [
             {
               "website": "https://www.axelos.com/certifications/itil/itil-v3-foundation-certification/",
-              "icon": "fluent-emoji-high-contrast:information",
+              "icon": "fa6-solid:info",
               "display": true
             }
           ],
@@ -61,7 +61,7 @@
           "credential_info": [
             {
               "website": "",
-              "icon": "fluent-emoji-high-contrast:information",
+              "icon": "fa6-solid:info",
               "display": false
             }
           ],
@@ -86,7 +86,7 @@
           "credential_info": [
             {
               "website": "",
-              "icon": "fluent-emoji-high-contrast:information",
+              "icon": "fa6-solid:info",
               "display": false
             }
           ],
