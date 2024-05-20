@@ -7,14 +7,17 @@ const SkillHighlight =() => {
     const skillData = data.core_skills;
 
     return (
-        <div className="flex flex-wrap gap-8">
+        <div className="flex flex-wrap gap-x-8 gap-y-4">
             {skillData.map((skill, index) => (
-                <div className="flex flex-col gap-3">
-                    <div className="flex items-center h-4 justify-between">
-                        <a key={index} className="flex gap-2.5 h-5 no-underline" href={skill.website} target="_blank"
+                <div className="flex flex-col gap-2">
+                    <div className="flex items-center justify-between">
+                        <a className="flex gap-2.5 items-center no-underline" href={skill.website} target="_blank"
                            rel="noopener noreferrer">
-                            <Icon icon={skill.logo} width="1.6em" height="1.6em"/>
-                            <span className="font-medium text-base text-content-subtitle hover:text-secondary-100">{skill.name}</span>
+                            <Icon inline icon={skill.logo} width="1.6em" height="1.6em"/>
+                            <div className="flex flex-col">
+                                <span className="text-base text-content-subtitle hover:text-secondary-100">{skill.name}</span>
+                                <span className="p-0 text-xs text-content-accent">{skill.category}</span>
+                            </div>
                         </a>
                     </div>
                     <div className="flex gap-1">
