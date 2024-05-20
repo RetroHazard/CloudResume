@@ -3,22 +3,26 @@
     {
       "name": "Skill",
       "level": "25%",
-      "logo": ""
+      "logo": "ph:placeholder-fill",
+      "website": "."
     },
     {
       "name": "Skill",
       "level": "75%",
-      "logo": ""
+      "logo": "ph:placeholder-fill",
+      "website": "."
     },
     {
       "name": "Skill",
       "level": "45%",
-      "logo": ""
+      "logo": "ph:placeholder-fill",
+      "website": "."
     },
     {
       "name": "Skill",
       "level": "90%",
-      "logo": ""
+      "logo": "ph:placeholder-fill",
+      "website": "."
     }
   ],
   "target_skills": [
