@@ -36,7 +36,7 @@ html.disable-fix {
     }
 
     .skill-progress-bar {
-        @apply bg-gradient-to-r from-skill-2 from-35% to-skill-1 h-2.5 rounded-full;
+        @apply bg-gradient-to-r from-skill-3 from-35% to-skill-1 h-2.5 rounded-full;
     }
 
     .skill-progress-bar-outline {

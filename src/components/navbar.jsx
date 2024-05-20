@@ -31,9 +31,9 @@ function Navigation() {
                         <NavLink to={"/"} className={({isActive}) => {
                             return isActive ? "nav-block-active" : "nav-block-inactive";
                         }}>
-                        <i className="icon-box">
-                            <Icon icon="fa6-solid:house"/>
-                        </i>
+                            <i className="icon-box">
+                                <Icon icon="fa6-solid:house"/>
+                            </i>
                             Home
                         </NavLink>
                     </li>
@@ -44,7 +44,7 @@ function Navigation() {
                             <i className="icon-box">
                                 <Icon icon="fa6-solid:graduation-cap"/>
                             </i>
-                                Education
+                            Education
                         </NavLink>
                     </li>
                     <li>
@@ -55,16 +55,6 @@ function Navigation() {
                                 <Icon icon="fa6-solid:briefcase"/>
                             </i>
                             Experience
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to={"/skills"} className={({isActive}) => {
-                            return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}>
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:chart-simple"/>
-                            </i>
-                            Skills
                         </NavLink>
                     </li>
                     <li>
@@ -85,6 +75,16 @@ function Navigation() {
                                 <Icon icon="fa6-solid:layer-group"/>
                             </i>
                             Projects
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to={"/skills"} className={({isActive}) => {
+                            return isActive ? "nav-block-active" : "nav-block-inactive";
+                        }}>
+                            <i className="icon-box">
+                                <Icon icon="fa6-solid:chart-simple"/>
+                            </i>
+                            Skills
                         </NavLink>
                     </li>
                     <li>

@@ -1,28 +1,124 @@
 {
   "core_skills": [
     {
-      "name": "Skill",
+      "name": "Amazon Web Services",
+      "level": "60%",
+      "logo": "skill-icons:aws-light",
+      "website": "https://aws.amazon.com/"
+    },
+    {
+      "name": "JetBrains IDEs",
+      "level": "40%",
+      "logo": "devicon:jetbrains",
+      "website": "https://www.jetbrains.com/"
+    },
+    {
+      "name": "C++",
+      "level": "30%",
+      "logo": "devicon:cplusplus",
+      "website": "https://cplusplus.com/"
+    },
+    {
+      "name": "Python",
       "level": "25%",
-      "logo": "ph:placeholder-fill",
-      "website": "."
+      "logo": "devicon:python",
+      "website": "https://www.python.org"
     },
     {
-      "name": "Skill",
-      "level": "75%",
-      "logo": "ph:placeholder-fill",
-      "website": "."
+      "name": "BASh",
+      "level": "70%",
+      "logo": "logos:bash-icon",
+      "website": "https://www.gnu.org/software/bash/"
     },
     {
-      "name": "Skill",
-      "level": "45%",
-      "logo": "ph:placeholder-fill",
-      "website": "."
+      "name": "Perl",
+      "level": "30%",
+      "logo": "devicon:perl",
+      "website": "https://www.perl.org/"
     },
     {
-      "name": "Skill",
+      "name": "Javascript",
+      "level": "30%",
+      "logo": "devicon:javascript",
+      "website": "https://developer.oracle.com/languages/javascript.html"
+    },
+    {
+      "name": "React.js",
+      "level": "30%",
+      "logo": "devicon:react",
+      "website": "https://react.dev/"
+    },
+    {
+      "name": "Node.js",
+      "level": "30%",
+      "logo": "devicon:nodejs",
+      "website": "https://nodejs.org"
+    },
+    {
+      "name": "tailwindCSS",
+      "level": "40%",
+      "logo": "devicon:tailwindcss",
+      "website": "https://tailwindcss.com"
+    },
+    {
+      "name": "Unreal Engine",
+      "level": "60%",
+      "logo": "devicon:unrealengine",
+      "website": "https://www.unrealengine.com/"
+    },
+    {
+      "name": "SideFX Houdini",
+      "level": "25%",
+      "logo": "simple-icons:houdini",
+      "website": "https://www.sidefx.com/"
+    },
+    {
+      "name": "Blender",
+      "level": "50%",
+      "logo": "devicon:blender",
+      "website": "https://www.blender.org/"
+    },
+    {
+      "name": "Google Workspace",
+      "level": "80%",
+      "logo": "devicon:google",
+      "website": "https://www.google.com"
+    },
+    {
+      "name": "Creative Cloud",
+      "level": "65%",
+      "logo": "simple-icons:adobecreativecloud",
+      "website": "https://www.adobe.com/creativecloud.html"
+    },
+    {
+      "name": "Github",
+      "level": "55%",
+      "logo": "devicon:github",
+      "website": "https://github.com/"
+    },
+    {
+      "name": "Perforce",
+      "level": "30%",
+      "logo": "simple-icons:perforce",
+      "website": "https://www.perforce.com/"
+    },
+    {
+      "name": "Windows",
       "level": "90%",
-      "logo": "ph:placeholder-fill",
-      "website": "."
+      "logo": "devicon:windows11",
+      "website": "https://www.microsoft.com/en-us/windows"
+    },
+    {
+      "name": "Linux",
+      "level": "60%",
+      "logo": "devicon:linux",
+      "website": "https://www.linux.org/"
+    },
+    {
+      "name": "macOS",
+      "level": "70%",
+      "logo": "devicon:apple",
+      "website": "https://www.apple.com"
     }
   ],
   "target_skills": [
