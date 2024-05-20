@@ -1,0 +1,104 @@
+{
+  "Certifications": [
+    {
+      "issuer": "ISC2",
+      "certification": "Systems Security Certified Practitioner",
+      "credential_id": "497518",
+      "date": "2014",
+      "logo": "./images/logos/certifications/sscp.png",
+      "links": [
+        {
+          "credential_info": [
+            {
+              "website": "https://www.isc2.org/certifications/sscp",
+              "icon": "fluent-emoji-high-contrast:information",
+              "display": true
+            }
+          ],
+          "verification": [
+            {
+              "website": "",
+              "icon": "fa6-solid:award",
+              "display": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "issuer": "AXELOS",
+      "certification": "ITIL 3 Foundations",
+      "credential_id": "953058",
+      "date": "2012",
+      "logo": "./images/logos/certifications/itil-foundation.png",
+      "links": [
+        {
+          "credential_info": [
+            {
+              "website": "https://www.axelos.com/certifications/itil/itil-v3-foundation-certification/",
+              "icon": "fluent-emoji-high-contrast:information",
+              "display": true
+            }
+          ],
+          "verification": [
+            {
+              "website": "",
+              "icon": "fa6-solid:award",
+              "display": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "issuer": "Microsoft",
+      "certification": "MCTS 70-640 : Windows Server 2008 R2 Active Directory",
+      "credential_id": "C127-7836",
+      "date": "2010",
+      "logo": "./images/logos/certifications/mcts.png",
+      "links": [
+        {
+          "credential_info": [
+            {
+              "website": "",
+              "icon": "fluent-emoji-high-contrast:information",
+              "display": false
+            }
+          ],
+          "verification": [
+            {
+              "website": "",
+              "icon": "fa6-solid:award",
+              "display": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "issuer": "Microsoft",
+      "certification": "MCTS 70-680 : Windows 7",
+      "credential_id": "C127-7838",
+      "date": "2010",
+      "logo": "./images/logos/certifications/mcts.png",
+      "links": [
+        {
+          "credential_info": [
+            {
+              "website": "",
+              "icon": "fluent-emoji-high-contrast:information",
+              "display": false
+            }
+          ],
+          "verification": [
+            {
+              "website": "",
+              "icon": "fa6-solid:award",
+              "display": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
