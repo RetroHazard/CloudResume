@@ -15,6 +15,7 @@ const EducationList = () => {
                                 <EducationItem
                                     school={item.school}
                                     degree={item.degree}
+                                    location={item.location}
                                     category={item.category}
                                     start={item.start}
                                     end={item.end}

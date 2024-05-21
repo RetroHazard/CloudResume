@@ -15,6 +15,7 @@ const ExperienceList = () => {
                                 <ExperienceItem
                                     company={experience.company}
                                     job_title={experience.job_title}
+                                    location={experience.location}
                                     type={experience.type}
                                     start={experience.start}
                                     end={experience.end}

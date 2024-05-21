@@ -9,7 +9,7 @@ const ProjectItem = ({ name, company, category, role, size, start, end, logo, de
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col w-full gap-4">
                     <div className="flex gap-4">
-                        <img className="hidden rounded-xl sm:block h-[6rem] w-[6rem]" src={logo} alt={`${name} logo`}/>
+                        <img className="hidden rounded-xl sm:block h-[6.5rem] w-[6.5rem]" src={logo} alt={`${name} logo`}/>
                         <div className="flex justify-between w-full">
                             <div className="flex flex-col w-full">
                                 <div>

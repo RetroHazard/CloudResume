@@ -6,7 +6,7 @@ const CertificationItem = ({ issuer, certification, credential_id, date, logo, l
     <div className="flex flex-col gap-3">
         <div className="flex gap-2 justify-between w-full">
             <div className="flex gap-4">
-                <img className="hidden rounded-xl sm:block h-[6rem] w-[6rem]" src={logo}
+                <img className="hidden rounded-xl sm:block h-[6.5rem] w-[6.5rem]" src={logo}
                      alt={`${certification} Logo`}/>
                 <div className="flex flex-col">
                     <h3 className="h3 font-extrabold text-content-title mb-0">{certification}</h3>
