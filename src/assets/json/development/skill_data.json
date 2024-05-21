@@ -2,28 +2,28 @@
   "core_skills": [
     {
       "name": "Placeholder",
-      "category": "Cloud",
+      "category": "Category",
       "level": "50%",
       "logo": "ph:placeholder-fill",
       "website": "."
     },
     {
       "name": "Placeholder",
-      "category": "Platform",
+      "category": "Category",
       "level": "25%",
       "logo": "ph:placeholder-fill",
       "website": "."
     },
     {
       "name": "Placeholder",
-      "category": "Automation",
+      "category": "Category",
       "level": "60%",
       "logo": "ph:placeholder-fill",
       "website": "."
     },
     {
       "name": "Placeholder",
-      "category": "Software",
+      "category": "Category",
       "level": "50%",
       "logo": "ph:placeholder-fill",
       "website": "."
