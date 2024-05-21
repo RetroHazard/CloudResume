@@ -3,12 +3,18 @@
     {
       "company": "Hollow Souls",
       "job_title": "Independant Developer",
+      "location": "Remote",
       "type": "Freelance",
       "start": "2020",
       "end": "NOW",
       "logo": "./images/logos/companies/hollowsouls.png",
       "website": "https://www.hollowsouls.com",
       "details": [
+        "Designed and built game components using Blueprint and C++.",
+        "Created detailed 3D models and visual effects for interactive media.",
+        "Developed user interfaces with a focus on intuitive and engaging user experiences.",
+        "Implemented and managed cloud-based solutions for scalable and reliable application support.",
+        "Produced and integrated digital media assets, enhancing overall project quality and engagement."
       ],
       "technologies": [
         {
@@ -56,6 +62,7 @@
     {
       "company": "Indeed",
       "job_title": "Lead, IT Support",
+      "location": "Tokyo, Japan",
       "type": "Full Time",
       "start": "2023",
       "end": "NOW",
@@ -105,6 +112,7 @@
     {
       "company": "Indeed",
       "job_title": "L2 Service Engineer",
+      "location": "Tokyo, Japan",
       "type": "Full Time",
       "start": "2021",
       "end": "2023",
@@ -146,6 +154,7 @@
     {
       "company": "University of Calgary",
       "job_title": "Systems Support Specialist",
+      "location": "Calgary, Canada",
       "type": "Contract",
       "start": "2017",
       "end": "2021",
@@ -184,6 +193,7 @@
     {
       "company": "Pythian",
       "job_title": "Systems Administrator",
+      "location": "Ottawa, Canada",
       "type": "Contract",
       "start": "2014",
       "end": "2014",
@@ -223,6 +233,7 @@
     {
       "company": "Long View Systems",
       "job_title": "Systems Consultant",
+      "location": "Calgary, Canada",
       "type": "Full Time",
       "start": "2012",
       "end": "2014",
@@ -256,6 +267,7 @@
     {
       "company": "Cloudwerx Data Solutions",
       "job_title": "Technical Analyst",
+      "location": "Calgary, Canada",
       "type": "Full Time",
       "start": "2011",
       "end": "2012",

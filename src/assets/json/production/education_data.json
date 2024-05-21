@@ -3,15 +3,17 @@
     {
       "school": "University of Calgary",
       "degree": "BA. Communications and Media Studies",
+      "location": "Calgary, Canada",
       "category": "Liberal Arts",
       "start": "2016",
       "end": "2021",
       "logo": "./images/logos/education/uofc.png",
       "details": [
-        "In tristique vulputate augue vel egestas.",
-        "Quisque ac imperdiet tortor, at lacinia ex.",
-        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
-        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+        "Comprehensive exploration of communication processes and media technologies.",
+        "Emphasis on critical analysis, research skills, and practical experience.",
+        "Prepares students for careers in media, public relations, digital communication, and more.",
+        "Curriculum integrates theory and practice, addressing contemporary media issues.",
+        "Offers hands-on experience through internships and projects, guided by expert faculty."
       ],
       "links": [
         {
@@ -33,15 +35,17 @@
     {
       "school": "Waseda University",
       "degree": "EX. International Studies",
+      "location": "Tokyo, Japan",
       "category": "Liberal Arts",
       "start": "2018",
       "end": "2019",
       "logo": "./images/logos/education/waseda.png",
       "details": [
-        "In tristique vulputate augue vel egestas.",
-        "Quisque ac imperdiet tortor, at lacinia ex.",
-        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
-        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+        "One-year exchange program at Waseda University's School of International Liberal Studies in Tokyo.",
+        "Immersive cultural and academic experience in a vibrant international environment.",
+        "Diverse curriculum focused on global issues, liberal arts, and interdisciplinary studies.",
+        "Opportunities to engage with students from around the world and participate in various extracurricular activities.",
+        "Enhances cross-cultural communication skills and broadens global perspectives."
       ],
       "links": [
         {
@@ -63,15 +67,16 @@
     {
       "school": "Centre for Arts and Technology",
       "degree": "AS. Network Administration and Security",
+      "location": "Kelowna, Canada",
       "category": "Computer Science",
       "start": "2009",
       "end": "2011",
       "logo": "./images/logos/education/cato.png",
       "details": [
-        "In tristique vulputate augue vel egestas.",
-        "Quisque ac imperdiet tortor, at lacinia ex.",
-        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
-        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+        "Comprehensive network security curriculum covering perimeter security, data communications, and practical penetration testing.",
+        "Practical experience in network exploits, vulnerabilities, and penetration testing prepares students for real-world challenges.",
+        "Addressing the exponential need for security professionals, offering a rewarding path in a rapidly growing industry.",
+        "Begins with a foundational Network Security Administrator Certificate program before advancing to specialized training."
       ],
       "links": [
         {
