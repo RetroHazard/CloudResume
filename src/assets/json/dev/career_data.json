@@ -1,0 +1,42 @@
+{
+  "Experience": [
+    {
+      "company": "Silent Skies",
+      "job_title": "FullStack Developer",
+      "type": "Contract",
+      "start": "2018",
+      "end": "2021",
+      "logo": "./images/placeholder.png",
+      "website": ".",
+      "details": [
+      ],
+      "technologies": [
+        {
+          "name": "Skill",
+          "logo": "ph:placeholder-fill",
+          "website": "."
+        },
+        {
+          "name": "Skill",
+          "logo": "ph:placeholder-fill",
+          "website": "."
+        },
+        {
+          "name": "Skill",
+          "logo": "ph:placeholder-fill",
+          "website": "."
+        },
+        {
+          "name": "Skill",
+          "logo": "ph:placeholder-fill",
+          "website": "."
+        },
+        {
+          "name": "Skill",
+          "logo": "ph:placeholder-fill",
+          "website": "."
+        }
+      ]
+    }
+  ]
+}

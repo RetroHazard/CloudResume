@@ -1,0 +1,9 @@
+{
+      "profilePicture": "/images/placeholder.png",
+      "fullName": "Name",
+      "jobTitle": "Job Title",
+      "location": "Location",
+      "salary": "125,000",
+      "currency": "USD",
+      "currency_icon": "fa6-solid:dollar-sign"
+}

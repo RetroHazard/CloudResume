@@ -1,0 +1,203 @@
+{
+  "Projects": [
+    {
+      "name": "Cloud Resume Challenge",
+      "company": "Hollow Souls",
+      "category": "Full Stack",
+      "role": "Project Lead",
+      "size": "1",
+      "start": "2024",
+      "end": "NOW",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "details": [
+        "Completed the Cloud Resume Challenge, gaining practical experience in deploying a full-stack cloud project, including front-end, back-end, and database components on AWS.",
+        "Implemented Continuous Integration and Continuous Deployment (CI/CD) pipelines, automating the deployment process and ensuring seamless updates and maintenance.",
+        "Utilized Infrastructure as Code (IaC) tools like AWS CloudFormation or Terraform to define and manage cloud infrastructure, demonstrating advanced cloud engineering skills.",
+        "Integrated various AWS services such as S3, Lambda, API Gateway, and DynamoDB, showcasing the ability to design and implement scalable and efficient cloud solutions.",
+        "Documented project processes and maintained version control using Git and GitHub."
+      ],
+      "links": [
+        {
+          "demo": [
+            {
+              "website": "https://www.cloudresume-agb.jp",
+              "icon": "fa-solid:external-link-alt"
+            }
+          ],
+          "repo": [
+            {
+              "website": "https://github.com/RetroHazard",
+              "icon": "simple-icons:git"
+            }
+          ],
+          "spec": [
+            {
+              "website": "https://cloudresumechallenge.dev/",
+              "icon": "fa6-solid:info"
+            }
+          ]
+        }
+      ],
+      "technologies": [
+        {
+          "name": "AWS",
+          "logo": "simple-icons:amazonaws",
+          "website": "https://aws.amazon.com/"
+        },
+        {
+          "name": "react.js",
+          "logo": "simple-icons:react",
+          "website": "https://react.dev/"
+        },
+        {
+          "name": "Node.js",
+          "logo": "simple-icons:nodedotjs",
+          "website": "https://nodejs.org/en"
+        },
+        {
+          "name": "tailwindCSS",
+          "logo": "simple-icons:tailwindcss",
+          "website": "https://tailwindcss.com"
+        },
+        {
+          "name": "Python",
+          "logo": "simple-icons:python",
+          "website": "https://www.python.org"
+        }
+      ]
+    },
+    {
+      "name": "Interactive Switches",
+      "company": "Hollow Souls",
+      "category": "Unreal Engine Blueprint",
+      "role": "Project Lead",
+      "size": "1",
+      "start": "2022",
+      "end": "2022",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "details": [
+        "Game Prototype Development: Independently creating, designing, and coding a comprehensive game prototype, demonstrating expertise in end-to-end game development.",
+        "Gameplay Mechanics Design: Defining core gameplay mechanics and determining their interaction with players, ensuring an engaging and intuitive user experience.",
+        "Artistic Style and Environmental Design: Building a detailed library of reference imagery to guide the artistic style and environmental design, ensuring visual coherence and aesthetic quality.",
+        "Digital Asset Creation: Producing a range of high-quality digital assets for use in current and future projects, showcasing versatility and creativity in asset development.",
+        "Marketing Strategy Development: Developing and implementing a marketing strategy tailored for social media and funding platforms, effectively promoting the project and engaging target audiences.",
+        "Methodology and Documentation: Generating various methodologies for application construction and testing, and providing comprehensive documentation, ensuring a structured and efficient development process."
+      ],
+      "links": [
+        {
+          "release": [
+            {
+              "website": "https://www.unrealengine.com/marketplace/en-US/product/interactive-switches",
+              "icon": "material-symbols:package-2-sharp"
+            }
+          ],
+          "source": [
+            {
+              "website": "https://github.com/Hollow-Soul-Studios/InteractiveSwitches",
+              "icon": "simple-icons:git"
+            }
+          ]
+        }
+      ],
+      "technologies": [
+        {
+          "name": "Unreal Engine",
+          "logo": "simple-icons:unrealengine",
+          "website": "https://www.unrealengine.com/"
+        },
+        {
+          "name": "Blender",
+          "logo": "simple-icons:blender",
+          "website": "https://www.blender.org/"
+        },
+        {
+          "name": "C++",
+          "logo": "ph:file-cpp-fill",
+          "website": "https://cplusplus.com/"
+        },
+        {
+          "name": "Perforce",
+          "logo": "simple-icons:perforce",
+          "website": "https://www.perforce.com/"
+        },
+        {
+          "name": "Jetbrains Rider",
+          "logo": "simple-icons:rider",
+          "website": "https://www.jetbrains.com/rider/"
+        },
+        {
+          "name": "Creative Cloud",
+          "logo": "simple-icons:adobecreativecloud",
+          "website": "https://www.adobe.com/creativecloud.html"
+        }
+
+      ]
+    },
+    {
+      "name": "Interactive Switches",
+      "company": "Hollow Souls",
+      "category": "Unreal Engine Blueprint",
+      "role": "Project Lead",
+      "size": "1",
+      "start": "2022",
+      "end": "2022",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "details": [
+        "Designed and developed a comprehensive set of interactive switches for Unreal Engine, enhancing user engagement and interactivity within virtual environments.",
+        "Created a highly customizable switch framework that allows developers to easily integrate a variety of switch types and configurations, improving versatility and adaptability in project applications.",
+        "Utilized Unreal Engine’s Blueprint system to streamline the implementation process, ensuring high efficiency and ease of use for developers, which minimizes development time and resources.",
+        "Delivered high-quality, fully functional switch assets with detailed visual fidelity, ensuring a professional and polished look for any game or simulation project.",
+        "Ensured cross-compatibility and optimization for various Unreal Engine versions, providing a reliable and stable solution for a wide range of development environments and platforms."
+      ],
+      "links": [
+        {
+          "release": [
+            {
+              "website": "https://www.unrealengine.com/marketplace/en-US/product/interactive-switches",
+              "icon": "material-symbols:package-2-sharp"
+            }
+          ],
+          "source": [
+            {
+              "website": "https://github.com/Hollow-Soul-Studios/InteractiveSwitches",
+              "icon": "simple-icons:git"
+            }
+          ]
+        }
+      ],
+      "technologies": [
+        {
+          "name": "Unreal Engine",
+          "logo": "simple-icons:unrealengine",
+          "website": "https://www.unrealengine.com/"
+        },
+        {
+          "name": "Blender",
+          "logo": "simple-icons:blender",
+          "website": "https://www.blender.org/"
+        },
+        {
+          "name": "C++",
+          "logo": "ph:file-cpp-fill",
+          "website": "https://cplusplus.com/"
+        },
+        {
+          "name": "Perforce",
+          "logo": "simple-icons:perforce",
+          "website": "https://www.perforce.com/"
+        },
+        {
+          "name": "Jetbrains Rider",
+          "logo": "simple-icons:rider",
+          "website": "https://www.jetbrains.com/rider/"
+        },
+        {
+          "name": "Creative Cloud",
+          "logo": "simple-icons:adobecreativecloud",
+          "website": "https://www.adobe.com/creativecloud.html"
+        }
+
+      ]
+    }
+  ]
+}
