@@ -10,14 +10,14 @@
         {
           "verification": [
             {
-              "website": ".",
+              "website": "",
               "icon": "fa6-solid:award",
               "display": true
             }
           ],
           "credential_info": [
             {
-              "website": ".",
+              "website": "",
               "icon": "fa6-solid:info",
               "display": true
             }

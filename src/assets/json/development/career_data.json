@@ -7,34 +7,34 @@
       "start": "2018",
       "end": "2021",
       "logo": "./images/placeholder.png",
-      "website": ".",
+      "website": "",
       "details": [
       ],
       "technologies": [
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         }
       ]
     }

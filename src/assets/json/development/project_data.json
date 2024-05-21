@@ -19,19 +19,19 @@
         {
           "demo": [
             {
-              "website": ".",
+              "website": "",
               "icon": "fa-solid:external-link-alt"
             }
           ],
           "repo": [
             {
-              "website": ".",
+              "website": "",
               "icon": "simple-icons:git"
             }
           ],
           "spec": [
             {
-              "website": ".",
+              "website": "",
               "icon": "fa6-solid:info"
             }
           ]
@@ -41,27 +41,27 @@
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": "."
+          "website": ""
         }
       ]
     }

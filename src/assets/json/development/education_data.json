@@ -17,13 +17,13 @@
         {
           "program": [
             {
-              "website": ".",
+              "website": "",
               "icon": "fa6-solid:circle-info"
             }
           ],
           "school": [
             {
-              "website": ".",
+              "website": "",
               "icon": "fa6-solid:globe"
             }
           ]
