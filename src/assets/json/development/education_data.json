@@ -1,0 +1,35 @@
+{
+  "Education": [
+    {
+      "school": "University of Lorem Ipsum",
+      "degree": "BSc. Digital Stuff",
+      "location": "Nowhere, USA",
+      "category": "Computer Science",
+      "start": "2012",
+      "end": "2016",
+      "logo": "./images/placeholder.png",
+      "details": [
+        "In tristique vulputate augue vel egestas.",
+        "Quisque ac imperdiet tortor, at lacinia ex.",
+        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
+        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+      ],
+      "links": [
+        {
+          "program": [
+            {
+              "website": "",
+              "icon": "fa6-solid:circle-info"
+            }
+          ],
+          "school": [
+            {
+              "website": "",
+              "icon": "fa6-solid:globe"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+ }

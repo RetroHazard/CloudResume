@@ -1,0 +1,307 @@
+{
+  "Experience": [
+    {
+      "company": "Hollow Souls",
+      "job_title": "Independant Developer",
+      "location": "Remote",
+      "type": "Freelance",
+      "start": "2020",
+      "end": "NOW",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "website": "https://www.hollowsouls.com",
+      "details": [
+        "Designed and built game components using Blueprint and C++.",
+        "Created detailed 3D models and visual effects for interactive media.",
+        "Developed user interfaces with a focus on intuitive and engaging user experiences.",
+        "Implemented and managed cloud-based solutions for scalable and reliable application support.",
+        "Produced and integrated digital media assets, enhancing overall project quality and engagement."
+      ],
+      "technologies": [
+        {
+          "name": "C++",
+          "logo": "ph:file-cpp-fill",
+          "website": "https://cplusplus.com/"
+        },
+        {
+          "name": "Blender",
+          "logo": "simple-icons:blender",
+          "website": "https://www.blender.org/"
+        },
+        {
+          "name": "Unreal Engine",
+          "logo": "simple-icons:unrealengine",
+          "website": "https://www.unrealengine.com/"
+        },
+        {
+          "name": "Perforce",
+          "logo": "simple-icons:perforce",
+          "website": "https://www.perforce.com/"
+        },
+        {
+          "name": "Jetbrains Rider",
+          "logo": "simple-icons:rider",
+          "website": "https://www.jetbrains.com/rider/"
+        },
+        {
+          "name": "Creative Cloud",
+          "logo": "simple-icons:adobecreativecloud",
+          "website": "https://www.adobe.com/creativecloud.html"
+        },
+        {
+          "name": "Houdini",
+          "logo": "simple-icons:houdini",
+          "website": "https://www.sidefx.com/"
+        },
+        {
+          "name": "AWS",
+          "logo": "simple-icons:amazonaws",
+          "website": "https://aws.amazon.com/"
+        }
+      ]
+    },
+    {
+      "company": "Indeed",
+      "job_title": "Lead, IT Support",
+      "location": "Tokyo, Japan",
+      "type": "Full Time",
+      "start": "2023",
+      "end": "NOW",
+      "logo": "./images/logos/companies/indeed.png",
+      "website": "https://www.indeed.com/",
+      "details": [
+        "Managed IT equipment and resources for Indeed's R&D offices, supporting over 700 users during WFH and Hybrid/RTO periods.",
+        "Ensured balanced utilization of team and resources, maintaining consistency in ticket resolution, training, and project work.",
+        "Designed, documented, and globally deployed Indeed's Enterprise Printing Solution for over 18,000 users.",
+        "Monitored team performance against SLAs and SLOs, ensuring customer-centric service delivery.",
+        "Conducted interviews and hired additional support resources to enhance team capabilities.",
+        "Developed and maintained effective communication channels with senior management, clients, and team members."
+      ],
+      "technologies": [
+        {
+          "name": "AWS",
+          "logo": "simple-icons:amazonaws",
+          "website": "https://aws.amazon.com/"
+        },
+        {
+          "name": "Atlassian Suite",
+          "logo": "simple-icons:atlassian",
+          "website": "https://www.atlassian.com"
+        },
+        {
+          "name": "CloudFlare",
+          "logo": "simple-icons:cloudflare",
+          "website": "https://www.cloudflare.com"
+        },
+        {
+          "name": "Google Suite",
+          "logo": "simple-icons:google",
+          "website": "https://www.google.com"
+        },
+        {
+          "name": "GitLab",
+          "logo": "simple-icons:gitlab",
+          "website": "https://about.gitlab.com/"
+        },
+        {
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
+        }
+      ]
+    },
+    {
+      "company": "Indeed",
+      "job_title": "L2 Service Engineer",
+      "location": "Tokyo, Japan",
+      "type": "Full Time",
+      "start": "2021",
+      "end": "2023",
+      "logo": "./images/logos/companies/indeed.png",
+      "website": "https://www.indeed.com/",
+      "details": [
+        "Technical Troubleshooting and Support: Provided direct customer support and resolved software and hardware issues across diverse technical disciplines, including client computing, infrastructure, networking, and system security.",
+        "Network Device and Server Management: Collaborated with Infrastructure teams to troubleshoot, install, and manage network devices and servers, ensuring seamless connectivity and system functionality.",
+        "Technical Project Execution: Completed various technical projects and tasks, demonstrating adaptability and proactive problem-solving to enhance team productivity and end-user satisfaction."
+      ],
+      "technologies": [
+        {
+          "name": "Atlassian Suite",
+          "logo": "simple-icons:atlassian",
+          "website": "https://www.atlassian.com"
+        },
+        {
+          "name": "Google Suite",
+          "logo": "simple-icons:google",
+          "website": "https://www.google.com"
+        },
+        {
+          "name": "Python",
+          "logo": "simple-icons:python",
+          "website": "https://www.python.org/"
+        },
+        {
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
+        },
+        {
+          "name": "macOS",
+          "logo": "simple-icons:apple",
+          "website": "https://www.apple.com"
+        }
+      ]
+    },
+    {
+      "company": "University of Calgary",
+      "job_title": "Systems Support Specialist",
+      "location": "Calgary, Canada",
+      "type": "Contract",
+      "start": "2017",
+      "end": "2021",
+      "logo": "./images/logos/companies/uofc.png",
+      "website": "https://www.ucalgary.ca/",
+      "details": [
+        "Documented technology-related inquiries and solutions to compile comprehensive knowledge-base resources.",
+        "Provided technical support and troubleshooting to optimize system performance.",
+        "Coordinated technical communications and instructions to enhance organizational IT effectiveness.",
+        "Responded to service requests, delivering resolutions based on industry knowledge.",
+        "Updated departmental documentation, including license databases, infrastructure maps, and FAQs, to maintain consistent response levels."
+      ],
+      "technologies": [
+        {
+          "name": "Windows",
+          "logo": "simple-icons:windows",
+          "website": "https://www.microsoft.com/en-us/windows"
+        },
+        {
+          "name": "macOS",
+          "logo": "simple-icons:apple",
+          "website": "https://www.apple.com"
+        },
+        {
+          "name": "Office 365",
+          "logo": "hugeicons:office-365",
+          "website": "https://www.office.com/"
+        },
+        {
+          "name": "Sharepoint",
+          "logo": "simple-icons:microsoftsharepoint",
+          "website": "https://www.microsoft.com/en-us/microsoft-365/sharepoint/collaboration"
+        }
+      ]
+    },
+    {
+      "company": "Pythian",
+      "job_title": "Systems Administrator",
+      "location": "Ottawa, Canada",
+      "type": "Contract",
+      "start": "2014",
+      "end": "2014",
+      "logo": "./images/logos/companies/pythian.png",
+      "website": "https://www.pythian.com/",
+      "details": [
+        "Conducted remote and onsite testing and troubleshooting for client server infrastructures to ensure operational readiness.",
+        "Managed and supported critical public infrastructure systems, ensuring their reliability and security.",
+        "Implemented inventory control measures to maintain and replenish IT equipment, supplies, tools, and replacement parts.",
+        "Developed modification and integration programs to ensure software compatibility.",
+        "Monitored networks and devices to promptly resolve technical problems.",
+        "Provided knowledgeable support and quality service to resolve issues and escalate problems effectively."
+      ],
+      "technologies": [
+        {
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
+        },
+        {
+          "name": "BASh",
+          "logo": "simple-icons:gnubash",
+          "website": "https://www.gnu.org/software/bash/"
+        },
+        {
+          "name": "Windows",
+          "logo": "simple-icons:windows",
+          "website": "https://www.microsoft.com/en-us/windows"
+        },
+        {
+          "name": "Exchange",
+          "logo": "simple-icons:microsoftexchange",
+          "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
+        }
+      ]
+    },
+    {
+      "company": "Long View Systems",
+      "job_title": "Systems Consultant",
+      "location": "Calgary, Canada",
+      "type": "Full Time",
+      "start": "2012",
+      "end": "2014",
+      "logo": "./images/logos/companies/longviewsystems.png",
+      "website": "https://www.longviewsystems.com/",
+      "details": [
+        "Acted as the primary liaison between customers and management, addressing and relaying feedback and concerns.",
+        "Managed security operations for multiple client networks, systems, and maintenance protocols.",
+        "Continuously enhanced operational and security procedures for client environments, including systems administration and maintenance.",
+        "Routinely evaluated security measures and recommended remediation to stakeholders.",
+        "Identified and resolved hardware and software compatibility issues."
+      ],
+      "technologies": [
+        {
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
+        },
+        {
+          "name": "BASh",
+          "logo": "simple-icons:gnubash",
+          "website": "https://www.gnu.org/software/bash/"
+        },
+        {
+          "name": "Windows",
+          "logo": "simple-icons:windows",
+          "website": "https://www.microsoft.com/en-us/windows"
+        }
+      ]
+    },
+    {
+      "company": "Cloudwerx Data Solutions",
+      "job_title": "Technical Analyst",
+      "location": "Calgary, Canada",
+      "type": "Full Time",
+      "start": "2011",
+      "end": "2012",
+      "logo": "./images/logos/companies/cloudwerx.png",
+      "website": "https://cloudwerx.com/",
+      "details": [
+        "Standardized technical operations reporting to eliminate redundancy and improve efficiency across multidisciplinary teams.",
+        "Mitigated risk and managed liability by applying the latest cybersecurity advisories and best practices to internal operations and product development.",
+        "Authored technical requirement documentation aligned with business goals and technological constraints.",
+        "Resolved program-level dependencies to prevent bottlenecks and maintain efficiency in ongoing efforts.",
+        "Implemented and fully managed the Asigra Cloud Backup platform in a multi-client environment."
+      ],
+      "technologies": [
+        {
+          "name": "Linux",
+          "logo": "simple-icons:linux",
+          "website": "https://www.linux.org/"
+        },
+        {
+          "name": "Citrix",
+          "logo": "simple-icons:citrix",
+          "website": "https://www.citrix.com/"
+        },
+        {
+          "name": "Windows",
+          "logo": "simple-icons:windows",
+          "website": "https://www.microsoft.com/en-us/windows"
+        },
+        {
+          "name": "Exchange",
+          "logo": "simple-icons:microsoftexchange",
+          "website": "https://www.microsoft.com/en-us/microsoft-365/exchange/email"
+        }
+      ]
+    }
+  ]
+}

@@ -1,9 +1,6 @@
 import React from "react";
 import { useState } from "react";
 
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPaperPlane} from "@fortawesome/free-solid-svg-icons";
-
 const ContactForm = () => {
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -70,7 +67,7 @@ const ContactForm = () => {
             <button type="submit" className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
                 <div className="icon-box">
                     <i className="w-5 h-5 mr-2 text-content-icons">
-                        <FontAwesomeIcon icon={faPaperPlane}/>
+                        <iconify-icon inline="" icon="fa6-solid:paper-plane"/>
                     </i>
                 </div>
                 <span className="text-content-header text-sm">Send Message</span>
@@ -88,7 +85,7 @@ function Contact() {
                 <h2 className="h2 font-extrabold text-content-header mb-0">CONTACT ME</h2>
                 <div className="mx-auto max-w-screen-md">
                     <p className="mb-6 font-sans text-content-accent sm:text-xl">
-                        Have a potential opportunity or project that you'd like to collaborate on?
+                        Questions? Comments? Have a potential opportunity or project that you'd like to collaborate on?
                         <br/>
                         Feel free to reach out using the contact form below.</p>
                     <ContactForm />

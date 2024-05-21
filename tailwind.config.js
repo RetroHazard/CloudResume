@@ -29,8 +29,9 @@ module.exports = {
       },
       skill: {
         0: '#64748b',
-        1: '#93c5fd',
+        1: '#e2e8f0',
         2: '#3b82f6',
+        3: '#94a3b8'
       },
     },
     fontFamily: {
