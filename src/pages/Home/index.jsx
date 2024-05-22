@@ -15,7 +15,7 @@ function Home() {
                             <div className="flex items-center gap-4 sm:flex-col">
                                 <img className="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24"
                                      src={personalData.profilePicture} alt="Headshot"/>
-                                <a href="." className="font-bold"> {/* TODO: Retrieve CV File from S3 */}
+                                <a href={personalData.resumeLink} className="font-bold">
                                     <button
                                         className="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center">
                                         <div className="icon-box">
