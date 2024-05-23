@@ -44,4 +44,9 @@ describe('SocialLinks Component', () => {
             expect(icon).toHaveAttribute('icon', 'mdi:home');
         });
     });
+
+    test('matches the snapshot', () => {
+        const { asFragment } = render(<SocialLinks />);
+        expect(asFragment()).toMatchSnapshot();
+    });
 });

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SocialLinks Component matches the snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="flex gap-3 flex-wrap sm:flex-nowrap"
+  >
+    <a
+      aria-label="Social1"
+      class="social-link"
+      href="http://social1.com"
+    >
+      <i
+        class="text-base text-content-icons"
+      >
+        <iconify-icon
+          class="social-link"
+          classname="social-link"
+          height="1.25em"
+          icon="mdi:home"
+          width="1.25em"
+        />
+      </i>
+    </a>
+  </div>
+</DocumentFragment>
+`;
