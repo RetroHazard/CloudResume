@@ -1,0 +1,182 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home component renders properly with provided data 1`] = `
+<DocumentFragment>
+  <div
+    class="content-block"
+    id="profile"
+  >
+    <div
+      class="flex flex-col gap-6 items-start sm:flex-row"
+    >
+      <div
+        class="flex items-center gap-4 sm:flex-col"
+      >
+        <img
+          alt="Headshot"
+          class="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24"
+          src="/images/placeholder.png"
+        />
+        <a
+          class="font-bold"
+          href="https://example.com/resume.pdf"
+        >
+          <button
+            class="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center"
+          >
+            <div
+              class="icon-box"
+            >
+              <i
+                class="w-5 h-5 mr-2 text-content-icons"
+              >
+                <iconify-icon
+                  classname="mb-1 icon-box"
+                  icon="fa6-solid:cloud-arrow-down"
+                  inline=""
+                />
+              </i>
+            </div>
+            <span
+              class="text-content-header text-sm"
+            >
+              Download CV
+            </span>
+          </button>
+        </a>
+      </div>
+      <div
+        class="flex flex-col w-full gap-5"
+      >
+        <div
+          class="flex flex-col w-full gap-2 justify-between sm:flex-row"
+        >
+          <div
+            class="w-full"
+          >
+            <h1
+              class="h1 font-extrabold text-content-header mb-0"
+            >
+              John Doe
+            </h1>
+            <h2
+              class="sm:text-lg text-base font-medium text-content-header mb-0"
+            >
+              Software Engineer
+            </h2>
+          </div>
+        </div>
+        <div
+          class="flex flex-col gap-6"
+        >
+          <div
+            class="inline-grid xl:grid-cols-[auto_auto]"
+          >
+            <div>
+              <span
+                class="font-medium text-content-subtitle"
+              >
+                Location: 
+              </span>
+              <span
+                class="text-content-accent"
+              >
+                New York, NY
+              </span>
+            </div>
+            <div>
+              <span
+                class="font-medium text-content-subtitle"
+              />
+            </div>
+            <div>
+              <span
+                class="font-medium text-content-subtitle"
+              >
+                Salary: 
+              </span>
+              <span
+                class="text-content-accent"
+              >
+                <iconify-icon
+                  classname="icon-box"
+                  icon="fa6-solid:dollar-sign"
+                  inline=""
+                />
+                125,000 USD
+              </span>
+            </div>
+          </div>
+          <div
+            class="flex flex-col gap-4"
+          >
+             
+            <p
+              class="leading-relaxed mb-0 text-sm sm:text-base sm:leading-relaxed"
+            >
+              Lorem ipsum dolor sit amet, consectetur 
+              <strong>
+                adipiscing elit
+              </strong>
+              . In sodales ac dui at 
+              <em>
+                vestibulum
+              </em>
+              . In condimentum metus id dui tincidunt, in blandit mi 
+              <a
+                href="."
+              >
+                vehicula
+              </a>
+              . Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
+            </p>
+            <p
+              class="leading-relaxed mb-0 text-sm sm:text-base sm:leading-relaxed"
+            >
+              Lorem ipsum dolor sit amet, consectetur 
+              <strong>
+                adipiscing elit
+              </strong>
+              . In sodales ac dui at 
+              <em>
+                vestibulum
+              </em>
+              . In condimentum metus id dui tincidunt, in blandit mi 
+              <a
+                href="/public"
+              >
+                vehicula
+              </a>
+              . Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
+            </p>
+            <div
+              class="flex gap-3 flex-wrap"
+            >
+              <div
+                class="open-for-block"
+              >
+                Open for work
+              </div>
+              <div
+                class="open-for-block"
+              >
+                Available for consulting
+              </div>
+              <div
+                class="open-for-block"
+              >
+                Looking to learn
+              </div>
+              <div
+                class="open-for-block"
+              >
+                Working on side project
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

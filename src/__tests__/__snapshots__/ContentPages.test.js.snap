@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Content Pages Certifications page renders correctly, calls CertificationList, and matches snapshot 1`] = `
+<div
+  class="content-block"
+  id="certifications"
+>
+  <h2
+    class="h2 font-extrabold text-content-header mb-0"
+  >
+    CERTIFICATIONS
+  </h2>
+  <div
+    class="flex flex-col gap-8"
+  />
+</div>
+`;
+
+exports[`Content Pages Education page renders correctly, calls EducationList, and matches snapshot 1`] = `
+<div
+  class="content-block"
+  id="education"
+>
+  <h2
+    class="h2 font-extrabold text-content-header mb-0"
+  >
+    EDUCATION
+  </h2>
+  <div
+    class="flex flex-col gap-8"
+  />
+</div>
+`;
+
+exports[`Content Pages Experience page renders correctly, calls ExperienceList, and matches snapshot 1`] = `
+<div
+  class="content-block"
+  id="experience"
+>
+  <h2
+    class="h2 font-extrabold text-content-header mb-0"
+  >
+    EXPERIENCE
+  </h2>
+  <div
+    class="flex flex-col gap-8"
+  />
+</div>
+`;
+
+exports[`Content Pages Projects page renders correctly, calls ProjectList, and matches snapshot 1`] = `
+<div
+  class="content-block"
+  id="projects"
+>
+  <h2
+    class="h2 font-extrabold text-content-header mb-0"
+  >
+    PROJECTS
+  </h2>
+  <div
+    class="flex flex-col gap-8"
+  />
+</div>
+`;
+
+exports[`Content Pages Skills page renders correctly, calls SkillHighlight, SkillButton, LanguageItem, and matches snapshot 1`] = `
+<div
+  class="content-block"
+  id="skills"
+>
+  <h2
+    class="h2 font-extrabold text-content-header mb-0"
+  >
+    SKILLS
+  </h2>
+  <div
+    class="flex flex-col gap-8"
+  >
+    <div
+      class="flex flex-col gap-3"
+    />
+    <div
+      class="flex flex-col gap-3"
+    >
+      <h3
+        class="h3 text-content-subtitle font-extrabold mb-0"
+      >
+        Interested in:
+      </h3>
+    </div>
+    <div
+      class="flex flex-col gap-3"
+    >
+      <h3
+        class="h3 text-content-subtitle font-extrabold mb-0"
+      >
+        I speak
+      </h3>
+    </div>
+  </div>
+</div>
+`;

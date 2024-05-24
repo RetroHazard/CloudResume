@@ -1,5 +1,4 @@
 import React from "react";
-
 import CertificationList from "../../components/certification_list";
 
 function Certifications() {

@@ -24,7 +24,7 @@ const SkillHighlight =() => {
                                 </div>
                                 <div className="flex gap-1">
                                     <div className="skill-progress-bar-outline">
-                                        <div className="skill-progress-bar" style={{width: skill.level}}/>
+                                        <div className="skill-progress-bar" style={{width: skill.level}} role="progressbar"/>
                                     </div>
                                 </div>
                             </div>
