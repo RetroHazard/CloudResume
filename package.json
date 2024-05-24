@@ -16,7 +16,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "test": "cross-env react-scripts test -u",
+    "test": "cross-env react-scripts test -u --coverage",
     "start-dev": "cross-env NODE_ENV=development REACT_APP_ENV=development REACT_APP_DATA_SET=development react-scripts start",
     "build-dev": "cross-env NODE_ENV=development REACT_APP_ENV=development REACT_APP_DATA_SET=development BUILD_PATH='build/dev' react-scripts build",
     "start-prod": "cross-env NODE_ENV=production REACT_APP_ENV=production REACT_APP_DATA_SET=production react-scripts start",

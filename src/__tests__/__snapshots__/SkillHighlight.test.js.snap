@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SkillHighlight renders the skill data correctly and matches snapshot 1`] = `
+<div>
+  <div
+    class="flex flex-wrap gap-x-8 gap-y-2"
+  >
+    <div
+      class="flex flex-col gap-2"
+      data-testid="skill-item-0"
+    >
+      <div
+        class="flex items-center justify-between"
+      >
+        <a
+          class="flex gap-2.5 items-center no-underline"
+          data-testid="skill-link-0"
+          href="https://example.com/skillA"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <iconify-icon
+            data-testid="skill-icon-0"
+            height="1.6em"
+            icon="logos:skillA"
+            inline="true"
+            width="1.6em"
+          />
+          <div
+            class="flex flex-col"
+          >
+            <span
+              class="font-semibold text-sm text-content-subtitle hover:text-secondary-100"
+              data-testid="skill-name-0"
+            >
+              Skill A
+            </span>
+            <span
+              class="font-light text-xs text-content-accent"
+              data-testid="skill-category-0"
+            >
+              Category A
+            </span>
+          </div>
+        </a>
+      </div>
+      <div
+        class="flex gap-1"
+      >
+        <div
+          class="skill-progress-bar-outline"
+        >
+          <div
+            class="skill-progress-bar"
+            data-testid="skill-progress-0"
+            style="width: 70%;"
+          />
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex flex-col gap-2"
+      data-testid="skill-item-1"
+    >
+      <div
+        class="flex items-center justify-between"
+      >
+        <a
+          class="flex gap-2.5 items-center no-underline"
+          data-testid="skill-link-1"
+          href="https://example.com/skillB"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <iconify-icon
+            data-testid="skill-icon-1"
+            height="1.6em"
+            icon="logos:skillB"
+            inline="true"
+            width="1.6em"
+          />
+          <div
+            class="flex flex-col"
+          >
+            <span
+              class="font-semibold text-sm text-content-subtitle hover:text-secondary-100"
+              data-testid="skill-name-1"
+            >
+              Skill B
+            </span>
+            <span
+              class="font-light text-xs text-content-accent"
+              data-testid="skill-category-1"
+            >
+              Category B
+            </span>
+          </div>
+        </a>
+      </div>
+      <div
+        class="flex gap-1"
+      >
+        <div
+          class="skill-progress-bar-outline"
+        >
+          <div
+            class="skill-progress-bar"
+            data-testid="skill-progress-1"
+            style="width: 85%;"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

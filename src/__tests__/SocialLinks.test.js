@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import SocialLinks from '../components/social_links';
-import pretty from 'pretty';
 
 // Mock the DataLoader component
 jest.mock('../utils/dataLoader', () => ({ children }) => {
@@ -28,9 +27,6 @@ describe('SocialLinks Component', () => {
 
         const socialLinks = screen.getAllByRole('link');
         const numberOfLinks = socialLinks.length;
-
-        // Log the rendered HTML in a preformatted manner to manually review it
-        console.log(pretty(container.innerHTML));
 
         // Check that the number of links is between 1 and 5
         expect(numberOfLinks).toBeGreaterThanOrEqual(1);
