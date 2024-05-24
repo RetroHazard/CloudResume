@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CertificationList Component matches snapshot 1`] = `
+<div>
+  <div>
+    <div
+      class="flex flex-col gap-3"
+    >
+      <div
+        class="flex gap-2 justify-between w-full"
+      >
+        <div
+          class="flex gap-4"
+        >
+          <img
+            alt="Sample Certification Logo"
+            class="hidden rounded-xl sm:block h-[6.5rem] w-[6.5rem]"
+            src="sample_logo.png"
+          />
+          <div
+            class="flex flex-col"
+          >
+            <h3
+              class="h3 font-extrabold text-content-title mb-0"
+            >
+              Sample Certification
+            </h3>
+            <p
+              class="text-content-subtitle font-semibold leading-snug mb-0.5"
+            >
+              Sample Issuer
+            </p>
+            <p
+              class="font-medium text-sm text-content-date mb-0"
+            >
+              <strong>
+                Credential ID:
+              </strong>
+               
+              123456789
+            </p>
+            <p
+              class="font-medium text-sm text-content-date mb-0"
+            >
+              <strong>
+                Date Issued:
+              </strong>
+               
+              2024-05-24
+            </p>
+          </div>
+        </div>
+        <div
+          class="flex gap-3 flex-wrap sm:flex-nowrap"
+          id="Sample Certification Links"
+        >
+          <a
+            class="social-link"
+            href="https://samplewebsite.com"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <iconify-icon
+              height="1.25em"
+              icon="sample-icon"
+              width="1.25em"
+            />
+          </a>
+          <a
+            class="social-link"
+            href="https://samplewebsite.com"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <iconify-icon
+              height="1.25em"
+              icon="sample-icon"
+              width="1.25em"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
