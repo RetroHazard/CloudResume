@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LanguageItem renders correctly and matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    class="flex gap-3 flex-wrap"
+  >
+    <div
+      class="skill-block"
+    >
+      <iconify-icon
+        height="1.25em"
+        icon="emojione:flag-for-united-states"
+        inline="true"
+        width="1.25em"
+      />
+      English - Native
+    </div>
+    <div
+      class="skill-block"
+    >
+      <iconify-icon
+        height="1.25em"
+        icon="twemoji:flag-for-france"
+        inline="true"
+        width="1.25em"
+      />
+      French - Intermediate
+    </div>
+    <div
+      class="skill-block"
+    >
+      <iconify-icon
+        height="1.25em"
+        icon="emojione:flag-for-spain"
+        inline="true"
+        width="1.25em"
+      />
+      Spanish - Beginner
+    </div>
+  </div>
+</DocumentFragment>
+`;

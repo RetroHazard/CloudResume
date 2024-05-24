@@ -6,7 +6,9 @@ function Education() {
         <>
             <div className="content-block" id="education">
                 <h2 className="h2 font-extrabold text-content-header mb-0">EDUCATION</h2>
-               <EducationList />
+                <div className="flex flex-col gap-8">
+                    <EducationList />
+                </div>
             </div>
         </>
     );

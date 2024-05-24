@@ -9,7 +9,7 @@ function Skills() {
         <>
             <div className="content-block" id="skills">
                 <h2 className="h2 font-extrabold text-content-header mb-0">SKILLS</h2>
-                <div className="flex flex-col gap-10">
+                <div className="flex flex-col gap-8">
                     <div className="flex flex-col gap-3">
                         <SkillHighlight/>
                     </div>
