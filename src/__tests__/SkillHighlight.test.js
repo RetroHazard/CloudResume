@@ -31,18 +31,19 @@ describe('SkillHighlight', () => {
         const { container } = render(<SkillHighlight />);
 
         // Check if the skills are rendered
-        expect(screen.getByTestId('skill-name-0')).toHaveTextContent('Skill A');
-        expect(screen.getByTestId('skill-category-0')).toHaveTextContent('Category A');
-        expect(screen.getByTestId('skill-name-1')).toHaveTextContent('Skill B');
-        expect(screen.getByTestId('skill-category-1')).toHaveTextContent('Category B');
+        expect(screen.getByText('Skill A')).toBeInTheDocument();
+        expect(screen.getByText('Category A')).toBeInTheDocument();
+        expect(screen.getByText('Skill B')).toBeInTheDocument();
+        expect(screen.getByText('Category B')).toBeInTheDocument();
 
         // Check if the links are correct
-        expect(screen.getByTestId('skill-link-0')).toHaveAttribute('href', 'https://example.com/skillA');
-        expect(screen.getByTestId('skill-link-1')).toHaveAttribute('href', 'https://example.com/skillB');
+        expect(screen.getByText('Skill A').closest('a')).toHaveAttribute('href', 'https://example.com/skillA');
+        expect(screen.getByText('Skill B').closest('a')).toHaveAttribute('href', 'https://example.com/skillB');
 
         // Check if the progress bars have correct widths
-        expect(screen.getByTestId('skill-progress-0')).toHaveStyle('width: 70%');
-        expect(screen.getByTestId('skill-progress-1')).toHaveStyle('width: 85%');
+        const progressBars = screen.getAllByRole('progressbar');
+        expect(progressBars[0]).toHaveStyle('width: 70%');
+        expect(progressBars[1]).toHaveStyle('width: 85%');
 
         // Create a snapshot of the rendered component
         expect(container).toMatchSnapshot();

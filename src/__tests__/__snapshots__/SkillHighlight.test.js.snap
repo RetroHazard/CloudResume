@@ -7,20 +7,17 @@ exports[`SkillHighlight renders the skill data correctly and matches snapshot 1`
   >
     <div
       class="flex flex-col gap-2"
-      data-testid="skill-item-0"
     >
       <div
         class="flex items-center justify-between"
       >
         <a
           class="flex gap-2.5 items-center no-underline"
-          data-testid="skill-link-0"
           href="https://example.com/skillA"
           rel="noopener noreferrer"
           target="_blank"
         >
           <iconify-icon
-            data-testid="skill-icon-0"
             height="1.6em"
             icon="logos:skillA"
             inline="true"
@@ -31,13 +28,11 @@ exports[`SkillHighlight renders the skill data correctly and matches snapshot 1`
           >
             <span
               class="font-semibold text-sm text-content-subtitle hover:text-secondary-100"
-              data-testid="skill-name-0"
             >
               Skill A
             </span>
             <span
               class="font-light text-xs text-content-accent"
-              data-testid="skill-category-0"
             >
               Category A
             </span>
@@ -52,7 +47,7 @@ exports[`SkillHighlight renders the skill data correctly and matches snapshot 1`
         >
           <div
             class="skill-progress-bar"
-            data-testid="skill-progress-0"
+            role="progressbar"
             style="width: 70%;"
           />
         </div>
@@ -60,20 +55,17 @@ exports[`SkillHighlight renders the skill data correctly and matches snapshot 1`
     </div>
     <div
       class="flex flex-col gap-2"
-      data-testid="skill-item-1"
     >
       <div
         class="flex items-center justify-between"
       >
         <a
           class="flex gap-2.5 items-center no-underline"
-          data-testid="skill-link-1"
           href="https://example.com/skillB"
           rel="noopener noreferrer"
           target="_blank"
         >
           <iconify-icon
-            data-testid="skill-icon-1"
             height="1.6em"
             icon="logos:skillB"
             inline="true"
@@ -84,13 +76,11 @@ exports[`SkillHighlight renders the skill data correctly and matches snapshot 1`
           >
             <span
               class="font-semibold text-sm text-content-subtitle hover:text-secondary-100"
-              data-testid="skill-name-1"
             >
               Skill B
             </span>
             <span
               class="font-light text-xs text-content-accent"
-              data-testid="skill-category-1"
             >
               Category B
             </span>
@@ -105,7 +95,7 @@ exports[`SkillHighlight renders the skill data correctly and matches snapshot 1`
         >
           <div
             class="skill-progress-bar"
-            data-testid="skill-progress-1"
+            role="progressbar"
             style="width: 85%;"
           />
         </div>
