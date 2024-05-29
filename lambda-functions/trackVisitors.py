@@ -62,6 +62,11 @@ def lambda_handler(event, context):
     apiResponse = {
         "isBase64Encoded": False,
         "statusCode": 200,
+        'headers': {
+            # 'Access-Control-Allow-Headers': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            # 'Access-Control-Allow-Methods': 'OPTIONS,GET'
+        },
         "body": responseBody
     }
 
