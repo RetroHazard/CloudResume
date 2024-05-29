@@ -61,13 +61,13 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'body': json.dumps({
                 'message': 'Form submitted and email sent successfully!',
-                'data': {
-                    'firstName': first_name,
-                    'lastName': last_name,
-                    'email': email,
-                    'subject': subject,
-                    'message': message
-                }
+                # 'data': {
+                #     'firstName': first_name,
+                #     'lastName': last_name,
+                #     'email': email,
+                #     'subject': subject,
+                #     'message': message
+                # }
             })
         }
 
