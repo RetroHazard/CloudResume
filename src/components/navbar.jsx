@@ -3,30 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import {Icon} from "@iconify-icon/react";
 
-async function get_visitors() {
-    try {
-        // Generate or retrieve a unique identifier for the visitor
-        let visitorId = localStorage.getItem('visitorId');
-        if (!visitorId) {
-            visitorId = crypto.randomUUID();
-            localStorage.setItem('visitorId', visitorId);
-        }
-
-        // Send the visitorId as a query parameter
-        let response = await fetch(`https://api.cloudresume-agb.jp/dev/visitors?visitorId=${visitorId}`, {
-            method: 'GET',
-        });
-
-        let data = await response.json();
-        document.getElementById("visitors").innerHTML = data['count'];
-        console.log(data);
-        return data;
-    } catch (err) {
-        console.error(err);
-    }
-}
-get_visitors();
-
+import VisitorCount from "./visitor_count";
 
 function Navigation() {
     return (
@@ -105,12 +82,7 @@ function Navigation() {
                     </li>
                     <div className="justify-between bg-secondary-600 h-0.5 mt-2 mb-2 w-full"></div>
                     <li className="flex-col text-sm font-medium text-content-accent">
-                        <div className="inline-flex items-center px-4 py-1 mt-1 mb-1 bg-secondary-700 w-full">
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:users"/>
-                            </i>
-                            <span className="text-base font-sans" id="visitors" />
-                        </div>
+                        <VisitorCount/>
                     </li>
                 </ul>
             </nav>
