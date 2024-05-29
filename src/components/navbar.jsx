@@ -3,15 +3,22 @@ import { NavLink } from "react-router-dom";
 
 import {Icon} from "@iconify-icon/react";
 
-// GET API REQUEST
+// eslint-disable-next-line
 async function get_visitors() {
-    // call post api request function
-    //await post_visitor();
     try {
-        let response = await fetch('https://knr52endfj.execute-api.ap-northeast-1.amazonaws.com/default/visitorCounter', {
+        // Generate or retrieve a unique identifier for the visitor
+        let visitorId = localStorage.getItem('visitorId');
+        if (!visitorId) {
+            visitorId = crypto.randomUUID();
+            localStorage.setItem('visitorId', visitorId);
+        }
+
+        // Send the visitorId as a query parameter
+        let response = await fetch(`https://api.cloudresume-agb.jp/dev/visitors?visitorId=${visitorId}`, {
             method: 'GET',
         });
-        let data = await response.json()
+
+        let data = await response.json();
         document.getElementById("visitors").innerHTML = data['count'];
         console.log(data);
         return data;
@@ -19,7 +26,6 @@ async function get_visitors() {
         console.error(err);
     }
 }
-get_visitors();
 
 
 function Navigation() {
@@ -103,7 +109,7 @@ function Navigation() {
                             <i className="icon-box">
                                 <Icon icon="fa6-solid:users"/>
                             </i>
-                            <span className="text-base font-sans" id="visitors"></span>
+                            <span className="text-base font-sans" id="visitors" />
                         </div>
                     </li>
                 </ul>
