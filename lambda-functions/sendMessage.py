@@ -2,9 +2,7 @@ import json
 import boto3
 import os
 
-# Define Environmental Variables
 AWS_REGION = os.environ['mailRegion']
-# SEND_TO and SEND_AS Addresses must be verified in SES
 SEND_TO = os.environ['sendToAddress']
 SEND_AS = os.environ['sendFromAddress']
 
@@ -27,7 +25,7 @@ def lambda_handler(event, context):
         email_subject = f"New contact form submission: {subject}"
         email_body = f"""
         You have a new contact form submission:
-
+        
         Name: {first_name} {last_name}
         Email: {email}
         Subject: {subject}
@@ -59,6 +57,11 @@ def lambda_handler(event, context):
         # Construct a success response
         response = {
             'statusCode': 200,
+            'headers': {
+                # 'Access-Control-Allow-Headers': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                # 'Access-Control-Allow-Methods': 'OPTIONS,GET'
+            },
             'body': json.dumps({
                 'message': 'Form submitted and email sent successfully!',
                 # 'data': {
