@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 
 import {Icon} from "@iconify-icon/react";
 
-// eslint-disable-next-line
 async function get_visitors() {
     try {
         // Generate or retrieve a unique identifier for the visitor
@@ -26,6 +25,7 @@ async function get_visitors() {
         console.error(err);
     }
 }
+get_visitors();
 
 
 function Navigation() {
