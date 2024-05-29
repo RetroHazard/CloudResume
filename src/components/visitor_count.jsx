@@ -17,7 +17,7 @@ function VisitorCount() {
         }
 
         // Send the visitorId as a query parameter
-        let response = await fetch(`https://api.cloudresume-agb.jp/dev/visitors?visitorId=${visitorId}`, {
+        let response = await fetch(`https://api.cloudresume-agb.jp/v1/visitors?visitorId=${visitorId}`, {
           method: 'GET',
         });
 
