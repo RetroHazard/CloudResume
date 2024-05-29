@@ -10,7 +10,7 @@ const ContactForm = () => {
     const [status, setStatus] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const endpoint = 'https://4t4geg10ee.execute-api.ap-northeast-1.amazonaws.com/default/handleFormSubmit';
+    const endpoint = 'https://api.cloudresume-agb.jp/v1/contact';
 
     const handleSubmit = (event) => {
         event.preventDefault();

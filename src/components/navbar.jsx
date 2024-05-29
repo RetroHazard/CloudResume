@@ -3,24 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import {Icon} from "@iconify-icon/react";
 
-// GET API REQUEST
-async function get_visitors() {
-    // call post api request function
-    //await post_visitor();
-    try {
-        let response = await fetch('https://knr52endfj.execute-api.ap-northeast-1.amazonaws.com/default/visitorCounter', {
-            method: 'GET',
-        });
-        let data = await response.json()
-        document.getElementById("visitors").innerHTML = data['count'];
-        console.log(data);
-        return data;
-    } catch (err) {
-        console.error(err);
-    }
-}
-get_visitors();
-
+import VisitorCount from "./visitor_count";
 
 function Navigation() {
     return (
@@ -99,12 +82,7 @@ function Navigation() {
                     </li>
                     <div className="justify-between bg-secondary-600 h-0.5 mt-2 mb-2 w-full"></div>
                     <li className="flex-col text-sm font-medium text-content-accent">
-                        <div className="inline-flex items-center px-4 py-1 mt-1 mb-1 bg-secondary-700 w-full">
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:users"/>
-                            </i>
-                            <span className="text-base font-sans" id="visitors"></span>
-                        </div>
+                        <VisitorCount/>
                     </li>
                 </ul>
             </nav>
