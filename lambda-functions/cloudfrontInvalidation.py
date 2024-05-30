@@ -4,19 +4,28 @@ import boto3
 import time
 import os
 
-distribution=os.environ['prod_distribution']
+distribution = os.environ.get('prod_distribution')
 
 def lambda_handler(event, context):
-    for items in event["Records"]:
-        path = "/" + items["s3"]["object"]["key"]
-    print(path)
+    if not distribution:
+        raise ValueError("Environment variable 'prod_distribution' is not set.")
+
     client = boto3.client('cloudfront')
-    invalidation = client.create_invalidation(
-        DistributionId=distribution,
-        InvalidationBatch={
-            'Paths': {
-                'Quantity': 1,
-                'Items': [path]
-        },
-        'CallerReference': str(time.time())
-    })
+
+    for item in event["Records"]:
+        path = "/" + item["s3"]["object"]["key"]
+        print(path)
+        try:
+            invalidation = client.create_invalidation(
+                DistributionId=distribution,
+                InvalidationBatch={
+                    'Paths': {
+                        'Quantity': 1,
+                        'Items': [path]
+                    },
+                    'CallerReference': str(time.time())
+                }
+            )
+            print("Invalidation created: ", invalidation)
+        except Exception as e:
+            print(f"Error creating invalidation for path {path}: {str(e)}")
