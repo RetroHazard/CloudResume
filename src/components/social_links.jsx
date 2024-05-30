@@ -10,7 +10,7 @@ const SocialLinks = () => {
             {(data) => {
                 const displayedSocials = data.Socials.filter((social) => social.display);
                 return (
-                    <div className='flex flex-wrap gap-3 max-sm:flex-row sm:flex-col md:flex-col lg:flex-nowrap'>
+                    <div className='flex gap-3'>
                         {displayedSocials.map((social, index) => (
                             <a key={index} className='social-link' href={social.link} aria-label={social.name}>
                                 <i className='text-base text-content-icons'>
