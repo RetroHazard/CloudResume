@@ -17,16 +17,16 @@
       ],
       "links": [
         {
-          "program": [
-            {
-              "website": "https://www.ucalgary.ca/future-students/undergraduate/explore-programs/communication-media-studies",
-              "icon": "fa6-solid:circle-info"
-            }
-          ],
           "school": [
             {
               "website": "https://www.ucalgary.ca/",
               "icon": "fa6-solid:globe"
+            }
+          ],
+          "program": [
+            {
+              "website": "https://www.ucalgary.ca/future-students/undergraduate/explore-programs/communication-media-studies",
+              "icon": "fa6-solid:circle-info"
             }
           ]
         }
@@ -49,16 +49,16 @@
       ],
       "links": [
         {
-          "program": [
-            {
-              "website": "https://www.waseda.jp/fire/sils/en/students/study-abroad/",
-              "icon": "fa6-solid:circle-info"
-            }
-          ],
           "school": [
             {
               "website": "https://www.waseda.jp/top/en",
               "icon": "fa6-solid:globe"
+            }
+          ],
+          "program": [
+            {
+              "website": "https://www.waseda.jp/fire/sils/en/students/study-abroad/",
+              "icon": "fa6-solid:circle-info"
             }
           ]
         }
@@ -80,16 +80,16 @@
       ],
       "links": [
         {
-          "program": [
-            {
-              "website": "https://digitalartschool.com/program/network-administration-security/",
-              "icon": "fa6-solid:circle-info"
-            }
-          ],
           "school": [
             {
               "website": "https://digitalartschool.com/",
               "icon": "fa6-solid:globe"
+            }
+          ],
+          "program": [
+            {
+              "website": "https://digitalartschool.com/program/network-administration-security/",
+              "icon": "fa6-solid:circle-info"
             }
           ]
         }

@@ -18,10 +18,10 @@
       ],
       "links": [
         {
-          "demo": [
+          "spec": [
             {
-              "website": "https://www.cloudresume-agb.jp",
-              "icon": "fa-solid:external-link-alt"
+              "website": "https://cloudresumechallenge.dev/",
+              "icon": "fa6-solid:info"
             }
           ],
           "repo": [
@@ -30,10 +30,10 @@
               "icon": "simple-icons:git"
             }
           ],
-          "spec": [
+          "demo": [
             {
-              "website": "https://cloudresumechallenge.dev/",
-              "icon": "fa6-solid:info"
+              "website": "https://www.cloudresume-agb.jp",
+              "icon": "fa-solid:external-link-alt"
             }
           ]
         }
@@ -137,13 +137,13 @@
       ],
       "links": [
         {
-          "release": [
+          "product": [
             {
               "website": "https://www.unrealengine.com/marketplace/en-US/product/interactive-switches",
               "icon": "material-symbols:package-2-sharp"
             }
           ],
-          "source": [
+          "repo": [
             {
               "website": "https://github.com/Hollow-Soul-Studios/InteractiveSwitches",
               "icon": "simple-icons:git"
