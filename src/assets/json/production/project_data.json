@@ -24,16 +24,16 @@
               "icon": "fa6-solid:info"
             }
           ],
+          "blog": [
+            {
+              "website": "",
+              "icon": "fa6-solid:blog"
+            }
+          ],
           "repo": [
             {
               "website": "https://github.com/RetroHazard",
               "icon": "simple-icons:git"
-            }
-          ],
-          "demo": [
-            {
-              "website": "https://www.cloudresume-agb.jp",
-              "icon": "fa-solid:external-link-alt"
             }
           ]
         }

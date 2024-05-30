@@ -3,7 +3,7 @@
     {
       "name": "Amazon Web Services",
       "category": "Cloud",
-      "level": "60%",
+      "level": "65%",
       "logo": "skill-icons:aws-light",
       "website": "https://aws.amazon.com/"
     },
@@ -24,21 +24,21 @@
     {
       "name": "JetBrains IDEs",
       "category": "Software",
-      "level": "50%",
+      "level": "60%",
       "logo": "devicon:jetbrains",
       "website": "https://www.jetbrains.com/"
     },
     {
       "name": "C++",
       "category": "Programming Language",
-      "level": "35%",
+      "level": "30%",
       "logo": "devicon:cplusplus",
       "website": "https://cplusplus.com/"
     },
     {
       "name": "Python",
       "category": "Scripting Language",
-      "level": "25%",
+      "level": "30%",
       "logo": "devicon:python",
       "website": "https://www.python.org"
     },
@@ -59,28 +59,28 @@
     {
       "name": "Javascript",
       "category": "Scripting Language",
-      "level": "25%",
+      "level": "30%",
       "logo": "devicon:javascript",
       "website": "https://developer.oracle.com/languages/javascript.html"
     },
     {
       "name": "React",
       "category": "Library",
-      "level": "30%",
+      "level": "45%",
       "logo": "devicon:react",
       "website": "https://react.dev/"
     },
     {
       "name": "Node.js",
       "category": "Software",
-      "level": "30%",
+      "level": "40%",
       "logo": "devicon:nodejs",
       "website": "https://nodejs.org"
     },
     {
       "name": "tailwindCSS",
       "category": "Framework",
-      "level": "40%",
+      "level": "50%",
       "logo": "devicon:tailwindcss",
       "website": "https://tailwindcss.com"
     },
@@ -101,42 +101,42 @@
     {
       "name": "Blender",
       "category": "Software",
-      "level": "50%",
+      "level": "55%",
       "logo": "devicon:blender",
       "website": "https://www.blender.org/"
     },
     {
       "name": "Google Workspace",
       "category": "Software",
-      "level": "80%",
+      "level": "85%",
       "logo": "devicon:google",
       "website": "https://www.google.com"
     },
     {
       "name": "Creative Cloud",
       "category": "Software",
-      "level": "65%",
+      "level": "70%",
       "logo": "simple-icons:adobecreativecloud",
       "website": "https://www.adobe.com/creativecloud.html"
     },
     {
       "name": "Github",
       "category": "Source Control",
-      "level": "45%",
+      "level": "50%",
       "logo": "devicon:github",
       "website": "https://github.com/"
     },
     {
       "name": "Perforce",
       "category": "Source Control",
-      "level": "35%",
+      "level": "45%",
       "logo": "simple-icons:perforce",
       "website": "https://www.perforce.com/"
     },
     {
       "name": "Windows",
       "category": "Operating System",
-      "level": "90%",
+      "level": "100%",
       "logo": "devicon:windows11",
       "website": "https://www.microsoft.com/en-us/windows"
     },
@@ -150,7 +150,7 @@
     {
       "name": "macOS",
       "category": "Operating System",
-      "level": "60%",
+      "level": "65%",
       "logo": "devicon:apple",
       "website": "https://www.apple.com"
     }

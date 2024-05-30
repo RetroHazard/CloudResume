@@ -1,5 +1,6 @@
 import React from 'react';
 
+import PersonalSummary from '../../components/personal_summary';
 import SocialLinks from '../../components/social_links';
 import DataLoader from '../../utils/dataLoader';
 
@@ -81,26 +82,7 @@ function Home() {
                             </div>
                         </div>
                         <div className='flex flex-col gap-4'>
-                            {' '}
-                            {/* TODO: Write Function to Automatically Retrieve Content from File(?) */}
-                            <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                                Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac
-                                dui at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi{' '}
-                                <a href='.'>vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus
-                                mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros
-                                fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum.
-                                Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae
-                                massa volutpat maximus.
-                            </p>
-                            <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                                Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac
-                                dui at <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi{' '}
-                                <a href='/public'>vehicula</a>. Nulla lacinia, erat sit amet elementum vulputate, lectus
-                                mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros
-                                fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum.
-                                Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae
-                                massa volutpat maximus.
-                            </p>
+                            <PersonalSummary />
                             <div className='flex flex-wrap gap-3'>
                                 <div className='open-for-block'>Open for work</div>
                                 <div className='open-for-block'>Available for consulting</div>
