@@ -7,31 +7,31 @@ exports[`CertificationList Component matches snapshot 1`] = `
       class="flex flex-col gap-3"
     >
       <div
-        class="flex gap-2 justify-between w-full"
+        class="flex w-full justify-between gap-2"
       >
         <div
           class="flex gap-4"
         >
           <img
             alt="Sample Certification Logo"
-            class="hidden rounded-xl sm:block h-[6.5rem] w-[6.5rem]"
+            class="h-[5.7rem] w-[5.7rem] rounded-xl"
             src="sample_logo.png"
           />
           <div
             class="flex flex-col"
           >
             <h3
-              class="h3 font-extrabold text-content-title mb-0"
+              class="h3 mb-0 font-extrabold text-content-title max-sm:text-sm sm:text-xs md:text-base"
             >
               Sample Certification
             </h3>
             <p
-              class="text-content-subtitle font-semibold leading-snug mb-0.5"
+              class="mb-0.5 font-semibold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base"
             >
               Sample Issuer
             </p>
             <p
-              class="font-medium text-sm text-content-date mb-0"
+              class="mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-sm"
             >
               <strong>
                 Credential ID:
@@ -40,7 +40,7 @@ exports[`CertificationList Component matches snapshot 1`] = `
               123456789
             </p>
             <p
-              class="font-medium text-sm text-content-date mb-0"
+              class="mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-sm"
             >
               <strong>
                 Date Issued:
@@ -51,7 +51,7 @@ exports[`CertificationList Component matches snapshot 1`] = `
           </div>
         </div>
         <div
-          class="flex gap-3 flex-wrap sm:flex-nowrap"
+          class="flex flex-wrap gap-3 sm:flex-nowrap"
           id="Sample Certification Links"
         >
           <a

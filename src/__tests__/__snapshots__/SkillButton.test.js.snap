@@ -3,7 +3,7 @@
 exports[`SkillButton renders skill buttons with correct data 1`] = `
 <DocumentFragment>
   <div
-    class="flex gap-3 flex-wrap"
+    class="flex flex-wrap max-sm:gap-1 sm:gap-2 md:gap-3"
   >
     <a
       class="skill-block"
@@ -14,9 +14,9 @@ exports[`SkillButton renders skill buttons with correct data 1`] = `
       <iconify-icon
         class="icon-box"
         classname="icon-box"
-        height="1.1rem"
+        height="1.1em"
         icon="skill1-icon"
-        width="1.1rem"
+        width="1.1em"
       />
       Skill 1
     </a>
@@ -29,9 +29,9 @@ exports[`SkillButton renders skill buttons with correct data 1`] = `
       <iconify-icon
         class="icon-box"
         classname="icon-box"
-        height="1.1rem"
+        height="1.1em"
         icon="skill2-icon"
-        width="1.1rem"
+        width="1.1em"
       />
       Skill 2
     </a>
@@ -42,7 +42,7 @@ exports[`SkillButton renders skill buttons with correct data 1`] = `
 exports[`SkillButton should match manual snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="flex gap-3 flex-wrap"
+    class="flex flex-wrap max-sm:gap-1 sm:gap-2 md:gap-3"
   >
     <a
       class="skill-block"
@@ -53,9 +53,9 @@ exports[`SkillButton should match manual snapshot 1`] = `
       <iconify-icon
         class="icon-box"
         classname="icon-box"
-        height="1.1rem"
+        height="1.1em"
         icon="skill1-icon"
-        width="1.1rem"
+        width="1.1em"
       />
       Skill 1
     </a>
@@ -68,9 +68,9 @@ exports[`SkillButton should match manual snapshot 1`] = `
       <iconify-icon
         class="icon-box"
         classname="icon-box"
-        height="1.1rem"
+        height="1.1em"
         icon="skill2-icon"
-        width="1.1rem"
+        width="1.1em"
       />
       Skill 2
     </a>

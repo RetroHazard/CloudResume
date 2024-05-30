@@ -7,14 +7,14 @@ exports[`Home component renders properly with provided data 1`] = `
     id="profile"
   >
     <div
-      class="flex flex-col gap-6 items-start sm:flex-row"
+      class="flex flex-col items-start gap-6 sm:flex-row"
     >
       <div
         class="flex items-center gap-4 sm:flex-col"
       >
         <img
           alt="Headshot"
-          class="rounded-lg h-24 max-w-none md:h-52 md:w-52 sm:h-36 sm:w-36 w-24"
+          class="h-24 w-24 max-w-none rounded-lg max-sm:size-32 sm:size-40 md:size-56"
           src="/images/placeholder.png"
         />
         <a
@@ -22,23 +22,23 @@ exports[`Home component renders properly with provided data 1`] = `
           href="https://example.com/resume.pdf"
         >
           <button
-            class="bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center"
+            class="inline-flex items-center rounded bg-primary-500 px-4 py-2 font-bold text-secondary-800 hover:bg-primary-400"
           >
             <div
               class="icon-box"
             >
               <i
-                class="w-5 h-5 mr-2 text-content-icons"
+                class="mr-2 h-5 w-5 text-content-icons"
               >
                 <iconify-icon
-                  classname="mb-1 icon-box"
+                  classname="icon-box mb-1"
                   icon="fa6-solid:cloud-arrow-down"
                   inline=""
                 />
               </i>
             </div>
             <span
-              class="text-content-header text-sm"
+              class="text-sm text-content-header max-sm:text-xs max-sm:font-light"
             >
               Download CV
             </span>
@@ -46,21 +46,21 @@ exports[`Home component renders properly with provided data 1`] = `
         </a>
       </div>
       <div
-        class="flex flex-col w-full gap-5"
+        class="flex w-full flex-col gap-5"
       >
         <div
-          class="flex flex-col w-full gap-2 justify-between sm:flex-row"
+          class="flex w-full flex-col justify-between gap-2 sm:flex-row"
         >
           <div
             class="w-full"
           >
             <h1
-              class="h1 font-extrabold text-content-header mb-0"
+              class="h1 mb-0 font-extrabold text-content-header max-sm:text-sm sm:text-sm md:text-lg"
             >
               John Doe
             </h1>
             <h2
-              class="sm:text-lg text-base font-medium text-content-header mb-0"
+              class="mb-0 text-base font-medium text-content-header max-sm:text-sm sm:text-sm md:text-base"
             >
               Software Engineer
             </h2>
@@ -74,29 +74,29 @@ exports[`Home component renders properly with provided data 1`] = `
           >
             <div>
               <span
-                class="font-medium text-content-subtitle"
+                class="font-medium text-content-subtitle max-sm:text-sm sm:text-sm md:text-base"
               >
                 Location: 
               </span>
               <span
-                class="text-content-accent"
+                class="text-content-accent max-sm:text-sm sm:text-sm md:text-base"
               >
                 New York, NY
               </span>
             </div>
             <div>
               <span
-                class="font-medium text-content-subtitle"
+                class="font-medium text-content-subtitle max-sm:text-sm sm:text-sm md:text-base"
               />
             </div>
             <div>
               <span
-                class="font-medium text-content-subtitle"
+                class="font-medium text-content-subtitle max-sm:text-sm sm:text-sm md:text-base"
               >
                 Salary: 
               </span>
               <span
-                class="text-content-accent"
+                class="text-content-accent max-sm:text-sm sm:text-sm md:text-base"
               >
                 <iconify-icon
                   classname="icon-box"
@@ -112,7 +112,7 @@ exports[`Home component renders properly with provided data 1`] = `
           >
              
             <p
-              class="leading-relaxed mb-0 text-sm sm:text-base sm:leading-relaxed"
+              class="mb-0 leading-relaxed max-sm:text-xs sm:text-sm"
             >
               Lorem ipsum dolor sit amet, consectetur 
               <strong>
@@ -131,7 +131,7 @@ exports[`Home component renders properly with provided data 1`] = `
               . Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
             </p>
             <p
-              class="leading-relaxed mb-0 text-sm sm:text-base sm:leading-relaxed"
+              class="mb-0 leading-relaxed max-sm:text-xs sm:text-sm"
             >
               Lorem ipsum dolor sit amet, consectetur 
               <strong>
@@ -150,7 +150,7 @@ exports[`Home component renders properly with provided data 1`] = `
               . Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque posuere justo vitae massa volutpat maximus.
             </p>
             <div
-              class="flex gap-3 flex-wrap"
+              class="flex flex-wrap gap-3"
             >
               <div
                 class="open-for-block"
@@ -176,6 +176,9 @@ exports[`Home component renders properly with provided data 1`] = `
           </div>
         </div>
       </div>
+      <div
+        class="flex flex-col"
+      />
     </div>
   </div>
 </DocumentFragment>
