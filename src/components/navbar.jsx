@@ -1,94 +1,114 @@
 import React from 'react';
-import { NavLink } from "react-router-dom";
+import { NavLink } from 'react-router-dom';
 
-import {Icon} from "@iconify-icon/react";
+import { Icon } from '@iconify-icon/react';
 
-import VisitorCount from "./visitor_count";
+import VisitorCount from './visitor_count';
 
 function Navigation() {
     return (
         <>
-            <nav className="flex float-left bg-secondary-700 p-2 rounded-lg mr-5 mt-28 h-fit" id="navbar">
-                <ul className="flex-col text-sm font-medium text-content-accent">
+            <nav className='float-left mr-5 mt-28 flex h-fit rounded-lg bg-secondary-700 p-2' id='navbar'>
+                <ul className='flex-col text-sm font-medium text-content-accent'>
                     <li>
-                        <NavLink to={"/"} className={({isActive}) => {
-                            return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}>
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:house"/>
+                        <NavLink
+                            to={'/'}
+                            className={({ isActive }) => {
+                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
+                            }}
+                        >
+                            <i className='icon-box'>
+                                <Icon icon='fa6-solid:house' />
                             </i>
-                            Home
+                            <div className='max-sm:hidden'>Home</div>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={"/education"} className={({isActive}) => {
-                            return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}>
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:graduation-cap"/>
+                        <NavLink
+                            to={'/education'}
+                            className={({ isActive }) => {
+                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
+                            }}
+                        >
+                            <i className='icon-box'>
+                                <Icon icon='fa6-solid:graduation-cap' />
                             </i>
-                            Education
+                            <div className='max-sm:hidden'>Education</div>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={"/experience"} className={({isActive}) => {
-                            return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}>
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:briefcase"/>
+                        <NavLink
+                            to={'/experience'}
+                            className={({ isActive }) => {
+                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
+                            }}
+                        >
+                            <i className='icon-box'>
+                                <Icon icon='fa6-solid:briefcase' />
                             </i>
-                            Experience
+                            <div className='max-sm:hidden'>Experience</div>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={"/certifications"} className={({isActive}) => {
-                            return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}>
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:certificate"/>
+                        <NavLink
+                            to={'/certifications'}
+                            className={({ isActive }) => {
+                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
+                            }}
+                        >
+                            <i className='icon-box'>
+                                <Icon icon='fa6-solid:certificate' />
                             </i>
-                            Certifications
+                            <div className='max-sm:hidden'>Certifications</div>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={"/projects"} className={({isActive}) => {
-                            return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}>
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:layer-group"/>
+                        <NavLink
+                            to={'/projects'}
+                            className={({ isActive }) => {
+                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
+                            }}
+                        >
+                            <i className='icon-box'>
+                                <Icon icon='fa6-solid:layer-group' />
                             </i>
-                            Projects
+                            <div className='max-sm:hidden'>Projects</div>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={"/skills"} className={({isActive}) => {
-                            return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}>
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:chart-simple"/>
+                        <NavLink
+                            to={'/skills'}
+                            className={({ isActive }) => {
+                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
+                            }}
+                        >
+                            <i className='icon-box'>
+                                <Icon icon='fa6-solid:chart-simple' />
                             </i>
-                            Skills
+                            <div className='max-sm:hidden'>Skills</div>
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to={"/contact"} className={({isActive}) => {
-                            return isActive ? "nav-block-active" : "nav-block-inactive";
-                        }}>
-                            <i className="icon-box">
-                                <Icon icon="fa6-solid:message"/>
+                        <NavLink
+                            to={'/contact'}
+                            className={({ isActive }) => {
+                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
+                            }}
+                        >
+                            <i className='icon-box'>
+                                <Icon icon='fa6-solid:message' />
                             </i>
-                            Contact
+                            <div className='max-sm:hidden'>Contact</div>
                         </NavLink>
                     </li>
-                    <div className="justify-between bg-secondary-600 h-0.5 mt-2 mb-2 w-full"></div>
-                    <li className="flex-col text-sm font-medium text-content-accent">
-                        <VisitorCount/>
+                    <div className='mb-2 mt-2 h-0.5 w-full justify-between bg-secondary-600 max-sm:hidden'></div>
+                    <li className='flex-col text-sm font-medium text-content-accent'>
+                        <VisitorCount />
                     </li>
                 </ul>
             </nav>
-
         </>
-    )
+    );
 }
 
 export default Navigation;

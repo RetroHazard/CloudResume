@@ -3,7 +3,7 @@
 exports[`SocialLinks Component matches the snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="flex gap-3 flex-wrap sm:flex-nowrap"
+    class="flex flex-wrap gap-3 max-sm:flex-row sm:flex-col md:flex-col lg:flex-nowrap"
   >
     <a
       aria-label="Social1"

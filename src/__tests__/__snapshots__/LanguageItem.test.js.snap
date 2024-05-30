@@ -3,7 +3,7 @@
 exports[`LanguageItem renders correctly and matches snapshot 1`] = `
 <DocumentFragment>
   <div
-    class="flex gap-3 flex-wrap"
+    class="flex flex-wrap gap-3"
   >
     <div
       class="skill-block"

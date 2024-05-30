@@ -6,7 +6,7 @@ exports[`Content Pages Certifications page renders correctly, calls Certificatio
   id="certifications"
 >
   <h2
-    class="h2 font-extrabold text-content-header mb-0"
+    class="h2 mb-0 font-extrabold text-content-header"
   >
     CERTIFICATIONS
   </h2>
@@ -22,7 +22,7 @@ exports[`Content Pages Education page renders correctly, calls EducationList, an
   id="education"
 >
   <h2
-    class="h2 font-extrabold text-content-header mb-0"
+    class="h2 mb-0 font-extrabold text-content-header"
   >
     EDUCATION
   </h2>
@@ -38,7 +38,7 @@ exports[`Content Pages Experience page renders correctly, calls ExperienceList, 
   id="experience"
 >
   <h2
-    class="h2 font-extrabold text-content-header mb-0"
+    class="h2 mb-0 font-extrabold text-content-header"
   >
     EXPERIENCE
   </h2>
@@ -54,7 +54,7 @@ exports[`Content Pages Projects page renders correctly, calls ProjectList, and m
   id="projects"
 >
   <h2
-    class="h2 font-extrabold text-content-header mb-0"
+    class="h2 mb-0 font-extrabold text-content-header"
   >
     PROJECTS
   </h2>
@@ -70,7 +70,7 @@ exports[`Content Pages Skills page renders correctly, calls SkillHighlight, Skil
   id="skills"
 >
   <h2
-    class="h2 font-extrabold text-content-header mb-0"
+    class="h2 mb-0 font-extrabold text-content-header"
   >
     SKILLS
   </h2>
@@ -84,7 +84,7 @@ exports[`Content Pages Skills page renders correctly, calls SkillHighlight, Skil
       class="flex flex-col gap-3"
     >
       <h3
-        class="h3 text-content-subtitle font-extrabold mb-0"
+        class="mb-0 font-extrabold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base"
       >
         Interested in:
       </h3>
@@ -93,7 +93,7 @@ exports[`Content Pages Skills page renders correctly, calls SkillHighlight, Skil
       class="flex flex-col gap-3"
     >
       <h3
-        class="h3 text-content-subtitle font-extrabold mb-0"
+        class="mb-0 font-extrabold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base"
       >
         I speak
       </h3>

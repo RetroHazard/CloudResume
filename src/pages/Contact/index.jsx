@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React from 'react';
+import { useState } from 'react';
 
 const ContactForm = () => {
     const [firstName, setFirstName] = useState('');
@@ -26,7 +26,7 @@ const ContactForm = () => {
                     method: 'POST',
                     mode: 'cors',
                     cache: 'no-cache',
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(data),
                 });
 
                 if (!response.ok) {
@@ -51,9 +51,13 @@ const ContactForm = () => {
                 setTimeout(() => {
                     setIsLoading(false);
                     if (responseStatus === 'error') {
-                        setStatus('Failed to send message.\nA notification has been sent to the Administrator for investigation.\nIf the issue persists, please try again later.');
+                        setStatus(
+                            'Failed to send message.\nA notification has been sent to the Administrator for investigation.\nIf the issue persists, please try again later.',
+                        );
                     } else {
-                        setStatus('Message sent successfully!\nPlease allow me a short time to review your message.\nThank You!');
+                        setStatus(
+                            'Message sent successfully!\nPlease allow me a short time to review your message.\nThank You!',
+                        );
                     }
                 }, delay);
             }
@@ -63,44 +67,95 @@ const ContactForm = () => {
     };
 
     return (
-        <form action={endpoint} onSubmit={handleSubmit} method="POST" className="space-y-8">
-            <div className="flex flex-col">
-                <label htmlFor="name" className="block mb-2 text-sm font-medium text-content-subtitle">Name</label>
-                <div className="flex flex-row gap-6">
-                    <input type="text" id="firstName" className="text-entry" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-                    <input type="text" id="lastName" className="text-entry" placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+        <form action={endpoint} onSubmit={handleSubmit} method='POST' className='space-y-8'>
+            <div className='flex flex-col'>
+                <label htmlFor='name' className='mb-2 block text-sm font-medium text-content-subtitle'>
+                    Name
+                </label>
+                <div className='flex flex-row gap-6'>
+                    <input
+                        type='text'
+                        id='firstName'
+                        className='text-entry'
+                        placeholder='First Name'
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        required
+                    />
+                    <input
+                        type='text'
+                        id='lastName'
+                        className='text-entry'
+                        placeholder='Last Name'
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        required
+                    />
                 </div>
             </div>
             <div>
-                <label htmlFor="email" className="block mb-2 text-sm font-medium text-content-subtitle">Email</label>
-                <input type="email" id="email" className="text-entry" placeholder="name@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <label htmlFor='email' className='mb-2 block text-sm font-medium text-content-subtitle'>
+                    Email
+                </label>
+                <input
+                    type='email'
+                    id='email'
+                    className='text-entry'
+                    placeholder='name@email.com'
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                />
             </div>
             <div>
-                <label htmlFor="subject" className="block mb-2 text-sm font-medium text-content-subtitle">Subject</label>
-                <input type="text" id="subject" className="text-entry" placeholder="What's up?" value={subject} onChange={(e) => setSubject(e.target.value)} required />
+                <label htmlFor='subject' className='mb-2 block text-sm font-medium text-content-subtitle'>
+                    Subject
+                </label>
+                <input
+                    type='text'
+                    id='subject'
+                    className='text-entry'
+                    placeholder="What's up?"
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    required
+                />
             </div>
-            <div className="sm:col-span-2">
-                <label htmlFor="message" className="block mb-2 text-sm font-medium text-content-subtitle">Your Message</label>
-                <textarea id="message" rows="5" className="text-entry" placeholder="Leave a comment..." value={message} onChange={(e) => setMessage(e.target.value)}></textarea>
+            <div className='sm:col-span-2'>
+                <label htmlFor='message' className='mb-2 block text-sm font-medium text-content-subtitle'>
+                    Your Message
+                </label>
+                <textarea
+                    id='message'
+                    rows='5'
+                    className='text-entry'
+                    placeholder='Leave a comment...'
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                ></textarea>
             </div>
             <button
-                type="submit"
+                type='submit'
                 className={
-                    isLoading ? "bg-secondary-500 text-secondary-400 font-bold py-2 px-4 rounded inline-flex items-center w-40 cursor-not-allowed"
-                        : "bg-primary-500 hover:bg-primary-400 text-secondary-800 font-bold py-2 px-4 rounded inline-flex items-center w-40"
+                    isLoading
+                        ? 'inline-flex w-40 cursor-not-allowed items-center rounded bg-secondary-500 px-4 py-2 font-bold text-secondary-400'
+                        : 'inline-flex w-40 items-center rounded bg-primary-500 px-4 py-2 font-bold text-secondary-800 hover:bg-primary-400'
                 }
                 disabled={isLoading}
             >
                 <>
-                    <div className="icon-box">
-                        <i className="w-5 h-5 mr-2 text-content-icons">
-                            <iconify-icon inline="" icon={isLoading ? "svg-spinners:270-ring-with-bg" : "fa6-solid:paper-plane"} />
+                    <div className='icon-box'>
+                        <i className='mr-2 h-5 w-5 text-content-icons'>
+                            <iconify-icon
+                                inline=''
+                                icon={isLoading ? 'svg-spinners:270-ring-with-bg' : 'fa6-solid:paper-plane'}
+                            />
                         </i>
                     </div>
-                    <span className="text-content-header text-sm">{isLoading ? "Sending..." : "Send Message"}</span>
+                    <span className='text-sm text-content-header'>{isLoading ? 'Sending...' : 'Send Message'}</span>
                 </>
             </button>
-            {status && <div className="mt-4 text-sm font-medium whitespace-pre">{status}</div>}
+            {status && <div className='mt-4 whitespace-pre text-sm font-medium'>{status}</div>}
         </form>
     );
 };
@@ -108,10 +163,10 @@ const ContactForm = () => {
 function Contact() {
     return (
         <>
-            <div className="content-block" id="contact">
-                <h2 className="h2 font-extrabold text-content-header mb-0">CONTACT ME</h2>
-                <div className="mx-auto max-w-screen-md">
-                    <p className="mb-6 font-sans text-content-accent sm:text-xl">
+            <div className='content-block' id='contact'>
+                <h2 className='h2 mb-0 font-extrabold text-content-header'>CONTACT ME</h2>
+                <div className='mx-auto max-w-screen-md'>
+                    <p className='mb-6 font-sans text-content-accent sm:text-xl'>
                         Questions? Comments? Have a potential opportunity or project that you'd like to collaborate on?
                         <br />
                         Feel free to reach out using the contact form below.

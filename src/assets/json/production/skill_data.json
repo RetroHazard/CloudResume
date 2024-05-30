@@ -3,14 +3,14 @@
     {
       "name": "Amazon Web Services",
       "category": "Cloud",
-      "level": "50%",
+      "level": "60%",
       "logo": "skill-icons:aws-light",
       "website": "https://aws.amazon.com/"
     },
     {
       "name": "Docker",
       "category": "Platform",
-      "level": "25%",
+      "level": "30%",
       "logo": "devicon:docker",
       "website": "https://www.docker.com/"
     },
@@ -44,7 +44,7 @@
     },
     {
       "name": "BASh",
-      "category": "Scripting Language",
+      "category": "Command Language",
       "level": "65%",
       "logo": "logos:bash-icon",
       "website": "https://www.gnu.org/software/bash/"
