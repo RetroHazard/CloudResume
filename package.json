@@ -5,6 +5,7 @@
   "dependencies": {
     "@iconify-icon/react": "^2.1.0",
     "@tailwindcss/forms": "^0.5.7",
+    "got": "^14.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router": "^6.23.0",
