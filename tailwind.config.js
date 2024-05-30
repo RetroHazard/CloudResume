@@ -75,6 +75,13 @@ module.exports = {
                 '8xl': '96rem',
                 '9xl': '128rem',
             },
+            minWidth: {
+                98: '392px',
+                100: '400px',
+                102: '408px',
+                104: '416px',
+                106: '424px',
+            },
             borderRadius: {
                 none: '0',
                 sm: '.125rem',

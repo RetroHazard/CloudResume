@@ -41,9 +41,9 @@ function VisitorCount() {
     }
 
     return (
-        <div className='mb-1 mt-1 inline-flex w-full items-center bg-secondary-700 px-4 py-1 max-sm:hidden'>
+        <div className='mb-1 mt-1 inline-flex w-full items-center px-4 py-1 max-sm:hidden'>
             <i className='icon-box'>
-                <Icon icon='fa6-solid:users' />
+                <Icon inline='' icon='fa6-solid:users' />
             </i>
             <span className='font-sans text-base'>{visitors !== null ? visitors : 'Loading...'}</span>
         </div>

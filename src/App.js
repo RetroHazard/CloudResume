@@ -22,7 +22,7 @@ export default function App() {
             <BrowserRouter>
                 <div className='flex justify-center'>
                     <Navigation />
-                    <div className='w-3/5 min-w-96 max-w-2xl space-y-8 px-2 py-20'>
+                    <div className='min-w-102 w-3/5 max-w-2xl flex-shrink space-y-8 px-2 py-20'>
                         <section id='content'>
                             <Routes>
                                 <Route path='/' element={<Home />} />
