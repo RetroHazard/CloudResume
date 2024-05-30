@@ -60,25 +60,23 @@ function Home() {
                                                 {personalData.salary} {personalData.currency}
                                             </span>
                                         </div>
-                                        <div className='my-6 justify-center'>
-                                            <a href={personalData.resumeLink} className='font-bold'>
-                                                <button className='inline-flex items-center rounded bg-primary-500 px-4 py-2 font-bold text-secondary-800 hover:bg-primary-400'>
-                                                    <div className='icon-box'>
-                                                        <i className='mr-2 h-5 w-5 text-content-icons'>
-                                                            <iconify-icon
-                                                                inline=''
-                                                                className='icon-box mb-1'
-                                                                icon='fa6-solid:cloud-arrow-down'
-                                                            />
-                                                        </i>
-                                                    </div>
-                                                    <span className='text-sm text-content-header max-sm:text-xs max-sm:font-light'>
-                                                        Download CV
-                                                    </span>
-                                                </button>
-                                            </a>
-                                        </div>
                                     </div>
+                                    <a href={personalData.resumeLink} className='font-bold'>
+                                        <button className='inline-flex items-center rounded bg-primary-500 px-4 py-2 font-bold text-secondary-800 hover:bg-primary-400'>
+                                            <div className='icon-box'>
+                                                <i className='mr-2 h-5 w-5 text-content-icons'>
+                                                    <iconify-icon
+                                                        inline=''
+                                                        className='icon-box mb-1'
+                                                        icon='fa6-solid:cloud-arrow-down'
+                                                    />
+                                                </i>
+                                            </div>
+                                            <span className='text-sm text-content-header max-sm:text-xs max-sm:font-light'>
+                                                Download CV
+                                            </span>
+                                        </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
