@@ -48,7 +48,6 @@
     "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.4.19",
     "cross-env": "^7.0.3",
-    "jest-test-gen": "^1.4.3",
     "nth-check": "^2.0.1",
     "postcss": "^8.4.31",
     "prettier": "^3.2.5",
