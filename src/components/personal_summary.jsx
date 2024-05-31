@@ -26,33 +26,28 @@ function PersonalSummary() {
         return (
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    With a vibrant career spanning over 15 years in the tech industry, I've worn many hats—from help
-                    desk support and systems administration to systems architecture, project management, and consulting.
-                    I've delved into network operations, service management, web development, graphics design, hardware
-                    testing, game development, 3D graphics, and VFX. My journey has even taken me abroad, where I
-                    managed a small team and thrived in a foreign environment. Now, I’m on the lookout for exciting
-                    opportunities in consulting, project management, or engineering roles, especially those focused on
-                    Cloud technologies and infrastructure. I have a particular soft spot for the entertainment, media,
-                    and gaming industries, where creativity and technology intersect.
+                    With <strong>over 15 years in the tech industry</strong>, I’ve gained a wealth of experience across
+                    roles such as client support, systems administration, systems architecture, cybersecurity, project
+                    management, and consulting. Now, I’m <em>seeking opportunities</em> in consulting, project
+                    management, or engineering, particularly in developing client solutions, leveraging{' '}
+                    <em>Cloud Technologies</em>.
                 </p>
 
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    What truly lights my fire is the thrill of learning and problem-solving. There's nothing quite like
-                    the satisfaction of fitting the pieces of a complex puzzle together or finding a more efficient way
-                    to tackle a challenge. I thrive on big problems that demand unique, out-of-the-box solutions.
-                    Keeping my mind engaged with challenging projects is crucial—I tend to get bored easily if I'm not
-                    constantly learning and pushing my limits.
+                    I’m driven by a passion for learning and solving complex problems. My broad industry knowledge
+                    provides unique insights across multiple disciplines, enabling me to design and build secure,
+                    effective, and innovative technology solutions. I thrive on big challenges that require
+                    out-of-the-box thinking and enjoy finding more efficient ways to achieve goals. Keeping mentally
+                    engaged and continuously learning is crucial for me.
                 </p>
 
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    When I’m not immersed in tech, you’ll find me exploring my hobbies with equal passion. I love
-                    capturing moments through photography and hitting the trails on my mountain bike. Music has been a
-                    lifelong companion; I’ve played the piano for over a decade and the guitar for five years. Lately,
-                    I’ve been itching to dive into woodworking and building projects. My passion for video games has led
-                    me to learn C++, Unreal Engine, Blender, and other 3D/VFX software. I even developed and released a
-                    component on the Unreal Marketplace and continue to experiment on this platform. My dream is to one
-                    day release a complete commercial game. To keep my skills sharp and my curiosity satisfied, I run my
-                    own homelab where I tinker with various projects and experiments.
+                    Outside of work, I immerse myself in hobbies like photography, mountain biking, and music—I’ve
+                    played piano for over a <em>decade</em> and guitar for <em>five years</em>. I’m also interested in
+                    exploring woodworking and have a passion for video games, which led me to learn C++, Unreal Engine,
+                    Blender, and other 3D/VFX software(s). I’ve developed a component on the Unreal Marketplace and
+                    continue to experiment with the goal of releasing a complete commercial game. To practice and
+                    develop my skills, I run a homelab for various projects and experiments.
                 </p>
             </>
         );
