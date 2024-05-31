@@ -2,25 +2,25 @@
   "Socials": [
     {
       "name": "LinkedIn",
-      "link": "",
+      "link": "#",
       "logo": "fa6-brands:linkedin-in",
       "display": true
     },
     {
       "name": "GitHub",
-      "link": "",
+      "link": "#",
       "logo": "fa6-brands:github",
       "display": true
     },
     {
       "name": "ArtStation",
-      "link": "",
+      "link": "#",
       "logo": "fa6-brands:artstation",
       "display": true
     },
     {
       "name": "Instagram",
-      "link": "",
+      "link": "#",
       "logo": "fa6-brands:instagram",
       "display": true
     }

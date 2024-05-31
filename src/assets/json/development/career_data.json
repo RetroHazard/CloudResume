@@ -8,7 +8,7 @@
       "start": "2018",
       "end": "2021",
       "logo": "./images/placeholder.png",
-      "website": "",
+      "website": "#",
       "details": [
         "In tristique vulputate augue vel egestas.",
         "Quisque ac imperdiet tortor, at lacinia ex.",
@@ -19,22 +19,22 @@
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": ""
+          "website": "#"
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": ""
+          "website": "#"
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": ""
+          "website": "#"
         },
         {
           "name": "Skill",
           "logo": "ph:placeholder-fill",
-          "website": ""
+          "website": "#"
         }
       ]
     }
