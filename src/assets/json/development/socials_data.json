@@ -22,7 +22,7 @@
       "name": "Instagram",
       "link": "#",
       "logo": "fa6-brands:instagram",
-      "display": true
+      "display": false
     }
   ]
 }
