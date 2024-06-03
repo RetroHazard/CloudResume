@@ -26,7 +26,7 @@ function PersonalSummary() {
         return (
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    With <strong>over 15 years in the tech industry</strong>, I’ve gained a wealth of experience across
+                    With over <strong>15 years</strong> in the tech industry, I’ve gained a wealth of experience across
                     roles such as client support, systems administration, systems architecture, cybersecurity, project
                     management, and consulting. Now, I’m <em>seeking opportunities</em> in consulting, project
                     management, or engineering, particularly in developing client solutions, leveraging{' '}
@@ -34,20 +34,21 @@ function PersonalSummary() {
                 </p>
 
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    I’m driven by a passion for learning and solving complex problems. My broad industry knowledge
-                    provides unique insights across multiple disciplines, enabling me to design and build secure,
-                    effective, and innovative technology solutions. I thrive when presented with challenges that require
-                    out-of-the-box thinking and enjoy finding more efficient ways to achieve goals. Keeping mentally
-                    engaged and continuously learning is crucial for me.
+                    I’m driven by a passion for learning and solving <em>complex problems</em>. My broad industry
+                    knowledge provides <em>unique insights</em> across <strong>multiple disciplines</strong>, enabling
+                    me to design and build <em>secure</em>, <em>effective</em>, and <em>innovative</em> technology
+                    solutions. I thrive when presented with challenges that require out-of-the-box thinking and enjoy
+                    finding more <strong>efficient</strong> ways to achieve goals. Keeping mentally engaged and
+                    continuously learning is crucial for me.
                 </p>
 
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
                     Outside of work, I immerse myself in hobbies like photography, mountain biking, and music—I’ve
                     played piano for over a <em>decade</em> and guitar for <em>five years</em>. I also have a passion
-                    for video games, which led me to learn C++, Unreal Engine, Blender, and other 3D/VFX software(s).
-                    I’ve independently developed a component on the Unreal Marketplace and continue to experiment with
-                    the goal of releasing a complete commercial game. To practice and develop my skills, I run a homelab
-                    for various projects and experiments.
+                    for video games, which led me to learn <strong>C++</strong>, Unreal Engine, Blender, and other
+                    3D/VFX software(s). I’ve <em>independently developed</em> a component on the Unreal Marketplace and
+                    continue to experiment, with the ultimate goal of releasing a complete commercial game. To
+                    continually practice and develop my skills, I run a homelab for various projects and experiments.
                 </p>
             </>
         );
