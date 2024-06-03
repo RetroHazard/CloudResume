@@ -5,7 +5,9 @@ import time
 import os
 from botocore.config import Config
 
+prodBucket = os.environ.get('prod_bucket')
 prodDistribution = os.environ.get('prod_distribution')
+devBucket = os.environ.get('dev_bucket')
 devDistribution = os.environ.get('dev_distribution')
 
 # Configure retries
@@ -29,9 +31,9 @@ def lambda_handler(event, context):
         print(f"Bucket: {bucket_name}, Path: {path}")
 
         # Determine the distribution ID based on the bucket name
-        if bucket_name == 'agb-s3-cloudresumechallenge-hosted':
+        if bucket_name == prodBucket:
             distribution_id = prodDistribution
-        elif bucket_name == 'agb-s3-cloudresumechallenge-staging':
+        elif bucket_name == devBucket:
             distribution_id = devDistribution
         else:
             print(f"Bucket {bucket_name} is not configured for cache invalidation.")
