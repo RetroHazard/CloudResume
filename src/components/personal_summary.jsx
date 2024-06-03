@@ -6,19 +6,19 @@ function PersonalSummary() {
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
                     Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui at{' '}
-                    <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a href='#'>vehicula</a>.
-                    Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus
-                    elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut
-                    imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo.
-                    Pellentesque posuere justo vitae massa volutpat maximus.
+                    <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <em>vehicula</em>. Nulla
+                    lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut
+                    nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet
+                    vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque
+                    posuere justo vitae massa volutpat maximus.
                 </p>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
                     Lorem ipsum dolor sit amet, consectetur <strong>adipiscing elit</strong>. In sodales ac dui at{' '}
-                    <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <a href='#'>vehicula</a>.
-                    Nulla lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus
-                    elit ut nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut
-                    imperdiet vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo.
-                    Pellentesque posuere justo vitae massa volutpat maximus.
+                    <em>vestibulum</em>. In condimentum metus id dui tincidunt, in blandit mi <em>vehicula</em>. Nulla
+                    lacinia, erat sit amet elementum vulputate, lectus mauris volutpat mi, vitae accumsan metus elit ut
+                    nunc. Vestibulum lacinia enim eget eros fermentum scelerisque. Proin augue leo, posuere ut imperdiet
+                    vitae, fermentum eu ipsum. Sed sed neque sagittis, posuere urna nec, commodo leo. Pellentesque
+                    posuere justo vitae massa volutpat maximus.
                 </p>
             </>
         );
