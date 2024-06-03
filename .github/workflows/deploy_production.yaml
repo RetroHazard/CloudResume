@@ -24,7 +24,7 @@ jobs:
         run: npm run test
 
       - name: Build
-        run: npm run build-prod
+        run: npm run build-dev
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
