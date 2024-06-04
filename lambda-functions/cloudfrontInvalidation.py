@@ -9,6 +9,7 @@ prodBucket = os.environ.get('prod_bucket')
 prodDistribution = os.environ.get('prod_distribution')
 devBucket = os.environ.get('dev_bucket')
 devDistribution = os.environ.get('dev_distribution')
+min_wait_time = 5
 
 
 def lambda_handler(event, context):
@@ -46,6 +47,10 @@ def lambda_handler(event, context):
             print(f"Error parsing message body: {str(e)}")
         except KeyError as e:
             print(f"Error extracting S3 event details: {str(e)}")
+
+    # Wait for the minimum wait time before creating invalidations
+    print(f"Waiting for {min_wait_time} seconds to allow more files to accumulate...")
+    time.sleep(min_wait_time)
 
     # Create invalidations in batches
     for distribution_id, paths in invalidation_paths.items():
