@@ -1,6 +1,7 @@
 import json
 import boto3
 import os
+from urllib.parse import parse_qs
 
 AWS_REGION = os.environ['mailRegion']
 SEND_TO = os.environ['sendToAddress']
@@ -31,6 +32,10 @@ def lambda_handler(event, context):
         subject = body.get('subject')
         message = body.get('message')
 
+        # Extract UUID from the query string parameters
+        query_string_parameters = event.get('queryStringParameters', {})
+        uuid = query_string_parameters.get('uuid', 'UUID not provided')
+
         # Construct the email content
         email_subject = f"New contact form submission: {subject}"
         email_body = f"""
@@ -40,6 +45,7 @@ def lambda_handler(event, context):
         Email: {email}
         Subject: {subject}
         Message: {message}
+        UUID: {uuid}
         """
 
         # Send the email using SES
