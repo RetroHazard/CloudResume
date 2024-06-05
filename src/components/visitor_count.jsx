@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid'; // Importing the v4 function from the uuid package
 
 import { Icon } from '@iconify-icon/react';
 
@@ -12,7 +13,7 @@ function VisitorCount() {
                 // Generate or retrieve a unique identifier for the visitor
                 let visitorId = localStorage.getItem('visitorId');
                 if (!visitorId) {
-                    visitorId = crypto.randomUUID();
+                    visitorId = uuidv4(); // Use uuidv4 to generate a unique identifier
                     localStorage.setItem('visitorId', visitorId);
                 }
 

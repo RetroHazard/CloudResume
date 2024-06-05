@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
-import { useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { v4 as uuidv4 } from 'uuid';
 
 const ContactForm = () => {
     const [firstName, setFirstName] = useState('');
@@ -11,8 +11,11 @@ const ContactForm = () => {
     const [status, setStatus] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const captchaRef = useRef(null);
+    const [uuid, setUuid] = useState('');
 
-    const endpoint = 'https://api.cloudresume-agb.jp/v1/contact';
+    useEffect(() => {
+        setUuid(uuidv4());
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,7 +32,7 @@ const ContactForm = () => {
             let responseStatus = 'success'; // Default to success, change to error if necessary
 
             try {
-                const response = await fetch(endpoint, {
+                const response = await fetch(`https://api.cloudresume-agb.jp/v1/contact?uuid=${uuid}`, {
                     method: 'POST',
                     mode: 'cors',
                     cache: 'no-cache',
@@ -78,7 +81,7 @@ const ContactForm = () => {
     };
 
     return (
-        <form action={endpoint} onSubmit={handleSubmit} method='POST' className='space-y-8'>
+        <form onSubmit={handleSubmit} className='space-y-8'>
             <div className='flex flex-col'>
                 <label htmlFor='name' className='mb-2 block text-sm font-medium text-content-subtitle'>
                     Name
