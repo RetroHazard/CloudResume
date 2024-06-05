@@ -5,12 +5,22 @@ import os
 AWS_REGION = os.environ['mailRegion']
 SEND_TO = os.environ['sendToAddress']
 SEND_AS = os.environ['sendFromAddress']
+ALLOWED_ORIGIN = 'https://www.cloudresume-agb.jp'
+
 
 def lambda_handler(event, context):
     # Initialize the SES client
     ses_client = boto3.client('ses', region_name=AWS_REGION)
 
     try:
+        # Verify the request origin
+        origin = event['headers'].get('Origin') or event['headers'].get('origin')
+        if origin != ALLOWED_ORIGIN:
+            return {
+                'statusCode': 403,
+                'body': json.dumps({'error': 'Forbidden: Invalid origin'})
+            }
+
         # Parse the JSON body of the request
         body = json.loads(event['body'])
 
@@ -25,7 +35,7 @@ def lambda_handler(event, context):
         email_subject = f"New contact form submission: {subject}"
         email_body = f"""
         You have a new contact form submission:
-        
+
         Name: {first_name} {last_name}
         Email: {email}
         Subject: {subject}
@@ -58,19 +68,10 @@ def lambda_handler(event, context):
         response = {
             'statusCode': 200,
             'headers': {
-                # 'Access-Control-Allow-Headers': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                # 'Access-Control-Allow-Methods': 'OPTIONS,GET'
+                'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
             },
             'body': json.dumps({
                 'message': 'Form submitted and email sent successfully!',
-                # 'data': {
-                #     'firstName': first_name,
-                #     'lastName': last_name,
-                #     'email': email,
-                #     'subject': subject,
-                #     'message': message
-                # }
             })
         }
 
