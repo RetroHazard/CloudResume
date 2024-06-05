@@ -14,7 +14,14 @@ const ContactForm = () => {
     const [uuid, setUuid] = useState('');
 
     useEffect(() => {
-        setUuid(uuidv4());
+        // Check if a UUID is already stored in local storage
+        let storedUuid = localStorage.getItem('uuid');
+        if (!storedUuid) {
+            // Generate a new UUID if none is found
+            storedUuid = uuidv4();
+            localStorage.setItem('uuid', storedUuid);
+        }
+        setUuid(storedUuid);
     }, []);
 
     const handleSubmit = async (event) => {

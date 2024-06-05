@@ -11,10 +11,10 @@ function VisitorCount() {
         async function fetchVisitorCount() {
             try {
                 // Generate or retrieve a unique identifier for the visitor
-                let visitorId = localStorage.getItem('visitorId');
+                let visitorId = localStorage.getItem('uuid');
                 if (!visitorId) {
                     visitorId = uuidv4(); // Use uuidv4 to generate a unique identifier
-                    localStorage.setItem('visitorId', visitorId);
+                    localStorage.setItem('uuid', visitorId);
                 }
 
                 // Send the visitorId as a query parameter
