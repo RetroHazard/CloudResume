@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const ContactForm = () => {
     const [firstName, setFirstName] = useState('');
@@ -9,13 +10,19 @@ const ContactForm = () => {
     const [message, setMessage] = useState('');
     const [status, setStatus] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const captchaRef = useRef(null);
 
     const endpoint = 'https://api.cloudresume-agb.jp/v1/contact';
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        const token = captchaRef.current.getValue();
+        if (!token) {
+            setStatus('Please complete the reCAPTCHA.');
+            return;
+        }
         setIsLoading(true); // Set loading state to true
-        const data = { firstName, lastName, email, subject, message };
+        const data = { firstName, lastName, email, subject, message, token };
 
         const fetchWithDelay = async () => {
             const startTime = Date.now();
@@ -26,6 +33,9 @@ const ContactForm = () => {
                     method: 'POST',
                     mode: 'cors',
                     cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                     body: JSON.stringify(data),
                 });
 
@@ -59,6 +69,7 @@ const ContactForm = () => {
                             'Message sent successfully!\nPlease allow me a short time to review your message.\nThank You!',
                         );
                     }
+                    captchaRef.current.reset();
                 }, delay);
             }
         };
@@ -134,27 +145,30 @@ const ContactForm = () => {
                     onChange={(e) => setMessage(e.target.value)}
                 ></textarea>
             </div>
-            <button
-                type='submit'
-                className={
-                    isLoading
-                        ? 'inline-flex w-40 cursor-not-allowed items-center rounded bg-secondary-500 px-4 py-2 font-bold text-secondary-400'
-                        : 'inline-flex w-40 items-center rounded bg-primary-500 px-4 py-2 font-bold text-secondary-800 hover:bg-primary-400'
-                }
-                disabled={isLoading}
-            >
-                <>
-                    <div className='icon-box'>
-                        <i className='mr-2 h-5 w-5 text-content-icons'>
-                            <iconify-icon
-                                inline=''
-                                icon={isLoading ? 'svg-spinners:270-ring-with-bg' : 'fa6-solid:paper-plane'}
-                            />
-                        </i>
-                    </div>
-                    <span className='text-sm text-content-header'>{isLoading ? 'Sending...' : 'Send Message'}</span>
-                </>
-            </button>
+            <div className='flex flex-col gap-y-3'>
+                <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY} ref={captchaRef} />
+                <button
+                    type='submit'
+                    className={
+                        isLoading
+                            ? 'inline-flex w-40 cursor-not-allowed items-center rounded bg-secondary-500 px-4 py-2 font-bold text-secondary-400'
+                            : 'inline-flex w-40 items-center rounded bg-primary-500 px-4 py-2 font-bold text-secondary-800 hover:bg-primary-400'
+                    }
+                    disabled={isLoading}
+                >
+                    <>
+                        <div className='icon-box'>
+                            <i className='mr-2 h-5 w-5 text-content-icons'>
+                                <iconify-icon
+                                    inline=''
+                                    icon={isLoading ? 'svg-spinners:270-ring-with-bg' : 'fa6-solid:paper-plane'}
+                                />
+                            </i>
+                        </div>
+                        <span className='text-sm text-content-header'>{isLoading ? 'Sending...' : 'Send Message'}</span>
+                    </>
+                </button>
+            </div>
             {status && <div className='mt-4 whitespace-pre text-sm font-medium'>{status}</div>}
         </form>
     );

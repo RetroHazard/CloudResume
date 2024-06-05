@@ -5,9 +5,11 @@
   "dependencies": {
     "@iconify-icon/react": "^2.1.0",
     "@tailwindcss/forms": "^0.5.7",
+    "dotenv": "^16.4.5",
     "got": "^14.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-google-recaptcha": "^3.1.0",
     "react-router": "^6.23.0",
     "react-router-dom": "^6.23.0",
     "react-scripts": "5.0.1",

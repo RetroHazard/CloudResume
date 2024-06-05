@@ -20,6 +20,11 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo REACT_APP_RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }} >> .env
+
       - name: Test app
         run: npm run test
 

@@ -35,7 +35,7 @@ const CertificationList = () => {
                                         </div>
                                     </div>
                                     <div
-                                        className='flex flex-wrap gap-3 sm:flex-nowrap'
+                                        className='flex flex-wrap gap-3 max-sm:flex-col sm:flex-col'
                                         id={`${item.certification} Links`}
                                     >
                                         {item.links.map((linkGroup, linkIndex) =>
