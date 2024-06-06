@@ -1,4 +1,4 @@
-resource "aws_wafv2_web_acl" "tfer--CloudResume-WebACL_c38b9d17" {
+resource "aws_wafv2_web_acl" "crc-CloudResume-WebACL_c38b9d17" {
   description = "Web Application Protection for the Cloud Resume"
   name        = "CloudResume-WebACL"
   scope       = "CLOUDFRONT"

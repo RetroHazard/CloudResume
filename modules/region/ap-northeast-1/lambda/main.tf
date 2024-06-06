@@ -1,4 +1,4 @@
-resource "aws_lambda_event_source_mapping" "tfer--9b7783a0-1f0a-408d-8d07-62e509bfb852" {
+resource "aws_lambda_event_source_mapping" "crc-9b7783a0-1f0a-408d-8d07-62e509bfb852" {
   batch_size                         = "15"
   bisect_batch_on_function_error     = "false"
   enabled                            = "true"
@@ -10,7 +10,7 @@ resource "aws_lambda_event_source_mapping" "tfer--9b7783a0-1f0a-408d-8d07-62e509
   tumbling_window_in_seconds         = "0"
 }
 
-resource "aws_lambda_function" "tfer--cloudfrontInvalidation" {
+resource "aws_lambda_function" "crc-cloudfrontInvalidation" {
   architectures = ["x86_64"]
 
   environment {
@@ -52,7 +52,7 @@ resource "aws_lambda_function" "tfer--cloudfrontInvalidation" {
   }
 }
 
-resource "aws_lambda_function" "tfer--sendMessage" {
+resource "aws_lambda_function" "crc-sendMessage" {
   architectures = ["x86_64"]
 
   environment {
@@ -93,7 +93,7 @@ resource "aws_lambda_function" "tfer--sendMessage" {
   }
 }
 
-resource "aws_lambda_function" "tfer--trackVisitors" {
+resource "aws_lambda_function" "crc-trackVisitors" {
   architectures = ["x86_64"]
 
   environment {
@@ -133,13 +133,13 @@ resource "aws_lambda_function" "tfer--trackVisitors" {
   }
 }
 
-resource "aws_lambda_function_event_invoke_config" "tfer--feic_arn-003A-aws-003A-lambda-003A-ap-northeast-1-003A-339712851438-003A-function-003A-cloudfrontInvalidation-003A--0024-LATEST" {
+resource "aws_lambda_function_event_invoke_config" "crc-feic_arn-003A-aws-003A-lambda-003A-ap-northeast-1-003A-339712851438-003A-function-003A-cloudfrontInvalidation-003A--0024-LATEST" {
   function_name                = "arn:aws:lambda:ap-northeast-1:339712851438:function:cloudfrontInvalidation"
   maximum_event_age_in_seconds = "3600"
   maximum_retry_attempts       = "2"
 }
 
-resource "aws_lambda_permission" "tfer--339712851438_event_permissions_from_agb-s3-cloudresumechallenge-hosted_for_cloudfrontInvalidation" {
+resource "aws_lambda_permission" "crc-339712851438_event_permissions_from_agb-s3-cloudresumechallenge-hosted_for_cloudfrontInvalidation" {
   action         = "lambda:InvokeFunction"
   function_name  = "arn:aws:lambda:ap-northeast-1:339712851438:function:cloudfrontInvalidation"
   principal      = "s3.amazonaws.com"
@@ -148,7 +148,7 @@ resource "aws_lambda_permission" "tfer--339712851438_event_permissions_from_agb-
   statement_id   = "339712851438_event_permissions_from_agb-s3-cloudresumechallenge-hosted_for_cloudfrontInvalidation"
 }
 
-resource "aws_lambda_permission" "tfer--339712851438_event_permissions_from_agb-s3-cloudresumechallenge-staging_for_cloudfrontInvalidation" {
+resource "aws_lambda_permission" "crc-339712851438_event_permissions_from_agb-s3-cloudresumechallenge-staging_for_cloudfrontInvalidation" {
   action         = "lambda:InvokeFunction"
   function_name  = "arn:aws:lambda:ap-northeast-1:339712851438:function:cloudfrontInvalidation"
   principal      = "s3.amazonaws.com"
@@ -157,7 +157,7 @@ resource "aws_lambda_permission" "tfer--339712851438_event_permissions_from_agb-
   statement_id   = "339712851438_event_permissions_from_agb-s3-cloudresumechallenge-staging_for_cloudfrontInvalidation"
 }
 
-resource "aws_lambda_permission" "tfer--6a15043e-cdf0-5fe5-9f60-2b632783e360" {
+resource "aws_lambda_permission" "crc-6a15043e-cdf0-5fe5-9f60-2b632783e360" {
   action        = "lambda:InvokeFunction"
   function_name = "arn:aws:lambda:ap-northeast-1:339712851438:function:trackVisitors"
   principal     = "apigateway.amazonaws.com"
@@ -165,7 +165,7 @@ resource "aws_lambda_permission" "tfer--6a15043e-cdf0-5fe5-9f60-2b632783e360" {
   statement_id  = "6a15043e-cdf0-5fe5-9f60-2b632783e360"
 }
 
-resource "aws_lambda_permission" "tfer--7fc9f8bc-795a-5281-8993-9ef519d4b046" {
+resource "aws_lambda_permission" "crc-7fc9f8bc-795a-5281-8993-9ef519d4b046" {
   action        = "lambda:InvokeFunction"
   function_name = "arn:aws:lambda:ap-northeast-1:339712851438:function:sendMessage"
   principal     = "apigateway.amazonaws.com"

@@ -1,4 +1,4 @@
-resource "aws_s3_bucket" "tfer--agb-s3-cloudresumechallenge-hosted" {
+resource "aws_s3_bucket" "crc-agb-s3-cloudresumechallenge-hosted" {
   bucket        = "agb-s3-cloudresumechallenge-hosted"
   force_destroy = "false"
 
@@ -84,7 +84,7 @@ POLICY
   }
 }
 
-resource "aws_s3_bucket" "tfer--agb-s3-cloudresumechallenge-logging" {
+resource "aws_s3_bucket" "crc-agb-s3-cloudresumechallenge-logging" {
   bucket        = "agb-s3-cloudresumechallenge-logging"
   force_destroy = "false"
 
@@ -195,7 +195,7 @@ POLICY
   }
 }
 
-resource "aws_s3_bucket" "tfer--agb-s3-cloudresumechallenge-staging" {
+resource "aws_s3_bucket" "crc-agb-s3-cloudresumechallenge-staging" {
   bucket        = "agb-s3-cloudresumechallenge-staging"
   force_destroy = "false"
 
@@ -260,17 +260,17 @@ POLICY
   }
 }
 
-resource "aws_s3_bucket_policy" "tfer--agb-s3-cloudresumechallenge-hosted" {
+resource "aws_s3_bucket_policy" "crc-agb-s3-cloudresumechallenge-hosted" {
   bucket = "agb-s3-cloudresumechallenge-hosted"
   policy = "{\"Statement\":[{\"Action\":\"s3:GetObject\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"arn:aws:s3:::agb-s3-cloudresumechallenge-hosted/*\",\"Sid\":\"PublicReadGetObject\"}],\"Version\":\"2012-10-17\"}"
 }
 
-resource "aws_s3_bucket_policy" "tfer--agb-s3-cloudresumechallenge-logging" {
+resource "aws_s3_bucket_policy" "crc-agb-s3-cloudresumechallenge-logging" {
   bucket = "agb-s3-cloudresumechallenge-logging"
   policy = "{\"Id\":\"S3-Console-Auto-Gen-Policy-1716338986262\",\"Statement\":[{\"Action\":\"s3:PutObject\",\"Condition\":{\"StringEquals\":{\"aws:SourceAccount\":\"339712851438\"}},\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"logging.s3.amazonaws.com\"},\"Resource\":\"arn:aws:s3:::agb-s3-cloudresumechallenge-logging/*\",\"Sid\":\"S3PolicyStmt-DO-NOT-MODIFY-1716338986157\"}],\"Version\":\"2012-10-17\"}"
 }
 
-resource "aws_s3_bucket_policy" "tfer--agb-s3-cloudresumechallenge-staging" {
+resource "aws_s3_bucket_policy" "crc-agb-s3-cloudresumechallenge-staging" {
   bucket = "agb-s3-cloudresumechallenge-staging"
   policy = "{\"Statement\":[{\"Action\":\"s3:GetObject\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"arn:aws:s3:::agb-s3-cloudresumechallenge-staging/*\",\"Sid\":\"PublicReadGetObject\"}],\"Version\":\"2012-10-17\"}"
 }

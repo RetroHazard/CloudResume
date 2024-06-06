@@ -1,4 +1,4 @@
-resource "aws_acm_certificate" "tfer--d2c204b7-bb92-437a-b2d8-a9dcd55aea97_-002A--002E-cloudresume-agb-002E-jp" {
+resource "aws_acm_certificate" "crc-d2c204b7-bb92-437a-b2d8-a9dcd55aea97_-002A--002E-cloudresume-agb-002E-jp" {
   domain_name   = "*.cloudresume-agb.jp"
   key_algorithm = "RSA_2048"
 

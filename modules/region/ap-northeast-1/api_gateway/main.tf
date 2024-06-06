@@ -1,4 +1,4 @@
-resource "aws_api_gateway_gateway_response" "tfer--3nfq1o8esj-002F-DEFAULT_4XX" {
+resource "aws_api_gateway_gateway_response" "crc-3nfq1o8esj-002F-DEFAULT_4XX" {
   response_parameters = {
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
     "gatewayresponse.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
@@ -13,7 +13,7 @@ resource "aws_api_gateway_gateway_response" "tfer--3nfq1o8esj-002F-DEFAULT_4XX" 
   rest_api_id   = "3nfq1o8esj"
 }
 
-resource "aws_api_gateway_gateway_response" "tfer--3nfq1o8esj-002F-DEFAULT_5XX" {
+resource "aws_api_gateway_gateway_response" "crc-3nfq1o8esj-002F-DEFAULT_5XX" {
   response_parameters = {
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
     "gatewayresponse.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
@@ -28,7 +28,7 @@ resource "aws_api_gateway_gateway_response" "tfer--3nfq1o8esj-002F-DEFAULT_5XX" 
   rest_api_id   = "3nfq1o8esj"
 }
 
-resource "aws_api_gateway_integration" "tfer--3nfq1o8esj-002F-0hihjm-002F-GET" {
+resource "aws_api_gateway_integration" "crc-3nfq1o8esj-002F-0hihjm-002F-GET" {
   cache_namespace         = "0hihjm"
   connection_type         = "INTERNET"
   content_handling        = "CONVERT_TO_TEXT"
@@ -42,7 +42,7 @@ resource "aws_api_gateway_integration" "tfer--3nfq1o8esj-002F-0hihjm-002F-GET" {
   uri                     = "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:339712851438:function:trackVisitors/invocations"
 }
 
-resource "aws_api_gateway_integration" "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTIONS" {
+resource "aws_api_gateway_integration" "crc-3nfq1o8esj-002F-0hihjm-002F-OPTIONS" {
   cache_namespace      = "0hihjm"
   connection_type      = "INTERNET"
   http_method          = "OPTIONS"
@@ -58,7 +58,7 @@ resource "aws_api_gateway_integration" "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTION
   type                 = "MOCK"
 }
 
-resource "aws_api_gateway_integration" "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTIONS" {
+resource "aws_api_gateway_integration" "crc-3nfq1o8esj-002F-vn8ef9-002F-OPTIONS" {
   cache_namespace      = "vn8ef9"
   connection_type      = "INTERNET"
   http_method          = "OPTIONS"
@@ -74,7 +74,7 @@ resource "aws_api_gateway_integration" "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTION
   type                 = "MOCK"
 }
 
-resource "aws_api_gateway_integration" "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST" {
+resource "aws_api_gateway_integration" "crc-3nfq1o8esj-002F-vn8ef9-002F-POST" {
   cache_namespace         = "vn8ef9"
   connection_type         = "INTERNET"
   content_handling        = "CONVERT_TO_TEXT"
@@ -88,7 +88,7 @@ resource "aws_api_gateway_integration" "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST" 
   uri                     = "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:339712851438:function:sendMessage/invocations"
 }
 
-resource "aws_api_gateway_integration_response" "tfer--3nfq1o8esj-002F-0hihjm-002F-GET-002F-200" {
+resource "aws_api_gateway_integration_response" "crc-3nfq1o8esj-002F-0hihjm-002F-GET-002F-200" {
   http_method = "GET"
   resource_id = "0hihjm"
 
@@ -100,7 +100,7 @@ resource "aws_api_gateway_integration_response" "tfer--3nfq1o8esj-002F-0hihjm-00
   status_code = "200"
 }
 
-resource "aws_api_gateway_integration_response" "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTIONS-002F-200" {
+resource "aws_api_gateway_integration_response" "crc-3nfq1o8esj-002F-0hihjm-002F-OPTIONS-002F-200" {
   http_method = "OPTIONS"
   resource_id = "0hihjm"
 
@@ -114,7 +114,7 @@ resource "aws_api_gateway_integration_response" "tfer--3nfq1o8esj-002F-0hihjm-00
   status_code = "200"
 }
 
-resource "aws_api_gateway_integration_response" "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTIONS-002F-200" {
+resource "aws_api_gateway_integration_response" "crc-3nfq1o8esj-002F-vn8ef9-002F-OPTIONS-002F-200" {
   http_method = "OPTIONS"
   resource_id = "vn8ef9"
 
@@ -128,7 +128,7 @@ resource "aws_api_gateway_integration_response" "tfer--3nfq1o8esj-002F-vn8ef9-00
   status_code = "200"
 }
 
-resource "aws_api_gateway_integration_response" "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST-002F-200" {
+resource "aws_api_gateway_integration_response" "crc-3nfq1o8esj-002F-vn8ef9-002F-POST-002F-200" {
   http_method = "POST"
   resource_id = "vn8ef9"
 
@@ -140,7 +140,7 @@ resource "aws_api_gateway_integration_response" "tfer--3nfq1o8esj-002F-vn8ef9-00
   status_code = "200"
 }
 
-resource "aws_api_gateway_method" "tfer--3nfq1o8esj-002F-0hihjm-002F-GET" {
+resource "aws_api_gateway_method" "crc-3nfq1o8esj-002F-0hihjm-002F-GET" {
   api_key_required = "false"
   authorization    = "NONE"
   http_method      = "GET"
@@ -154,7 +154,7 @@ resource "aws_api_gateway_method" "tfer--3nfq1o8esj-002F-0hihjm-002F-GET" {
   rest_api_id          = "3nfq1o8esj"
 }
 
-resource "aws_api_gateway_method" "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTIONS" {
+resource "aws_api_gateway_method" "crc-3nfq1o8esj-002F-0hihjm-002F-OPTIONS" {
   api_key_required = "false"
   authorization    = "NONE"
   http_method      = "OPTIONS"
@@ -162,7 +162,7 @@ resource "aws_api_gateway_method" "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTIONS" {
   rest_api_id      = "3nfq1o8esj"
 }
 
-resource "aws_api_gateway_method" "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTIONS" {
+resource "aws_api_gateway_method" "crc-3nfq1o8esj-002F-vn8ef9-002F-OPTIONS" {
   api_key_required = "false"
   authorization    = "NONE"
   http_method      = "OPTIONS"
@@ -170,7 +170,7 @@ resource "aws_api_gateway_method" "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTIONS" {
   rest_api_id      = "3nfq1o8esj"
 }
 
-resource "aws_api_gateway_method" "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST" {
+resource "aws_api_gateway_method" "crc-3nfq1o8esj-002F-vn8ef9-002F-POST" {
   api_key_required = "false"
   authorization    = "NONE"
   http_method      = "POST"
@@ -184,7 +184,7 @@ resource "aws_api_gateway_method" "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST" {
   rest_api_id          = "3nfq1o8esj"
 }
 
-resource "aws_api_gateway_method_response" "tfer--3nfq1o8esj-002F-0hihjm-002F-GET-002F-200" {
+resource "aws_api_gateway_method_response" "crc-3nfq1o8esj-002F-0hihjm-002F-GET-002F-200" {
   http_method = "GET"
   resource_id = "0hihjm"
 
@@ -200,7 +200,7 @@ resource "aws_api_gateway_method_response" "tfer--3nfq1o8esj-002F-0hihjm-002F-GE
   status_code = "200"
 }
 
-resource "aws_api_gateway_method_response" "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTIONS-002F-200" {
+resource "aws_api_gateway_method_response" "crc-3nfq1o8esj-002F-0hihjm-002F-OPTIONS-002F-200" {
   http_method = "OPTIONS"
   resource_id = "0hihjm"
 
@@ -218,7 +218,7 @@ resource "aws_api_gateway_method_response" "tfer--3nfq1o8esj-002F-0hihjm-002F-OP
   status_code = "200"
 }
 
-resource "aws_api_gateway_method_response" "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTIONS-002F-200" {
+resource "aws_api_gateway_method_response" "crc-3nfq1o8esj-002F-vn8ef9-002F-OPTIONS-002F-200" {
   http_method = "OPTIONS"
   resource_id = "vn8ef9"
 
@@ -236,7 +236,7 @@ resource "aws_api_gateway_method_response" "tfer--3nfq1o8esj-002F-vn8ef9-002F-OP
   status_code = "200"
 }
 
-resource "aws_api_gateway_method_response" "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST-002F-200" {
+resource "aws_api_gateway_method_response" "crc-3nfq1o8esj-002F-vn8ef9-002F-POST-002F-200" {
   http_method = "POST"
   resource_id = "vn8ef9"
 
@@ -252,7 +252,7 @@ resource "aws_api_gateway_method_response" "tfer--3nfq1o8esj-002F-vn8ef9-002F-PO
   status_code = "200"
 }
 
-resource "aws_api_gateway_model" "tfer--ay6utx" {
+resource "aws_api_gateway_model" "crc-ay6utx" {
   content_type = "application/json"
   description  = "This is a default empty schema model"
   name         = "Empty"
@@ -260,7 +260,7 @@ resource "aws_api_gateway_model" "tfer--ay6utx" {
   schema       = "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"Empty Schema\",\n  \"type\" : \"object\"\n}"
 }
 
-resource "aws_api_gateway_model" "tfer--yh6w2n" {
+resource "aws_api_gateway_model" "crc-yh6w2n" {
   content_type = "application/json"
   description  = "This is a default error schema model"
   name         = "Error"
@@ -268,25 +268,25 @@ resource "aws_api_gateway_model" "tfer--yh6w2n" {
   schema       = "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"Error Schema\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"message\" : { \"type\" : \"string\" }\n  }\n}"
 }
 
-resource "aws_api_gateway_resource" "tfer--0hihjm" {
+resource "aws_api_gateway_resource" "crc-0hihjm" {
   parent_id   = "1e1dkkytsg"
   path_part   = "visitors"
   rest_api_id = "3nfq1o8esj"
 }
 
-resource "aws_api_gateway_resource" "tfer--1e1dkkytsg" {
+resource "aws_api_gateway_resource" "crc-1e1dkkytsg" {
   parent_id   = ""
   path_part   = ""
   rest_api_id = "3nfq1o8esj"
 }
 
-resource "aws_api_gateway_resource" "tfer--vn8ef9" {
+resource "aws_api_gateway_resource" "crc-vn8ef9" {
   parent_id   = "1e1dkkytsg"
   path_part   = "contact"
   rest_api_id = "3nfq1o8esj"
 }
 
-resource "aws_api_gateway_rest_api" "tfer--3nfq1o8esj_CloudResume_API" {
+resource "aws_api_gateway_rest_api" "crc-3nfq1o8esj_CloudResume_API" {
   api_key_source               = "AUTHORIZER"
   description                  = "MultiPurpose API for CloudResume Site"
   disable_execute_api_endpoint = "true"
@@ -298,20 +298,20 @@ resource "aws_api_gateway_rest_api" "tfer--3nfq1o8esj_CloudResume_API" {
   name = "CloudResume_API"
 }
 
-resource "aws_api_gateway_deployment" "tfer--3nfq1o8esj_CloudResume_API" {
-  rest_api_id = aws_api_gateway_rest_api.tfer--3nfq1o8esj_CloudResume_API.id
+resource "aws_api_gateway_deployment" "crc-3nfq1o8esj_CloudResume_API" {
+  rest_api_id = aws_api_gateway_rest_api.crc-3nfq1o8esj_CloudResume_API.id
 
   triggers = {
-    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.tfer--3nfq1o8esj_CloudResume_API.body))
+    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.crc-3nfq1o8esj_CloudResume_API.body))
   }
   lifecycle {
     create_before_destroy = true
   }
 }
 
-resource "aws_api_gateway_stage" "tfer--3nfq1o8esj-002F-v1" {
+resource "aws_api_gateway_stage" "crc-3nfq1o8esj-002F-v1" {
   cache_cluster_enabled = "false"
-  deployment_id         = aws_api_gateway_deployment.tfer--3nfq1o8esj_CloudResume_API.id
+  deployment_id         = aws_api_gateway_deployment.crc-3nfq1o8esj_CloudResume_API.id
   rest_api_id           = "3nfq1o8esj"
   stage_name            = "v1"
   xray_tracing_enabled  = "true"

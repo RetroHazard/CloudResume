@@ -1,4 +1,4 @@
-resource "aws_sqs_queue" "tfer--CloudFrontInvalidationQueue" {
+resource "aws_sqs_queue" "crc-CloudFrontInvalidationQueue" {
   content_based_deduplication       = "false"
   delay_seconds                     = "0"
   fifo_queue                        = "false"

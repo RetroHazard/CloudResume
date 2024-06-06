@@ -1,4 +1,4 @@
-resource "aws_iam_policy" "tfer--CloudResume_CloudFrontInvalidation" {
+resource "aws_iam_policy" "crc-CloudResume_CloudFrontInvalidation" {
   name = "CloudResume_CloudFrontInvalidation"
   path = "/"
 
@@ -47,7 +47,7 @@ POLICY
   }
 }
 
-resource "aws_iam_policy" "tfer--CloudResume_LambdaBasicLoggingRights" {
+resource "aws_iam_policy" "crc-CloudResume_LambdaBasicLoggingRights" {
   name = "CloudResume_LambdaBasicLoggingRights"
   path = "/"
 
@@ -75,7 +75,7 @@ POLICY
   }
 }
 
-resource "aws_iam_policy" "tfer--CloudResume_LambdaEmailSendPolicy" {
+resource "aws_iam_policy" "crc-CloudResume_LambdaEmailSendPolicy" {
   name = "CloudResume_LambdaEmailSendPolicy"
   path = "/"
 
@@ -112,7 +112,7 @@ POLICY
   }
 }
 
-resource "aws_iam_policy" "tfer--CloudResume_LambdaLogging_CloudFrontInvalidator" {
+resource "aws_iam_policy" "crc-CloudResume_LambdaLogging_CloudFrontInvalidator" {
   name = "CloudResume_LambdaLogging_CloudFrontInvalidator"
   path = "/"
 
@@ -146,7 +146,7 @@ POLICY
   }
 }
 
-resource "aws_iam_policy" "tfer--CloudResume_LambdaLogging_SendMessage" {
+resource "aws_iam_policy" "crc-CloudResume_LambdaLogging_SendMessage" {
   name = "CloudResume_LambdaLogging_SendMessage"
   path = "/"
 
@@ -180,7 +180,7 @@ POLICY
   }
 }
 
-resource "aws_iam_policy" "tfer--CloudResume_LambdaLogging_TrackVisitors" {
+resource "aws_iam_policy" "crc-CloudResume_LambdaLogging_TrackVisitors" {
   name = "CloudResume_LambdaLogging_TrackVisitors"
   path = "/"
 
@@ -214,7 +214,7 @@ POLICY
   }
 }
 
-resource "aws_iam_policy" "tfer--CloudResume_Lambda_DBUpdater" {
+resource "aws_iam_policy" "crc-CloudResume_Lambda_DBUpdater" {
   name = "CloudResume_Lambda_DBUpdater"
   path = "/"
 
@@ -250,7 +250,7 @@ POLICY
   }
 }
 
-resource "aws_iam_policy" "tfer--CloudResume_S3GitHubActions" {
+resource "aws_iam_policy" "crc-CloudResume_S3GitHubActions" {
   name = "CloudResume_S3GitHubActions"
   path = "/"
 
@@ -284,7 +284,7 @@ POLICY
   }
 }
 
-resource "aws_iam_role" "tfer--CloudResume_API_CloudWatchLogs" {
+resource "aws_iam_role" "crc-CloudResume_API_CloudWatchLogs" {
   assume_role_policy = <<POLICY
 {
   "Statement": [
@@ -316,7 +316,7 @@ POLICY
   }
 }
 
-resource "aws_iam_role" "tfer--CloudResume_CloudFrontManager" {
+resource "aws_iam_role" "crc-CloudResume_CloudFrontManager" {
   assume_role_policy = <<POLICY
 {
   "Statement": [
@@ -346,7 +346,7 @@ POLICY
   }
 }
 
-resource "aws_iam_role" "tfer--CloudResume_SendMessage" {
+resource "aws_iam_role" "crc-CloudResume_SendMessage" {
   assume_role_policy = <<POLICY
 {
   "Statement": [
@@ -377,7 +377,7 @@ POLICY
   }
 }
 
-resource "aws_iam_role" "tfer--CloudResume_TrackVisitors" {
+resource "aws_iam_role" "crc-CloudResume_TrackVisitors" {
   assume_role_policy = <<POLICY
 {
   "Statement": [
@@ -408,7 +408,7 @@ POLICY
   }
 }
 
-resource "aws_iam_user" "tfer--AIDAU6GDWXXXKJN63YR22" {
+resource "aws_iam_user" "crc-AIDAU6GDWXXXKJN63YR22" {
   force_destroy = "false"
   name          = "CloudResume_TerraformOrchestrator"
   path          = "/"
@@ -424,7 +424,7 @@ resource "aws_iam_user" "tfer--AIDAU6GDWXXXKJN63YR22" {
   }
 }
 
-resource "aws_iam_user" "tfer--AIDAU6GDWXXXMWUJTXQ36" {
+resource "aws_iam_user" "crc-AIDAU6GDWXXXMWUJTXQ36" {
   force_destroy = "false"
   name          = "CloudResume_GitHubS3"
   path          = "/"

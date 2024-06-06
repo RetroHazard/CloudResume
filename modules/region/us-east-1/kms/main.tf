@@ -1,9 +1,9 @@
-resource "aws_kms_alias" "tfer--alias-002F-cloudresume_dnssec" {
+resource "aws_kms_alias" "crc-alias-002F-cloudresume_dnssec" {
   name          = "alias/cloudresume_dnssec"
   target_key_id = "0fca1ad8-81ef-4b82-9662-205c52643235"
 }
 
-resource "aws_kms_key" "tfer--0fca1ad8-81ef-4b82-9662-205c52643235" {
+resource "aws_kms_key" "crc-0fca1ad8-81ef-4b82-9662-205c52643235" {
   customer_master_key_spec = "ECC_NIST_P256"
   description              = "Keys used for the purpose of signing DNSSEC"
   enable_key_rotation      = "false"

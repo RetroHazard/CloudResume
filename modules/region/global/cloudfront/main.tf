@@ -1,4 +1,4 @@
-resource "aws_cloudfront_cache_policy" "tfer--08627262-05a9-4f76-9ded-b50ca2e3a84f" {
+resource "aws_cloudfront_cache_policy" "crc-08627262-05a9-4f76-9ded-b50ca2e3a84f" {
   comment     = "Policy for Elemental MediaPackage Origin"
   default_ttl = "86400"
   max_ttl     = "31536000"
@@ -31,7 +31,7 @@ resource "aws_cloudfront_cache_policy" "tfer--08627262-05a9-4f76-9ded-b50ca2e3a8
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--1c6db51a-a33f-469a-8245-dae26771f530" {
+resource "aws_cloudfront_cache_policy" "crc-1c6db51a-a33f-469a-8245-dae26771f530" {
   comment     = "Amplify cache policy for image optimization"
   default_ttl = "0"
   max_ttl     = "31536000"
@@ -60,7 +60,7 @@ resource "aws_cloudfront_cache_policy" "tfer--1c6db51a-a33f-469a-8245-dae26771f5
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--2e54312d-136d-493c-8eb9-b001f22f67d2" {
+resource "aws_cloudfront_cache_policy" "crc-2e54312d-136d-493c-8eb9-b001f22f67d2" {
   comment     = "Policy for Amplify Origin"
   default_ttl = "2"
   max_ttl     = "600"
@@ -89,7 +89,7 @@ resource "aws_cloudfront_cache_policy" "tfer--2e54312d-136d-493c-8eb9-b001f22f67
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--4135ea2d-6df8-44a3-9df3-4b5a84be39ad" {
+resource "aws_cloudfront_cache_policy" "crc-4135ea2d-6df8-44a3-9df3-4b5a84be39ad" {
   comment     = "Policy with caching disabled"
   default_ttl = "0"
   max_ttl     = "0"
@@ -114,7 +114,7 @@ resource "aws_cloudfront_cache_policy" "tfer--4135ea2d-6df8-44a3-9df3-4b5a84be39
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--4cc15a8a-d715-48a4-82b8-cc0b614638fe" {
+resource "aws_cloudfront_cache_policy" "crc-4cc15a8a-d715-48a4-82b8-cc0b614638fe" {
   comment     = "Policy for origins that return Cache-Control headers and serve different content based on values present in the query string."
   default_ttl = "0"
   max_ttl     = "31536000"
@@ -143,7 +143,7 @@ resource "aws_cloudfront_cache_policy" "tfer--4cc15a8a-d715-48a4-82b8-cc0b614638
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--4d1d2f1d-3a71-49ad-9e08-7ea5d843a556" {
+resource "aws_cloudfront_cache_policy" "crc-4d1d2f1d-3a71-49ad-9e08-7ea5d843a556" {
   comment     = "Default Amplify cache policy"
   default_ttl = "0"
   max_ttl     = "31536000"
@@ -172,7 +172,7 @@ resource "aws_cloudfront_cache_policy" "tfer--4d1d2f1d-3a71-49ad-9e08-7ea5d843a5
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--658327ea-f89d-4fab-a63d-7e88639e58f6" {
+resource "aws_cloudfront_cache_policy" "crc-658327ea-f89d-4fab-a63d-7e88639e58f6" {
   comment     = "Policy with caching enabled. Supports Gzip and Brotli compression."
   default_ttl = "86400"
   max_ttl     = "31536000"
@@ -197,7 +197,7 @@ resource "aws_cloudfront_cache_policy" "tfer--658327ea-f89d-4fab-a63d-7e88639e58
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--7e5fad67-ee98-4ad0-b05a-394999eefc1a" {
+resource "aws_cloudfront_cache_policy" "crc-7e5fad67-ee98-4ad0-b05a-394999eefc1a" {
   comment     = "Amplify cache policy for static content"
   default_ttl = "0"
   max_ttl     = "31536000"
@@ -226,7 +226,7 @@ resource "aws_cloudfront_cache_policy" "tfer--7e5fad67-ee98-4ad0-b05a-394999eefc
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--83da9c7e-98b4-4e11-a168-04f0df8e2c65" {
+resource "aws_cloudfront_cache_policy" "crc-83da9c7e-98b4-4e11-a168-04f0df8e2c65" {
   comment     = "Policy for origins that return Cache-Control headers. Query strings are not included in the cache key."
   default_ttl = "0"
   max_ttl     = "31536000"
@@ -255,7 +255,7 @@ resource "aws_cloudfront_cache_policy" "tfer--83da9c7e-98b4-4e11-a168-04f0df8e2c
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--a6bad946-36c3-4c33-aa98-362c74a7fb13" {
+resource "aws_cloudfront_cache_policy" "crc-a6bad946-36c3-4c33-aa98-362c74a7fb13" {
   comment     = "Default Amplify cache policy without cookies"
   default_ttl = "0"
   max_ttl     = "31536000"
@@ -284,7 +284,7 @@ resource "aws_cloudfront_cache_policy" "tfer--a6bad946-36c3-4c33-aa98-362c74a7fb
   }
 }
 
-resource "aws_cloudfront_cache_policy" "tfer--b2884449-e4de-46a7-ac36-70bc7f1ddd6d" {
+resource "aws_cloudfront_cache_policy" "crc-b2884449-e4de-46a7-ac36-70bc7f1ddd6d" {
   comment     = "Default policy when compression is disabled"
   default_ttl = "86400"
   max_ttl     = "31536000"
@@ -309,13 +309,13 @@ resource "aws_cloudfront_cache_policy" "tfer--b2884449-e4de-46a7-ac36-70bc7f1ddd
   }
 }
 
-resource "aws_cloudfront_distribution" "tfer--E37NSQHT5FF2XS" {
+resource "aws_cloudfront_distribution" "crc-E37NSQHT5FF2XS" {
   aliases = ["staging.cloudresume-agb.jp"]
   comment = "Staging Distribution for Cloud Resume Challenge"
 
   default_cache_behavior {
     allowed_methods = ["GET", "HEAD"]
-    cache_policy_id = "${aws_cloudfront_cache_policy.tfer--658327ea-f89d-4fab-a63d-7e88639e58f6.id}"
+    cache_policy_id = aws_cloudfront_cache_policy.crc-658327ea-f89d-4fab-a63d-7e88639e58f6.id
     cached_methods  = ["GET", "HEAD"]
     compress        = "true"
     default_ttl     = "0"
@@ -385,7 +385,7 @@ resource "aws_cloudfront_distribution" "tfer--E37NSQHT5FF2XS" {
   web_acl_id = "arn:aws:wafv2:us-east-1:339712851438:global/webacl/CloudResume-WebACL/c38b9d17-1bdf-4d05-ad66-edee4866bbbc"
 }
 
-resource "aws_cloudfront_distribution" "tfer--ESAPTUQ4RL7CE" {
+resource "aws_cloudfront_distribution" "crc-ESAPTUQ4RL7CE" {
   aliases = ["*.cloudresume-agb.jp", "www.cloudresume-agb.jp"]
   comment = "Production Distribution for Cloud Resume Challenge"
 
@@ -398,7 +398,7 @@ resource "aws_cloudfront_distribution" "tfer--ESAPTUQ4RL7CE" {
 
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
-    cache_policy_id        = "${aws_cloudfront_cache_policy.tfer--658327ea-f89d-4fab-a63d-7e88639e58f6.id}"
+    cache_policy_id        = aws_cloudfront_cache_policy.crc-658327ea-f89d-4fab-a63d-7e88639e58f6.id
     cached_methods         = ["GET", "HEAD"]
     compress               = "true"
     default_ttl            = "0"
