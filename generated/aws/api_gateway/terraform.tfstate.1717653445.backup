@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.5.7",
-  "serial": 8,
+  "serial": 1,
   "lineage": "27e92c49-561b-afa7-bb23-edd15e0099a4",
   "outputs": {
     "aws_api_gateway_gateway_response_tfer--3nfq1o8esj-002F-DEFAULT_4XX_id": {
@@ -108,53 +108,20 @@
   "resources": [
     {
       "mode": "managed",
-      "type": "aws_api_gateway_deployment",
-      "name": "tfer--3nfq1o8esj_CloudResume_API",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
-      "instances": [
-        {
-          "schema_version": 0,
-          "attributes": {
-            "canary_settings": [],
-            "created_date": "2024-06-06T06:22:28Z",
-            "description": "",
-            "execution_arn": "arn:aws:execute-api:ap-northeast-1:339712851438:3nfq1o8esj/",
-            "id": "5v55h8",
-            "invoke_url": "https://3nfq1o8esj.execute-api.ap-northeast-1.amazonaws.com/",
-            "rest_api_id": "3nfq1o8esj",
-            "stage_description": null,
-            "stage_name": null,
-            "triggers": {
-              "redeployment": "2be88ca4242c76e8253ac62474851065032d6833"
-            },
-            "variables": null
-          },
-          "sensitive_attributes": [],
-          "private": "bnVsbA==",
-          "dependencies": [
-            "aws_api_gateway_rest_api.tfer--3nfq1o8esj_CloudResume_API"
-          ]
-        }
-      ]
-    },
-    {
-      "mode": "managed",
       "type": "aws_api_gateway_gateway_response",
       "name": "tfer--3nfq1o8esj-002F-DEFAULT_4XX",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "id": "3nfq1o8esj/DEFAULT_4XX",
-            "response_parameters": {
-              "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-              "gatewayresponse.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
-              "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
-            },
-            "response_templates": {
-              "application/json": "{\"message\":$context.error.messageString}"
-            },
+            "response_parameters.%": "3",
+            "response_parameters.gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+            "response_parameters.gatewayresponse.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+            "response_parameters.gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+            "response_templates.%": "1",
+            "response_templates.application/json": "{\"message\":$context.error.messageString}",
             "response_type": "DEFAULT_4XX",
             "rest_api_id": "3nfq1o8esj",
             "status_code": ""
@@ -167,20 +134,18 @@
       "mode": "managed",
       "type": "aws_api_gateway_gateway_response",
       "name": "tfer--3nfq1o8esj-002F-DEFAULT_5XX",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "id": "3nfq1o8esj/DEFAULT_5XX",
-            "response_parameters": {
-              "gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-              "gatewayresponse.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
-              "gatewayresponse.header.Access-Control-Allow-Origin": "'*'"
-            },
-            "response_templates": {
-              "application/json": "{\"message\":$context.error.messageString}"
-            },
+            "response_parameters.%": "3",
+            "response_parameters.gatewayresponse.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+            "response_parameters.gatewayresponse.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+            "response_parameters.gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+            "response_templates.%": "1",
+            "response_templates.application/json": "{\"message\":$context.error.messageString}",
             "response_type": "DEFAULT_5XX",
             "rest_api_id": "3nfq1o8esj",
             "status_code": ""
@@ -193,12 +158,12 @@
       "mode": "managed",
       "type": "aws_api_gateway_integration",
       "name": "tfer--3nfq1o8esj-002F-0hihjm-002F-GET",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
-            "cache_key_parameters": [],
+          "attributes_flat": {
+            "cache_key_parameters.#": "0",
             "cache_namespace": "0hihjm",
             "connection_id": "",
             "connection_type": "INTERNET",
@@ -208,12 +173,12 @@
             "id": "3nfq1o8esj/0hihjm/GET",
             "integration_http_method": "POST",
             "passthrough_behavior": "WHEN_NO_MATCH",
-            "request_parameters": {},
-            "request_templates": {},
+            "request_parameters.%": "0",
+            "request_templates.%": "0",
             "resource_id": "0hihjm",
             "rest_api_id": "3nfq1o8esj",
-            "timeout_milliseconds": 29000,
-            "tls_config": [],
+            "timeout_milliseconds": "29000",
+            "tls_config.#": "0",
             "type": "AWS_PROXY",
             "uri": "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:339712851438:function:trackVisitors/invocations"
           },
@@ -225,12 +190,12 @@
       "mode": "managed",
       "type": "aws_api_gateway_integration",
       "name": "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTIONS",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
-            "cache_key_parameters": [],
+          "attributes_flat": {
+            "cache_key_parameters.#": "0",
             "cache_namespace": "0hihjm",
             "connection_id": "",
             "connection_type": "INTERNET",
@@ -240,14 +205,13 @@
             "id": "3nfq1o8esj/0hihjm/OPTIONS",
             "integration_http_method": "",
             "passthrough_behavior": "WHEN_NO_MATCH",
-            "request_parameters": {},
-            "request_templates": {
-              "application/json": "{\"statusCode\": 200}"
-            },
+            "request_parameters.%": "0",
+            "request_templates.%": "1",
+            "request_templates.application/json": "{\"statusCode\": 200}",
             "resource_id": "0hihjm",
             "rest_api_id": "3nfq1o8esj",
-            "timeout_milliseconds": 29000,
-            "tls_config": [],
+            "timeout_milliseconds": "29000",
+            "tls_config.#": "0",
             "type": "MOCK",
             "uri": ""
           },
@@ -259,12 +223,12 @@
       "mode": "managed",
       "type": "aws_api_gateway_integration",
       "name": "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTIONS",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
-            "cache_key_parameters": [],
+          "attributes_flat": {
+            "cache_key_parameters.#": "0",
             "cache_namespace": "vn8ef9",
             "connection_id": "",
             "connection_type": "INTERNET",
@@ -274,14 +238,13 @@
             "id": "3nfq1o8esj/vn8ef9/OPTIONS",
             "integration_http_method": "",
             "passthrough_behavior": "WHEN_NO_MATCH",
-            "request_parameters": {},
-            "request_templates": {
-              "application/json": "{\"statusCode\": 200}"
-            },
+            "request_parameters.%": "0",
+            "request_templates.%": "1",
+            "request_templates.application/json": "{\"statusCode\": 200}",
             "resource_id": "vn8ef9",
             "rest_api_id": "3nfq1o8esj",
-            "timeout_milliseconds": 29000,
-            "tls_config": [],
+            "timeout_milliseconds": "29000",
+            "tls_config.#": "0",
             "type": "MOCK",
             "uri": ""
           },
@@ -293,12 +256,12 @@
       "mode": "managed",
       "type": "aws_api_gateway_integration",
       "name": "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
-            "cache_key_parameters": [],
+          "attributes_flat": {
+            "cache_key_parameters.#": "0",
             "cache_namespace": "vn8ef9",
             "connection_id": "",
             "connection_type": "INTERNET",
@@ -308,12 +271,12 @@
             "id": "3nfq1o8esj/vn8ef9/POST",
             "integration_http_method": "POST",
             "passthrough_behavior": "WHEN_NO_MATCH",
-            "request_parameters": {},
-            "request_templates": {},
+            "request_parameters.%": "0",
+            "request_templates.%": "0",
             "resource_id": "vn8ef9",
             "rest_api_id": "3nfq1o8esj",
-            "timeout_milliseconds": 29000,
-            "tls_config": [],
+            "timeout_milliseconds": "29000",
+            "tls_config.#": "0",
             "type": "AWS_PROXY",
             "uri": "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:339712851438:function:sendMessage/invocations"
           },
@@ -325,25 +288,24 @@
       "mode": "managed",
       "type": "aws_api_gateway_integration_response",
       "name": "tfer--3nfq1o8esj-002F-0hihjm-002F-GET-002F-200",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "content_handling": "",
             "http_method": "GET",
             "id": "3nfq1o8esj/0hihjm/GET/200",
             "resource_id": "0hihjm",
-            "response_parameters": {
-              "method.response.header.Access-Control-Allow-Origin": "'*'"
-            },
-            "response_templates": {},
+            "response_parameters.%": "1",
+            "response_parameters.method.response.header.Access-Control-Allow-Origin": "'*'",
+            "response_templates.%": "1",
+            "response_templates.application/json": "",
             "rest_api_id": "3nfq1o8esj",
             "selection_pattern": "",
             "status_code": "200"
           },
-          "sensitive_attributes": [],
-          "private": "bnVsbA=="
+          "sensitive_attributes": []
         }
       ]
     },
@@ -351,21 +313,20 @@
       "mode": "managed",
       "type": "aws_api_gateway_integration_response",
       "name": "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTIONS-002F-200",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "content_handling": "",
             "http_method": "OPTIONS",
             "id": "3nfq1o8esj/0hihjm/OPTIONS/200",
             "resource_id": "0hihjm",
-            "response_parameters": {
-              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-              "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
-              "method.response.header.Access-Control-Allow-Origin": "'*'"
-            },
-            "response_templates": {},
+            "response_parameters.%": "3",
+            "response_parameters.method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+            "response_parameters.method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
+            "response_parameters.method.response.header.Access-Control-Allow-Origin": "'*'",
+            "response_templates.%": "0",
             "rest_api_id": "3nfq1o8esj",
             "selection_pattern": "",
             "status_code": "200"
@@ -378,21 +339,20 @@
       "mode": "managed",
       "type": "aws_api_gateway_integration_response",
       "name": "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTIONS-002F-200",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "content_handling": "",
             "http_method": "OPTIONS",
             "id": "3nfq1o8esj/vn8ef9/OPTIONS/200",
             "resource_id": "vn8ef9",
-            "response_parameters": {
-              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-              "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
-              "method.response.header.Access-Control-Allow-Origin": "'*'"
-            },
-            "response_templates": {},
+            "response_parameters.%": "3",
+            "response_parameters.method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+            "response_parameters.method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'",
+            "response_parameters.method.response.header.Access-Control-Allow-Origin": "'*'",
+            "response_templates.%": "0",
             "rest_api_id": "3nfq1o8esj",
             "selection_pattern": "",
             "status_code": "200"
@@ -405,25 +365,24 @@
       "mode": "managed",
       "type": "aws_api_gateway_integration_response",
       "name": "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST-002F-200",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "content_handling": "",
             "http_method": "POST",
             "id": "3nfq1o8esj/vn8ef9/POST/200",
             "resource_id": "vn8ef9",
-            "response_parameters": {
-              "method.response.header.Access-Control-Allow-Origin": "'*'"
-            },
-            "response_templates": {},
+            "response_parameters.%": "1",
+            "response_parameters.method.response.header.Access-Control-Allow-Origin": "'*'",
+            "response_templates.%": "1",
+            "response_templates.application/json": "",
             "rest_api_id": "3nfq1o8esj",
             "selection_pattern": "",
             "status_code": "200"
           },
-          "sensitive_attributes": [],
-          "private": "bnVsbA=="
+          "sensitive_attributes": []
         }
       ]
     },
@@ -431,22 +390,21 @@
       "mode": "managed",
       "type": "aws_api_gateway_method",
       "name": "tfer--3nfq1o8esj-002F-0hihjm-002F-GET",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
-            "api_key_required": false,
+          "attributes_flat": {
+            "api_key_required": "false",
             "authorization": "NONE",
-            "authorization_scopes": [],
+            "authorization_scopes.#": "0",
             "authorizer_id": "",
             "http_method": "GET",
             "id": "3nfq1o8esj/0hihjm/GET",
             "operation_name": "",
-            "request_models": {},
-            "request_parameters": {
-              "method.request.querystring.visitorId": true
-            },
+            "request_models.%": "0",
+            "request_parameters.%": "1",
+            "request_parameters.method.request.querystring.visitorId": "true",
             "request_validator_id": "k1c8gg",
             "resource_id": "0hihjm",
             "rest_api_id": "3nfq1o8esj"
@@ -459,20 +417,20 @@
       "mode": "managed",
       "type": "aws_api_gateway_method",
       "name": "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTIONS",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
-            "api_key_required": false,
+          "attributes_flat": {
+            "api_key_required": "false",
             "authorization": "NONE",
-            "authorization_scopes": [],
+            "authorization_scopes.#": "0",
             "authorizer_id": "",
             "http_method": "OPTIONS",
             "id": "3nfq1o8esj/0hihjm/OPTIONS",
             "operation_name": "",
-            "request_models": {},
-            "request_parameters": {},
+            "request_models.%": "0",
+            "request_parameters.%": "0",
             "request_validator_id": "",
             "resource_id": "0hihjm",
             "rest_api_id": "3nfq1o8esj"
@@ -485,20 +443,20 @@
       "mode": "managed",
       "type": "aws_api_gateway_method",
       "name": "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTIONS",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
-            "api_key_required": false,
+          "attributes_flat": {
+            "api_key_required": "false",
             "authorization": "NONE",
-            "authorization_scopes": [],
+            "authorization_scopes.#": "0",
             "authorizer_id": "",
             "http_method": "OPTIONS",
             "id": "3nfq1o8esj/vn8ef9/OPTIONS",
             "operation_name": "",
-            "request_models": {},
-            "request_parameters": {},
+            "request_models.%": "0",
+            "request_parameters.%": "0",
             "request_validator_id": "",
             "resource_id": "vn8ef9",
             "rest_api_id": "3nfq1o8esj"
@@ -511,22 +469,21 @@
       "mode": "managed",
       "type": "aws_api_gateway_method",
       "name": "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
-            "api_key_required": false,
+          "attributes_flat": {
+            "api_key_required": "false",
             "authorization": "NONE",
-            "authorization_scopes": [],
+            "authorization_scopes.#": "0",
             "authorizer_id": "",
             "http_method": "POST",
             "id": "3nfq1o8esj/vn8ef9/POST",
             "operation_name": "",
-            "request_models": {},
-            "request_parameters": {
-              "method.request.querystring.uuid": true
-            },
+            "request_models.%": "0",
+            "request_parameters.%": "1",
+            "request_parameters.method.request.querystring.uuid": "true",
             "request_validator_id": "k1c8gg",
             "resource_id": "vn8ef9",
             "rest_api_id": "3nfq1o8esj"
@@ -539,20 +496,18 @@
       "mode": "managed",
       "type": "aws_api_gateway_method_response",
       "name": "tfer--3nfq1o8esj-002F-0hihjm-002F-GET-002F-200",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "http_method": "GET",
             "id": "3nfq1o8esj/0hihjm/GET/200",
             "resource_id": "0hihjm",
-            "response_models": {
-              "application/json": "Empty"
-            },
-            "response_parameters": {
-              "method.response.header.Access-Control-Allow-Origin": false
-            },
+            "response_models.%": "1",
+            "response_models.application/json": "Empty",
+            "response_parameters.%": "1",
+            "response_parameters.method.response.header.Access-Control-Allow-Origin": "false",
             "rest_api_id": "3nfq1o8esj",
             "status_code": "200"
           },
@@ -564,22 +519,20 @@
       "mode": "managed",
       "type": "aws_api_gateway_method_response",
       "name": "tfer--3nfq1o8esj-002F-0hihjm-002F-OPTIONS-002F-200",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "http_method": "OPTIONS",
             "id": "3nfq1o8esj/0hihjm/OPTIONS/200",
             "resource_id": "0hihjm",
-            "response_models": {
-              "application/json": "Empty"
-            },
-            "response_parameters": {
-              "method.response.header.Access-Control-Allow-Headers": false,
-              "method.response.header.Access-Control-Allow-Methods": false,
-              "method.response.header.Access-Control-Allow-Origin": false
-            },
+            "response_models.%": "1",
+            "response_models.application/json": "Empty",
+            "response_parameters.%": "3",
+            "response_parameters.method.response.header.Access-Control-Allow-Headers": "false",
+            "response_parameters.method.response.header.Access-Control-Allow-Methods": "false",
+            "response_parameters.method.response.header.Access-Control-Allow-Origin": "false",
             "rest_api_id": "3nfq1o8esj",
             "status_code": "200"
           },
@@ -591,22 +544,20 @@
       "mode": "managed",
       "type": "aws_api_gateway_method_response",
       "name": "tfer--3nfq1o8esj-002F-vn8ef9-002F-OPTIONS-002F-200",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "http_method": "OPTIONS",
             "id": "3nfq1o8esj/vn8ef9/OPTIONS/200",
             "resource_id": "vn8ef9",
-            "response_models": {
-              "application/json": "Empty"
-            },
-            "response_parameters": {
-              "method.response.header.Access-Control-Allow-Headers": false,
-              "method.response.header.Access-Control-Allow-Methods": false,
-              "method.response.header.Access-Control-Allow-Origin": false
-            },
+            "response_models.%": "1",
+            "response_models.application/json": "Empty",
+            "response_parameters.%": "3",
+            "response_parameters.method.response.header.Access-Control-Allow-Headers": "false",
+            "response_parameters.method.response.header.Access-Control-Allow-Methods": "false",
+            "response_parameters.method.response.header.Access-Control-Allow-Origin": "false",
             "rest_api_id": "3nfq1o8esj",
             "status_code": "200"
           },
@@ -618,20 +569,18 @@
       "mode": "managed",
       "type": "aws_api_gateway_method_response",
       "name": "tfer--3nfq1o8esj-002F-vn8ef9-002F-POST-002F-200",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "http_method": "POST",
             "id": "3nfq1o8esj/vn8ef9/POST/200",
             "resource_id": "vn8ef9",
-            "response_models": {
-              "application/json": "Empty"
-            },
-            "response_parameters": {
-              "method.response.header.Access-Control-Allow-Origin": false
-            },
+            "response_models.%": "1",
+            "response_models.application/json": "Empty",
+            "response_parameters.%": "1",
+            "response_parameters.method.response.header.Access-Control-Allow-Origin": "false",
             "rest_api_id": "3nfq1o8esj",
             "status_code": "200"
           },
@@ -643,11 +592,11 @@
       "mode": "managed",
       "type": "aws_api_gateway_model",
       "name": "tfer--ay6utx",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "content_type": "application/json",
             "description": "This is a default empty schema model",
             "id": "ay6utx",
@@ -663,11 +612,11 @@
       "mode": "managed",
       "type": "aws_api_gateway_model",
       "name": "tfer--yh6w2n",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "content_type": "application/json",
             "description": "This is a default error schema model",
             "id": "yh6w2n",
@@ -683,11 +632,11 @@
       "mode": "managed",
       "type": "aws_api_gateway_resource",
       "name": "tfer--0hihjm",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "id": "0hihjm",
             "parent_id": "1e1dkkytsg",
             "path": "/visitors",
@@ -702,11 +651,11 @@
       "mode": "managed",
       "type": "aws_api_gateway_resource",
       "name": "tfer--1e1dkkytsg",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "id": "1e1dkkytsg",
             "parent_id": "",
             "path": "/",
@@ -721,11 +670,11 @@
       "mode": "managed",
       "type": "aws_api_gateway_resource",
       "name": "tfer--vn8ef9",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "id": "vn8ef9",
             "parent_id": "1e1dkkytsg",
             "path": "/contact",
@@ -740,37 +689,29 @@
       "mode": "managed",
       "type": "aws_api_gateway_rest_api",
       "name": "tfer--3nfq1o8esj_CloudResume_API",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
+          "attributes_flat": {
             "api_key_source": "AUTHORIZER",
             "arn": "arn:aws:apigateway:ap-northeast-1::/restapis/3nfq1o8esj",
-            "binary_media_types": [],
-            "body": null,
+            "binary_media_types.#": "0",
             "created_date": "2024-05-28T12:22:04Z",
             "description": "MultiPurpose API for CloudResume Site",
-            "disable_execute_api_endpoint": true,
-            "endpoint_configuration": [
-              {
-                "types": [
-                  "REGIONAL"
-                ],
-                "vpc_endpoint_ids": []
-              }
-            ],
+            "disable_execute_api_endpoint": "true",
+            "endpoint_configuration.#": "1",
+            "endpoint_configuration.0.types.#": "1",
+            "endpoint_configuration.0.types.0": "REGIONAL",
+            "endpoint_configuration.0.vpc_endpoint_ids.#": "0",
             "execution_arn": "arn:aws:execute-api:ap-northeast-1:339712851438:3nfq1o8esj",
-            "fail_on_warnings": null,
             "id": "3nfq1o8esj",
             "minimum_compression_size": "",
             "name": "CloudResume_API",
-            "parameters": null,
             "policy": "",
-            "put_rest_api_mode": null,
             "root_resource_id": "1e1dkkytsg",
-            "tags": {},
-            "tags_all": {}
+            "tags.%": "0",
+            "tags_all.%": "0"
           },
           "sensitive_attributes": []
         }
@@ -780,18 +721,18 @@
       "mode": "managed",
       "type": "aws_api_gateway_stage",
       "name": "tfer--3nfq1o8esj-002F-v1",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
-          "attributes": {
-            "access_log_settings": [],
+          "attributes_flat": {
+            "access_log_settings.#": "0",
             "arn": "arn:aws:apigateway:ap-northeast-1::/restapis/3nfq1o8esj/stages/v1",
-            "cache_cluster_enabled": false,
+            "cache_cluster_enabled": "false",
             "cache_cluster_size": "",
-            "canary_settings": [],
+            "canary_settings.#": "0",
             "client_certificate_id": "",
-            "deployment_id": "5v55h8",
+            "deployment_id": "01obv8",
             "description": "",
             "documentation_version": "",
             "execution_arn": "arn:aws:execute-api:ap-northeast-1:339712851438:3nfq1o8esj/v1",
@@ -799,18 +740,13 @@
             "invoke_url": "https://3nfq1o8esj.execute-api.ap-northeast-1.amazonaws.com/v1",
             "rest_api_id": "3nfq1o8esj",
             "stage_name": "v1",
-            "tags": {},
-            "tags_all": {},
-            "variables": {},
+            "tags.%": "0",
+            "tags_all.%": "0",
+            "variables.%": "0",
             "web_acl_arn": "arn:aws:wafv2:ap-northeast-1:339712851438:regional/webacl/CloudResumeAPI_WACL/71c009ce-7207-46ce-9bda-4fa60ad611e4",
-            "xray_tracing_enabled": true
+            "xray_tracing_enabled": "true"
           },
-          "sensitive_attributes": [],
-          "private": "bnVsbA==",
-          "dependencies": [
-            "aws_api_gateway_deployment.tfer--3nfq1o8esj_CloudResume_API",
-            "aws_api_gateway_rest_api.tfer--3nfq1o8esj_CloudResume_API"
-          ]
+          "sensitive_attributes": []
         }
       ]
     }
