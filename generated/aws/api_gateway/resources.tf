@@ -304,6 +304,9 @@ resource "aws_api_gateway_deployment" "tfer--3nfq1o8esj_CloudResume_API" {
   triggers = {
     redeployment = sha1(jsonencode(aws_api_gateway_rest_api.tfer--3nfq1o8esj_CloudResume_API.body))
   }
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_api_gateway_stage" "tfer--3nfq1o8esj-002F-v1" {
