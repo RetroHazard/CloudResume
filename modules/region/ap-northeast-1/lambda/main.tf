@@ -39,8 +39,8 @@ resource "aws_lambda_function" "tfer--cloudfrontInvalidation" {
 
   memory_size                    = "128"
   package_type                   = "Zip"
-  filename                       = data.archive_file.cloudfrontInvalidation_lambda_function.output_path
-  source_code_hash               = data.archive_file.cloudfrontInvalidation_lambda_function.output_base64sha256
+  filename                       = data.archive_file.cloudfrontInvalidation_lambda_function_code.output_path
+  source_code_hash               = data.archive_file.cloudfrontInvalidation_lambda_function_code.output_base64sha256
   reserved_concurrent_executions = "-1"
   role                           = "arn:aws:iam::339712851438:role/service-role/CloudResume_CloudFrontManager"
   runtime                        = "python3.12"
@@ -80,8 +80,8 @@ resource "aws_lambda_function" "tfer--sendMessage" {
 
   memory_size                    = "128"
   package_type                   = "Zip"
-  filename                       = data.archive_file.sendMessage_lambda_function.output_path
-  source_code_hash               = data.archive_file.sendMessage_lambda_function.output_base64sha256
+  filename                       = data.archive_file.sendMessage_lambda_function_code.output_path
+  source_code_hash               = data.archive_file.sendMessage_lambda_function_code.output_base64sha256
   reserved_concurrent_executions = "-1"
   role                           = "arn:aws:iam::339712851438:role/CloudResume_SendMessage"
   runtime                        = "python3.12"
@@ -120,8 +120,8 @@ resource "aws_lambda_function" "tfer--trackVisitors" {
 
   memory_size                    = "128"
   package_type                   = "Zip"
-  filename                       = data.archive_file.trackvisitors_lambda_function.output_path
-  source_code_hash               = data.archive_file.trackvisitors_lambda_function.output_base64sha256
+  filename                       = data.archive_file.trackvisitors_lambda_function_code.output_path
+  source_code_hash               = data.archive_file.trackvisitors_lambda_function_code.output_base64sha256
   reserved_concurrent_executions = "-1"
   role                           = "arn:aws:iam::339712851438:role/CloudResume_TrackVisitors"
   runtime                        = "python3.12"
