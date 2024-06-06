@@ -1,7 +1,6 @@
 import json
 import boto3
 import os
-from urllib.parse import parse_qs
 
 AWS_REGION = os.environ['mailRegion']
 SEND_TO = os.environ['sendToAddress']
@@ -9,7 +8,7 @@ SEND_AS = os.environ['sendFromAddress']
 ALLOWED_ORIGIN = 'https://www.cloudresume-agb.jp'
 
 
-def lambda_handler(event, context):
+def lambda_handler(event):
     # Initialize the SES client
     ses_client = boto3.client('ses', region_name=AWS_REGION)
 
@@ -49,7 +48,7 @@ def lambda_handler(event, context):
         """
 
         # Send the email using SES
-        response = ses_client.send_email(
+        ses_client.send_email(
             Source=SEND_AS,
             Destination={
                 'ToAddresses': [
@@ -71,7 +70,7 @@ def lambda_handler(event, context):
         )
 
         # Construct a success response
-        response = {
+        api_response = {
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
@@ -81,7 +80,7 @@ def lambda_handler(event, context):
             })
         }
 
-        return response
+        return api_response
 
     except Exception as e:
         # Handle any errors that may occur

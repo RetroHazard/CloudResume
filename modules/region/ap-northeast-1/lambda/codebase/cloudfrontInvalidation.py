@@ -12,7 +12,7 @@ devDistribution = os.environ.get('dev_distribution')
 min_wait_time = 5
 
 
-def lambda_handler(event, context):
+def lambda_handler(event):
     if not prodDistribution or not devDistribution:
         raise ValueError("Environment variables 'prod_distribution' or 'dev_distribution' are not set.")
 
