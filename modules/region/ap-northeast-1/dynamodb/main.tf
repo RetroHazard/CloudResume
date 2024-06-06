@@ -1,4 +1,4 @@
-resource "aws_dynamodb_table" "tfer--crc-visitor-count" {
+resource "aws_dynamodb_table" "crc-visitor-count" {
   attribute {
     name = "id"
     type = "S"
@@ -30,7 +30,7 @@ resource "aws_dynamodb_table" "tfer--crc-visitor-count" {
   write_capacity = "1"
 }
 
-resource "aws_dynamodb_table" "tfer--crc-visitor-record" {
+resource "aws_dynamodb_table" "crc-visitor-record" {
   attribute {
     name = "id"
     type = "S"
