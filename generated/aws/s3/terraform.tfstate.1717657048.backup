@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.5.7",
-  "serial": 2,
+  "serial": 1,
   "lineage": "19d10ef1-fe52-5274-5c31-6135f3b2a237",
   "outputs": {
     "aws_s3_bucket_policy_tfer--agb-s3-cloudresumechallenge-hosted_id": {
@@ -34,7 +34,7 @@
       "mode": "managed",
       "type": "aws_s3_bucket",
       "name": "tfer--agb-s3-cloudresumechallenge-hosted",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -116,7 +116,7 @@
       "mode": "managed",
       "type": "aws_s3_bucket",
       "name": "tfer--agb-s3-cloudresumechallenge-logging",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -208,7 +208,7 @@
       "mode": "managed",
       "type": "aws_s3_bucket",
       "name": "tfer--agb-s3-cloudresumechallenge-staging",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -278,7 +278,7 @@
       "mode": "managed",
       "type": "aws_s3_bucket_policy",
       "name": "tfer--agb-s3-cloudresumechallenge-hosted",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -295,7 +295,7 @@
       "mode": "managed",
       "type": "aws_s3_bucket_policy",
       "name": "tfer--agb-s3-cloudresumechallenge-logging",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -312,7 +312,7 @@
       "mode": "managed",
       "type": "aws_s3_bucket_policy",
       "name": "tfer--agb-s3-cloudresumechallenge-staging",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
