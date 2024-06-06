@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.5.7",
-  "serial": 2,
+  "serial": 1,
   "lineage": "4ec6630b-b119-fa36-6191-50124473125b",
   "outputs": {
     "aws_ses_configuration_set_tfer--ContactFormMailer_id": {
@@ -26,7 +26,7 @@
       "mode": "managed",
       "type": "aws_ses_configuration_set",
       "name": "tfer--ContactFormMailer",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -50,7 +50,7 @@
       "mode": "managed",
       "type": "aws_ses_configuration_set",
       "name": "tfer--my-first-configuration-set",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -72,7 +72,7 @@
       "mode": "managed",
       "type": "aws_ses_domain_identity",
       "name": "tfer--cloudresume-agb-002E-jp",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
@@ -90,7 +90,7 @@
       "mode": "managed",
       "type": "aws_ses_email_identity",
       "name": "tfer--a-002E-bracken87-002B-cloudresume_ses-0040-gmail-002E-com",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
