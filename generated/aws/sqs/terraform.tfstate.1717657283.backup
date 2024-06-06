@@ -1,7 +1,7 @@
 {
   "version": 4,
   "terraform_version": "1.5.7",
-  "serial": 2,
+  "serial": 1,
   "lineage": "85e1d994-6460-d67a-d2a0-054dbd4b4986",
   "outputs": {
     "aws_sqs_queue_tfer--CloudFrontInvalidationQueue_arn": {
@@ -18,7 +18,7 @@
       "mode": "managed",
       "type": "aws_sqs_queue",
       "name": "tfer--CloudFrontInvalidationQueue",
-      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "provider": "provider[\"registry.terraform.io/-/aws\"]",
       "instances": [
         {
           "schema_version": 0,
