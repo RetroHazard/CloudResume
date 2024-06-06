@@ -300,7 +300,7 @@ resource "aws_api_gateway_rest_api" "tfer--3nfq1o8esj_CloudResume_API" {
 
 resource "aws_api_gateway_stage" "tfer--3nfq1o8esj-002F-v1" {
   cache_cluster_enabled = "false"
-  deployment_id         = "c51dkf"
+  deployment_id         = "01obv8"
   rest_api_id           = "3nfq1o8esj"
   stage_name            = "v1"
   xray_tracing_enabled  = "true"

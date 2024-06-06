@@ -6,9 +6,7 @@ resource "aws_lambda_event_source_mapping" "tfer--9b7783a0-1f0a-408d-8d07-62e509
   function_name                      = "arn:aws:lambda:ap-northeast-1:339712851438:function:cloudfrontInvalidation"
   function_response_types            = ["ReportBatchItemFailures"]
   maximum_batching_window_in_seconds = "5"
-  maximum_record_age_in_seconds      = "0"
   maximum_retry_attempts             = "0"
-  parallelization_factor             = "0"
   tumbling_window_in_seconds         = "0"
 }
 
@@ -29,7 +27,7 @@ resource "aws_lambda_function" "tfer--cloudfrontInvalidation" {
   }
 
   function_name = "cloudfrontInvalidation"
-  handler       = "lambda_function.lambda_handler"
+  handler       = "cloudfrontInvalidation.lambda_handler"
   layers        = ["arn:aws:lambda:ap-northeast-1:580247275435:layer:LambdaInsightsExtension:79"]
 
   logging_config {
@@ -70,7 +68,7 @@ resource "aws_lambda_function" "tfer--sendMessage" {
   }
 
   function_name = "sendMessage"
-  handler       = "lambda_function.lambda_handler"
+  handler       = "sendMessage.lambda_handler"
   layers        = ["arn:aws:lambda:ap-northeast-1:580247275435:layer:LambdaInsightsExtension:79"]
 
   logging_config {
@@ -110,7 +108,7 @@ resource "aws_lambda_function" "tfer--trackVisitors" {
   }
 
   function_name = "trackVisitors"
-  handler       = "lambda_function.lambda_handler"
+  handler       = "trackVisitors.lambda_handler"
   layers        = ["arn:aws:lambda:ap-northeast-1:580247275435:layer:LambdaInsightsExtension:79"]
 
   logging_config {
