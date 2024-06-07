@@ -121,35 +121,33 @@ output "aws_route53_record_crc-dns-zone-ses-record-TXT_id" {
   value = aws_route53_record.crc-dns-zone-ses-record-TXT.id
 }
 
-output "aws_route53_record_crc-dns-zone-prod-record-A_id" {
-  value = aws_route53_record.crc-dns-zone-prod-www-record-A.id
+output "aws_route53_record_crc-dns-zone-ses-dkim-1-record-CNAME_id" {
+  value = aws_route53_record.crc-dns-zone-ses-dkim-1-record-CNAME.id
 }
 
-output "aws_route53_record_crc-dns-zone-prod-www-record-A_id" {
-  value = aws_route53_record.crc-dns-zone-prod-www-record-A.id
+output "aws_route53_record_crc-dns-zone-ses-dkim-2-record-CNAME_id" {
+  value = aws_route53_record.crc-dns-zone-ses-dkim-2-record-CNAME.id
+}
+
+output "aws_route53_record_crc-dns-zone-ses-dkim-3-record-CNAME_id" {
+  value = aws_route53_record.crc-dns-zone-ses-dkim-3-record-CNAME.id
+}
+
+output "aws_route53_record_crc-dns-zone-ses-dmarc-record-CNAME_id" {
+  value = aws_route53_record.crc-dns-zone-ses-dmarc-record-TXT.id
+}
+
+output "aws_route53_record_crc-dns-zone-record-A_id" {
+  value = aws_route53_record.crc-dns-zone-record-A.id
+}
+
+output "aws_route53_record_crc-dns-zone-www-record-A_id" {
+  value = aws_route53_record.crc-dns-zone-www-record-A.id
 }
 
 output "aws_route53_record_crc-dns-zone-staging-record-A_id" {
   value = aws_route53_record.crc-dns-zone-staging-record-A.id
 }
-
-
-output "aws_route53_record_crc-Z03405071SXF625TZSK71_nngjyxusg7376yfuxcrx6h6p4ljavsru-002E-_domainkey-002E-cloudresume-agb-002E-jp-002E-_CNAME__id" {
-  value = aws_route53_record.crc-Z03405071SXF625TZSK71_nngjyxusg7376yfuxcrx6h6p4ljavsru-002E-_domainkey-002E-cloudresume-agb-002E-jp-002E-_CNAME_.id
-}
-
-output "aws_route53_record_crc-Z03405071SXF625TZSK71_s2k3jbjkxqkzok5u2vxthw7gi5deossm-002E-_domainkey-002E-cloudresume-agb-002E-jp-002E-_CNAME__id" {
-  value = aws_route53_record.crc-Z03405071SXF625TZSK71_s2k3jbjkxqkzok5u2vxthw7gi5deossm-002E-_domainkey-002E-cloudresume-agb-002E-jp-002E-_CNAME_.id
-}
-
-output "aws_route53_record_crc-Z03405071SXF625TZSK71_7lmgms2aww5lulqi3rmfffwqocwkmjck-002E-_domainkey-002E-cloudresume-agb-002E-jp-002E-_CNAME__id" {
-  value = aws_route53_record.crc-Z03405071SXF625TZSK71_7lmgms2aww5lulqi3rmfffwqocwkmjck-002E-_domainkey-002E-cloudresume-agb-002E-jp-002E-_CNAME_.id
-}
-
-output "aws_route53_record_crc-Z03405071SXF625TZSK71__dmarc-002E-cloudresume-agb-002E-jp-002E-_TXT__id" {
-  value = aws_route53_record.crc-Z03405071SXF625TZSK71__dmarc-002E-cloudresume-agb-002E-jp-002E-_TXT_.id
-}
-
 
 
 
