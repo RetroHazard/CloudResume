@@ -48,54 +48,392 @@ variable "tags" {
   }
 }
 
+module "frontend" {
+  source = "./modules/frontend"
 
-# Begin Modules for ap-northeast-1
-module "ap-northeast-1_api_gateway" {
-  source = "./modules/region/ap-northeast-1/api_gateway"
+  account_id  = data.aws_caller_identity.current.account_id
+  caller_arn  = data.aws_caller_identity.current.arn
+  caller_user = data.aws_caller_identity.current.user_id
+  }
+
+module "backend" {
+  source = "./modules/backend"
+
+  account_id  = data.aws_caller_identity.current.account_id
+  caller_arn  = data.aws_caller_identity.current.arn
+  caller_user = data.aws_caller_identity.current.user_id
+  }
+
+
+##########################
+# Begin Core IAM Resources
+
+// IAM Policies
+resource "aws_iam_policy" "crc-Lambda-TrackVisitors-AccessPolicy" {
+  name = "crc-Lambda-TrackVisitors-AccessPolicy"
+  path = "/"
+
+  policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": [
+        "dynamodb:PutItem",
+        "dynamodb:GetItem",
+        "dynamodb:UpdateItem"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:dynamodb:ap-northeast-1:${data.aws_caller_identity.current.account_id}:table/crc-visitor-count",
+        "arn:aws:dynamodb:ap-northeast-1:${data.aws_caller_identity.current.account_id}:table/crc-visitor-record"
+      ],
+      "Sid": "VisualEditor0"
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
 }
 
-module "ap-northeast-1_dynamodb" {
-  source = "./modules/region/ap-northeast-1/dynamodb"
+resource "aws_iam_policy" "crc-Lambda-TrackVisitors-Logging" {
+  name = "crc-Lambda-TrackVisitors-Logging"
+  path = "/"
+
+  policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/trackVisitors:*"
+      ],
+      "Sid": "Statement1"
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
+  tags = {
+    Name    = "TrackVisitors_Logger"
+    Project = "CloudResume"
+  }
+
+  tags_all = {
+    Name    = "TrackVisitors_Logger"
+    Project = "CloudResume"
+  }
 }
 
-module "ap-northeast-1_lambda" {
-  source = "./modules/region/ap-northeast-1/lambda"
+resource "aws_iam_policy" "crc-Lambda-CloudFrontInvalidation-AccessPolicy" {
+  name = "crc-CloudFrontInvalidation-AccessPolicy"
+  path = "/"
+
+  policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": [
+        "cloudfront:CreateInvalidation",
+        "cloudfront:GetInvalidation",
+        "cloudfront:ListInvalidations"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/ESAPTUQ4RL7CE",
+        "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/E37NSQHT5FF2XS"
+      ],
+      "Sid": "Stmt1505004397098"
+    },
+    {
+      "Action": [
+        "s3:Get*",
+        "s3:List*"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::agb-s3-cloudresumechallenge-hosted",
+        "arn:aws:s3:::agb-s3-cloudresumechallenge-hosted/*",
+        "arn:aws:s3:::agb-s3-cloudresumechallenge-staging",
+        "arn:aws:s3:::agb-s3-cloudresumechallenge-staging/*"
+      ]
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
 }
 
-module "ap-northeast-1_s3" {
-  source = "./modules/region/ap-northeast-1/s3"
+resource "aws_iam_policy" "crc-Lambda-CloudFrontInvalidation-Logging" {
+  name = "crc-Lambda-CloudFrontInvalidation-Logging"
+  path = "/"
+
+  policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/cloudfrontInvalidation:*"
+      ],
+      "Sid": "Statement1"
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
 }
 
-module "ap-northeast-1_ses" {
-  source = "./modules/region/ap-northeast-1/ses"
+resource "aws_iam_policy" "crc-Lambda-SendMessage-AccessPolicy" {
+  name = "crc-Lambda-SendMessage-AccessPolicy"
+  path = "/"
+
+  policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": [
+        "ses:SendEmail",
+        "ses:SendTemplatedEmail",
+        "ses:SendRawEmail"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:ses:ap-northeast-1:${data.aws_caller_identity.current.account_id}:configuration-set/ContactFormMailer",
+        "arn:aws:ses:ap-northeast-1:${data.aws_caller_identity.current.account_id}:identity/a.bracken87+cloudresume_ses@gmail.com",
+        "arn:aws:ses:ap-northeast-1:${data.aws_caller_identity.current.account_id}:identity/cloudresume-agb.jp"
+      ],
+      "Sid": "VisualEditor0"
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
+  tags = {
+    Name    = "SESSendPolicy"
+    Project = "CloudResume"
+  }
+
+  tags_all = {
+    Name    = "SESSendPolicy"
+    Project = "CloudResume"
+  }
 }
 
-module "ap-northeast-1_sqs" {
-  source = "./modules/region/ap-northeast-1/sqs"
+resource "aws_iam_policy" "crc-Lambda-SendMessage-Logging" {
+  name = "crc-Lambda-SendMessage-Logging"
+  path = "/"
+
+  policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/sendMessage:*"
+      ],
+      "Sid": "Statement1"
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
+  tags = {
+    Name    = "SendMessage_Logger"
+    Project = "CloudResume"
+  }
+
+  tags_all = {
+    Name    = "SendMessage_Logger"
+    Project = "CloudResume"
+  }
 }
 
-# Begin Modules for us-east-1
-module "us-east-1_acm" {
-  source = "./modules/region/us-east-1/acm"
+resource "aws_iam_policy" "crc-Lambda-LoggingRights" {
+  name = "crc-Lambda-LoggingRights"
+  path = "/"
+
+  policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": "logs:CreateLogGroup",
+      "Effect": "Allow",
+      "Resource": "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:*"
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
 }
 
-module "us-east-1_kms" {
-  source = "./modules/region/us-east-1/kms"
+resource "aws_iam_policy" "crc-S3-GitHubActions" {
+  name = "crc-S3-GitHubActions"
+  path = "/"
+
+  policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": "s3:*",
+      "Effect": "Allow",
+      "Resource": [
+        "${module.frontend.}"
+        "arn:aws:s3:::agb-s3-cloudresumechallenge-hosted",
+        "arn:aws:s3:::agb-s3-cloudresumechallenge-hosted/*",
+        "arn:aws:s3:::agb-s3-cloudresumechallenge-staging",
+        "arn:aws:s3:::agb-s3-cloudresumechallenge-staging/*"
+      ],
+      "Sid": "VisualEditor1"
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
 }
 
-module "us-east-1_wafv2_cloudfront" {
-  source = "./modules/region/us-east-1/wafv2_cloudfront"
+
+
+// IAM Roles
+resource "aws_iam_role" "crc-CloudResume_API_CloudWatchLogs" {
+  assume_role_policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "apigateway.amazonaws.com"
+      },
+      "Sid": ""
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
+  description          = "Allows API Gateway to push logs to CloudWatch Logs."
+  managed_policy_arns  = ["arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"]
+  max_session_duration = "3600"
+  name                 = "CloudResume_API_CloudWatchLogs"
+  path                 = "/"
 }
 
-# Begin Modules for Global Zone
-module "global_cloudfront" {
-  source = "./modules/region/global/cloudfront"
+resource "aws_iam_role" "crc-CloudResume_CloudFrontManager" {
+  assume_role_policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      }
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
+  managed_policy_arns  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_CloudFrontInvalidation", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaBasicLoggingRights", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaLogging_CloudFrontInvalidator", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/service-role/AWSLambdaTracerAccessExecutionRole-6d76afb3-0381-49c5-9c2f-dd57dc56dac5", "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy"]
+  max_session_duration = "3600"
+  name                 = "CloudResume_CloudFrontManager"
+  path                 = "/service-role/"
+
 }
 
-module "global_iam" {
-  source = "./modules/region/global/iam"
+resource "aws_iam_role" "crc-CloudResume_SendMessage" {
+  assume_role_policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      }
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
+  description          = "Allows Lambda functions to call AWS services on your behalf."
+  managed_policy_arns  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaBasicLoggingRights", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaEmailSendPolicy", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaLogging_SendMessage", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/service-role/AWSLambdaTracerAccessExecutionRole-04c4257a-4904-4246-84c8-542bb9418cbf", "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy"]
+  max_session_duration = "3600"
+  name                 = "CloudResume_SendMessage"
+  path                 = "/"
+
 }
 
-module "global_route53" {
-  source = "./modules/region/global/route53"
+resource "aws_iam_role" "crc-CloudResume_TrackVisitors" {
+  assume_role_policy = <<POLICY
+{
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "lambda.amazonaws.com"
+      }
+    }
+  ],
+  "Version": "2012-10-17"
+}
+POLICY
+
+  description          = "Allows Lambda functions to call AWS services on your behalf."
+  managed_policy_arns  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaBasicLoggingRights", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaLogging_TrackVisitors", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_Lambda_DBUpdater", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/service-role/AWSLambdaTracerAccessExecutionRole-26787255-679b-481d-b2fa-243b20da804a", "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy"]
+  max_session_duration = "3600"
+  name                 = "CloudResume_TrackVisitors"
+  path                 = "/"
+
+}
+
+
+// IAM Users
+resource "aws_iam_user" "crc-AIDAU6GDWXXXKJN63YR22" {
+  force_destroy = "false"
+  name          = "CloudResume_TerraformOrchestrator"
+  path          = "/"
+
+  tags = {
+    AKIAU6GDWXXXBYZHQLUN = "Administrative Control for Terraform"
+  }
+
+  tags_all = {
+    AKIAU6GDWXXXBYZHQLUN = "Administrative Control for Terraform"
+  }
+}
+
+resource "aws_iam_user" "crc-AIDAU6GDWXXXMWUJTXQ36" {
+  force_destroy = "false"
+  name          = "CloudResume_GitHubS3"
+  path          = "/"
+
+  tags = {
+    AKIAU6GDWXXXLB5RWJNB = "GitHub Actions Push to S3"
+  }
+
+  tags_all = {
+    AKIAU6GDWXXXLB5RWJNB = "GitHub Actions Push to S3"
+  }
 }
