@@ -149,15 +149,120 @@ output "aws_route53_record_crc-dns-zone-staging-record-A_id" {
   value = aws_route53_record.crc-dns-zone-staging-record-A.id
 }
 
-
-
-
-
-
-
-
-
-
-
 #  End Route53 Block  #
 #######################
+
+
+###########################
+# Begin API Gateway Block #
+
+output "aws_api_gateway_rest_api_crc-rest-api_id" {
+  value = aws_api_gateway_rest_api.crc-rest-api.id
+}
+
+output "aws_api_gateway_deployment_crc-api-deployment_id" {
+  value = aws_api_gateway_deployment.crc-api-deployment.id
+}
+
+output "aws_api_gateway_stage_crc-api-stage_id" {
+  value = aws_api_gateway_stage.crc-api-stage.id
+}
+
+output "aws_api_gateway_resource_crc-api-resource_id" {
+  value = aws_api_gateway_resource.crc-api-resource.id
+}
+
+output "aws_api_gateway_resource_crc-api-resource-visitors_id" {
+  value = aws_api_gateway_resource.crc-api-resource-visitors.id
+}
+
+output "aws_api_gateway_resource_crc-api-resource-contact_id" {
+  value = aws_api_gateway_resource.crc-api-resource-contact.id
+}
+
+output "aws_api_gateway_request_validator_crc-api-param-validator" {
+  value = aws_api_gateway_request_validator.crc-api-param-validator.id
+}
+
+output "aws_api_gateway_gateway_response_crc-api-response-default-4XX_id" {
+  value = aws_api_gateway_gateway_response.crc-api-response-default-4XX.id
+}
+
+output "aws_api_gateway_gateway_response_crc-api-response-default-5XX_id" {
+  value = aws_api_gateway_gateway_response.crc-api-response-default-5XX.id
+}
+
+output "aws_api_gateway_integration_crc-api-visitors-get_id" {
+  value = aws_api_gateway_integration.crc-api-visitors-get.id
+}
+
+output "aws_api_gateway_integration_crc-api-visitors-options_id" {
+  value = aws_api_gateway_integration.crc-api-visitors-options.id
+}
+
+output "aws_api_gateway_integration_crc-cpi-contact-options_id" {
+  value = aws_api_gateway_integration.crc-cpi-contact-options.id
+}
+
+output "aws_api_gateway_integration_crc-api-contact-post_id" {
+  value = aws_api_gateway_integration.crc-api-contact-post.id
+}
+
+output "aws_api_gateway_integration_response_crc-api-visitors-get_id" {
+  value = aws_api_gateway_integration_response.crc-api-visitors-get.id
+}
+
+output "aws_api_gateway_integration_response_crc-api-visitors-options_id" {
+  value = aws_api_gateway_integration_response.crc-api-visitors-options.id
+}
+
+output "aws_api_gateway_integration_response_crc-api-contact-options_id" {
+  value = aws_api_gateway_integration_response.crc-api-contact-options.id
+}
+
+output "aws_api_gateway_integration_response_crc-api-contact-post_id" {
+  value = aws_api_gateway_integration_response.crc-api-contact-post.id
+}
+
+output "aws_api_gateway_method_crc-api-visitors-get_id" {
+  value = aws_api_gateway_method.crc-api-visitors-get.id
+}
+
+output "aws_api_gateway_method_crc-api-visitors-options_id" {
+  value = aws_api_gateway_method.crc-api-visitors-options.id
+}
+
+output "aws_api_gateway_method_crc-api-contact-options_id" {
+  value = aws_api_gateway_method.crc-api-contact-options.id
+}
+
+output "aws_api_gateway_method_crc-api-contact-post_id" {
+  value = aws_api_gateway_method.crc-api-contact-post.id
+}
+
+output "aws_api_gateway_method_response_crc-api-visitors-get_id" {
+  value = aws_api_gateway_method_response.crc-api-visitors-get.id
+}
+
+output "aws_api_gateway_method_response_crc-api-visitors-options_id" {
+  value = aws_api_gateway_method_response.crc-api-visitors-options.id
+}
+
+output "aws_api_gateway_method_response_crc-api-contact-options_id" {
+  value = aws_api_gateway_method_response.crc-api-contact-options.id
+}
+
+output "aws_api_gateway_method_response_crc-api-contact-post_id" {
+  value = aws_api_gateway_method_response.crc-api-contact-post.id
+}
+
+output "aws_api_gateway_model_crc-api-default-empty-model_id" {
+  value = aws_api_gateway_model.crc-api-default-empty-model.id
+}
+
+output "aws_api_gateway_model_crc-api-default-error-model_id" {
+  value = aws_api_gateway_model.crc-api-default-error-model.id
+}
+
+#  End API Gateway Block  #
+###########################
