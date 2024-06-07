@@ -360,19 +360,204 @@ resource "aws_acm_certificate" "crc-website-certificate" {
 # Begin Key Manager Block #
 
 resource "aws_kms_alias" "crc-dnssec-key" {
+  provider = aws.us-east-1
   name          = "alias/cloudresume_dnssec"
   target_key_id = aws_kms_key.crc-dnssec-key.key_id
 }
 
 resource "aws_kms_key" "crc-dnssec-key" {
+  provider = aws.us-east-1
+
   customer_master_key_spec = "ECC_NIST_P256"
   description              = "Keys used for the purpose of signing DNSSEC"
   enable_key_rotation      = "false"
   is_enabled               = "true"
   key_usage                = "SIGN_VERIFY"
   multi_region             = "false"
-  policy                   = "{\"Id\":\"key-consolepolicy-3\",\"Statement\":[{\"Action\":\"kms:*\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::${data.aws_caller_identity.current.account_id}:root\"},\"Resource\":\"*\",\"Sid\":\"Enable IAM User Permissions\"},{\"Action\":[\"kms:Create*\",\"kms:Describe*\",\"kms:Enable*\",\"kms:List*\",\"kms:Put*\",\"kms:Update*\",\"kms:Revoke*\",\"kms:Disable*\",\"kms:Get*\",\"kms:Delete*\",\"kms:TagResource\",\"kms:UntagResource\",\"kms:ScheduleKeyDeletion\",\"kms:CancelKeyDeletion\"],\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"AROAU6GDWXXXGJELQFKUD\"},\"Resource\":\"*\",\"Sid\":\"Allow access for Key Administrators\"},{\"Action\":[\"kms:DescribeKey\",\"kms:GetPublicKey\",\"kms:Sign\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"dnssec-route53.amazonaws.com\"},\"Resource\":\"*\",\"Sid\":\"Allow Route 53 DNSSEC Service\"},{\"Action\":\"kms:CreateGrant\",\"Condition\":{\"Bool\":{\"kms:GrantIsForAWSResource\":\"true\"}},\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"dnssec-route53.amazonaws.com\"},\"Resource\":\"*\",\"Sid\":\"Allow Route 53 DNSSEC to CreateGrant\"}],\"Version\":\"2012-10-17\"}"
+  policy = jsonencode({
+    Statement = [
+      {
+        Action = [
+          "kms:DescribeKey",
+          "kms:GetPublicKey",
+          "kms:Sign",
+        ],
+        Effect = "Allow"
+        Principal = {
+          Service = "dnssec-route53.amazonaws.com"
+        }
+        Sid      = "Allow Route 53 DNSSEC Service",
+        Resource = "*"
+      },
+      {
+        Action = "kms:CreateGrant",
+        Effect = "Allow"
+        Principal = {
+          Service = "dnssec-route53.amazonaws.com"
+        }
+        Sid      = "Allow Route 53 DNSSEC Service to CreateGrant",
+        Resource = "*"
+        Condition = {
+          Bool = {
+            "kms:GrantIsForAWSResource" = "true"
+          }
+        }
+      },
+      {
+        Action = "kms:*"
+        Effect = "Allow"
+        Principal = {
+          AWS = "*"
+        }
+        Resource = "*"
+        Sid      = "IAM User Permissions"
+      },
+    ]
+    Version = "2012-10-17"
+  })
 }
 
 #  End Key Manager Block  #
 ###########################
+
+
+#######################
+# Begin Route53 Block #
+
+data "aws_route53_zone" "crc-hosted-zone" {
+  name = "cloudresume-agb.jp"
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_7lmgms2aww5lulqi3rmfffwqocwkmjck-002E-_domainkey-002E-cloudresume-agb-002E-jp-002E-_CNAME_" {
+  name                             = "7lmgms2aww5lulqi3rmfffwqocwkmjck._domainkey.cloudresume-agb.jp"
+  records                          = ["7lmgms2aww5lulqi3rmfffwqocwkmjck.dkim.amazonses.com"]
+  ttl                              = "300"
+  type                             = "CNAME"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71__dmarc-002E-cloudresume-agb-002E-jp-002E-_TXT_" {
+  name                             = "_dmarc.cloudresume-agb.jp"
+  records                          = ["v=DMARC1; p=none;"]
+  ttl                              = "300"
+  type                             = "TXT"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_api-002E-cloudresume-agb-002E-jp-002E-_A_" {
+  alias {
+    evaluate_target_health = "false"
+    name                   = "d9zhaw4xflnb4.cloudfront.net"
+    zone_id                = "Z2FDTNDATAQYW2"
+  }
+
+  name                             = "api.cloudresume-agb.jp"
+  type                             = "A"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_cloudresume-agb-002E-jp-002E-_A_" {
+  alias {
+    evaluate_target_health = "false"
+    name                   = aws_cloudfront_distribution.crc-cf-production-distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.crc-cf-production-distribution.hosted_zone_id
+  }
+
+  name                             = "cloudresume-agb.jp"
+  type                             = "A"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_cloudresume-agb-002E-jp-002E-_NS_" {
+  name                             = "cloudresume-agb.jp"
+  records                          = ["ns-1451.awsdns-53.org.", "ns-1674.awsdns-17.co.uk.", "ns-237.awsdns-29.com.", "ns-541.awsdns-03.net."]
+  ttl                              = "172800"
+  type                             = "NS"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_cloudresume-agb-002E-jp-002E-_SOA_" {
+  name                             = "cloudresume-agb.jp"
+  records                          = ["ns-541.awsdns-03.net. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"]
+  ttl                              = "900"
+  type                             = "SOA"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_contact-002E-cloudresume-agb-002E-jp-002E-_MX_" {
+  name                             = "contact.cloudresume-agb.jp"
+  records                          = ["10 feedback-smtp.ap-northeast-1.amazonses.com"]
+  ttl                              = "300"
+  type                             = "MX"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_contact-002E-cloudresume-agb-002E-jp-002E-_TXT_" {
+  name                             = "contact.cloudresume-agb.jp"
+  records                          = ["v=spf1 include:amazonses.com ~all"]
+  ttl                              = "300"
+  type                             = "TXT"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_nngjyxusg7376yfuxcrx6h6p4ljavsru-002E-_domainkey-002E-cloudresume-agb-002E-jp-002E-_CNAME_" {
+  name                             = "nngjyxusg7376yfuxcrx6h6p4ljavsru._domainkey.cloudresume-agb.jp"
+  records                          = ["nngjyxusg7376yfuxcrx6h6p4ljavsru.dkim.amazonses.com"]
+  ttl                              = "300"
+  type                             = "CNAME"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_s2k3jbjkxqkzok5u2vxthw7gi5deossm-002E-_domainkey-002E-cloudresume-agb-002E-jp-002E-_CNAME_" {
+  name                             = "s2k3jbjkxqkzok5u2vxthw7gi5deossm._domainkey.cloudresume-agb.jp"
+  records                          = ["s2k3jbjkxqkzok5u2vxthw7gi5deossm.dkim.amazonses.com"]
+  ttl                              = "300"
+  type                             = "CNAME"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_staging-002E-cloudresume-agb-002E-jp-002E-_A_" {
+  alias {
+    evaluate_target_health = "false"
+    name                   = aws_cloudfront_distribution.crc-cf-staging-distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.crc-cf-staging-distribution.hosted_zone_id
+  }
+
+  name                             = "staging.cloudresume-agb.jp"
+  type                             = "A"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_record" "crc-Z03405071SXF625TZSK71_www-002E-cloudresume-agb-002E-jp-002E-_A_" {
+  alias {
+    evaluate_target_health = "false"
+    name                   = "dwjelrheir4cw.cloudfront.net"
+    zone_id                = "Z2FDTNDATAQYW2"
+  }
+
+  name                             = "www.cloudresume-agb.jp"
+  type                             = "A"
+  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_route53_zone" "crc-hosted-zone" {
+  comment       = "Hosted Zone for Cloud Resume Project\nDomain Registered via onamae.com"
+  force_destroy = "false"
+  name          = "cloudresume-agb.jp"
+}
+
+resource "aws_route53_key_signing_key" "dnssecksk" {
+  name = "cloudresume-agb.jp"
+  hosted_zone_id = data.aws_route53_zone.crc-hosted-zone.id
+  key_management_service_arn = aws_kms_key.crc-dnssec-key.arn
+}
+
+resource "aws_route53_hosted_zone_dnssec" "crc-hosted-zone" {
+  depends_on = [
+    aws_route53_key_signing_key.dnssecksk
+  ]
+  hosted_zone_id = aws_route53_key_signing_key.dnssecksk.hosted_zone_id
+}
+
+#  End Route53 Block  #
+#######################

@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 variable "account_id" {
   type = string
 }
