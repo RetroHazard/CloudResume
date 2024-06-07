@@ -2,8 +2,6 @@
 # Cloud Resume - Front End Components #
 #######################################
 
-provider "random" {}
-
 resource "random_string" "bucket_suffix" {
   length = 6
   special = false
@@ -46,7 +44,7 @@ resource "aws_s3_bucket_logging" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
 
   target_bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
-  target_prefix = "crc_prod_access_log/"
+  target_prefix = "crc_access_log-prod/"
 }
 
 resource "aws_s3_bucket_versioning" "crc-agb-s3-website-prod" {
@@ -103,7 +101,7 @@ resource "aws_s3_bucket_logging" "crc-agb-s3-website-staging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
 
   target_bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
-  target_prefix = "crc_stage_access_log/"
+  target_prefix = "crc_access_log-stage/"
 }
 
 resource "aws_s3_bucket_versioning" "crc-agb-s3-website-staging" {
@@ -239,13 +237,13 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   retain_on_delete = "false"
   staging          = "false"
 
-  viewer_certificate { // todo: get arn from terraform
-    acm_certificate_arn            = "arn:aws:acm:us-east-1:${data.aws_caller_identity.current.account_id}:certificate/d2c204b7-bb92-437a-b2d8-a9dcd55aea97"
+  viewer_certificate {
+    acm_certificate_arn            = aws_acm_certificate.crc-website-certificate.arn
     cloudfront_default_certificate = "false"
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
   }
-
+// TODO Update WAF ARN
   web_acl_id = "arn:aws:wafv2:us-east-1:${data.aws_caller_identity.current.account_id}:global/webacl/CloudResume-WebACL/c38b9d17-1bdf-4d05-ad66-edee4866bbbc"
 }
 
@@ -264,7 +262,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.crc-StagingAuthorization.arn
     }
-// todo: get bucket from terraform
+
     max_ttl                = "0"
     min_ttl                = "0"
     smooth_streaming       = "false"
@@ -275,7 +273,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
   enabled         = "true"
   http_version    = "http2"
   is_ipv6_enabled = "true"
-// todo: get bucket from terraform
+
   logging_config {
     bucket          = aws_s3_bucket.crc-agb-s3-website-staging.bucket_domain_name
     include_cookies = "false"
@@ -315,13 +313,13 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
   retain_on_delete = "false"
   staging          = "false"
 
-  viewer_certificate { // TODO: Update ARN
-    acm_certificate_arn            = "arn:aws:acm:us-east-1:${data.aws_caller_identity.current.account_id}:certificate/d2c204b7-bb92-437a-b2d8-a9dcd55aea97"
+  viewer_certificate {
+    acm_certificate_arn            = aws_acm_certificate.crc-website-certificate.arn
     cloudfront_default_certificate = "false"
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
   }
-
+// TODO Update WAF ARN
   web_acl_id = "arn:aws:wafv2:us-east-1:${data.aws_caller_identity.current.account_id}:global/webacl/CloudResume-WebACL/c38b9d17-1bdf-4d05-ad66-edee4866bbbc"
 }
 
@@ -335,3 +333,46 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 
 #  End CloudFront Block  #
 ##########################
+
+
+############################
+# Begin Certificates Block #
+
+resource "aws_acm_certificate" "crc-website-certificate" {
+  provider = aws.us-east-1
+  domain_name   = "*.cloudresume-agb.jp"
+  key_algorithm = "RSA_2048"
+
+  options {
+    certificate_transparency_logging_preference = "ENABLED"
+  }
+
+  subject_alternative_names = ["*.cloudresume-agb.jp"]
+
+  validation_method = "DNS"
+}
+
+#  End Certificates Block  #
+############################
+
+
+###########################
+# Begin Key Manager Block #
+
+resource "aws_kms_alias" "crc-dnssec-key" {
+  name          = "alias/cloudresume_dnssec"
+  target_key_id = aws_kms_key.crc-dnssec-key.key_id
+}
+
+resource "aws_kms_key" "crc-dnssec-key" {
+  customer_master_key_spec = "ECC_NIST_P256"
+  description              = "Keys used for the purpose of signing DNSSEC"
+  enable_key_rotation      = "false"
+  is_enabled               = "true"
+  key_usage                = "SIGN_VERIFY"
+  multi_region             = "false"
+  policy                   = "{\"Id\":\"key-consolepolicy-3\",\"Statement\":[{\"Action\":\"kms:*\",\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"arn:aws:iam::${data.aws_caller_identity.current.account_id}:root\"},\"Resource\":\"*\",\"Sid\":\"Enable IAM User Permissions\"},{\"Action\":[\"kms:Create*\",\"kms:Describe*\",\"kms:Enable*\",\"kms:List*\",\"kms:Put*\",\"kms:Update*\",\"kms:Revoke*\",\"kms:Disable*\",\"kms:Get*\",\"kms:Delete*\",\"kms:TagResource\",\"kms:UntagResource\",\"kms:ScheduleKeyDeletion\",\"kms:CancelKeyDeletion\"],\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"AROAU6GDWXXXGJELQFKUD\"},\"Resource\":\"*\",\"Sid\":\"Allow access for Key Administrators\"},{\"Action\":[\"kms:DescribeKey\",\"kms:GetPublicKey\",\"kms:Sign\"],\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"dnssec-route53.amazonaws.com\"},\"Resource\":\"*\",\"Sid\":\"Allow Route 53 DNSSEC Service\"},{\"Action\":\"kms:CreateGrant\",\"Condition\":{\"Bool\":{\"kms:GrantIsForAWSResource\":\"true\"}},\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"dnssec-route53.amazonaws.com\"},\"Resource\":\"*\",\"Sid\":\"Allow Route 53 DNSSEC to CreateGrant\"}],\"Version\":\"2012-10-17\"}"
+}
+
+#  End Key Manager Block  #
+###########################
