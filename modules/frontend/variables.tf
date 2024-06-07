@@ -9,3 +9,9 @@ variable "caller_arn" {
 variable "caller_user" {
   type = string
 }
+
+# Inputs from IAM
+
+
+
+# Inputs from Backend Module

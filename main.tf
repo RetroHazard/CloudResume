@@ -51,6 +51,10 @@ variable "tags" {
 module "frontend" {
   source = "./modules/frontend"
 
+  providers = {
+    aws = aws.ap-northeast-1
+  }
+
   account_id  = data.aws_caller_identity.current.account_id
   caller_arn  = data.aws_caller_identity.current.arn
   caller_user = data.aws_caller_identity.current.user_id
@@ -58,6 +62,10 @@ module "frontend" {
 
 module "backend" {
   source = "./modules/backend"
+
+  providers = {
+    aws = aws.ap-northeast-1
+  }
 
   account_id  = data.aws_caller_identity.current.account_id
   caller_arn  = data.aws_caller_identity.current.arn

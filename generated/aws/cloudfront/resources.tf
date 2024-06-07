@@ -315,7 +315,7 @@ resource "aws_cloudfront_distribution" "tfer--E37NSQHT5FF2XS" {
 
   default_cache_behavior {
     allowed_methods = ["GET", "HEAD"]
-    cache_policy_id = "${aws_cloudfront_cache_policy.tfer--658327ea-f89d-4fab-a63d-7e88639e58f6.id}"
+    cache_policy_id = aws_cloudfront_cache_policy.tfer--658327ea-f89d-4fab-a63d-7e88639e58f6.id
     cached_methods  = ["GET", "HEAD"]
     compress        = "true"
     default_ttl     = "0"

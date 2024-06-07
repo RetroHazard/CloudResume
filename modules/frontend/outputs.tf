@@ -1,3 +1,6 @@
+##################
+# Begin S3 Block #
+
 output "aws_s3_bucket_crc-agb-s3-website-prod" {
   value = [
     aws_s3_bucket.crc-agb-s3-website-prod.id,
@@ -24,3 +27,29 @@ output "aws_s3_bucket_crc-agb-s3-cloudresumechallenge-logging_id" {
 output "aws_s3_bucket_policy_crc-agb-s3-website-logging_id" {
   value = aws_s3_bucket_policy.crc-agb-s3-website-logging.id
 }
+
+#  End S3 Block  #
+##################
+
+
+##########################
+# Begin CloudFront Block #
+
+output "aws_cloudfront_cache_policy_crc-default-caching-policy_id" {
+  value = aws_cloudfront_cache_policy.crc-default-caching-policy.id
+}
+
+output "aws_cloudfront_distribution_crc-cf-production-distribution_id" {
+  value = aws_cloudfront_distribution.crc-cf-production-distribution.id
+}
+
+output "aws_cloudfront_distribution_crc-cf-staging-distribution_id" {
+  value = aws_cloudfront_distribution.crc-cf-staging-distribution.id
+}
+
+output "aws_cloudfront_function_crc-staging-authorization_arn" {
+  value = aws_cloudfront_function.crc-StagingAuthorization.arn
+}
+
+#  End CloudFront Block  #
+##########################

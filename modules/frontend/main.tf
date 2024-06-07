@@ -138,3 +138,200 @@ resource "aws_s3_bucket_policy" "crc-agb-s3-website-logging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
   policy = "{\"Statement\":[{\"Action\":\"s3:PutObject\",\"Condition\":{\"StringEquals\":{\"aws:SourceAccount\":\"${var.account_id}\"}},\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"logging.s3.amazonaws.com\"},\"Resource\":\"${aws_s3_bucket.crc-agb-s3-website-logging.arn}/*\",\"Sid\":\"S3PolicyStmt-DO-NOT-MODIFY-1716338986157\"}],\"Version\":\"2012-10-17\"}"
 }
+
+#  End S3 Block  #
+##################
+
+
+##########################
+# Begin CloudFront Block #
+
+resource "aws_cloudfront_cache_policy" "crc-default-caching-policy" {
+  comment     = "Policy with caching enabled. Supports Gzip and Brotli compression."
+  default_ttl = "86400"
+  max_ttl     = "31536000"
+  min_ttl     = "1"
+  name        = "Managed-CachingOptimized"
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    cookies_config {
+      cookie_behavior = "none"
+    }
+
+    enable_accept_encoding_brotli = "true"
+    enable_accept_encoding_gzip   = "true"
+
+    headers_config {
+      header_behavior = "none"
+    }
+
+    query_strings_config {
+      query_string_behavior = "none"
+    }
+  }
+}
+
+resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
+  aliases = ["*.cloudresume-agb.jp", "www.cloudresume-agb.jp"]
+  comment = "Production Distribution for Cloud Resume"
+
+  custom_error_response {
+    error_caching_min_ttl = "10"
+    error_code            = "403"
+    response_code         = "400"
+    response_page_path    = "/"
+  }
+
+  default_cache_behavior { // todo: get bucket from terraform
+    allowed_methods        = ["GET", "HEAD"]
+    cache_policy_id        = aws_cloudfront_cache_policy.crc-default-caching-policy.id
+    cached_methods         = ["GET", "HEAD"]
+    compress               = "true"
+    default_ttl            = "0"
+    max_ttl                = "0"
+    min_ttl                = "0"
+    smooth_streaming       = "false"
+    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-prod.website_endpoint
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  enabled         = "true"
+  http_version    = "http2"
+  is_ipv6_enabled = "false"
+
+  logging_config {
+    bucket          = aws_s3_bucket.crc-agb-s3-website-logging.website_domain
+    include_cookies = "false"
+    prefix          = "cf_crc_production/"
+  }
+
+  origin {
+    connection_attempts = "3"
+    connection_timeout  = "10"
+
+    custom_origin_config {
+      http_port                = "80"
+      https_port               = "443"
+      origin_keepalive_timeout = "5"
+      origin_protocol_policy   = "http-only"
+      origin_read_timeout      = "30"
+      origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
+    }
+
+    domain_name = aws_s3_bucket.crc-agb-s3-website-prod.bucket_domain_name
+    origin_id   = aws_s3_bucket.crc-agb-s3-website-prod.id
+
+    origin_shield {
+      enabled              = "true"
+      origin_shield_region = aws_s3_bucket.crc-agb-s3-website-prod.region
+    }
+  }
+
+
+  price_class = "PriceClass_All"
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  retain_on_delete = "false"
+  staging          = "false"
+
+  viewer_certificate { // todo: get arn from terraform
+    acm_certificate_arn            = "arn:aws:acm:us-east-1:${data.aws_caller_identity.current.account_id}:certificate/d2c204b7-bb92-437a-b2d8-a9dcd55aea97"
+    cloudfront_default_certificate = "false"
+    minimum_protocol_version       = "TLSv1.2_2021"
+    ssl_support_method             = "sni-only"
+  }
+
+  web_acl_id = "arn:aws:wafv2:us-east-1:${data.aws_caller_identity.current.account_id}:global/webacl/CloudResume-WebACL/c38b9d17-1bdf-4d05-ad66-edee4866bbbc"
+}
+
+resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
+  aliases = ["staging.cloudresume-agb.jp"]
+  comment = "Staging Distribution for Cloud Resume"
+
+  default_cache_behavior {
+    allowed_methods = ["GET", "HEAD"]
+    cache_policy_id = aws_cloudfront_cache_policy.crc-default-caching-policy.id
+    cached_methods  = ["GET", "HEAD"]
+    compress        = "true"
+    default_ttl     = "0"
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.crc-StagingAuthorization.arn
+    }
+// todo: get bucket from terraform
+    max_ttl                = "0"
+    min_ttl                = "0"
+    smooth_streaming       = "false"
+    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-staging.website_endpoint
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
+  enabled         = "true"
+  http_version    = "http2"
+  is_ipv6_enabled = "true"
+// todo: get bucket from terraform
+  logging_config {
+    bucket          = aws_s3_bucket.crc-agb-s3-website-staging.bucket_domain_name
+    include_cookies = "false"
+    prefix          = "cf_crc_staging/"
+  }
+
+  origin {
+    connection_attempts = "3"
+    connection_timeout  = "10"
+
+    custom_origin_config {
+      http_port                = "80"
+      https_port               = "443"
+      origin_keepalive_timeout = "5"
+      origin_protocol_policy   = "http-only"
+      origin_read_timeout      = "30"
+      origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
+    }
+
+    domain_name = aws_s3_bucket.crc-agb-s3-website-staging.bucket_domain_name
+    origin_id   = aws_s3_bucket.crc-agb-s3-website-staging.id
+
+    origin_shield {
+      enabled              = "true"
+      origin_shield_region = aws_s3_bucket.crc-agb-s3-website-staging.region
+    }
+  }
+
+  price_class = "PriceClass_All"
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  retain_on_delete = "false"
+  staging          = "false"
+
+  viewer_certificate { // TODO: Update ARN
+    acm_certificate_arn            = "arn:aws:acm:us-east-1:${data.aws_caller_identity.current.account_id}:certificate/d2c204b7-bb92-437a-b2d8-a9dcd55aea97"
+    cloudfront_default_certificate = "false"
+    minimum_protocol_version       = "TLSv1.2_2021"
+    ssl_support_method             = "sni-only"
+  }
+
+  web_acl_id = "arn:aws:wafv2:us-east-1:${data.aws_caller_identity.current.account_id}:global/webacl/CloudResume-WebACL/c38b9d17-1bdf-4d05-ad66-edee4866bbbc"
+}
+
+resource "aws_cloudfront_function" "crc-StagingAuthorization" {
+  name    = "StagingAuthorization"
+  runtime = "cloudfront-js-1.0"
+  comment = "Simple Authorization for Access to Staging Distribution"
+  publish = true
+  code    = file("${path.root}/codebase/stagingAuthorization.js")
+}
+
+#  End CloudFront Block  #
+##########################
