@@ -17,11 +17,7 @@ output "caller_user" {
 
 // IAM Policies
 output "aws_iam_policy_crc-Lambda-CloudFrontInvalidation-AccessPolicy" {
-  value = [
-    aws_iam_policy.crc-Lambda-CloudFrontInvalidation-AccessPolicy.id,
-    aws_iam_policy.crc-Lambda-CloudFrontInvalidation-AccessPolicy.arn,
-    aws_iam_policy.crc-Lambda-CloudFrontInvalidation-AccessPolicy.name
-  ]
+  value = aws_iam_policy.crc-Lambda-CloudFrontInvalidation-AccessPolicy.id
 }
 
 output "aws_iam_policy_crc-Lambda-CloudFrontInvalidation-Logging_id" {
