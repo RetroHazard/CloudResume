@@ -85,6 +85,13 @@
       "website": "https://tailwindcss.com"
     },
     {
+      "name": "Terraform",
+      "category": "Automation",
+      "level": "35%",
+      "logo": "devicon:terraform",
+      "website": "https://www.terraform.io/"
+    },
+    {
       "name": "Cypress",
       "category": "Automation",
       "level": "25%",
@@ -185,11 +192,6 @@
       "name": "Datadog",
       "logo": "simple-icons:datadog",
       "website": "https://www.datadoghq.com/"
-    },
-    {
-      "name": "Terraform",
-      "logo": "simple-icons:terraform",
-      "website": "https://www.terraform.io/"
     },
     {
       "name": "Ansible",
