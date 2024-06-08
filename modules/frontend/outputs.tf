@@ -25,7 +25,7 @@ output "aws_s3_bucket_policy_crc-agb-s3-website-staging_id" {
   value = aws_s3_bucket_policy.crc-agb-s3-website-staging.id
 }
 
-output "aws_s3_bucket_crc-agb-s3-cloudresumechallenge-logging_id" {
+output "aws_s3_bucket_crc-agb-s3-website-logging_id" {
   value = aws_s3_bucket.crc-agb-s3-website-logging.id
 }
 
