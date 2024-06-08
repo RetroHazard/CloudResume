@@ -228,14 +228,14 @@ resource "aws_sqs_queue" "crc-cloudfront-invalidation-queue" {
           ]
         },
         "StringEquals": {
-          "aws:SourceAccount": "${data.aws_caller_identity.current.account_id}"
+          "aws:SourceAccount": "${var.account_id}"
         }
       },
       "Effect": "Allow",
       "Principal": {
         "Service": "s3.amazonaws.com"
       },
-      "Resource": "arn:aws:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_sqs_queue.crc-cloudfront-invalidation-queue.name}",
+      "Resource": "${aws_sqs_queue.crc-cloudfront-invalidation-queue.arn}",
       "Sid": "Stmt1717463975055"
     },
     {
@@ -249,7 +249,7 @@ resource "aws_sqs_queue" "crc-cloudfront-invalidation-queue" {
       "Principal": {
         "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/service-role/CloudResume_CloudFrontManager"
       },
-      "Resource": "arn:aws:sqs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:${aws_sqs_queue.crc-cloudfront-invalidation-queue.name}",
+      "Resource": "${aws_sqs_queue.crc-cloudfront-invalidation-queue.arn}",
       "Sid": "Stmt1717464008331"
     }
   ],
@@ -416,20 +416,20 @@ resource "aws_lambda_permission" "crc-event-permissions-s3-production" {
   action         = "lambda:InvokeFunction"
   function_name  = aws_lambda_function.crc-cloudfrontInvalidation.function_name
   principal      = "s3.amazonaws.com"
-  source_account = "339712851438"
+  source_account = var.account_id
   source_arn     = "arn:aws:s3:::agb-s3-cloudresumechallenge-hosted"
-  statement_id   = "339712851438_event_permissions_from_agb-s3-cloudresumechallenge-hosted_for_cloudfrontInvalidation"
   //todo get bucket info from frontend
+  statement_id   = aws_lambda_permission.crc-event-permissions-s3-production.statement_id
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-s3-staging" {
   action         = "lambda:InvokeFunction"
   function_name  = aws_lambda_function.crc-cloudfrontInvalidation.function_name
   principal      = "s3.amazonaws.com"
-  source_account = "339712851438"
+  source_account = var.account_id
   source_arn     = "arn:aws:s3:::agb-s3-cloudresumechallenge-staging"
-  statement_id   = "339712851438_event_permissions_from_agb-s3-cloudresumechallenge-staging_for_cloudfrontInvalidation"
   //todo get bucket info from frontend
+  statement_id   = aws_lambda_permission.crc-event-permissions-s3-staging.statement_id
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-api-visitors" {
@@ -437,8 +437,8 @@ resource "aws_lambda_permission" "crc-event-permissions-api-visitors" {
   function_name = aws_lambda_function.crc-trackVisitors.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "arn:aws:execute-api:ap-northeast-1:339712851438:3nfq1o8esj/*/GET/visitors"
-  statement_id  = "6a15043e-cdf0-5fe5-9f60-2b632783e360"
   //todo get api info from frontend
+  statement_id  = aws_lambda_permission.crc-event-permissions-api-visitors.statement_id
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-api-contact" {
@@ -446,8 +446,8 @@ resource "aws_lambda_permission" "crc-event-permissions-api-contact" {
   function_name = aws_lambda_function.crc-sendMessage.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "arn:aws:execute-api:ap-northeast-1:339712851438:3nfq1o8esj/*/POST/contact"
-  statement_id  = "7fc9f8bc-795a-5281-8993-9ef519d4b046"
   //todo get api info from frontend
+  statement_id  = aws_lambda_permission.crc-event-permissions-api-contact.statement_id
 }
 
 #  End Lambda Block  #

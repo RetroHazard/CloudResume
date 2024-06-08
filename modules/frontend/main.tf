@@ -54,10 +54,23 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-prod" {
   }
 }
 
-resource "aws_s3_bucket_policy" "crc-agb-s3-website-prod" {
+resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
-  policy = "{\"Statement\":[{\"Action\":\"s3:GetObject\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"${aws_s3_bucket.crc-agb-s3-website-prod.arn}/*\",\"Sid\":\"PublicReadGetObject\"}],\"Version\":\"2012-10-17\"}"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid = "PublicReadGetObject"
+        Effect = "Allow"
+        Principal = "*"
+        Action = "s3:GetObject"
+        Resource = "${aws_s3_bucket.crc-agb-s3-website-prod.arn}/*"
+      }
+    ]
+  })
 }
+
 
 resource "aws_s3_bucket_website_configuration" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
@@ -113,7 +126,19 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-staging" {
 
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-  policy = "{\"Statement\":[{\"Action\":\"s3:GetObject\",\"Effect\":\"Allow\",\"Principal\":\"*\",\"Resource\":\"${aws_s3_bucket.crc-agb-s3-website-staging.arn}/*\",\"Sid\":\"PublicReadGetObject\"}],\"Version\":\"2012-10-17\"}"
+  
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid = "PublicReadGetObject"
+        Effect = "Allow"
+        Principal = "*"
+        Action = "s3:GetObject"
+        Resource = "${aws_s3_bucket.crc-agb-s3-website-staging.arn}/*"
+      }
+    ]
+  })
 }
 
 resource "aws_s3_bucket_website_configuration" "crc-agb-s3-website-staging" {
@@ -134,7 +159,25 @@ resource "aws_s3_bucket" "crc-agb-s3-website-logging" {
 
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-logging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
-  policy = "{\"Statement\":[{\"Action\":\"s3:PutObject\",\"Condition\":{\"StringEquals\":{\"aws:SourceAccount\":\"${var.account_id}\"}},\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"logging.s3.amazonaws.com\"},\"Resource\":\"${aws_s3_bucket.crc-agb-s3-website-logging.arn}/*\",\"Sid\":\"S3PolicyStmt-DO-NOT-MODIFY-1716338986157\"}],\"Version\":\"2012-10-17\"}"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Sid = "S3PolicyStmt-DO-NOT-MODIFY"
+        Effect = "Allow"
+        Principal = {
+          Service = "logging.s3.amazonaws.com"
+        }
+        Action = "s3:PutObject"
+        Resource = "${aws_s3_bucket.crc-agb-s3-website-logging.arn}/*"
+        Condition = {
+          StringEquals = {
+            "aws:SourceAccount" = var.account_id
+          }
+        }
+      }
+    ]
+  })
 }
 
 #  End S3 Block  #
@@ -170,7 +213,7 @@ resource "aws_cloudfront_cache_policy" "crc-default-caching-policy" {
 }
 
 resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
-  aliases = ["*.cloudresume-agb.jp", "www.cloudresume-agb.jp"]
+  aliases = ["*.${data.aws_route53_zone.crc-domain-name}", "www.${data.aws_route53_zone.crc-domain-name}"]
   comment = "Production Distribution for Cloud Resume"
 
   custom_error_response {
@@ -180,7 +223,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     response_page_path    = "/"
   }
 
-  default_cache_behavior { // todo: get bucket from terraform
+  default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cache_policy_id        = aws_cloudfront_cache_policy.crc-default-caching-policy.id
     cached_methods         = ["GET", "HEAD"]
@@ -248,7 +291,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
 }
 
 resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
-  aliases = ["staging.cloudresume-agb.jp"]
+  aliases = ["staging.${data.aws_route53_zone.crc-domain-name}"]
   comment = "Staging Distribution for Cloud Resume"
 
   default_cache_behavior {
@@ -340,14 +383,14 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 
 resource "aws_acm_certificate" "crc-website-certificate" {
   provider = aws.us-east-1
-  domain_name   = "*.cloudresume-agb.jp"
+  domain_name   = "*.${data.aws_route53_zone.crc-domain-name}"
   key_algorithm = "RSA_2048"
 
   options {
     certificate_transparency_logging_preference = "ENABLED"
   }
-
-  subject_alternative_names = ["*.cloudresume-agb.jp"]
+  
+  subject_alternative_names = ["*.${data.aws_route53_zone.crc-domain-name}"]
 
   validation_method = "DNS"
 }
@@ -425,11 +468,16 @@ resource "aws_kms_key" "crc-dnssec-key" {
 # Begin Route53 Block #
 
 data "aws_route53_zone" "crc-domain-name" {
+  //todo get domain from root
   name = "cloudresume-agb.jp"
 }
 
+data "aws_route53_zone" "crc-hosted-zone"{
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
 resource "aws_route53_zone" "crc-hosted-zone" {
-  comment       = "Hosted Zone for Cloud Resume Project\nDomain Registered via onamae.com"
+  comment       = "Hosted Zone for Cloud Resume Project"
   force_destroy = "false"
   name          = data.aws_route53_zone.crc-domain-name
 }
@@ -448,21 +496,21 @@ resource "aws_route53_hosted_zone_dnssec" "crc-hosted-zone" {
 }
 
 resource "aws_route53_record" "crc-dns-zone-core-record-NS" {
-  //todo Get correct NS Records from Route53
-  name                             = data.aws_route53_zone.crc-domain-name
-  records                          = ["ns-1451.awsdns-53.org.", "ns-1674.awsdns-17.co.uk.", "ns-237.awsdns-29.com.", "ns-541.awsdns-03.net."]
-  ttl                              = "172800"
-  type                             = "NS"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+  name    = data.aws_route53_zone.crc-hosted-zone.name
+  records = data.aws_route53_zone.crc-hosted-zone.name_servers
+  ttl     = "172800"
+  type    = "NS"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-core-record-SOA" {
-  //todo Get SOA from Route53
-  name                             = data.aws_route53_zone.crc-domain-name
-  records                          = ["ns-541.awsdns-03.net. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"]
-  ttl                              = "900"
-  type                             = "SOA"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+  name = data.aws_route53_zone.crc-hosted-zone.name
+  records = [
+    "${data.aws_route53_zone.crc-hosted-zone.name_servers[0]}. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
+  ]
+  ttl     = "900"
+  type    = "SOA"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-api-record-A" {
@@ -601,7 +649,7 @@ resource "aws_api_gateway_stage" "crc-api-stage" {
   cache_cluster_enabled = "false"
   deployment_id         = aws_api_gateway_deployment.crc-api-deployment.id
   rest_api_id           = aws_api_gateway_deployment.crc-api-deployment.rest_api_id
-  stage_name            = "v1"
+  stage_name            = aws_api_gateway_deployment.crc-api-deployment.stage_name
   xray_tracing_enabled  = "true"
 }
 
