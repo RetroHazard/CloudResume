@@ -180,10 +180,6 @@ output "aws_api_gateway_integration_crc-api-visitors-get_id" {
   value = aws_api_gateway_integration.crc-api-visitors-get.id
 }
 
-output "aws_api_gateway_integration_crc-api-visitors-get_id" {
-  value = aws_api_gateway_integration.crc-api-visitors-get.
-}
-
 output "aws_api_gateway_integration_crc-api-visitors-options_id" {
   value = aws_api_gateway_integration.crc-api-visitors-options.id
 }
