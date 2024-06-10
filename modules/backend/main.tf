@@ -182,14 +182,12 @@ resource "aws_ses_configuration_set" "crc-contact-mail" {
   sending_enabled            = "true"
 
   tracking_options {
-    //todo get domain from route53
-    custom_redirect_domain = "contact.cloudresume-agb.jp"
+    custom_redirect_domain = "contact.${var.domain-name}"
   }
 }
 
 resource "aws_ses_domain_identity" "crc-mail-domain" {
-  //todo get domain from Route53
-  domain = "cloudresume-agb.jp"
+  domain = var.domain-name
 }
 
 resource "aws_ses_email_identity" "crc-mail-destination" {
@@ -211,9 +209,6 @@ resource "aws_sqs_queue" "crc-cloudfront-invalidation-queue" {
   max_message_size                  = "262144"
   message_retention_seconds         = "345600"
   name                              = "CloudFrontInvalidationQueue"
-//todo get region in policy
-//todo get buckets in policy
-//todo get iam objects
   policy = <<POLICY
 {
   "Id": "Policy1717464010087",
@@ -223,8 +218,8 @@ resource "aws_sqs_queue" "crc-cloudfront-invalidation-queue" {
       "Condition": {
         "ArnLike": {
           "aws:SourceArn": [
-            "arn:aws:s3:::agb-s3-cloudresumechallenge-hosted",
-            "arn:aws:s3:::agb-s3-cloudresumechallenge-staging"
+            "${var.s3-bucket-production-arn}",
+            "${var.s3-bucket-staging-arn}"
           ]
         },
         "StringEquals": {
@@ -247,7 +242,7 @@ resource "aws_sqs_queue" "crc-cloudfront-invalidation-queue" {
       ],
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/service-role/CloudResume_CloudFrontManager"
+        "AWS": "${var.iam-role-cloudfront-manager-arn}"
       },
       "Resource": "${aws_sqs_queue.crc-cloudfront-invalidation-queue.arn}",
       "Sid": "Stmt1717464008331"
@@ -319,15 +314,10 @@ resource "aws_lambda_function" "crc-cloudfrontInvalidation" {
   filename                       = data.archive_file.cloudfrontInvalidation_lambda_function_code.output_path
   source_code_hash               = data.archive_file.cloudfrontInvalidation_lambda_function_code.output_base64sha256
   reserved_concurrent_executions = "-1"
-  //todo get role ARN from main
-  role                           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/service-role/CloudResume_CloudFrontManager"
+  role                           = var.iam-role-cloudfront-manager-arn
   runtime                        = "python3.12"
   skip_destroy                   = "false"
   timeout                        = "60"
-
-  tracing_config {
-    mode = "Active"
-  }
 }
 
 resource "aws_lambda_function" "crc-sendMessage" {
@@ -361,15 +351,10 @@ resource "aws_lambda_function" "crc-sendMessage" {
   filename                       = data.archive_file.sendMessage_lambda_function_code.output_path
   source_code_hash               = data.archive_file.sendMessage_lambda_function_code.output_base64sha256
   reserved_concurrent_executions = "-1"
-  //todo get role arn from main
-  role                           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/CloudResume_SendMessage"
+  role                           = var.iam-role-message-sender-arn
   runtime                        = "python3.12"
   skip_destroy                   = "false"
   timeout                        = "3"
-
-  tracing_config {
-    mode = "Active"
-  }
 }
 
 resource "aws_lambda_function" "crc-trackVisitors" {
@@ -401,15 +386,10 @@ resource "aws_lambda_function" "crc-trackVisitors" {
   filename                       = data.archive_file.trackvisitors_lambda_function_code.output_path
   source_code_hash               = data.archive_file.trackvisitors_lambda_function_code.output_base64sha256
   reserved_concurrent_executions = "-1"
-  //todo get role arn from main
-  role                           = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/CloudResume_TrackVisitors"
+  role                           = var.iam-role-visitor-tracker-arn
   runtime                        = "python3.12"
   skip_destroy                   = "false"
   timeout                        = "3"
-
-  tracing_config {
-    mode = "Active"
-  }
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-s3-production" {

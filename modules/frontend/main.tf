@@ -286,8 +286,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
   }
-// TODO Update WAF ARN
-  web_acl_id = "arn:aws:wafv2:us-east-1:${data.aws_caller_identity.current.account_id}:global/webacl/CloudResume-WebACL/c38b9d17-1bdf-4d05-ad66-edee4866bbbc"
+  web_acl_id = var.waf-acl-arn
 }
 
 resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
@@ -362,8 +361,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
   }
-// TODO Update WAF ARN
-  web_acl_id = "arn:aws:wafv2:us-east-1:${data.aws_caller_identity.current.account_id}:global/webacl/CloudResume-WebACL/c38b9d17-1bdf-4d05-ad66-edee4866bbbc"
+  web_acl_id = var.waf-acl-arn
 }
 
 resource "aws_cloudfront_function" "crc-StagingAuthorization" {
@@ -468,12 +466,19 @@ resource "aws_kms_key" "crc-dnssec-key" {
 # Begin Route53 Block #
 
 data "aws_route53_zone" "crc-domain-name" {
-  //todo get domain from root
-  name = "cloudresume-agb.jp"
+  name = var.domain-name
 }
 
 data "aws_route53_zone" "crc-hosted-zone"{
   zone_id = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
+resource "aws_ses_domain_identity" "crc-ses-domain-id" {
+  domain = var.domain-name
+}
+
+resource "aws_ses_domain_dkim" "crc-ses-domain-dkim" {
+  domain = aws_ses_domain_identity.crc-ses-domain-id.domain
 }
 
 resource "aws_route53_zone" "crc-hosted-zone" {
@@ -516,6 +521,7 @@ resource "aws_route53_record" "crc-dns-zone-core-record-SOA" {
 resource "aws_route53_record" "crc-dns-zone-api-record-A" {
   alias {
     evaluate_target_health = "false"
+    //todo get from api gateway
     name                   = "d9zhaw4xflnb4.cloudfront.net"
     zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
   }
@@ -543,40 +549,21 @@ resource "aws_route53_record" "crc-dns-zone-ses-record-TXT" {
   zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
-resource "aws_route53_record" "crc-dns-zone-ses-dkim-1-record-CNAME" {
-  //todo Get Data from SES
-  name                             = "nngjyxusg7376yfuxcrx6h6p4ljavsru._domainkey.cloudresume-agb.jp"
-  records                          = ["nngjyxusg7376yfuxcrx6h6p4ljavsru.dkim.amazonses.com"]
-  ttl                              = "300"
-  type                             = "CNAME"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
-}
-
-resource "aws_route53_record" "crc-dns-zone-ses-dkim-2-record-CNAME" {
-  //todo Get Data from SES
-  name                             = "s2k3jbjkxqkzok5u2vxthw7gi5deossm._domainkey.cloudresume-agb.jp"
-  records                          = ["s2k3jbjkxqkzok5u2vxthw7gi5deossm.dkim.amazonses.com"]
-  ttl                              = "300"
-  type                             = "CNAME"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
-}
-
-resource "aws_route53_record" "crc-dns-zone-ses-dkim-3-record-CNAME" {
-  //todo Get Data from SES
-  name                             = "7lmgms2aww5lulqi3rmfffwqocwkmjck._domainkey.cloudresume-agb.jp"
-  records                          = ["7lmgms2aww5lulqi3rmfffwqocwkmjck.dkim.amazonses.com"]
-  ttl                              = "300"
-  type                             = "CNAME"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+resource "aws_route53_record" "crc-dns-zone-ses-dkim-record-CNAME" {
+  count  = length(aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens)
+  name   = "${element(aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens, count.index)}._domainkey.${aws_ses_domain_identity.crc-ses-domain-id.domain}"
+  records = ["${element(aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens, count.index)}.dkim.amazonses.com"]
+  ttl    = "600"
+  type   = "CNAME"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-dmarc-record-TXT" {
-  //todo Get Data from SES
-  name                             = "_dmarc.cloudresume-agb.jp"
-  records                          = ["v=DMARC1; p=none;"]
-  ttl                              = "300"
-  type                             = "TXT"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+  name    = "_dmarc.${aws_ses_domain_identity.crc-ses-domain-id.domain}"
+  records = ["v=DMARC1; p=none;"]
+  ttl     = "300"
+  type    = "TXT"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-record-A" {
@@ -650,7 +637,6 @@ resource "aws_api_gateway_stage" "crc-api-stage" {
   deployment_id         = aws_api_gateway_deployment.crc-api-deployment.id
   rest_api_id           = aws_api_gateway_deployment.crc-api-deployment.rest_api_id
   stage_name            = aws_api_gateway_deployment.crc-api-deployment.stage_name
-  xray_tracing_enabled  = "true"
 }
 
 resource "aws_api_gateway_resource" "crc-api-resource" {
@@ -719,8 +705,7 @@ resource "aws_api_gateway_integration" "crc-api-visitors-get" {
   rest_api_id             = aws_api_gateway_rest_api.crc-rest-api.id
   timeout_milliseconds    = "29000"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:${data.aws_caller_identity.current.account_id}:function:trackVisitors/invocations"
-  //todo Get Lambda ARN
+  uri                     = var.api-lambda-visitors-uri
 }
 
 resource "aws_api_gateway_integration" "crc-api-visitors-options" {
@@ -766,8 +751,7 @@ resource "aws_api_gateway_integration" "crc-api-contact-post" {
   rest_api_id             = aws_api_gateway_rest_api.crc-rest-api.id
   timeout_milliseconds    = "29000"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:ap-northeast-1:lambda:path/2015-03-31/functions/arn:aws:lambda:ap-northeast-1:${data.aws_caller_identity.current.account_id}:function:sendMessage/invocations"
-  //todo Get Lambda ARN
+  uri                     = var.api-lambda-contact-uri
 }
 
 resource "aws_api_gateway_integration_response" "crc-api-visitors-get" {

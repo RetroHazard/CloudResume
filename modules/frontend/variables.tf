@@ -13,8 +13,24 @@ variable "caller_user" {
   type = string
 }
 
+variable "domain-name" {
+  type = string
+}
+
 # Inputs from IAM
 
 
 
 # Inputs from Backend Module
+
+variable "waf-acl-arn" {
+  type = string
+}
+
+variable "api-lambda-visitors-uri" {
+  type = string
+}
+
+variable "api-lambda-contact-uri" {
+  type = string
+}

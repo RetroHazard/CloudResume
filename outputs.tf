@@ -51,19 +51,19 @@ output "aws_iam_policy_crc-CloudResume_S3GitHubActions_id" {
 
 // IAM Roles
 output "aws_iam_role_crc-CloudResume_API_CloudWatchLogs_id" {
-  value = aws_iam_role.crc-CloudResume_API_CloudWatchLogs.id
+  value = aws_iam_role.crc-API-CloudWatchLogs.id
 }
 
 output "aws_iam_role_crc-CloudResume_CloudFrontManager_id" {
-  value = aws_iam_role.crc-CloudResume_CloudFrontManager.id
+  value = aws_iam_role.crc-CloudFrontManager.id
 }
 
 output "aws_iam_role_crc-CloudResume_SendMessage_id" {
-  value = aws_iam_role.crc-CloudResume_SendMessage.id
+  value = aws_iam_role.crc-MessageSender.id
 }
 
 output "aws_iam_role_crc-CloudResume_TrackVisitors_id" {
-  value = aws_iam_role.crc-CloudResume_TrackVisitors.id
+  value = aws_iam_role.crc-VisitorTracker.id
 }
 
 // IAM Users

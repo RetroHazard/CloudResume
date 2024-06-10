@@ -47,6 +47,11 @@ variable "tags" {
   }
 }
 
+variable "domain-name" {
+  type = string
+  default = "cloudresume-agb.jp"
+}
+
 module "frontend" {
   source = "./modules/frontend"
   
@@ -57,6 +62,13 @@ module "frontend" {
   account_id  = data.aws_caller_identity.current.account_id
   caller_arn  = data.aws_caller_identity.current.arn
   caller_user = data.aws_caller_identity.current.user_id
+  
+  domain-name = var.domain-name
+  
+  waf-acl-arn = module.backend.aws_wafv2_web_acl_crc-web-acl_arn
+  
+  api-lambda-contact-uri = module.backend.aws_lambda_function_crc-sendMessage_uri
+  api-lambda-visitors-uri = module.backend.aws_lambda_function_crc-trackVisitors_uri
   }
 
 module "backend" {
@@ -69,7 +81,16 @@ module "backend" {
   account_id  = data.aws_caller_identity.current.account_id
   caller_arn  = data.aws_caller_identity.current.arn
   caller_user = data.aws_caller_identity.current.user_id
-  }
+
+  domain-name = var.domain-name
+  
+  iam-role-cloudfront-manager-arn = aws_iam_role.crc-CloudFrontManager.arn
+  iam-role-message-sender-arn = aws_iam_role.crc-MessageSender.arn
+  iam-role-visitor-tracker-arn = aws_iam_role.crc-VisitorTracker.arn
+  
+  s3-bucket-production-arn = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_arn
+  s3-bucket-staging-arn = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_arn
+}
 
 
 ##########################
@@ -190,7 +211,7 @@ resource "aws_iam_policy" "crc-Lambda-CloudFrontInvalidation-Logging" {
       ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/cloudfrontInvalidation:*"
+        "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:${module.backend.aws_lambda_function_crc-cloudfrontInvalidation_log-group}:*"
       ],
       "Sid": "Statement1"
     }
@@ -319,7 +340,7 @@ POLICY
 
 
 // IAM Roles
-resource "aws_iam_role" "crc-CloudResume_API_CloudWatchLogs" {
+resource "aws_iam_role" "crc-API-CloudWatchLogs" {
   assume_role_policy = <<POLICY
 {
   "Statement": [
@@ -337,13 +358,15 @@ resource "aws_iam_role" "crc-CloudResume_API_CloudWatchLogs" {
 POLICY
 
   description          = "Allows API Gateway to push logs to CloudWatch Logs."
-  managed_policy_arns  = ["arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"]
+  managed_policy_arns  = [
+    "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+  ]
   max_session_duration = "3600"
   name                 = "CloudResume_API_CloudWatchLogs"
-  path                 = "/"
+  path                 = "/service-role/"
 }
 
-resource "aws_iam_role" "crc-CloudResume_CloudFrontManager" {
+resource "aws_iam_role" "crc-CloudFrontManager" {
   assume_role_policy = <<POLICY
 {
   "Statement": [
@@ -359,14 +382,18 @@ resource "aws_iam_role" "crc-CloudResume_CloudFrontManager" {
 }
 POLICY
 
-  managed_policy_arns  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_CloudFrontInvalidation", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaBasicLoggingRights", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaLogging_CloudFrontInvalidator", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/service-role/AWSLambdaTracerAccessExecutionRole-6d76afb3-0381-49c5-9c2f-dd57dc56dac5", "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy"]
+  managed_policy_arns  = [
+    aws_iam_policy.crc-Lambda-LoggingRights.arn, 
+    aws_iam_policy.crc-Lambda-CloudFrontInvalidation-AccessPolicy.arn, 
+    aws_iam_policy.crc-Lambda-CloudFrontInvalidation-Logging.arn
+    ]
   max_session_duration = "3600"
-  name                 = "CloudResume_CloudFrontManager"
+  name                 = "crc-CloudFrontManager"
   path                 = "/service-role/"
 
 }
 
-resource "aws_iam_role" "crc-CloudResume_SendMessage" {
+resource "aws_iam_role" "crc-MessageSender" {
   assume_role_policy = <<POLICY
 {
   "Statement": [
@@ -383,14 +410,18 @@ resource "aws_iam_role" "crc-CloudResume_SendMessage" {
 POLICY
 
   description          = "Allows Lambda functions to call AWS services on your behalf."
-  managed_policy_arns  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaBasicLoggingRights", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaEmailSendPolicy", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaLogging_SendMessage", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/service-role/AWSLambdaTracerAccessExecutionRole-04c4257a-4904-4246-84c8-542bb9418cbf", "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy"]
+  managed_policy_arns  = [
+    aws_iam_policy.crc-Lambda-LoggingRights.arn,
+    aws_iam_policy.crc-Lambda-SendMessage-AccessPolicy.arn,
+    aws_iam_policy.crc-Lambda-SendMessage-Logging.arn
+  ]
   max_session_duration = "3600"
-  name                 = "CloudResume_SendMessage"
-  path                 = "/"
+  name                 = "crc-MessageSender"
+  path                 = "/service-role/"
 
 }
 
-resource "aws_iam_role" "crc-CloudResume_TrackVisitors" {
+resource "aws_iam_role" "crc-VisitorTracker" {
   assume_role_policy = <<POLICY
 {
   "Statement": [
@@ -407,39 +438,13 @@ resource "aws_iam_role" "crc-CloudResume_TrackVisitors" {
 POLICY
 
   description          = "Allows Lambda functions to call AWS services on your behalf."
-  managed_policy_arns  = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaBasicLoggingRights", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_LambdaLogging_TrackVisitors", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/CloudResume_Lambda_DBUpdater", "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/service-role/AWSLambdaTracerAccessExecutionRole-26787255-679b-481d-b2fa-243b20da804a", "arn:aws:iam::aws:policy/CloudWatchLambdaInsightsExecutionRolePolicy"]
+  managed_policy_arns  = [
+    aws_iam_policy.crc-Lambda-LoggingRights.arn,
+    aws_iam_policy.crc-Lambda-TrackVisitors-AccessPolicy.arn,
+    aws_iam_policy.crc-Lambda-TrackVisitors-Logging.arn
+  ]
   max_session_duration = "3600"
-  name                 = "CloudResume_TrackVisitors"
-  path                 = "/"
+  name                 = "crc-VisitorTracker"
+  path                 = "/service-role/"
 
-}
-
-
-// IAM Users
-resource "aws_iam_user" "crc-AIDAU6GDWXXXKJN63YR22" {
-  force_destroy = "false"
-  name          = "CloudResume_TerraformOrchestrator"
-  path          = "/"
-
-  tags = {
-    AKIAU6GDWXXXBYZHQLUN = "Administrative Control for Terraform"
-  }
-
-  tags_all = {
-    AKIAU6GDWXXXBYZHQLUN = "Administrative Control for Terraform"
-  }
-}
-
-resource "aws_iam_user" "crc-AIDAU6GDWXXXMWUJTXQ36" {
-  force_destroy = "false"
-  name          = "CloudResume_GitHubS3"
-  path          = "/"
-
-  tags = {
-    AKIAU6GDWXXXLB5RWJNB = "GitHub Actions Push to S3"
-  }
-
-  tags_all = {
-    AKIAU6GDWXXXLB5RWJNB = "GitHub Actions Push to S3"
-  }
 }
