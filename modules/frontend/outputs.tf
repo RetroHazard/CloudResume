@@ -9,10 +9,6 @@ output "aws_s3_bucket_crc-agb-s3-website-prod_arn" {
   value = aws_s3_bucket.crc-agb-s3-website-prod.arn
 }
 
-output "aws_s3_bucket_policy_crc-agb-s3-website-prod_id" {
-  value = aws_s3_bucket_policy.crc-agb-s3-website-prod.id
-}
-
 output "aws_s3_bucket_crc-agb-s3-website-staging_id" {
   value = aws_s3_bucket.crc-agb-s3-website-staging.id
 }
@@ -121,18 +117,6 @@ output "aws_route53_record_crc-dns-zone-ses-record-TXT_id" {
   value = aws_route53_record.crc-dns-zone-ses-record-TXT.id
 }
 
-output "aws_route53_record_crc-dns-zone-ses-dkim-1-record-CNAME_id" {
-  value = aws_route53_record.crc-dns-zone-ses-dkim-1-record-CNAME.id
-}
-
-output "aws_route53_record_crc-dns-zone-ses-dkim-2-record-CNAME_id" {
-  value = aws_route53_record.crc-dns-zone-ses-dkim-2-record-CNAME.id
-}
-
-output "aws_route53_record_crc-dns-zone-ses-dkim-3-record-CNAME_id" {
-  value = aws_route53_record.crc-dns-zone-ses-dkim-3-record-CNAME.id
-}
-
 output "aws_route53_record_crc-dns-zone-ses-dmarc-record-CNAME_id" {
   value = aws_route53_record.crc-dns-zone-ses-dmarc-record-TXT.id
 }
@@ -194,6 +178,10 @@ output "aws_api_gateway_gateway_response_crc-api-response-default-5XX_id" {
 
 output "aws_api_gateway_integration_crc-api-visitors-get_id" {
   value = aws_api_gateway_integration.crc-api-visitors-get.id
+}
+
+output "aws_api_gateway_integration_crc-api-visitors-get_id" {
+  value = aws_api_gateway_integration.crc-api-visitors-get.
 }
 
 output "aws_api_gateway_integration_crc-api-visitors-options_id" {

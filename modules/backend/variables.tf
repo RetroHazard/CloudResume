@@ -40,3 +40,11 @@ variable "s3-bucket-production-arn" {
 variable "s3-bucket-staging-arn" {
   type = string
 }
+
+variable "api-resource-track-visitors" {
+  type = string
+}
+
+variable "api-resource-send-message" {
+  type = string
+}

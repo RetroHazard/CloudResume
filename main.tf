@@ -90,6 +90,8 @@ module "backend" {
   
   s3-bucket-production-arn = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_arn
   s3-bucket-staging-arn = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_arn
+  api-resource-send-message = module.frontend.aws_api_gateway_resource_crc-api-resource-contact_id
+  api-resource-track-visitors = module.frontend.aws_api_gateway_resource_crc-api-resource-visitors_id
 }
 
 

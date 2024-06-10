@@ -397,8 +397,7 @@ resource "aws_lambda_permission" "crc-event-permissions-s3-production" {
   function_name  = aws_lambda_function.crc-cloudfrontInvalidation.function_name
   principal      = "s3.amazonaws.com"
   source_account = var.account_id
-  source_arn     = "arn:aws:s3:::agb-s3-cloudresumechallenge-hosted"
-  //todo get bucket info from frontend
+  source_arn     = var.s3-bucket-production-arn
   statement_id   = aws_lambda_permission.crc-event-permissions-s3-production.statement_id
 }
 
@@ -407,8 +406,7 @@ resource "aws_lambda_permission" "crc-event-permissions-s3-staging" {
   function_name  = aws_lambda_function.crc-cloudfrontInvalidation.function_name
   principal      = "s3.amazonaws.com"
   source_account = var.account_id
-  source_arn     = "arn:aws:s3:::agb-s3-cloudresumechallenge-staging"
-  //todo get bucket info from frontend
+  source_arn     = var.s3-bucket-staging-arn
   statement_id   = aws_lambda_permission.crc-event-permissions-s3-staging.statement_id
 }
 
