@@ -521,8 +521,7 @@ resource "aws_route53_record" "crc-dns-zone-core-record-SOA" {
 resource "aws_route53_record" "crc-dns-zone-api-record-A" {
   alias {
     evaluate_target_health = "false"
-    //todo get from api gateway
-    name                   = "d9zhaw4xflnb4.cloudfront.net"
+    name                   = aws_api_gateway_domain_name.crc-api-domain.cloudfront_domain_name
     zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
   }
 
@@ -608,6 +607,10 @@ resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
 
 ###########################
 # Begin API Gateway Block #
+
+resource "aws_api_gateway_domain_name" "crc-api-domain" {
+  domain_name = "your-api-domain-name"
+}
 
 resource "aws_api_gateway_rest_api" "crc-rest-api" {
   api_key_source               = "AUTHORIZER"
