@@ -21,8 +21,16 @@ output "aws_dynamodb_table_crc-visitor-count_id" {
   value = aws_dynamodb_table.crc-visitor-count.id
 }
 
+output "aws_dynamodb_table_crc-visitor-count_arn" {
+  value = aws_dynamodb_table.crc-visitor-count.arn
+}
+
 output "aws_dynamodb_table_crc-visitor-record_id" {
   value = aws_dynamodb_table.crc-visitor-record.id
+}
+
+output "aws_dynamodb_table_crc-visitor-record_arn" {
+  value = aws_dynamodb_table.crc-visitor-record.arn
 }
 
 #  End DynamoDB Block  #
@@ -78,20 +86,12 @@ output "aws_lambda_function_crc-cloudfrontInvalidation_id" {
   value = aws_lambda_function.crc-cloudfrontInvalidation.id
 }
 
-output "aws_lambda_function_crc-cloudfrontInvalidation_log-group" {
-  value = aws_lambda_function.crc-cloudfrontInvalidation.logging_config.log_group
-}
-
 output "aws_lambda_function_crc-cloudfrontInvalidation_uri" {
   value = aws_lambda_function.crc-cloudfrontInvalidation.invoke_arn
 }
 
 output "aws_lambda_function_crc-sendMessage_id" {
   value = aws_lambda_function.crc-sendMessage.id
-}
-
-output "aws_lambda_function_crc-sendMessage_log-group" {
-  value = aws_lambda_function.crc-sendMessage.logging_config.log_group
 }
 
 output "aws_lambda_function_crc-sendMessage_uri" {
@@ -101,10 +101,6 @@ output "aws_lambda_function_crc-sendMessage_uri" {
 
 output "aws_lambda_function_crc-trackVisitors_id" {
   value = aws_lambda_function.crc-trackVisitors.id
-}
-
-output "aws_lambda_function_crc-trackVisitors_log-group" {
-  value = aws_lambda_function.crc-trackVisitors.logging_config.log_group
 }
 
 output "aws_lambda_function_crc-trackVisitors_uri" {

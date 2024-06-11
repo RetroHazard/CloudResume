@@ -71,7 +71,6 @@ resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
   })
 }
 
-
 resource "aws_s3_bucket_website_configuration" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
 
@@ -380,7 +379,6 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 # Begin Certificates Block #
 
 resource "aws_acm_certificate" "crc-website-certificate" {
-  provider = aws.us-east-1
   domain_name   = "*.${data.aws_route53_zone.crc-domain-name}"
   key_algorithm = "RSA_2048"
 
@@ -401,13 +399,11 @@ resource "aws_acm_certificate" "crc-website-certificate" {
 # Begin Key Manager Block #
 
 resource "aws_kms_alias" "crc-dnssec-key" {
-  provider = aws.us-east-1
   name          = "alias/cloudresume_dnssec"
   target_key_id = aws_kms_key.crc-dnssec-key.key_id
 }
 
 resource "aws_kms_key" "crc-dnssec-key" {
-  provider = aws.us-east-1
 
   customer_master_key_spec = "ECC_NIST_P256"
   description              = "Keys used for the purpose of signing DNSSEC"
