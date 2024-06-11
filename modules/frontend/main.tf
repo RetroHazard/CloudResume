@@ -54,7 +54,17 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-prod" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-prod" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
+
+  block_public_policy = false
+  restrict_public_buckets = false
+  block_public_acls = true
+  ignore_public_acls = true
+}
+
 resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
+  depends_on = [aws_s3_bucket_public_access_block.crc-agb-s3-website-prod]
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
 
   policy = jsonencode({
@@ -123,7 +133,17 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-staging" {
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-staging" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
+
+  block_public_policy = false
+  restrict_public_buckets = false
+  block_public_acls = true
+  ignore_public_acls = true
+}
+
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
+  depends_on = [aws_s3_bucket_public_access_block.crc-agb-s3-website-staging]
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
   
   policy = jsonencode({
@@ -191,7 +211,7 @@ resource "aws_cloudfront_cache_policy" "crc-default-caching-policy" {
   default_ttl = "86400"
   max_ttl     = "31536000"
   min_ttl     = "1"
-  name        = "Managed-CachingOptimized"
+  name        = "CRC-CachingOptimized"
 
   parameters_in_cache_key_and_forwarded_to_origin {
     cookies_config {
@@ -497,24 +517,6 @@ resource "aws_route53_hosted_zone_dnssec" "crc-hosted-zone" {
   hosted_zone_id = aws_route53_key_signing_key.crc-dnssec-ksk.hosted_zone_id
 }
 
-resource "aws_route53_record" "crc-dns-zone-core-record-NS" {
-  name    = data.aws_route53_zone.crc-hosted-zone.name
-  records = data.aws_route53_zone.crc-hosted-zone.name_servers
-  ttl     = "172800"
-  type    = "NS"
-  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
-}
-
-resource "aws_route53_record" "crc-dns-zone-core-record-SOA" {
-  name = data.aws_route53_zone.crc-hosted-zone.name
-  records = [
-    "${data.aws_route53_zone.crc-hosted-zone.name_servers[0]}. awsdns-hostmaster.amazon.com. 1 7200 900 1209600 86400"
-  ]
-  ttl     = "900"
-  type    = "SOA"
-  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
-}
-
 resource "aws_route53_record" "crc-dns-zone-api-record-A" {
   alias {
     evaluate_target_health = "false"
@@ -607,6 +609,7 @@ resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
 
 resource "aws_api_gateway_domain_name" "crc-api-domain" {
   domain_name = "api.${var.domain-name}"
+  regional_certificate_arn = aws_acm_certificate.crc-website-certificate.arn
 }
 
 resource "aws_api_gateway_base_path_mapping" "crc-api-domain-deploy" {
@@ -643,12 +646,6 @@ resource "aws_api_gateway_stage" "crc-api-stage" {
   deployment_id         = aws_api_gateway_deployment.crc-api-deployment.id
   rest_api_id           = aws_api_gateway_deployment.crc-api-deployment.rest_api_id
   stage_name            = "v1"
-}
-
-resource "aws_api_gateway_resource" "crc-api-resource" {
-  parent_id   = ""
-  path_part   = ""
-  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
 }
 
 resource "aws_api_gateway_resource" "crc-api-resource-visitors" {
@@ -924,22 +921,6 @@ resource "aws_api_gateway_method_response" "crc-api-contact-post" {
 
   rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
   status_code = "200"
-}
-
-resource "aws_api_gateway_model" "crc-api-default-empty-model" {
-  content_type = "application/json"
-  description  = "This is a default empty schema model"
-  name         = "Empty"
-  rest_api_id  = aws_api_gateway_rest_api.crc-rest-api.id
-  schema       = "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"Empty Schema\",\n  \"type\" : \"object\"\n}"
-}
-
-resource "aws_api_gateway_model" "crc-api-default-error-model" {
-  content_type = "application/json"
-  description  = "This is a default error schema model"
-  name         = "Error"
-  rest_api_id  = aws_api_gateway_rest_api.crc-rest-api.id
-  schema       = "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"Error Schema\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"message\" : { \"type\" : \"string\" }\n  }\n}"
 }
 
 resource "aws_api_gateway_account" "crc-api-logging-role" {
