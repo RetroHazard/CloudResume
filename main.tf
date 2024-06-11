@@ -73,7 +73,9 @@ module "frontend" {
   
   api-lambda-contact-uri = module.backend.aws_lambda_function_crc-sendMessage_uri
   api-lambda-visitors-uri = module.backend.aws_lambda_function_crc-trackVisitors_uri
-  }
+
+  api-gateway-cw-logs-role = module.iam.aws_iam_role_crc-api-CloudwatchLogs_arn
+}
 
 module "backend" {
   source = "./modules/backend"

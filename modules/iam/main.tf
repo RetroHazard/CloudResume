@@ -217,7 +217,7 @@ resource "aws_iam_role" "crc-api-CloudwatchLogs" {
   ]
   max_session_duration = "3600"
   name                 = "CloudResume_API_CloudWatchLogs"
-  path                 = "/service-role/"
+  path                 = "/"
 }
 
 resource "aws_iam_role" "crc-CloudfrontManager" {

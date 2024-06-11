@@ -18,7 +18,9 @@ variable "domain-name" {
 
 # Inputs from IAM
 
-
+variable "api-gateway-cw-logs-role" {
+  type = string
+}
 
 # Inputs from Backend Module
 

@@ -608,6 +608,12 @@ resource "aws_api_gateway_domain_name" "crc-api-domain" {
   domain_name = "api.${var.domain-name}"
 }
 
+resource "aws_api_gateway_base_path_mapping" "crc-api-domain-deploy" {
+  api_id      = aws_api_gateway_rest_api.crc-rest-api.id
+  stage_name  = aws_api_gateway_stage.crc-api-stage.stage_name
+  domain_name = aws_api_gateway_domain_name.crc-api-domain.domain_name
+}
+
 resource "aws_api_gateway_rest_api" "crc-rest-api" {
   api_key_source               = "AUTHORIZER"
   description                  = "MultiPurpose API for CloudResume Site"
@@ -933,6 +939,10 @@ resource "aws_api_gateway_model" "crc-api-default-error-model" {
   name         = "Error"
   rest_api_id  = aws_api_gateway_rest_api.crc-rest-api.id
   schema       = "{\n  \"$schema\" : \"http://json-schema.org/draft-04/schema#\",\n  \"title\" : \"Error Schema\",\n  \"type\" : \"object\",\n  \"properties\" : {\n    \"message\" : { \"type\" : \"string\" }\n  }\n}"
+}
+
+resource "aws_api_gateway_account" "crc-api-logging-role" {
+  cloudwatch_role_arn = var.api-gateway-cw-logs-role
 }
 
 #  End API Gateway Block  #

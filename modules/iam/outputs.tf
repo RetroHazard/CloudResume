@@ -31,8 +31,8 @@ output "aws_iam_policy_crc-CloudResume_S3GitHubActions_id" {
 }
 
 // IAM Roles
-output "aws_iam_role_crc-api-CloudwatchLogs_id" {
-  value = aws_iam_role.crc-api-CloudwatchLogs.id
+output "aws_iam_role_crc-api-CloudwatchLogs_arn" {
+  value = aws_iam_role.crc-api-CloudwatchLogs.arn
 }
 
 output "aws_iam_role_crc-CloudFrontManager_id" {
