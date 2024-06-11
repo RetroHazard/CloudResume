@@ -209,52 +209,58 @@ resource "aws_sqs_queue" "crc-cloudfront-invalidation-queue" {
   max_message_size                  = "262144"
   message_retention_seconds         = "345600"
   name                              = "CloudFrontInvalidationQueue"
-  policy = <<POLICY
-{
-  "Id": "Policy1717464010087",
-  "Statement": [
-    {
-      "Action": "SQS:SendMessage",
-      "Condition": {
-        "ArnLike": {
-          "aws:SourceArn": [
-            "${var.s3-bucket-production-arn}",
-            "${var.s3-bucket-staging-arn}"
-          ]
-        },
-        "StringEquals": {
-          "aws:SourceAccount": "${var.account_id}"
-        }
-      },
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "s3.amazonaws.com"
-      },
-      "Resource": "${aws_sqs_queue.crc-cloudfront-invalidation-queue.arn}",
-      "Sid": "Stmt1717463975055"
-    },
-    {
-      "Action": [
-        "SQS:ChangeMessageVisibility",
-        "SQS:DeleteMessage",
-        "SQS:ReceiveMessage",
-        "SQS:GetQueueAttributes"
-      ],
-      "Effect": "Allow",
-      "Principal": {
-        "AWS": "${var.iam-role-cloudfront-manager-arn}"
-      },
-      "Resource": "${aws_sqs_queue.crc-cloudfront-invalidation-queue.arn}",
-      "Sid": "Stmt1717464008331"
-    }
-  ],
-  "Version": "2012-10-17"
+  receive_wait_time_seconds         = "0"
+  sqs_managed_sse_enabled           = "true"
+  visibility_timeout_seconds        = "60"
 }
-POLICY
 
-  receive_wait_time_seconds  = "0"
-  sqs_managed_sse_enabled    = "true"
-  visibility_timeout_seconds = "60"
+data "aws_sqs_queue" "crc_cloudfront_invalidation_queue" {
+  depends_on = [aws_sqs_queue.crc-cloudfront-invalidation-queue]
+  name = aws_sqs_queue.crc-cloudfront-invalidation-queue.name
+}
+
+resource "aws_sqs_queue_policy" "crc_cloudfront_invalidation_queue_policy" {
+  queue_url = aws_sqs_queue.crc-cloudfront-invalidation-queue.id
+  policy = jsonencode({
+    "Id": "Policy1717464010087",
+    "Statement": [
+      {
+        "Action": "SQS:SendMessage",
+        "Condition": {
+          "ArnLike": {
+            "aws:SourceArn": [
+              var.s3-bucket-production-arn,
+              var.s3-bucket-staging-arn
+            ]
+          },
+          "StringEquals": {
+            "aws:SourceAccount": var.account_id
+          }
+        },
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "s3.amazonaws.com"
+        },
+        "Resource": data.aws_sqs_queue.crc_cloudfront_invalidation_queue.arn,
+        "Sid": "Stmt1717463975055"
+      },
+      {
+        "Action": [
+          "SQS:ChangeMessageVisibility",
+          "SQS:DeleteMessage",
+          "SQS:ReceiveMessage",
+          "SQS:GetQueueAttributes"
+        ],
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": var.iam-role-cloudfront-manager-arn
+        },
+        "Resource": data.aws_sqs_queue.crc_cloudfront_invalidation_queue.arn,
+        "Sid": "Stmt1717464008331"
+      }
+    ],
+    "Version": "2012-10-17"
+  })
 }
 
 #  End SQS Block  #
@@ -282,16 +288,20 @@ resource "aws_lambda_function_event_invoke_config" "crc-invoke-invalidation-queu
   maximum_retry_attempts       = "2"
 }
 
+resource "aws_cloudwatch_log_group" "crc-cloudfrontInvalidation-log-group" {
+  name              = "/aws/lambda/cloudfrontInvalidation"
+  retention_in_days = 14
+}
+
 resource "aws_lambda_function" "crc-cloudfrontInvalidation" {
   architectures = ["x86_64"]
 
   environment {
     variables = {
-      //todo get buckets and distributions from frontend module
-      dev_bucket        = "agb-s3-cloudresumechallenge-staging"
-      dev_distribution  = "E37NSQHT5FF2XS"
-      prod_bucket       = "agb-s3-cloudresumechallenge-hosted"
-      prod_distribution = "ESAPTUQ4RL7CE"
+      dev_bucket        = var.s3-bucket-staging-name
+      dev_distribution  = var.cf-staging-distribution
+      prod_bucket       = var.s3-bucket-production-name
+      prod_distribution = var.cf-production-distribution
     }
   }
 
@@ -305,7 +315,7 @@ resource "aws_lambda_function" "crc-cloudfrontInvalidation" {
   logging_config {
     application_log_level = "INFO"
     log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.crc-cloudfrontInvalidation.function_name}"
+    log_group             = aws_cloudwatch_log_group.crc-cloudfrontInvalidation-log-group.name
     system_log_level      = "INFO"
   }
 
@@ -318,6 +328,15 @@ resource "aws_lambda_function" "crc-cloudfrontInvalidation" {
   runtime                        = "python3.12"
   skip_destroy                   = "false"
   timeout                        = "60"
+
+  depends_on = [
+    aws_cloudwatch_log_group.crc-cloudfrontInvalidation-log-group
+  ]
+}
+
+resource "aws_cloudwatch_log_group" "crc-sendMessage-log-group" {
+  name              = "/aws/lambda/sendMessage"
+  retention_in_days = 14
 }
 
 resource "aws_lambda_function" "crc-sendMessage" {
@@ -342,7 +361,7 @@ resource "aws_lambda_function" "crc-sendMessage" {
   logging_config {
     application_log_level = "INFO"
     log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.crc-sendMessage.function_name}"
+    log_group             = aws_cloudwatch_log_group.crc-sendMessage-log-group.name
     system_log_level      = "INFO"
   }
 
@@ -355,6 +374,15 @@ resource "aws_lambda_function" "crc-sendMessage" {
   runtime                        = "python3.12"
   skip_destroy                   = "false"
   timeout                        = "3"
+
+  depends_on = [
+    aws_cloudwatch_log_group.crc-sendMessage-log-group
+  ]
+}
+
+resource "aws_cloudwatch_log_group" "crc-trackVisitors-log-group" {
+  name              = "/aws/lambda/trackVisitors"
+  retention_in_days = 14
 }
 
 resource "aws_lambda_function" "crc-trackVisitors" {
@@ -377,7 +405,7 @@ resource "aws_lambda_function" "crc-trackVisitors" {
   logging_config {
     application_log_level = "INFO"
     log_format            = "JSON"
-    log_group             = "/aws/lambda/${aws_lambda_function.crc-trackVisitors.function_name}"
+    log_group             = aws_cloudwatch_log_group.crc-trackVisitors-log-group.name
     system_log_level      = "INFO"
   }
 
@@ -390,6 +418,10 @@ resource "aws_lambda_function" "crc-trackVisitors" {
   runtime                        = "python3.12"
   skip_destroy                   = "false"
   timeout                        = "3"
+
+  depends_on = [
+  aws_cloudwatch_log_group.crc-trackVisitors-log-group
+  ]
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-s3-production" {
@@ -398,7 +430,7 @@ resource "aws_lambda_permission" "crc-event-permissions-s3-production" {
   principal      = "s3.amazonaws.com"
   source_account = var.account_id
   source_arn     = var.s3-bucket-production-arn
-  statement_id   = aws_lambda_permission.crc-event-permissions-s3-production.statement_id
+  statement_id   = uuid()
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-s3-staging" {
@@ -407,25 +439,23 @@ resource "aws_lambda_permission" "crc-event-permissions-s3-staging" {
   principal      = "s3.amazonaws.com"
   source_account = var.account_id
   source_arn     = var.s3-bucket-staging-arn
-  statement_id   = aws_lambda_permission.crc-event-permissions-s3-staging.statement_id
+  statement_id   = uuid()
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-api-visitors" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.crc-trackVisitors.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:ap-northeast-1:339712851438:3nfq1o8esj/*/GET/visitors"
-  //todo get api info from frontend
-  statement_id  = aws_lambda_permission.crc-event-permissions-api-visitors.statement_id
+  source_arn    = "${var.api-exectution-arn}/*/GET/visitors"
+  statement_id  = uuid()
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-api-contact" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.crc-sendMessage.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:ap-northeast-1:339712851438:3nfq1o8esj/*/POST/contact"
-  //todo get api info from frontend
-  statement_id  = aws_lambda_permission.crc-event-permissions-api-contact.statement_id
+  source_arn    = "${var.api-exectution-arn}/*/POST/contact"
+  statement_id  = uuid()
 }
 
 #  End Lambda Block  #

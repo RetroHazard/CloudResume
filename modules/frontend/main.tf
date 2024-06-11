@@ -212,7 +212,7 @@ resource "aws_cloudfront_cache_policy" "crc-default-caching-policy" {
 }
 
 resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
-  aliases = ["*.${data.aws_route53_zone.crc-domain-name}", "www.${data.aws_route53_zone.crc-domain-name}"]
+  aliases = ["*.${var.domain-name}", "www.${var.domain-name}"]
   comment = "Production Distribution for Cloud Resume"
 
   custom_error_response {
@@ -231,7 +231,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     max_ttl                = "0"
     min_ttl                = "0"
     smooth_streaming       = "false"
-    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-prod.website_endpoint
+    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-prod.bucket_domain_name
     viewer_protocol_policy = "redirect-to-https"
   }
 
@@ -240,7 +240,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   is_ipv6_enabled = "false"
 
   logging_config {
-    bucket          = aws_s3_bucket.crc-agb-s3-website-logging.website_domain
+    bucket          = aws_s3_bucket.crc-agb-s3-website-logging.bucket_domain_name
     include_cookies = "false"
     prefix          = "cf_crc_production/"
   }
@@ -289,7 +289,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
 }
 
 resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
-  aliases = ["staging.${data.aws_route53_zone.crc-domain-name}"]
+  aliases = ["staging.${var.domain-name}"]
   comment = "Staging Distribution for Cloud Resume"
 
   default_cache_behavior {
@@ -307,7 +307,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
     max_ttl                = "0"
     min_ttl                = "0"
     smooth_streaming       = "false"
-    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-staging.website_endpoint
+    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-staging.bucket_domain_name
     viewer_protocol_policy = "redirect-to-https"
   }
 
@@ -379,14 +379,14 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 # Begin Certificates Block #
 
 resource "aws_acm_certificate" "crc-website-certificate" {
-  domain_name   = "*.${data.aws_route53_zone.crc-domain-name}"
+  domain_name   = "*.${var.domain-name}"
   key_algorithm = "RSA_2048"
 
   options {
     certificate_transparency_logging_preference = "ENABLED"
   }
   
-  subject_alternative_names = ["*.${data.aws_route53_zone.crc-domain-name}"]
+  subject_alternative_names = ["*.${var.domain-name}"]
 
   validation_method = "DNS"
 }
@@ -480,11 +480,11 @@ resource "aws_ses_domain_dkim" "crc-ses-domain-dkim" {
 resource "aws_route53_zone" "crc-hosted-zone" {
   comment       = "Hosted Zone for Cloud Resume Project"
   force_destroy = "false"
-  name          = data.aws_route53_zone.crc-domain-name
+  name          = var.domain-name
 }
 
 resource "aws_route53_key_signing_key" "crc-dnssec-ksk" {
-  name = data.aws_route53_zone.crc-domain-name
+  name = var.domain-name
   hosted_zone_id = data.aws_route53_zone.crc-domain-name.id
   key_management_service_arn = aws_kms_key.crc-dnssec-key.arn
 }
@@ -521,13 +521,13 @@ resource "aws_route53_record" "crc-dns-zone-api-record-A" {
     zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
   }
 
-  name                             = "api.${data.aws_route53_zone.crc-domain-name}"
+  name                             = "api.${var.domain-name}"
   type                             = "A"
   zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-record-MX" {
-  name                             = "contact.${data.aws_route53_zone.crc-domain-name}"
+  name                             = "contact.${var.domain-name}"
   //todo Get Record from SES
   records                          = ["10 feedback-smtp.ap-northeast-1.amazonses.com"]
   ttl                              = "300"
@@ -536,7 +536,7 @@ resource "aws_route53_record" "crc-dns-zone-ses-record-MX" {
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-record-TXT" {
-  name                             = "contact.${data.aws_route53_zone.crc-domain-name}"
+  name                             = "contact.${var.domain-name}"
   //todo Get Record from SES
   records                          = ["v=spf1 include:amazonses.com ~all"]
   ttl                              = "300"
@@ -545,7 +545,7 @@ resource "aws_route53_record" "crc-dns-zone-ses-record-TXT" {
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-dkim-record-CNAME" {
-  count  = length(aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens)
+  count  = length(aws_ses_domain_dkim.crc-ses-domain-dkim[*].dkim_tokens)
   name   = "${element(aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens, count.index)}._domainkey.${aws_ses_domain_identity.crc-ses-domain-id.domain}"
   records = ["${element(aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens, count.index)}.dkim.amazonses.com"]
   ttl    = "600"
@@ -568,7 +568,7 @@ resource "aws_route53_record" "crc-dns-zone-record-A" {
     zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
   }
 
-  name                             = data.aws_route53_zone.crc-domain-name
+  name                             = var.domain-name
   type                             = "A"
   zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
 }
@@ -580,7 +580,7 @@ resource "aws_route53_record" "crc-dns-zone-www-record-A" {
     zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
   }
 
-  name                             = "www.${data.aws_route53_zone.crc-domain-name}"
+  name                             = "www.${var.domain-name}"
   type                             = "A"
   zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
 }
@@ -592,7 +592,7 @@ resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
     zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
   }
 
-  name                             = "staging.${data.aws_route53_zone.crc-domain-name}"
+  name                             = "staging.${var.domain-name}"
   type                             = "A"
   zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
 }
@@ -605,7 +605,7 @@ resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
 # Begin API Gateway Block #
 
 resource "aws_api_gateway_domain_name" "crc-api-domain" {
-  domain_name = "your-api-domain-name"
+  domain_name = "api.${var.domain-name}"
 }
 
 resource "aws_api_gateway_rest_api" "crc-rest-api" {
@@ -635,7 +635,7 @@ resource "aws_api_gateway_stage" "crc-api-stage" {
   cache_cluster_enabled = "false"
   deployment_id         = aws_api_gateway_deployment.crc-api-deployment.id
   rest_api_id           = aws_api_gateway_deployment.crc-api-deployment.rest_api_id
-  stage_name            = aws_api_gateway_deployment.crc-api-deployment.stage_name
+  stage_name            = "v1"
 }
 
 resource "aws_api_gateway_resource" "crc-api-resource" {
@@ -657,7 +657,7 @@ resource "aws_api_gateway_resource" "crc-api-resource-contact" {
 }
 
 resource "aws_api_gateway_request_validator" "crc-api-param-validator" {
-  name                        = aws_api_gateway_request_validator.crc-api-param-validator.id
+  name                        = uuid()
   rest_api_id                 = aws_api_gateway_rest_api.crc-rest-api.id
   validate_request_body       = false
   validate_request_parameters = true

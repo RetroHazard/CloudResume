@@ -76,9 +76,14 @@ module "backend" {
   iam-role-cloudfront-manager-arn = module.iam.aws_iam_role_crc-CloudResume_CloudFrontManager_arn
   iam-role-message-sender-arn = module.iam.aws_iam_role_crc-CloudResume_SendMessage_arn
   iam-role-visitor-tracker-arn = module.iam.aws_iam_role_crc-CloudResume_TrackVisitors_arn
-  
+
   s3-bucket-production-arn = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_arn
+  s3-bucket-production-name = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_id
   s3-bucket-staging-arn = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_arn
+  s3-bucket-staging-name = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_id
   api-resource-send-message = module.frontend.aws_api_gateway_resource_crc-api-resource-contact_id
   api-resource-track-visitors = module.frontend.aws_api_gateway_resource_crc-api-resource-visitors_id
+  cf-production-distribution = module.frontend.aws_cloudfront_distribution_crc-cf-production-distribution_id
+  cf-staging-distribution = module.frontend.aws_cloudfront_distribution_crc-cf-staging-distribution_id
+  api-exectution-arn = module.frontend.aws_api_gateway_rest_api_crc-rest-api_exec-arn
 }

@@ -144,6 +144,10 @@ output "aws_api_gateway_rest_api_crc-rest-api_id" {
   value = aws_api_gateway_rest_api.crc-rest-api.id
 }
 
+output "aws_api_gateway_rest_api_crc-rest-api_exec-arn" {
+  value = aws_api_gateway_rest_api.crc-rest-api.execution_arn
+}
+
 output "aws_api_gateway_deployment_crc-api-deployment_id" {
   value = aws_api_gateway_deployment.crc-api-deployment.id
 }
