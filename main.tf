@@ -1,4 +1,12 @@
 terraform {
+  backend "s3" {
+    bucket = "crc-agb-s3-terraform-state-ugyhqu"
+    key = "aws-services1.tfstate"
+    dynamodb_table = "terraform-locks"
+    region = "us-east-1"
+    encrypt = true
+    profile = "Sandbox"
+  }
   required_providers {
     aws = {
       source = "hashicorp/aws"
@@ -16,23 +24,14 @@ terraform {
 }
 
 provider "aws" {
-  region = "ap-northeast-1"
+  region = "us-east-1"
+  profile = "Sandbox"
+  assume_role {
+    role_arn = var.assume_role
+  }
   default_tags {
     tags = var.tags
   }
-}
-
-variable "tags" {
-  type = map(string)
-  description = "Default Tags, applied to all resources"
-  default = {
-    ManagedByTerraform = true
-  }
-}
-
-variable "domain-name" {
-  type = string
-  default = "cloudresume-agb.jp"
 }
 
 module "iam" {
