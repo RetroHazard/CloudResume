@@ -1,220 +1,159 @@
 ##########################
 # Begin Core IAM Resources
 
+// IAM Policy Documents
+data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
+  statement {
+      sid    = "Statement1"
+      effect = "Allow"
+
+      actions = [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ]
+      resources = [
+        "${var.crc-cw-lambda-log-group-trackVisitors}:*"
+      ]
+    }
+}
+
+data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
+  statement {
+  sid = "VisualEditor0"
+  effect = "Allow"
+  actions = [
+    "dynamodb:PutItem",
+    "dynamodb:GetItem",
+    "dynamodb:UpdateItem"
+  ]
+  resources = [
+    var.crc-visitor-count_arn,
+    var.crc-visitor-record_arn
+  ]
+  }
+}
+
+data "aws_iam_policy_document" "crc-lambda-SendMessage-logging-policy" {
+  statement {
+    sid    = "Statement1"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "${var.crc-cw-lambda-log-group-sendMessage}:*"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
+  statement {
+    sid    = "VisualEditor0"
+    effect = "Allow"
+    actions = [
+      "ses:SendEmail",
+      "ses:SendTemplatedEmail",
+      "ses:SendRawEmail"
+    ]
+    resources = [
+      var.crc-ses-configuration-set,
+      var.crc-ses-mail-destination,
+      var.crc-ses-mail-domain
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy" {
+  statement {
+    sid    = "Statement1"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "${var.crc-cw-lambda-log-group-cloudfrontInvalidation}:*"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy" {
+  statement {
+    sid = "Stmt1505004397098"
+    effect = "Allow"
+    actions = [
+      "cloudfront:CreateInvalidation",
+      "cloudfront:GetInvalidation",
+      "cloudfront:ListInvalidations"
+    ]
+    resources = [
+      var.crc-cf-production-distribution,
+      var.crc-cf-staging-distribution
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "s3:Get*",
+      "s3:List*"
+    ]
+    resources = [
+      var.crc-s3-production-arn,
+      "${var.crc-s3-production-arn}/*",
+      var.crc-s3-staging-arn,
+      "${var.crc-s3-staging-arn}/*"
+    ]
+  }
+}
+
 // IAM Policies
 resource "aws_iam_policy" "crc-Lambda-TrackVisitors-AccessPolicy" {
   name = "crc-Lambda-TrackVisitors-AccessPolicy"
   path = "/"
 
-  policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": [
-        "dynamodb:PutItem",
-        "dynamodb:GetItem",
-        "dynamodb:UpdateItem"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "${var.crc-visitor-count_arn}",
-        "${var.crc-visitor-record_arn}"
-      ],
-      "Sid": "VisualEditor0"
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
+  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-TrackVisitors-access-policy.json)
 }
 
 resource "aws_iam_policy" "crc-Lambda-TrackVisitors-Logging" {
   name = "crc-Lambda-TrackVisitors-Logging"
   path = "/"
 
-  policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": [
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/trackVisitors:*"
-      ],
-      "Sid": "Statement1"
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
-
-  tags = {
-    Name    = "TrackVisitors_Logger"
-    Project = "CloudResume"
-  }
-
-  tags_all = {
-    Name    = "TrackVisitors_Logger"
-    Project = "CloudResume"
-  }
+  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-TrackVisitors-logging-policy.json)
 }
 
-resource "aws_iam_policy" "crc-Lambda-CloudFrontInvalidation-AccessPolicy" {
+resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-AccessPolicy" {
   name = "crc-CloudFrontInvalidation-AccessPolicy"
   path = "/"
 
-  policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": [
-        "cloudfront:CreateInvalidation",
-        "cloudfront:GetInvalidation",
-        "cloudfront:ListInvalidations"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/ESAPTUQ4RL7CE",
-        "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/E37NSQHT5FF2XS"
-      ],
-      "Sid": "Stmt1505004397098"
-    },
-    {
-      "Action": [
-        "s3:Get*",
-        "s3:List*"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "arn:aws:s3:::agb-s3-cloudresumechallenge-hosted",
-        "arn:aws:s3:::agb-s3-cloudresumechallenge-hosted/*",
-        "arn:aws:s3:::agb-s3-cloudresumechallenge-staging",
-        "arn:aws:s3:::agb-s3-cloudresumechallenge-staging/*"
-      ]
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
-
+  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-CloudfrontInvalidation-access-policy.json)
 }
 
-resource "aws_iam_policy" "crc-Lambda-CloudFrontInvalidation-Logging" {
+resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-Logging" {
   name = "crc-Lambda-CloudFrontInvalidation-Logging"
   path = "/"
 
-  policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": [
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/cloudfrontInvalidation:*"
-      ],
-      "Sid": "Statement1"
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
-
+  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-CloudfrontInvalidation-logging-policy.json)
 }
 
 resource "aws_iam_policy" "crc-Lambda-SendMessage-AccessPolicy" {
   name = "crc-Lambda-SendMessage-AccessPolicy"
   path = "/"
 
-  policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": [
-        "ses:SendEmail",
-        "ses:SendTemplatedEmail",
-        "ses:SendRawEmail"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "arn:aws:ses:ap-northeast-1:${data.aws_caller_identity.current.account_id}:configuration-set/ContactFormMailer",
-        "arn:aws:ses:ap-northeast-1:${data.aws_caller_identity.current.account_id}:identity/a.bracken87+cloudresume_ses@gmail.com",
-        "arn:aws:ses:ap-northeast-1:${data.aws_caller_identity.current.account_id}:identity/cloudresume-agb.jp"
-      ],
-      "Sid": "VisualEditor0"
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
-
-  tags = {
-    Name    = "SESSendPolicy"
-    Project = "CloudResume"
-  }
-
-  tags_all = {
-    Name    = "SESSendPolicy"
-    Project = "CloudResume"
-  }
+  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-SendMessage-access-policy.json)
 }
 
 resource "aws_iam_policy" "crc-Lambda-SendMessage-Logging" {
   name = "crc-Lambda-SendMessage-Logging"
   path = "/"
 
-  policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": [
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ],
-      "Effect": "Allow",
-      "Resource": [
-        "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/lambda/sendMessage:*"
-      ],
-      "Sid": "Statement1"
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
-
-  tags = {
-    Name    = "SendMessage_Logger"
-    Project = "CloudResume"
-  }
-
-  tags_all = {
-    Name    = "SendMessage_Logger"
-    Project = "CloudResume"
-  }
-}
-
-resource "aws_iam_policy" "crc-Lambda-LoggingRights" {
-  name = "crc-Lambda-LoggingRights"
-  path = "/"
-
-  policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": "logs:CreateLogGroup",
-      "Effect": "Allow",
-      "Resource": "arn:aws:logs:ap-northeast-1:${data.aws_caller_identity.current.account_id}:log-group:*"
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
-
+  policy = data.aws_iam_policy_document.crc-lambda-SendMessage-logging-policy.json
 }
 
 resource "aws_iam_policy" "crc-S3-GitHubActions" {
@@ -239,28 +178,38 @@ resource "aws_iam_policy" "crc-S3-GitHubActions" {
   "Version": "2012-10-17"
 }
 POLICY
-
 }
 
+// IAM Policy Attachment
+resource "aws_iam_role_policy_attachment" "crc-cloudwatch-VisitorTracker" {
+  policy_arn = aws_iam_role.crc-VisitorTracker.arn
+  role       = aws_iam_role.crc-VisitorTracker.name
+}
 
+resource "aws_iam_role_policy_attachment" "crc-cloudwatch-MessageSender" {
+  policy_arn = aws_iam_role.crc-MessageSender.arn
+  role       = aws_iam_role.crc-MessageSender.name
+}
+
+resource "aws_iam_role_policy_attachment" "crc-cloudwatch-CloudfrontManager" {
+  policy_arn = aws_iam_role.crc-CloudfrontManager.arn
+  role       = aws_iam_role.crc-CloudfrontManager.name
+}
 
 // IAM Roles
-resource "aws_iam_role" "crc-API-CloudWatchLogs" {
-  assume_role_policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "apigateway.amazonaws.com"
-      },
-      "Sid": ""
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
+resource "aws_iam_role" "crc-api-CloudwatchLogs" {
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action    = "sts:AssumeRole",
+        Effect    = "Allow",
+        Principal = {
+          Service = "apigateway.amazonaws.com"
+        }
+      }
+    ]
+  })
 
   description          = "Allows API Gateway to push logs to CloudWatch Logs."
   managed_policy_arns  = [
@@ -271,85 +220,73 @@ POLICY
   path                 = "/service-role/"
 }
 
-resource "aws_iam_role" "crc-CloudFrontManager" {
-  assume_role_policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
+resource "aws_iam_role" "crc-CloudfrontManager" {
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action    = "sts:AssumeRole",
+        Effect    = "Allow",
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
       }
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
+    ]
+  })
 
   managed_policy_arns  = [
-    aws_iam_policy.crc-Lambda-LoggingRights.arn,
-    aws_iam_policy.crc-Lambda-CloudFrontInvalidation-AccessPolicy.arn,
-    aws_iam_policy.crc-Lambda-CloudFrontInvalidation-Logging.arn
+    aws_iam_policy.crc-Lambda-CloudfrontInvalidation-AccessPolicy.arn,
     ]
   max_session_duration = "3600"
   name                 = "crc-CloudFrontManager"
-  path                 = "/service-role/"
+  path                 = "/"
 
 }
 
 resource "aws_iam_role" "crc-MessageSender" {
-  assume_role_policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action    = "sts:AssumeRole",
+        Effect    = "Allow",
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
       }
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
+    ]
+  })
 
   description          = "Allows Lambda functions to call AWS services on your behalf."
   managed_policy_arns  = [
-    aws_iam_policy.crc-Lambda-LoggingRights.arn,
     aws_iam_policy.crc-Lambda-SendMessage-AccessPolicy.arn,
-    aws_iam_policy.crc-Lambda-SendMessage-Logging.arn
   ]
   max_session_duration = "3600"
   name                 = "crc-MessageSender"
-  path                 = "/service-role/"
+  path                 = "/"
 
 }
 
 resource "aws_iam_role" "crc-VisitorTracker" {
-  assume_role_policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action    = "sts:AssumeRole",
+        Effect    = "Allow",
+        Principal = {
+          Service = "lambda.amazonaws.com"
+        }
       }
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
+    ]
+  })
 
   description          = "Allows Lambda functions to call AWS services on your behalf."
   managed_policy_arns  = [
-    aws_iam_policy.crc-Lambda-LoggingRights.arn,
     aws_iam_policy.crc-Lambda-TrackVisitors-AccessPolicy.arn,
-    aws_iam_policy.crc-Lambda-TrackVisitors-Logging.arn
   ]
   max_session_duration = "3600"
   name                 = "crc-VisitorTracker"
-  path                 = "/service-role/"
+  path                 = "/"
 
 }

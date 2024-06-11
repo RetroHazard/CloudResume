@@ -1,5 +1,4 @@
 data "aws_region" "current" {}
-data "aws_caller_identity" "current" {}
 
 variable "account_id" {
   type = string
@@ -65,6 +64,6 @@ variable "cf-staging-distribution" {
   type = string
 }
 
-variable "api-exectution-arn" {
+variable "api-execution-arn" {
   type = string
 }

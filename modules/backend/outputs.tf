@@ -40,16 +40,16 @@ output "aws_dynamodb_table_crc-visitor-record_arn" {
 ###################
 # Begin SES Block #
 
-output "aws_ses_configuration_set_crc-contact-mail_id" {
-  value = aws_ses_configuration_set.crc-contact-mail.id
+output "aws_ses_configuration_set_crc-contact-mail_arn" {
+  value = aws_ses_configuration_set.crc-contact-mail.arn
 }
 
-output "aws_ses_domain_identity_crc-mail-domain_id" {
-  value = aws_ses_domain_identity.crc-mail-domain.id
+output "aws_ses_domain_identity_crc-mail-domain_arn" {
+  value = aws_ses_domain_identity.crc-mail-domain.arn
 }
 
-output "aws_ses_email_identity_crc-mail-destination_id" {
-  value = aws_ses_email_identity.crc-mail-destination.id
+output "aws_ses_email_identity_crc-mail-destination_arn" {
+  value = aws_ses_email_identity.crc-mail-destination.arn
 }
 
 #  End SES Block  #
@@ -82,12 +82,20 @@ output "aws_lambda_function_event_invoke_config_crc-invoke-invalidation-queue_id
   value = aws_lambda_function_event_invoke_config.crc-invoke-invalidation-queue.id
 }
 
+output "aws_cloudwatch_log_group_crc-cloudfrontInvalidation_arn" {
+  value = aws_cloudwatch_log_group.crc-cloudfrontInvalidation-log-group.arn
+}
+
 output "aws_lambda_function_crc-cloudfrontInvalidation_id" {
   value = aws_lambda_function.crc-cloudfrontInvalidation.id
 }
 
 output "aws_lambda_function_crc-cloudfrontInvalidation_uri" {
   value = aws_lambda_function.crc-cloudfrontInvalidation.invoke_arn
+}
+
+output "aws_cloudwatch_log_group_crc-sendMessage_arn" {
+  value = aws_cloudwatch_log_group.crc-sendMessage-log-group.arn
 }
 
 output "aws_lambda_function_crc-sendMessage_id" {
@@ -98,6 +106,9 @@ output "aws_lambda_function_crc-sendMessage_uri" {
   value = aws_lambda_function.crc-sendMessage.invoke_arn
 }
 
+output "aws_cloudwatch_log_group_crc-trackVisitors_arn" {
+  value = aws_cloudwatch_log_group.crc-trackVisitors-log-group.arn
+}
 
 output "aws_lambda_function_crc-trackVisitors_id" {
   value = aws_lambda_function.crc-trackVisitors.id

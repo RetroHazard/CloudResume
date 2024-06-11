@@ -2,16 +2,12 @@
 # Begin IAM Outputs
 
 // IAM Policies
-output "aws_iam_policy_crc-Lambda-CloudFrontInvalidation-AccessPolicy" {
-  value = aws_iam_policy.crc-Lambda-CloudFrontInvalidation-AccessPolicy.id
+output "aws_iam_policy_crc-Lambda-CloudfrontInvalidation-AccessPolicy" {
+  value = aws_iam_policy.crc-Lambda-CloudfrontInvalidation-AccessPolicy.id
 }
 
-output "aws_iam_policy_crc-Lambda-CloudFrontInvalidation-Logging_id" {
-  value = aws_iam_policy.crc-Lambda-CloudFrontInvalidation-Logging.id
-}
-
-output "aws_iam_policy_crc-Lambda-LoggingRights_id" {
-  value = aws_iam_policy.crc-Lambda-LoggingRights.id
+output "aws_iam_policy_crc-Lambda-CloudfrontInvalidation-Logging_id" {
+  value = aws_iam_policy.crc-Lambda-CloudfrontInvalidation-Logging.id
 }
 
 output "aws_iam_policy_crc-Lambda-SendMessage-AccessPolicy_id" {
@@ -35,30 +31,30 @@ output "aws_iam_policy_crc-CloudResume_S3GitHubActions_id" {
 }
 
 // IAM Roles
-output "aws_iam_role_crc-CloudResume_API_CloudWatchLogs_id" {
-  value = aws_iam_role.crc-API-CloudWatchLogs.id
+output "aws_iam_role_crc-api-CloudwatchLogs_id" {
+  value = aws_iam_role.crc-api-CloudwatchLogs.id
 }
 
-output "aws_iam_role_crc-CloudResume_CloudFrontManager_id" {
-  value = aws_iam_role.crc-CloudFrontManager.id
+output "aws_iam_role_crc-CloudFrontManager_id" {
+  value = aws_iam_role.crc-CloudfrontManager.id
 }
 
-output "aws_iam_role_crc-CloudResume_CloudFrontManager_arn" {
-  value = aws_iam_role.crc-CloudFrontManager.arn
+output "aws_iam_role_crc-CloudFrontManager_arn" {
+  value = aws_iam_role.crc-CloudfrontManager.arn
 }
 
-output "aws_iam_role_crc-CloudResume_SendMessage_id" {
+output "aws_iam_role_crc-MessageSender_id" {
   value = aws_iam_role.crc-MessageSender.id
 }
 
-output "aws_iam_role_crc-CloudResume_SendMessage_arn" {
+output "aws_iam_role_crc-MessageSender_arn" {
   value = aws_iam_role.crc-MessageSender.arn
 }
 
-output "aws_iam_role_crc-CloudResume_TrackVisitors_id" {
+output "aws_iam_role_crc-VisitorTracker_id" {
   value = aws_iam_role.crc-VisitorTracker.id
 }
 
-output "aws_iam_role_crc-CloudResume_TrackVisitors_arn" {
+output "aws_iam_role_crc-VisitorTracker_arn" {
   value = aws_iam_role.crc-VisitorTracker.arn
 }

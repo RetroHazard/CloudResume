@@ -446,7 +446,7 @@ resource "aws_lambda_permission" "crc-event-permissions-api-visitors" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.crc-trackVisitors.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${var.api-exectution-arn}/*/GET/visitors"
+  source_arn    = "${var.api-execution-arn}/*/GET/visitors"
   statement_id  = uuid()
 }
 
@@ -454,7 +454,7 @@ resource "aws_lambda_permission" "crc-event-permissions-api-contact" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.crc-sendMessage.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${var.api-exectution-arn}/*/POST/contact"
+  source_arn    = "${var.api-execution-arn}/*/POST/contact"
   statement_id  = uuid()
 }
 
