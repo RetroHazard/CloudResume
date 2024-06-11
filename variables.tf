@@ -5,7 +5,7 @@ variable "service" {
 
 variable "domain-name" {
   type    = string
-  default = "cloudresume-agb.jp"
+  default = "demo-example.info"
 }
 
 variable "assume_role" {
