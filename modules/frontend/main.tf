@@ -448,7 +448,7 @@ resource "aws_acm_certificate" "crc-website-certificate" {
 
 resource "aws_acm_certificate_validation" "crc-website-certificate-validation" {
   certificate_arn = aws_acm_certificate.crc-website-certificate.arn
-  validation_record_fqdns = [aws_route53_record.crc-hosted-zone-validation-record.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.crc-hosted-zone-validation-record: record.fqdn]
 }
 
 #  End Certificates Block  #
