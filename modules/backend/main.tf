@@ -173,6 +173,10 @@ resource "aws_dynamodb_table" "crc-visitor-record" {
 #  Begin SES Block  #
 
 resource "aws_ses_configuration_set" "crc-contact-mail" {
+  depends_on = [
+    var.r53-ses-verification-mx,
+    var.r53-ses-verification-txt
+  ]
   delivery_options {
     tls_policy = "Require"
   }

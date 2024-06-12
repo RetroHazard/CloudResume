@@ -59,8 +59,8 @@ resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-prod" {
 
   block_public_policy = false
   restrict_public_buckets = false
-  block_public_acls = true
-  ignore_public_acls = true
+  block_public_acls = false
+  ignore_public_acls = false
 }
 
 resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
@@ -138,8 +138,8 @@ resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-staging" {
 
   block_public_policy = false
   restrict_public_buckets = false
-  block_public_acls = true
-  ignore_public_acls = true
+  block_public_acls = false
+  ignore_public_acls = false
 }
 
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
@@ -178,6 +178,9 @@ resource "aws_s3_bucket" "crc-agb-s3-website-logging" {
 
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-logging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
+
+  acl = "log-delivery-write"
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -256,6 +259,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   }
 
   enabled         = "true"
+  default_root_object = "index.html"
   http_version    = "http2"
   is_ipv6_enabled = "false"
 
@@ -332,6 +336,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
   }
 
   enabled         = "true"
+  default_root_object = "index.html"
   http_version    = "http2"
   is_ipv6_enabled = "true"
 
@@ -513,6 +518,19 @@ resource "aws_route53_hosted_zone_dnssec" "crc-hosted-zone" {
   hosted_zone_id = aws_route53_key_signing_key.crc-dnssec-ksk.hosted_zone_id
 }
 
+resource "aws_route53_health_check" "crc-website-health-check-prod" {
+  depends_on = [
+    aws_cloudfront_distribution.crc-cf-production-distribution
+  ]
+  reference_name    = "crc-website-prod"
+  fqdn              = var.domain-name
+  port              = 443
+  type              = "HTTPS"
+  failure_threshold = "5"
+  request_interval  = "30"
+  enable_sni        = true
+}
+
 resource "aws_route53_record" "crc-website-cert-validation" {
   for_each = {
     for dvo in aws_acm_certificate.crc-website-certificate.domain_validation_options : dvo.domain_name => {
@@ -630,7 +648,7 @@ resource "aws_api_gateway_rest_api" "crc-rest-api" {
 
 resource "aws_api_gateway_domain_name" "crc-api-domain" {
   domain_name = "api.${var.domain-name}"
-  regional_certificate_arn = aws_acm_certificate.crc-website-certificate.arn
+  certificate_arn = aws_acm_certificate.crc-website-certificate.arn
   endpoint_configuration {
     types = ["EDGE"]
   }

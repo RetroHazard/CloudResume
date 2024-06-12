@@ -66,4 +66,7 @@ module "backend" {
   cf-production-distribution = module.frontend.aws_cloudfront_distribution_crc-cf-production-distribution_id
   cf-staging-distribution = module.frontend.aws_cloudfront_distribution_crc-cf-staging-distribution_id
   api-execution-arn = module.frontend.aws_api_gateway_rest_api_crc-rest-api_exec-arn
+
+  r53-ses-verification-mx  = module.frontend.aws_route53_record_crc-ses-verification-record_MX
+  r53-ses-verification-txt = module.frontend.aws_route53_record_crc-ses-verification-record_TXT
 }

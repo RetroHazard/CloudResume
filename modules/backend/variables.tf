@@ -67,3 +67,11 @@ variable "cf-staging-distribution" {
 variable "api-execution-arn" {
   type = string
 }
+
+variable "r53-ses-verification-txt" {
+  type = string
+}
+
+variable "r53-ses-verification-mx" {
+  type = string
+}

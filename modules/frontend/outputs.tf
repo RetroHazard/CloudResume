@@ -57,7 +57,13 @@ output "aws_cloudfront_distribution_crc-cf-staging-distribution_id" {
 #######################
 # Begin Route53 Block #
 
+output "aws_route53_record_crc-ses-verification-record_TXT" {
+  value = aws_route53_record.crc-dns-zone-ses-record-TXT.id
+}
 
+output "aws_route53_record_crc-ses-verification-record_MX" {
+  value = aws_route53_record.crc-dns-zone-ses-record-MX.id
+}
 
 #  End Route53 Block  #
 #######################
