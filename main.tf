@@ -1,3 +1,8 @@
+import {
+  to = module.frontend.aws_route53_zone.crc-hosted-zone
+  id = "Z0112988166DCA66VYK9N"
+}
+
 module "iam" {
   source = "./modules/iam"
 
