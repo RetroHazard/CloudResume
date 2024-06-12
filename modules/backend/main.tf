@@ -174,6 +174,7 @@ resource "aws_dynamodb_table" "crc-visitor-record" {
 
 resource "aws_ses_configuration_set" "crc-contact-mail" {
   depends_on = [
+    var.acm-certificate-validation,
     var.r53-ses-verification-mx,
     var.r53-ses-verification-txt,
     aws_ses_domain_identity.crc-mail-domain,

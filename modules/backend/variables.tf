@@ -75,3 +75,7 @@ variable "r53-ses-verification-txt" {
 variable "r53-ses-verification-mx" {
   type = string
 }
+
+variable "acm-certificate-validation" {
+  type = string
+}

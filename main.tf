@@ -69,4 +69,6 @@ module "backend" {
 
   r53-ses-verification-mx  = module.frontend.aws_route53_record_crc-ses-verification-record_MX
   r53-ses-verification-txt = module.frontend.aws_route53_record_crc-ses-verification-record_TXT
+
+  acm-certificate-validation = module.frontend.aws_acm_certificate_validation_crc-website-certificate-validation
 }

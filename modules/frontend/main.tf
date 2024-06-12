@@ -429,19 +429,26 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 
 resource "aws_acm_certificate" "crc-website-certificate" {
   domain_name   = var.domain-name
+  subject_alternative_names = ["*.${var.domain-name}"]
   key_algorithm = "RSA_2048"
+  validation_method = "DNS"
+
+  tags = {
+    Name : var.domain-name
+  }
 
   options {
     certificate_transparency_logging_preference = "ENABLED"
   }
-  
-  subject_alternative_names = ["*.${var.domain-name}"]
-
-  validation_method = "DNS"
 
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_acm_certificate_validation" "crc-website-certificate-validation" {
+  certificate_arn = aws_acm_certificate.crc-website-certificate.arn
+  validation_record_fqdns = [aws_route53_record.crc-hosted-zone-validation-record.fqdn]
 }
 
 #  End Certificates Block  #
@@ -555,7 +562,7 @@ resource "aws_route53_health_check" "crc-website-health-check-prod" {
   enable_sni        = true
 }
 
-resource "aws_route53_record" "crc-website-cert-validation" {
+resource "aws_route53_record" "crc-hosted-zone-validation-record" {
   for_each = {
     for dvo in aws_acm_certificate.crc-website-certificate.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
@@ -570,6 +577,14 @@ resource "aws_route53_record" "crc-website-cert-validation" {
   type    = each.value.type
   zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
+
+/*resource "aws_route53_record" "crc-hosted-zone-validation-record" {
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
+  name    = aws_acm_certificate.crc-website-certificate.domain_validation_options.0.resource_record_name
+  type    = aws_acm_certificate.crc-website-certificate.domain_validation_options.0.resource_record_type
+  records = [aws_acm_certificate.crc-website-certificate.domain_validation_options.0.resource_record_value]
+  ttl = 60
+}*/
 
 resource "aws_route53_record" "crc-dns-zone-api-record-A" {
   alias {

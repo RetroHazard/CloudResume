@@ -39,7 +39,9 @@ output "aws_cloudfront_distribution_crc-cf-staging-distribution_id" {
 ############################
 # Begin Certificates Block #
 
-
+output "aws_acm_certificate_validation_crc-website-certificate-validation" {
+  value = aws_acm_certificate_validation.crc-website-certificate-validation.id
+}
 
 #  End Certificates Block  #
 ############################
