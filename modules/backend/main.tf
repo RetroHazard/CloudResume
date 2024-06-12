@@ -219,11 +219,6 @@ resource "aws_sqs_queue" "crc-cloudfront-invalidation-queue" {
   visibility_timeout_seconds        = "60"
 }
 
-data "aws_sqs_queue" "crc_cloudfront_invalidation_queue" {
-  depends_on = [aws_sqs_queue.crc-cloudfront-invalidation-queue]
-  name = aws_sqs_queue.crc-cloudfront-invalidation-queue.name
-}
-
 resource "aws_sqs_queue_policy" "crc_cloudfront_invalidation_queue_policy" {
   queue_url = aws_sqs_queue.crc-cloudfront-invalidation-queue.id
   policy = jsonencode({

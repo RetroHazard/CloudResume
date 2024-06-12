@@ -481,15 +481,6 @@ resource "aws_kms_key" "crc-dnssec-key" {
 #######################
 # Begin Route53 Block #
 
-data "aws_route53_zone" "crc-domain-name" {
-  depends_on = [aws_route53_zone.crc-hosted-zone]
-  name = var.domain-name
-}
-
-data "aws_route53_zone" "crc-hosted-zone"{
-  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
-}
-
 resource "aws_ses_domain_identity" "crc-ses-domain-id" {
   domain = var.domain-name
 }
