@@ -419,7 +419,7 @@ resource "aws_acm_certificate" "crc-website-certificate" {
 # Begin Key Manager Block #
 
 resource "aws_kms_alias" "crc-dnssec-key" {
-  name          = "alias/${var.domain-name}_dnssec"
+  name          = "alias/${var.sanitized-domain-name}_dnssec"
   target_key_id = aws_kms_key.crc-dnssec-key.key_id
 }
 

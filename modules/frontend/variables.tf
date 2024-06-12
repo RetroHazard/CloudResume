@@ -16,6 +16,10 @@ variable "domain-name" {
   type = string
 }
 
+variable "sanitized-domain-name" {
+  type = string
+}
+
 # Inputs from IAM
 
 variable "api-gateway-cw-logs-role" {

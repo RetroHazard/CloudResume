@@ -67,6 +67,7 @@ module "frontend" {
   caller_user = data.aws_caller_identity.current.user_id
   
   domain-name = var.domain-name
+  sanitized-domain-name = var.sanitized-domain-name
   
   waf-acl-arn = module.backend.aws_wafv2_web_acl_crc-web-acl_arn
   
@@ -76,6 +77,7 @@ module "frontend" {
   api-gateway-cw-logs-role = module.iam.aws_iam_role_crc-api-CloudwatchLogs_arn
 
   ses-mail-from-domain = module.backend.aws_ses_domain_mail_from_crc-mail-from-domain
+
 }
 
 module "backend" {
