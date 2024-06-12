@@ -179,8 +179,6 @@ resource "aws_s3_bucket" "crc-agb-s3-website-logging" {
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-logging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
 
-  acl = "log-delivery-write"
-
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -200,6 +198,32 @@ resource "aws_s3_bucket_policy" "crc-agb-s3-website-logging" {
       }
     ]
   })
+}
+
+resource "aws_s3_bucket_ownership_controls" "crc-agb-s3-website-logging" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_acl" "crc-agb-s3-website-logging" {
+  depends_on = [aws_s3_bucket_ownership_controls.crc-agb-s3-website-logging]
+
+  bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
+  access_control_policy {
+    grant {
+      grantee {
+        id   = data.aws_cloudfront_log_delivery_canonical_user_id.current.id
+        type = "CanonicalUser"
+      }
+      permission = "FULL_CONTROL"
+    }
+    owner {
+      id = data.aws_canonical_user_id.current.id
+    }
+  }
+
 }
 
 #  End S3 Block  #
@@ -341,7 +365,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
   is_ipv6_enabled = "true"
 
   logging_config {
-    bucket          = aws_s3_bucket.crc-agb-s3-website-staging.bucket_domain_name
+    bucket          = aws_s3_bucket.crc-agb-s3-website-logging.bucket_domain_name
     include_cookies = "false"
     prefix          = "cf_crc_staging/"
   }
@@ -404,7 +428,7 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 # Begin Certificates Block #
 
 resource "aws_acm_certificate" "crc-website-certificate" {
-  domain_name   = "*.${var.domain-name}"
+  domain_name   = var.domain-name
   key_algorithm = "RSA_2048"
 
   options {
@@ -647,7 +671,7 @@ resource "aws_api_gateway_rest_api" "crc-rest-api" {
 }
 
 resource "aws_api_gateway_domain_name" "crc-api-domain" {
-  domain_name = "api.${var.domain-name}"
+  domain_name = "api.${aws_acm_certificate.crc-website-certificate.domain_name}"
   certificate_arn = aws_acm_certificate.crc-website-certificate.arn
   endpoint_configuration {
     types = ["EDGE"]

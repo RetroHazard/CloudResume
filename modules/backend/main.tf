@@ -175,7 +175,9 @@ resource "aws_dynamodb_table" "crc-visitor-record" {
 resource "aws_ses_configuration_set" "crc-contact-mail" {
   depends_on = [
     var.r53-ses-verification-mx,
-    var.r53-ses-verification-txt
+    var.r53-ses-verification-txt,
+    aws_ses_domain_identity.crc-mail-domain,
+    aws_ses_domain_mail_from.crc-mail-from-domain
   ]
   delivery_options {
     tls_policy = "Require"
