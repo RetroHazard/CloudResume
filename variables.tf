@@ -8,6 +8,11 @@ variable "sanitized-domain-name" {
   default = "silent-skies-site"
 }
 
+variable "api-current-stage" {
+  type = string
+  default = "v1"
+}
+
 variable "assume_role" {
   type    = string
   default = "arn:aws:iam::730335615519:role/DevOpsTerraform_AssumeRole"

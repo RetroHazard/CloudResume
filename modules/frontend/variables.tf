@@ -20,6 +20,10 @@ variable "sanitized-domain-name" {
   type = string
 }
 
+variable "api-current-stage" {
+  type = string
+}
+
 # Inputs from IAM
 
 variable "api-gateway-cw-logs-role" {
@@ -41,5 +45,9 @@ variable "api-lambda-contact-uri" {
 }
 
 variable "ses-mail-from-domain" {
+  type = string
+}
+
+variable "sqs-cf-invalidation-queue" {
   type = string
 }

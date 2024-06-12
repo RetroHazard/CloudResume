@@ -1,7 +1,8 @@
-import {
+/*import {
   to = module.frontend.aws_route53_zone.crc-hosted-zone
-  id = "Z0112988166DCA66VYK9N"
-}
+  id = "-CHANGE-ME-"
+  // TODO: UPDATE ZONE ID BEFORE DEPLOY
+}*/
 
 module "iam" {
   source = "./modules/iam"
@@ -46,7 +47,8 @@ module "frontend" {
   api-gateway-cw-logs-role = module.iam.aws_iam_role_crc-api-CloudwatchLogs_arn
 
   ses-mail-from-domain = module.backend.aws_ses_domain_mail_from_crc-mail-from-domain
-
+  sqs-cf-invalidation-queue = module.backend.aws_sqs_queue_crc-cloudfront-invalidation-queue_arn
+  api-current-stage = ""
 }
 
 module "backend" {

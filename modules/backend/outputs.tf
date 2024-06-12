@@ -51,7 +51,9 @@ output "aws_ses_domain_mail_from_crc-mail-from-domain" {
 ###################
 # Begin SQS Block #
 
-
+output "aws_sqs_queue_crc-cloudfront-invalidation-queue_arn" {
+  value = aws_sqs_queue.crc-cloudfront-invalidation-queue.arn
+}
 
 #  End SQS Block  #
 ###################

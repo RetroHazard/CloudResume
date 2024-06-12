@@ -89,6 +89,15 @@ resource "aws_s3_bucket_website_configuration" "crc-agb-s3-website-prod" {
   }
 }
 
+resource "aws_s3_bucket_notification" "crc-agb-s3-website-prod" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
+
+  queue {
+    events = ["s3:ObjectCreated:*"]
+    queue_arn = var.sqs-cf-invalidation-queue
+  }
+}
+
 
 resource "aws_s3_bucket" "crc-agb-s3-website-staging" {
   bucket        = "crc-agb-s3-website-staging-${random_string.bucket_suffix.result}"
@@ -168,6 +177,15 @@ resource "aws_s3_bucket_website_configuration" "crc-agb-s3-website-staging" {
   }
 }
 
+resource "aws_s3_bucket_notification" "crc-agb-s3-website-staging" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
+
+  queue {
+    events = ["s3:ObjectCreated:*"]
+    queue_arn = var.sqs-cf-invalidation-queue
+  }
+}
+
 
 resource "aws_s3_bucket" "crc-agb-s3-website-logging" {
   bucket        = "crc-agb-s3-website-logging-${random_string.bucket_suffix.result}"
@@ -233,7 +251,7 @@ resource "aws_s3_bucket_acl" "crc-agb-s3-website-logging" {
 ##########################
 # Begin CloudFront Block #
 
-resource "aws_cloudfront_cache_policy" "crc-default-caching-policy" {
+/*resource "aws_cloudfront_cache_policy" "crc-default-caching-policy" {
   comment     = "Policy with caching enabled. Supports Gzip and Brotli compression."
   default_ttl = "86400"
   max_ttl     = "31536000"
@@ -256,7 +274,7 @@ resource "aws_cloudfront_cache_policy" "crc-default-caching-policy" {
       query_string_behavior = "none"
     }
   }
-}
+}*/
 
 resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
@@ -272,7 +290,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
 
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
-    cache_policy_id        = aws_cloudfront_cache_policy.crc-default-caching-policy.id
+    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     cached_methods         = ["GET", "HEAD"]
     compress               = "true"
     default_ttl            = "0"
@@ -344,7 +362,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
 
   default_cache_behavior {
     allowed_methods = ["GET", "HEAD"]
-    cache_policy_id = aws_cloudfront_cache_policy.crc-default-caching-policy.id
+    cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     cached_methods  = ["GET", "HEAD"]
     compress        = "true"
     default_ttl     = "0"
@@ -534,6 +552,9 @@ resource "aws_route53_zone" "crc-hosted-zone" {
   comment       = "Hosted Zone for Cloud Resume Project"
   force_destroy = "false"
   name          = var.domain-name
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_route53_key_signing_key" "crc-dnssec-ksk" {
@@ -601,7 +622,7 @@ resource "aws_route53_record" "crc-dns-zone-ses-record-MX" {
 
 resource "aws_route53_record" "crc-dns-zone-ses-record-TXT" {
   name                             = var.ses-mail-from-domain
-  records                          = [aws_ses_domain_identity.crc-ses-domain-id.verification_token]
+  records                          = ["v=spf1 include:amazonses.com -all"]
   ttl                              = "600"
   type                             = "TXT"
   zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
@@ -691,13 +712,14 @@ resource "aws_api_gateway_base_path_mapping" "crc-api-domain-deploy" {
   api_id      = aws_api_gateway_rest_api.crc-rest-api.id
   stage_name  = aws_api_gateway_stage.crc-api-stage.stage_name
   domain_name = aws_api_gateway_domain_name.crc-api-domain.domain_name
+  base_path = aws_api_gateway_stage.crc-api-stage.stage_name
 }
 
 resource "aws_api_gateway_stage" "crc-api-stage" {
   cache_cluster_enabled = "false"
   deployment_id         = aws_api_gateway_deployment.crc-api-deployment.id
   rest_api_id           = aws_api_gateway_deployment.crc-api-deployment.rest_api_id
-  stage_name            = "v1"
+  stage_name            = var.api-current-stage
 }
 
 resource "aws_api_gateway_deployment" "crc-api-deployment" {
