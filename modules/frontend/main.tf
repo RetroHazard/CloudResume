@@ -563,7 +563,7 @@ resource "aws_route53_health_check" "crc-website-health-check-prod" {
   enable_sni        = true
 }
 
-/*resource "aws_route53_record" "crc-hosted-zone-validation-record" {
+resource "aws_route53_record" "crc-hosted-zone-validation-record" {
   for_each = {
     for dvo in aws_acm_certificate.crc-website-certificate.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
@@ -577,14 +577,6 @@ resource "aws_route53_health_check" "crc-website-health-check-prod" {
   ttl     = 60
   type    = each.value.type
   zone_id = aws_route53_zone.crc-hosted-zone.zone_id
-}*/
-
-resource "aws_route53_record" "crc-hosted-zone-validation-record" {
-  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
-  name    = aws_acm_certificate.crc-website-certificate.domain_validation_options.0.resource_record_name
-  type    = aws_acm_certificate.crc-website-certificate.domain_validation_options.0.resource_record_type
-  records = [aws_acm_certificate.crc-website-certificate.domain_validation_options.0.resource_record_value]
-  ttl = 60
 }
 
 resource "aws_route53_record" "crc-dns-zone-api-record-A" {
