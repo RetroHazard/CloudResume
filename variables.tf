@@ -1,11 +1,11 @@
 variable "domain-name" {
   type    = string
-  default = "demo-demo.com"
+  default = "silentskies.site"
 }
 
 variable "sanitized-domain-name" {
   type    = string
-  default = "demo-demo-com"
+  default = "silent-skies-site"
 }
 
 variable "assume_role" {
