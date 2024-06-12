@@ -259,7 +259,8 @@ resource "aws_cloudfront_cache_policy" "crc-default-caching-policy" {
 }
 
 resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
-  aliases = ["*.${var.domain-name}", "www.${var.domain-name}"]
+  depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
+  aliases = ["www.${var.domain-name}", "*.${var.domain-name}"]
   comment = "Production Distribution for Cloud Resume"
 
   custom_error_response {
@@ -337,6 +338,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
 }
 
 resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
+  depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
   aliases = ["staging.${var.domain-name}"]
   comment = "Staging Distribution for Cloud Resume"
 
@@ -428,8 +430,7 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 # Begin Certificates Block #
 
 resource "aws_acm_certificate" "crc-website-certificate" {
-  domain_name   = var.domain-name
-  subject_alternative_names = ["*.${var.domain-name}"]
+  domain_name   = "*.${var.domain-name}"
   key_algorithm = "RSA_2048"
   validation_method = "DNS"
 
@@ -562,7 +563,7 @@ resource "aws_route53_health_check" "crc-website-health-check-prod" {
   enable_sni        = true
 }
 
-resource "aws_route53_record" "crc-hosted-zone-validation-record" {
+/*resource "aws_route53_record" "crc-hosted-zone-validation-record" {
   for_each = {
     for dvo in aws_acm_certificate.crc-website-certificate.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
@@ -576,15 +577,15 @@ resource "aws_route53_record" "crc-hosted-zone-validation-record" {
   ttl     = 60
   type    = each.value.type
   zone_id = aws_route53_zone.crc-hosted-zone.zone_id
-}
+}*/
 
-/*resource "aws_route53_record" "crc-hosted-zone-validation-record" {
+resource "aws_route53_record" "crc-hosted-zone-validation-record" {
   zone_id = aws_route53_zone.crc-hosted-zone.zone_id
   name    = aws_acm_certificate.crc-website-certificate.domain_validation_options.0.resource_record_name
   type    = aws_acm_certificate.crc-website-certificate.domain_validation_options.0.resource_record_type
   records = [aws_acm_certificate.crc-website-certificate.domain_validation_options.0.resource_record_value]
   ttl = 60
-}*/
+}
 
 resource "aws_route53_record" "crc-dns-zone-api-record-A" {
   alias {
@@ -686,6 +687,7 @@ resource "aws_api_gateway_rest_api" "crc-rest-api" {
 }
 
 resource "aws_api_gateway_domain_name" "crc-api-domain" {
+  depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
   domain_name = "api.${aws_acm_certificate.crc-website-certificate.domain_name}"
   certificate_arn = aws_acm_certificate.crc-website-certificate.arn
   endpoint_configuration {
