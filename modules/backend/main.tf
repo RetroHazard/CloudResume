@@ -172,6 +172,12 @@ resource "aws_dynamodb_table" "crc-visitor-record" {
 #####################
 #  Begin SES Block  #
 
+resource "random_string" "configuration_suffix" {
+  length = 6
+  special = false
+  upper = false
+}
+
 resource "aws_ses_configuration_set" "crc-contact-mail" {
   depends_on = [
     var.acm-certificate-validation,
@@ -184,12 +190,15 @@ resource "aws_ses_configuration_set" "crc-contact-mail" {
     tls_policy = "Require"
   }
 
-  name                       = "ContactFormMailer"
+  name                       = "ContactFormConfiguration-${random_string.configuration_suffix.result}"
   reputation_metrics_enabled = "false"
   sending_enabled            = "true"
 
   tracking_options {
     custom_redirect_domain = "contact.${var.domain-name}"
+  }
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -285,8 +294,6 @@ resource "aws_lambda_event_source_mapping" "crc-sqs-invalidation-queue" {
   function_name                      = aws_lambda_function.crc-cloudfrontInvalidation.arn
   function_response_types            = ["ReportBatchItemFailures"]
   maximum_batching_window_in_seconds = "5"
-  maximum_retry_attempts             = "0"
-  tumbling_window_in_seconds         = "0"
 }
 
 resource "aws_lambda_function_event_invoke_config" "crc-invoke-invalidation-queue" {

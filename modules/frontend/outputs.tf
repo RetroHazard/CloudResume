@@ -28,8 +28,16 @@ output "aws_cloudfront_distribution_crc-cf-production-distribution_id" {
   value = aws_cloudfront_distribution.crc-cf-production-distribution.id
 }
 
+output "aws_cloudfront_distribution_crc-cf-production-distribution_arn" {
+  value = aws_cloudfront_distribution.crc-cf-production-distribution.arn
+}
+
 output "aws_cloudfront_distribution_crc-cf-staging-distribution_id" {
   value = aws_cloudfront_distribution.crc-cf-staging-distribution.id
+}
+
+output "aws_cloudfront_distribution_crc-cf-staging-distribution_arn" {
+  value = aws_cloudfront_distribution.crc-cf-staging-distribution.arn
 }
 
 #  End CloudFront Block  #

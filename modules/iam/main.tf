@@ -20,7 +20,7 @@ resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-AccessPolicy" {
   name = "crc-CloudFrontInvalidation-AccessPolicy"
   path = "/"
 
-  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-CloudfrontInvalidation-access-policy.json)
+  policy = data.aws_iam_policy_document.crc-lambda-CloudfrontInvalidation-access-policy.json
 }
 
 resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-Logging" {
@@ -34,7 +34,7 @@ resource "aws_iam_policy" "crc-Lambda-SendMessage-AccessPolicy" {
   name = "crc-Lambda-SendMessage-AccessPolicy"
   path = "/"
 
-  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-SendMessage-access-policy.json)
+  policy = data.aws_iam_policy_document.crc-lambda-SendMessage-access-policy.json
 }
 
 resource "aws_iam_policy" "crc-Lambda-SendMessage-Logging" {

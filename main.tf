@@ -16,8 +16,8 @@ module "iam" {
   crc-s3-production-arn = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_arn
   crc-s3-staging-arn = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_arn
 
-  crc-cf-production-distribution = module.frontend.aws_cloudfront_distribution_crc-cf-production-distribution_id
-  crc-cf-staging-distribution = module.frontend.aws_cloudfront_distribution_crc-cf-staging-distribution_id
+  crc-cf-production-distribution = module.frontend.aws_cloudfront_distribution_crc-cf-production-distribution_arn
+  crc-cf-staging-distribution = module.frontend.aws_cloudfront_distribution_crc-cf-staging-distribution_arn
 
   crc-cw-lambda-log-group-cloudfrontInvalidation = module.backend.aws_cloudwatch_log_group_crc-cloudfrontInvalidation_arn
   crc-cw-lambda-log-group-sendMessage            = module.backend.aws_cloudwatch_log_group_crc-sendMessage_arn

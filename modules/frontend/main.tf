@@ -583,7 +583,7 @@ resource "aws_route53_record" "crc-dns-zone-api-record-A" {
   alias {
     evaluate_target_health = "false"
     name                   = aws_api_gateway_domain_name.crc-api-domain.cloudfront_domain_name
-    zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
+    zone_id                = aws_api_gateway_domain_name.crc-api-domain.cloudfront_zone_id
   }
 
   name                             = "api.${var.domain-name}"
@@ -608,9 +608,9 @@ resource "aws_route53_record" "crc-dns-zone-ses-record-TXT" {
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-dkim-record-CNAME" {
-  count  = length(aws_ses_domain_dkim.crc-ses-domain-dkim[*].dkim_tokens)
-  name   = "${element(aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens, count.index)}._domainkey.${aws_ses_domain_identity.crc-ses-domain-id.domain}"
-  records = ["${element(aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens, count.index)}.dkim.amazonses.com"]
+  count  = 3
+  name   = "${aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens[count.index]}._domainkey"
+  records = ["${aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens[count.index]}.dkim.amazonses.com"]
   ttl    = "600"
   type   = "CNAME"
   zone_id = aws_route53_zone.crc-hosted-zone.zone_id
@@ -628,7 +628,7 @@ resource "aws_route53_record" "crc-dns-zone-record-A" {
   alias {
     evaluate_target_health = "false"
     name                   = aws_cloudfront_distribution.crc-cf-production-distribution.domain_name
-    zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
+    zone_id                = aws_cloudfront_distribution.crc-cf-production-distribution.hosted_zone_id
   }
 
   name                             = var.domain-name
@@ -640,7 +640,7 @@ resource "aws_route53_record" "crc-dns-zone-www-record-A" {
   alias {
     evaluate_target_health = "false"
     name                   = aws_cloudfront_distribution.crc-cf-production-distribution.domain_name
-    zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
+    zone_id                = aws_cloudfront_distribution.crc-cf-production-distribution.hosted_zone_id
   }
 
   name                             = "www.${var.domain-name}"
@@ -652,7 +652,7 @@ resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
   alias {
     evaluate_target_health = "false"
     name                   = aws_cloudfront_distribution.crc-cf-staging-distribution.domain_name
-    zone_id                = aws_route53_zone.crc-hosted-zone.zone_id
+    zone_id                = aws_cloudfront_distribution.crc-cf-staging-distribution.hosted_zone_id
   }
 
   name                             = "staging.${var.domain-name}"
@@ -680,7 +680,7 @@ resource "aws_api_gateway_rest_api" "crc-rest-api" {
 
 resource "aws_api_gateway_domain_name" "crc-api-domain" {
   depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
-  domain_name = "api.${aws_acm_certificate.crc-website-certificate.domain_name}"
+  domain_name = "api.${var.domain-name}"
   certificate_arn = aws_acm_certificate.crc-website-certificate.arn
   endpoint_configuration {
     types = ["EDGE"]
