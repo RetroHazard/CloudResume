@@ -419,7 +419,7 @@ resource "aws_acm_certificate" "crc-website-certificate" {
 # Begin Key Manager Block #
 
 resource "aws_kms_alias" "crc-dnssec-key" {
-  name          = "alias/cloudresume_dnssec"
+  name          = "alias/${var.domain-name}_dnssec"
   target_key_id = aws_kms_key.crc-dnssec-key.key_id
 }
 
@@ -530,19 +530,17 @@ resource "aws_route53_record" "crc-dns-zone-api-record-A" {
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-record-MX" {
-  name                             = "contact.${var.domain-name}"
-  //todo Get Record from SES
-  records                          = ["10 feedback-smtp.ap-northeast-1.amazonses.com"]
-  ttl                              = "300"
+  name                             = var.ses-mail-from-domain
+  records                          = ["10 feedback-smtp.us-east-1.amazonses.com"] //todo Update Region Based On Deployment
+  ttl                              = "600"
   type                             = "MX"
   zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-record-TXT" {
-  name                             = "contact.${var.domain-name}"
-  //todo Get Record from SES
-  records                          = ["v=spf1 include:amazonses.com ~all"]
-  ttl                              = "300"
+  name                             = var.ses-mail-from-domain
+  records                          = [aws_ses_domain_identity.crc-ses-domain-id.verification_token]
+  ttl                              = "600"
   type                             = "TXT"
   zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
 }
@@ -631,6 +629,13 @@ resource "aws_api_gateway_rest_api" "crc-rest-api" {
 }
 
 resource "aws_api_gateway_deployment" "crc-api-deployment" {
+  depends_on = [
+    aws_api_gateway_method.crc-api-visitors-get,
+    aws_api_gateway_method.crc-api-visitors-options,
+    aws_api_gateway_method.crc-api-contact-post,
+    aws_api_gateway_method.crc-api-contact-options
+  ]
+
   rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
 
   triggers = {
@@ -698,6 +703,8 @@ resource "aws_api_gateway_gateway_response" "crc-api-response-default-5XX" {
 }
 
 resource "aws_api_gateway_integration" "crc-api-visitors-get" {
+  depends_on = [aws_api_gateway_method.crc-api-visitors-get]
+
   cache_namespace         = aws_api_gateway_resource.crc-api-resource-visitors.id
   connection_type         = "INTERNET"
   content_handling        = "CONVERT_TO_TEXT"
@@ -712,6 +719,8 @@ resource "aws_api_gateway_integration" "crc-api-visitors-get" {
 }
 
 resource "aws_api_gateway_integration" "crc-api-visitors-options" {
+  depends_on = [aws_api_gateway_method.crc-api-visitors-options]
+
   cache_namespace      = aws_api_gateway_resource.crc-api-resource-visitors.id
   connection_type      = "INTERNET"
   http_method          = "OPTIONS"
@@ -727,7 +736,9 @@ resource "aws_api_gateway_integration" "crc-api-visitors-options" {
   type                 = "MOCK"
 }
 
-resource "aws_api_gateway_integration" "crc-cpi-contact-options" {
+resource "aws_api_gateway_integration" "crc-api-contact-options" {
+  depends_on = [aws_api_gateway_method.crc-api-contact-options]
+
   cache_namespace      = aws_api_gateway_resource.crc-api-resource-contact.id
   connection_type      = "INTERNET"
   http_method          = "OPTIONS"
@@ -744,6 +755,8 @@ resource "aws_api_gateway_integration" "crc-cpi-contact-options" {
 }
 
 resource "aws_api_gateway_integration" "crc-api-contact-post" {
+  depends_on = [aws_api_gateway_method.crc-api-contact-post]
+
   cache_namespace         = aws_api_gateway_resource.crc-api-resource-contact.id
   connection_type         = "INTERNET"
   content_handling        = "CONVERT_TO_TEXT"
@@ -758,6 +771,8 @@ resource "aws_api_gateway_integration" "crc-api-contact-post" {
 }
 
 resource "aws_api_gateway_integration_response" "crc-api-visitors-get" {
+  depends_on = [aws_api_gateway_integration.crc-api-visitors-get]
+
   http_method = "GET"
   resource_id = aws_api_gateway_resource.crc-api-resource-visitors.id
 
@@ -770,6 +785,8 @@ resource "aws_api_gateway_integration_response" "crc-api-visitors-get" {
 }
 
 resource "aws_api_gateway_integration_response" "crc-api-visitors-options" {
+  depends_on = [aws_api_gateway_integration.crc-api-visitors-options]
+
   http_method = "OPTIONS"
   resource_id = aws_api_gateway_resource.crc-api-resource-visitors.id
 
@@ -784,6 +801,8 @@ resource "aws_api_gateway_integration_response" "crc-api-visitors-options" {
 }
 
 resource "aws_api_gateway_integration_response" "crc-api-contact-options" {
+  depends_on = [aws_api_gateway_integration.crc-api-contact-options]
+
   http_method = "OPTIONS"
   resource_id = aws_api_gateway_resource.crc-api-resource-contact.id
 
@@ -798,6 +817,8 @@ resource "aws_api_gateway_integration_response" "crc-api-contact-options" {
 }
 
 resource "aws_api_gateway_integration_response" "crc-api-contact-post" {
+  depends_on = [aws_api_gateway_integration.crc-api-contact-post]
+
   http_method = "POST"
   resource_id = aws_api_gateway_resource.crc-api-resource-contact.id
 

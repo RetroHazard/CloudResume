@@ -97,14 +97,6 @@ output "aws_route53_hosted_zone_dnssec_crc-hosted-zone_id" {
   value = aws_route53_hosted_zone_dnssec.crc-hosted-zone.id
 }
 
-output "aws_route53_record_crc-dns-zone-core-record-NS_id" {
-  value = aws_route53_record.crc-dns-zone-core-record-NS.id
-}
-
-output "aws_route53_record_crc-dns-zone-core-record-SOA_id" {
-  value = aws_route53_record.crc-dns-zone-core-record-SOA.id
-}
-
 output "aws_route53_record_crc-dns-zone-api-record-A_id" {
   value = aws_route53_record.crc-dns-zone-api-record-A.id
 }
@@ -156,10 +148,6 @@ output "aws_api_gateway_stage_crc-api-stage_id" {
   value = aws_api_gateway_stage.crc-api-stage.id
 }
 
-output "aws_api_gateway_resource_crc-api-resource_id" {
-  value = aws_api_gateway_resource.crc-api-resource.id
-}
-
 output "aws_api_gateway_resource_crc-api-resource-visitors_id" {
   value = aws_api_gateway_resource.crc-api-resource-visitors.id
 }
@@ -188,8 +176,8 @@ output "aws_api_gateway_integration_crc-api-visitors-options_id" {
   value = aws_api_gateway_integration.crc-api-visitors-options.id
 }
 
-output "aws_api_gateway_integration_crc-cpi-contact-options_id" {
-  value = aws_api_gateway_integration.crc-cpi-contact-options.id
+output "aws_api_gateway_integration_crc-api-contact-options_id" {
+  value = aws_api_gateway_integration.crc-api-contact-options.id
 }
 
 output "aws_api_gateway_integration_crc-api-contact-post_id" {
@@ -242,14 +230,6 @@ output "aws_api_gateway_method_response_crc-api-contact-options_id" {
 
 output "aws_api_gateway_method_response_crc-api-contact-post_id" {
   value = aws_api_gateway_method_response.crc-api-contact-post.id
-}
-
-output "aws_api_gateway_model_crc-api-default-empty-model_id" {
-  value = aws_api_gateway_model.crc-api-default-empty-model.id
-}
-
-output "aws_api_gateway_model_crc-api-default-error-model_id" {
-  value = aws_api_gateway_model.crc-api-default-error-model.id
 }
 
 #  End API Gateway Block  #

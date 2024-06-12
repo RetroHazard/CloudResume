@@ -74,6 +74,8 @@ module "frontend" {
   api-lambda-visitors-uri = module.backend.aws_lambda_function_crc-trackVisitors_uri
 
   api-gateway-cw-logs-role = module.iam.aws_iam_role_crc-api-CloudwatchLogs_arn
+
+  ses-mail-from-domain = module.backend.aws_ses_domain_mail_from_crc-mail-from-domain
 }
 
 module "backend" {

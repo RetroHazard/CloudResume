@@ -194,6 +194,11 @@ resource "aws_ses_email_identity" "crc-mail-destination" {
   email = "a.bracken87+cloudresume_ses@gmail.com"
 }
 
+resource "aws_ses_domain_mail_from" "crc-mail-from-domain" {
+  domain           = aws_ses_domain_identity.crc-mail-domain.domain
+  mail_from_domain = "contact.${aws_ses_domain_identity.crc-mail-domain.domain}"
+}
+
 #  End SES Block  #
 ###################
 

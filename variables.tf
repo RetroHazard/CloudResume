@@ -1,8 +1,3 @@
-variable "service" {
-  type    = string
-  default = "abc"
-}
-
 variable "domain-name" {
   type    = string
   default = "demo-example.info"

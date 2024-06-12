@@ -35,3 +35,7 @@ variable "api-lambda-visitors-uri" {
 variable "api-lambda-contact-uri" {
   type = string
 }
+
+variable "ses-mail-from-domain" {
+  type = string
+}

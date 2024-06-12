@@ -113,19 +113,33 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
   }
 }
 
+data "aws_iam_policy_document" "crc-s3-github-actions" {
+  statement {
+    sid    = "VisualEditor1"
+    effect = "Allow"
+    actions = ["s3:*"]
+    resources = [
+      var.crc-s3-production-arn,
+      "${var.crc-s3-production-arn}/*",
+      var.crc-s3-staging-arn,
+      "${var.crc-s3-staging-arn}/*"
+    ]
+  }
+}
+
 // IAM Policies
 resource "aws_iam_policy" "crc-Lambda-TrackVisitors-AccessPolicy" {
   name = "crc-Lambda-TrackVisitors-AccessPolicy"
   path = "/"
 
-  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-TrackVisitors-access-policy.json)
+  policy = data.aws_iam_policy_document.crc-lambda-TrackVisitors-access-policy.json
 }
 
 resource "aws_iam_policy" "crc-Lambda-TrackVisitors-Logging" {
   name = "crc-Lambda-TrackVisitors-Logging"
   path = "/"
 
-  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-TrackVisitors-logging-policy.json)
+  policy = data.aws_iam_policy_document.crc-lambda-TrackVisitors-logging-policy.json
 }
 
 resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-AccessPolicy" {
@@ -139,7 +153,7 @@ resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-Logging" {
   name = "crc-Lambda-CloudFrontInvalidation-Logging"
   path = "/"
 
-  policy = jsonencode(data.aws_iam_policy_document.crc-lambda-CloudfrontInvalidation-logging-policy.json)
+  policy = data.aws_iam_policy_document.crc-lambda-CloudfrontInvalidation-logging-policy.json
 }
 
 resource "aws_iam_policy" "crc-Lambda-SendMessage-AccessPolicy" {
@@ -160,24 +174,7 @@ resource "aws_iam_policy" "crc-S3-GitHubActions" {
   name = "crc-S3-GitHubActions"
   path = "/"
 
-  policy = <<POLICY
-{
-  "Statement": [
-    {
-      "Action": "s3:*",
-      "Effect": "Allow",
-      "Resource": [
-        "${var.crc-s3-production-arn}",
-        "${var.crc-s3-production-arn}/*",
-        "${var.crc-s3-staging-arn}",
-        "${var.crc-s3-staging-arn}/*"
-      ],
-      "Sid": "VisualEditor1"
-    }
-  ],
-  "Version": "2012-10-17"
-}
-POLICY
+  policy = data.aws_iam_policy_document.crc-s3-github-actions.json
 }
 
 // IAM Policy Attachment
