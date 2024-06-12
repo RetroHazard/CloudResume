@@ -53,17 +53,17 @@ resource "aws_iam_policy" "crc-S3-GitHubActions" {
 
 // IAM Policy Attachment
 resource "aws_iam_role_policy_attachment" "crc-cloudwatch-VisitorTracker" {
-  policy_arn = aws_iam_role.crc-VisitorTracker.arn
+  policy_arn = aws_iam_policy.crc-Lambda-TrackVisitors-Logging.arn
   role       = aws_iam_role.crc-VisitorTracker.name
 }
 
 resource "aws_iam_role_policy_attachment" "crc-cloudwatch-MessageSender" {
-  policy_arn = aws_iam_role.crc-MessageSender.arn
+  policy_arn = aws_iam_policy.crc-Lambda-SendMessage-Logging.arn
   role       = aws_iam_role.crc-MessageSender.name
 }
 
 resource "aws_iam_role_policy_attachment" "crc-cloudwatch-CloudfrontManager" {
-  policy_arn = aws_iam_role.crc-CloudfrontManager.arn
+  policy_arn = aws_iam_policy.crc-Lambda-CloudfrontInvalidation-Logging.arn
   role       = aws_iam_role.crc-CloudfrontManager.name
 }
 

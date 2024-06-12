@@ -251,7 +251,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     max_ttl                = "0"
     min_ttl                = "0"
     smooth_streaming       = "false"
-    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-prod.bucket_domain_name
+    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-prod.id
     viewer_protocol_policy = "redirect-to-https"
   }
 
@@ -278,7 +278,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
       origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = aws_s3_bucket.crc-agb-s3-website-prod.bucket_domain_name
+    domain_name = aws_s3_bucket.crc-agb-s3-website-prod.bucket_regional_domain_name
     origin_id   = aws_s3_bucket.crc-agb-s3-website-prod.id
 
     origin_shield {
@@ -327,7 +327,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
     max_ttl                = "0"
     min_ttl                = "0"
     smooth_streaming       = "false"
-    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-staging.bucket_domain_name
+    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-staging.id
     viewer_protocol_policy = "redirect-to-https"
   }
 
@@ -354,7 +354,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
       origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = aws_s3_bucket.crc-agb-s3-website-staging.bucket_domain_name
+    domain_name = aws_s3_bucket.crc-agb-s3-website-staging.bucket_regional_domain_name
     origin_id   = aws_s3_bucket.crc-agb-s3-website-staging.id
 
     origin_shield {
@@ -409,6 +409,10 @@ resource "aws_acm_certificate" "crc-website-certificate" {
   subject_alternative_names = ["*.${var.domain-name}"]
 
   validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 #  End Certificates Block  #
@@ -498,6 +502,7 @@ resource "aws_route53_zone" "crc-hosted-zone" {
 resource "aws_route53_key_signing_key" "crc-dnssec-ksk" {
   name = var.domain-name
   hosted_zone_id = data.aws_route53_zone.crc-domain-name.id
+  status = "ACTIVE"
   key_management_service_arn = aws_kms_key.crc-dnssec-key.arn
 }
 
@@ -506,6 +511,22 @@ resource "aws_route53_hosted_zone_dnssec" "crc-hosted-zone" {
     aws_route53_key_signing_key.crc-dnssec-ksk
   ]
   hosted_zone_id = aws_route53_key_signing_key.crc-dnssec-ksk.hosted_zone_id
+}
+
+resource "aws_route53_record" "crc-website-cert-validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.crc-website-certificate.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  name    = each.value.name
+  records = [each.value.record]
+  ttl     = 60
+  type    = each.value.type
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-api-record-A" {
@@ -596,9 +617,23 @@ resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
 ###########################
 # Begin API Gateway Block #
 
+resource "aws_api_gateway_account" "crc-api-logging-role" {
+  cloudwatch_role_arn = var.api-gateway-cw-logs-role
+}
+
+resource "aws_api_gateway_rest_api" "crc-rest-api" {
+  description                  = "MultiPurpose API for CloudResume Site"
+  disable_execute_api_endpoint = "true"
+
+  name = "CloudResume_API"
+}
+
 resource "aws_api_gateway_domain_name" "crc-api-domain" {
   domain_name = "api.${var.domain-name}"
   regional_certificate_arn = aws_acm_certificate.crc-website-certificate.arn
+  endpoint_configuration {
+    types = ["EDGE"]
+  }
 }
 
 resource "aws_api_gateway_base_path_mapping" "crc-api-domain-deploy" {
@@ -607,23 +642,18 @@ resource "aws_api_gateway_base_path_mapping" "crc-api-domain-deploy" {
   domain_name = aws_api_gateway_domain_name.crc-api-domain.domain_name
 }
 
-resource "aws_api_gateway_rest_api" "crc-rest-api" {
-  api_key_source               = "AUTHORIZER"
-  description                  = "MultiPurpose API for CloudResume Site"
-  disable_execute_api_endpoint = "true"
-
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
-
-  name = "CloudResume_API"
+resource "aws_api_gateway_stage" "crc-api-stage" {
+  cache_cluster_enabled = "false"
+  deployment_id         = aws_api_gateway_deployment.crc-api-deployment.id
+  rest_api_id           = aws_api_gateway_deployment.crc-api-deployment.rest_api_id
+  stage_name            = "v1"
 }
 
 resource "aws_api_gateway_deployment" "crc-api-deployment" {
   depends_on = [
-    aws_api_gateway_method.crc-api-visitors-get,
+    aws_api_gateway_integration.crc-api-visitors-get,
     aws_api_gateway_method.crc-api-visitors-options,
-    aws_api_gateway_method.crc-api-contact-post,
+    aws_api_gateway_integration.crc-api-contact-post,
     aws_api_gateway_method.crc-api-contact-options
   ]
 
@@ -637,24 +667,7 @@ resource "aws_api_gateway_deployment" "crc-api-deployment" {
   }
 }
 
-resource "aws_api_gateway_stage" "crc-api-stage" {
-  cache_cluster_enabled = "false"
-  deployment_id         = aws_api_gateway_deployment.crc-api-deployment.id
-  rest_api_id           = aws_api_gateway_deployment.crc-api-deployment.rest_api_id
-  stage_name            = "v1"
-}
 
-resource "aws_api_gateway_resource" "crc-api-resource-visitors" {
-  parent_id   = aws_api_gateway_rest_api.crc-rest-api.root_resource_id
-  path_part   = "visitors"
-  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
-}
-
-resource "aws_api_gateway_resource" "crc-api-resource-contact" {
-  parent_id   = aws_api_gateway_rest_api.crc-rest-api.root_resource_id
-  path_part   = "contact"
-  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
-}
 
 resource "aws_api_gateway_request_validator" "crc-api-param-validator" {
   name                        = uuid()
@@ -693,134 +706,22 @@ resource "aws_api_gateway_gateway_response" "crc-api-response-default-5XX" {
   rest_api_id   = aws_api_gateway_rest_api.crc-rest-api.id
 }
 
-resource "aws_api_gateway_integration" "crc-api-visitors-get" {
-  depends_on = [aws_api_gateway_method.crc-api-visitors-get]
 
-  cache_namespace         = aws_api_gateway_resource.crc-api-resource-visitors.id
-  connection_type         = "INTERNET"
-  content_handling        = "CONVERT_TO_TEXT"
-  http_method             = "GET"
-  integration_http_method = "POST"
-  passthrough_behavior    = "WHEN_NO_MATCH"
-  resource_id             = aws_api_gateway_resource.crc-api-resource-visitors.id
-  rest_api_id             = aws_api_gateway_rest_api.crc-rest-api.id
-  timeout_milliseconds    = "29000"
-  type                    = "AWS_PROXY"
-  uri                     = var.api-lambda-visitors-uri
-}
 
-resource "aws_api_gateway_integration" "crc-api-visitors-options" {
-  depends_on = [aws_api_gateway_method.crc-api-visitors-options]
-
-  cache_namespace      = aws_api_gateway_resource.crc-api-resource-visitors.id
-  connection_type      = "INTERNET"
-  http_method          = "OPTIONS"
-  passthrough_behavior = "WHEN_NO_MATCH"
-
-  request_templates = {
-    "application/json" = "{\"statusCode\": 200}"
-  }
-
-  resource_id          = aws_api_gateway_resource.crc-api-resource-visitors.id
-  rest_api_id          = aws_api_gateway_rest_api.crc-rest-api.id
-  timeout_milliseconds = "29000"
-  type                 = "MOCK"
-}
-
-resource "aws_api_gateway_integration" "crc-api-contact-options" {
-  depends_on = [aws_api_gateway_method.crc-api-contact-options]
-
-  cache_namespace      = aws_api_gateway_resource.crc-api-resource-contact.id
-  connection_type      = "INTERNET"
-  http_method          = "OPTIONS"
-  passthrough_behavior = "WHEN_NO_MATCH"
-
-  request_templates = {
-    "application/json" = "{\"statusCode\": 200}"
-  }
-
-  resource_id          = aws_api_gateway_resource.crc-api-resource-contact.id
-  rest_api_id          = aws_api_gateway_rest_api.crc-rest-api.id
-  timeout_milliseconds = "29000"
-  type                 = "MOCK"
-}
-
-resource "aws_api_gateway_integration" "crc-api-contact-post" {
-  depends_on = [aws_api_gateway_method.crc-api-contact-post]
-
-  cache_namespace         = aws_api_gateway_resource.crc-api-resource-contact.id
-  connection_type         = "INTERNET"
-  content_handling        = "CONVERT_TO_TEXT"
-  http_method             = "POST"
-  integration_http_method = "POST"
-  passthrough_behavior    = "WHEN_NO_MATCH"
-  resource_id             = aws_api_gateway_resource.crc-api-resource-contact.id
-  rest_api_id             = aws_api_gateway_rest_api.crc-rest-api.id
-  timeout_milliseconds    = "29000"
-  type                    = "AWS_PROXY"
-  uri                     = var.api-lambda-contact-uri
-}
-
-resource "aws_api_gateway_integration_response" "crc-api-visitors-get" {
-  depends_on = [aws_api_gateway_integration.crc-api-visitors-get]
-
-  http_method = "GET"
-  resource_id = aws_api_gateway_resource.crc-api-resource-visitors.id
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = "'*'"
-  }
-
+resource "aws_api_gateway_resource" "crc-api-resource-visitors" {
+  parent_id   = aws_api_gateway_rest_api.crc-rest-api.root_resource_id
+  path_part   = "visitors"
   rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
-  status_code = "200"
 }
 
-resource "aws_api_gateway_integration_response" "crc-api-visitors-options" {
-  depends_on = [aws_api_gateway_integration.crc-api-visitors-options]
-
-  http_method = "OPTIONS"
-  resource_id = aws_api_gateway_resource.crc-api-resource-visitors.id
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
-
+resource "aws_api_gateway_resource" "crc-api-resource-contact" {
+  parent_id   = aws_api_gateway_rest_api.crc-rest-api.root_resource_id
+  path_part   = "contact"
   rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
-  status_code = "200"
 }
 
-resource "aws_api_gateway_integration_response" "crc-api-contact-options" {
-  depends_on = [aws_api_gateway_integration.crc-api-contact-options]
 
-  http_method = "OPTIONS"
-  resource_id = aws_api_gateway_resource.crc-api-resource-contact.id
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
-    "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
-
-  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
-  status_code = "200"
-}
-
-resource "aws_api_gateway_integration_response" "crc-api-contact-post" {
-  depends_on = [aws_api_gateway_integration.crc-api-contact-post]
-
-  http_method = "POST"
-  resource_id = aws_api_gateway_resource.crc-api-resource-contact.id
-
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = "'*'"
-  }
-
-  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
-  status_code = "200"
-}
-
+// Track Visitors GET
 resource "aws_api_gateway_method" "crc-api-visitors-get" {
   api_key_required = "false"
   authorization    = "NONE"
@@ -835,38 +736,45 @@ resource "aws_api_gateway_method" "crc-api-visitors-get" {
   rest_api_id          = aws_api_gateway_rest_api.crc-rest-api.id
 }
 
-resource "aws_api_gateway_method" "crc-api-visitors-options" {
-  api_key_required = "false"
-  authorization    = "NONE"
-  http_method      = "OPTIONS"
-  resource_id      = aws_api_gateway_resource.crc-api-resource-visitors.id
-  rest_api_id      = aws_api_gateway_rest_api.crc-rest-api.id
+resource "aws_api_gateway_integration" "crc-api-visitors-get" {
+  depends_on = [aws_api_gateway_method.crc-api-visitors-get]
+
+  cache_namespace         = aws_api_gateway_resource.crc-api-resource-visitors.id
+  connection_type         = "INTERNET"
+  content_handling        = "CONVERT_TO_TEXT"
+  http_method             = aws_api_gateway_method.crc-api-visitors-get.http_method
+  integration_http_method = "POST"
+  passthrough_behavior    = "WHEN_NO_MATCH"
+  resource_id             = aws_api_gateway_resource.crc-api-resource-visitors.id
+  rest_api_id             = aws_api_gateway_rest_api.crc-rest-api.id
+  timeout_milliseconds    = "29000"
+  type                    = "AWS_PROXY"
+  uri                     = var.api-lambda-visitors-uri
 }
 
-resource "aws_api_gateway_method" "crc-api-contact-options" {
-  api_key_required = "false"
-  authorization    = "NONE"
-  http_method      = "OPTIONS"
-  resource_id      = aws_api_gateway_resource.crc-api-resource-contact.id
-  rest_api_id      = aws_api_gateway_rest_api.crc-rest-api.id
-}
+resource "aws_api_gateway_integration_response" "crc-api-visitors-get" {
+  depends_on = [
+    aws_api_gateway_integration.crc-api-visitors-get,
+    aws_api_gateway_method_response.crc-api-visitors-get
+  ]
 
-resource "aws_api_gateway_method" "crc-api-contact-post" {
-  api_key_required = "false"
-  authorization    = "NONE"
-  http_method      = "POST"
+  http_method = aws_api_gateway_method.crc-api-visitors-get.http_method
+  resource_id = aws_api_gateway_resource.crc-api-resource-visitors.id
 
-  request_parameters = {
-    "method.request.querystring.uuid" = "true"
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
   }
 
-  request_validator_id = aws_api_gateway_request_validator.crc-api-param-validator.id
-  resource_id          = aws_api_gateway_resource.crc-api-resource-contact.id
-  rest_api_id          = aws_api_gateway_rest_api.crc-rest-api.id
+  response_templates = {
+    "application/json" = ""
+  }
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  status_code = "200"
 }
 
 resource "aws_api_gateway_method_response" "crc-api-visitors-get" {
-  http_method = "GET"
+  http_method = aws_api_gateway_method.crc-api-visitors-get.http_method
   resource_id = aws_api_gateway_resource.crc-api-resource-visitors.id
 
   response_models = {
@@ -881,8 +789,59 @@ resource "aws_api_gateway_method_response" "crc-api-visitors-get" {
   status_code = "200"
 }
 
+
+// Track Visitors OPTIONS
+resource "aws_api_gateway_method" "crc-api-visitors-options" {
+  api_key_required = "false"
+  authorization    = "NONE"
+  http_method      = "OPTIONS"
+  resource_id      = aws_api_gateway_resource.crc-api-resource-visitors.id
+  rest_api_id      = aws_api_gateway_rest_api.crc-rest-api.id
+}
+
+resource "aws_api_gateway_integration" "crc-api-visitors-options" {
+  depends_on = [aws_api_gateway_method.crc-api-visitors-options]
+
+  cache_namespace      = aws_api_gateway_resource.crc-api-resource-visitors.id
+  connection_type      = "INTERNET"
+  http_method          = aws_api_gateway_method.crc-api-visitors-options.http_method
+  passthrough_behavior = "WHEN_NO_MATCH"
+
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+
+  resource_id          = aws_api_gateway_resource.crc-api-resource-visitors.id
+  rest_api_id          = aws_api_gateway_rest_api.crc-rest-api.id
+  timeout_milliseconds = "29000"
+  type                 = "MOCK"
+}
+
+resource "aws_api_gateway_integration_response" "crc-api-visitors-options" {
+  depends_on = [
+    aws_api_gateway_integration.crc-api-visitors-options,
+    aws_api_gateway_method_response.crc-api-visitors-options
+  ]
+
+  http_method = aws_api_gateway_method.crc-api-visitors-options.http_method
+  resource_id = aws_api_gateway_resource.crc-api-resource-visitors.id
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+
+  response_templates = {
+    "application/json" = ""
+  }
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  status_code = "200"
+}
+
 resource "aws_api_gateway_method_response" "crc-api-visitors-options" {
-  http_method = "OPTIONS"
+  http_method = aws_api_gateway_method.crc-api-visitors-options.http_method
   resource_id = aws_api_gateway_resource.crc-api-resource-visitors.id
 
   response_models = {
@@ -899,8 +858,61 @@ resource "aws_api_gateway_method_response" "crc-api-visitors-options" {
   status_code = "200"
 }
 
+
+// Send Message POST
+resource "aws_api_gateway_method" "crc-api-contact-post" {
+  api_key_required = "false"
+  authorization    = "NONE"
+  http_method      = "POST"
+
+  request_parameters = {
+    "method.request.querystring.uuid" = "true"
+  }
+
+  request_validator_id = aws_api_gateway_request_validator.crc-api-param-validator.id
+  resource_id          = aws_api_gateway_resource.crc-api-resource-contact.id
+  rest_api_id          = aws_api_gateway_rest_api.crc-rest-api.id
+}
+
+resource "aws_api_gateway_integration" "crc-api-contact-post" {
+  depends_on = [aws_api_gateway_method.crc-api-contact-post]
+
+  cache_namespace         = aws_api_gateway_resource.crc-api-resource-contact.id
+  connection_type         = "INTERNET"
+  content_handling        = "CONVERT_TO_TEXT"
+  http_method             = aws_api_gateway_method.crc-api-contact-post.http_method
+  integration_http_method = "POST"
+  passthrough_behavior    = "WHEN_NO_MATCH"
+  resource_id             = aws_api_gateway_resource.crc-api-resource-contact.id
+  rest_api_id             = aws_api_gateway_rest_api.crc-rest-api.id
+  timeout_milliseconds    = "29000"
+  type                    = "AWS_PROXY"
+  uri                     = var.api-lambda-contact-uri
+}
+
+resource "aws_api_gateway_integration_response" "crc-api-contact-post" {
+  depends_on = [
+    aws_api_gateway_integration.crc-api-contact-post,
+    aws_api_gateway_method_response.crc-api-contact-post
+  ]
+
+  http_method = aws_api_gateway_method.crc-api-contact-post.http_method
+  resource_id = aws_api_gateway_resource.crc-api-resource-contact.id
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+
+  response_templates = {
+    "application/json" = ""
+  }
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  status_code = "200"
+}
+
 resource "aws_api_gateway_method_response" "crc-api-contact-options" {
-  http_method = "OPTIONS"
+  http_method = aws_api_gateway_method.crc-api-contact-options.http_method
   resource_id = aws_api_gateway_resource.crc-api-resource-contact.id
 
   response_models = {
@@ -911,6 +923,57 @@ resource "aws_api_gateway_method_response" "crc-api-contact-options" {
     "method.response.header.Access-Control-Allow-Headers" = "false"
     "method.response.header.Access-Control-Allow-Methods" = "false"
     "method.response.header.Access-Control-Allow-Origin"  = "false"
+  }
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  status_code = "200"
+}
+
+
+// Send Message OPTIONS
+resource "aws_api_gateway_method" "crc-api-contact-options" {
+  api_key_required = "false"
+  authorization    = "NONE"
+  http_method      = "OPTIONS"
+  resource_id      = aws_api_gateway_resource.crc-api-resource-contact.id
+  rest_api_id      = aws_api_gateway_rest_api.crc-rest-api.id
+}
+
+resource "aws_api_gateway_integration" "crc-api-contact-options" {
+  depends_on = [aws_api_gateway_method.crc-api-contact-options]
+
+  cache_namespace      = aws_api_gateway_resource.crc-api-resource-contact.id
+  connection_type      = "INTERNET"
+  http_method          = aws_api_gateway_method.crc-api-contact-options.http_method
+  passthrough_behavior = "WHEN_NO_MATCH"
+
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+
+  resource_id          = aws_api_gateway_resource.crc-api-resource-contact.id
+  rest_api_id          = aws_api_gateway_rest_api.crc-rest-api.id
+  timeout_milliseconds = "29000"
+  type                 = "MOCK"
+}
+
+resource "aws_api_gateway_integration_response" "crc-api-contact-options" {
+  depends_on = [
+    aws_api_gateway_integration.crc-api-contact-options,
+    aws_api_gateway_method_response.crc-api-contact-options
+  ]
+
+  http_method = aws_api_gateway_method.crc-api-contact-options.http_method
+  resource_id = aws_api_gateway_resource.crc-api-resource-contact.id
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'OPTIONS,POST'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+
+  response_templates = {
+    "application/json" = ""
   }
 
   rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
@@ -918,7 +981,7 @@ resource "aws_api_gateway_method_response" "crc-api-contact-options" {
 }
 
 resource "aws_api_gateway_method_response" "crc-api-contact-post" {
-  http_method = "POST"
+  http_method = aws_api_gateway_method.crc-api-contact-post.http_method
   resource_id = aws_api_gateway_resource.crc-api-resource-contact.id
 
   response_models = {
@@ -935,9 +998,6 @@ resource "aws_api_gateway_method_response" "crc-api-contact-post" {
   status_code = "200"
 }
 
-resource "aws_api_gateway_account" "crc-api-logging-role" {
-  cloudwatch_role_arn = var.api-gateway-cw-logs-role
-}
 
 #  End API Gateway Block  #
 ###########################

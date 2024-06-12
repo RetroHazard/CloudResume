@@ -1,11 +1,11 @@
 variable "domain-name" {
   type    = string
-  default = "demo-example.info"
+  default = "cloudresume-agb.jp"
 }
 
 variable "sanitized-domain-name" {
   type    = string
-  default = "demo-example-info"
+  default = "cloudresume-agb-jp"
 }
 
 variable "assume_role" {
