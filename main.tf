@@ -48,7 +48,7 @@ module "frontend" {
 
   ses-mail-from-domain = module.backend.aws_ses_domain_mail_from_crc-mail-from-domain
   sqs-cf-invalidation-queue = module.backend.aws_sqs_queue_crc-cloudfront-invalidation-queue_arn
-  api-current-stage = ""
+  api-current-stage = var.api-current-stage
 }
 
 module "backend" {
