@@ -1,11 +1,11 @@
 variable "domain-name" {
   type    = string
-  default = "silentskies.site"
+  default = "cloudresume-agb.jp"
 }
 
 variable "sanitized-domain-name" {
   type    = string
-  default = "silent-skies-site"
+  default = "cloud-resume-agb-jp"
 }
 
 variable "api-current-stage" {
@@ -15,7 +15,7 @@ variable "api-current-stage" {
 
 variable "assume_role" {
   type    = string
-  default = "arn:aws:iam::730335615519:role/DevOpsTerraform_AssumeRole"
+  default = "arn:aws:iam::339712851438:role/crc-devops-terraform-AssumeRole"
 }
 
 variable "tags" {

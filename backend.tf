@@ -1,10 +1,10 @@
 terraform {
     backend "s3" {
-    bucket = "crc-agb-s3-terraform-state-ugyhqu"
-    key = "aws-services1.tfstate"
-    dynamodb_table = "terraform-locks"
+    bucket = "crc-s3-terraform-state-7ahwqu"
+    key = "aws-services.tfstate"
+    dynamodb_table = "crc-terraform-locks"
     region = "us-east-1"
     encrypt = true
-    profile = "Sandbox"
+    profile = "crc-terraformer"
   }
 }

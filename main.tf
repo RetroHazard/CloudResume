@@ -1,8 +1,8 @@
-/*import {
+import {
   to = module.frontend.aws_route53_zone.crc-hosted-zone
-  id = "-CHANGE-ME-"
+  id = "Z03405071SXF625TZSK71"
   // TODO: UPDATE ZONE ID BEFORE DEPLOY
-}*/
+}
 
 module "iam" {
   source = "./modules/iam"

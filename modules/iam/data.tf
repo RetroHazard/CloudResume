@@ -117,7 +117,7 @@ data "aws_iam_policy_document" "crc-s3-github-actions" {
   statement {
     sid    = "VisualEditor1"
     effect = "Allow"
-    actions = ["s3:*"]
+    actions = ["s3:PutObject"]
     resources = [
       var.crc-s3-production-arn,
       "${var.crc-s3-production-arn}/*",

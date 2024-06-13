@@ -45,7 +45,7 @@ resource "aws_iam_policy" "crc-Lambda-SendMessage-Logging" {
 }
 
 resource "aws_iam_policy" "crc-S3-GitHubActions" {
-  name = "crc-S3-GitHubActions"
+  name = "crc-s3-github-actions"
   path = "/"
 
   policy = data.aws_iam_policy_document.crc-s3-github-actions.json
