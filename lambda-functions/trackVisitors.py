@@ -1,7 +1,7 @@
 import json
 import boto3
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 # Initialize dynamodb boto3 object
 dynamodb = boto3.resource('dynamodb')
@@ -13,9 +13,10 @@ record_table_name = os.environ['recordTableName']
 count_table = dynamodb.Table(count_table_name)
 record_table = dynamodb.Table(record_table_name)
 
-def lambda_handler(event, context):
+
+def lambda_handler(event):
     visitor_id = event['queryStringParameters']['visitorId']
-    current_time = datetime.utcnow()
+    current_time = datetime.now(timezone.utc)
     ttl_time = int((current_time + timedelta(days=1)).timestamp())
 
     try:
@@ -56,10 +57,10 @@ def lambda_handler(event, context):
         }
 
     # Format dynamodb response into variable
-    responseBody = json.dumps({"count": int(visitor_count)})
+    response_body = json.dumps({"count": int(visitor_count)})
 
     # Create API response object
-    apiResponse = {
+    api_response = {
         "isBase64Encoded": False,
         "statusCode": 200,
         'headers': {
@@ -67,8 +68,8 @@ def lambda_handler(event, context):
             'Access-Control-Allow-Origin': '*',
             # 'Access-Control-Allow-Methods': 'OPTIONS,GET'
         },
-        "body": responseBody
+        "body": response_body
     }
 
     # Return API response object
-    return apiResponse
+    return api_response
