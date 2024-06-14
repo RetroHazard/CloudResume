@@ -5,7 +5,7 @@ import os
 AWS_REGION = os.environ['mailRegion']
 SEND_TO = os.environ['sendToAddress']
 SEND_AS = os.environ['sendFromAddress']
-ALLOWED_ORIGIN = 'https://www.cloudresume-agb.jp'
+ALLOWED_ORIGIN = os.environ['allowedOrigin']
 
 
 def lambda_handler(event):

@@ -1,0 +1,29 @@
+name: Run Website Tests on Pull Request
+
+defaults: 
+  run:
+    working-directory: website
+
+on:
+  pull_request:
+    paths:
+      - 'website/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Tests on Website Components
+        run: npm run test

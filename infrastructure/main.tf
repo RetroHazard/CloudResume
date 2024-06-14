@@ -1,7 +1,6 @@
 import {
   to = module.frontend.aws_route53_zone.crc-hosted-zone
-  id = "Z03405071SXF625TZSK71"
-  // TODO: UPDATE ZONE ID BEFORE DEPLOY
+  id = var.hosted_zone_id
 }
 
 module "iam" {
@@ -27,9 +26,9 @@ module "frontend" {
 
   account_id                = data.aws_caller_identity.current.account_id
   
-  domain-name               = var.domain-name
-  sanitized-domain-name     = var.sanitized-domain-name
-  api-current-stage         = var.api-current-stage
+  domain-name               = var.domain_name
+  sanitized-domain-name     = var.sanitized_domain_name
+  api-current-stage         = var.api_current_stage
   
   api-gateway-cw-logs-role  = module.iam.aws_iam_role_crc-api-CloudwatchLogs_arn
   
@@ -45,7 +44,7 @@ module "backend" {
 
   account_id                      = data.aws_caller_identity.current.account_id
 
-  domain-name                     = var.domain-name
+  domain-name                     = var.domain_name
   
   iam-role-cloudfront-manager-arn = module.iam.aws_iam_role_crc-CloudFrontManager_arn
   iam-role-message-sender-arn     = module.iam.aws_iam_role_crc-MessageSender_arn

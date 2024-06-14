@@ -1,50 +1,44 @@
-variable "deployment-region" {
-  description = "Target Region for Resource Deployment"
-  type = string
-  default = "us-east-1"
-}
-
-variable "aws-profile" {
-  description = "AWS CLI Profile to use during Terraform Operations"
-  type = string
-  default = "Sandbox"
-}
-
-variable "aws-access-key" {
+variable "aws_access_key" {
   description = "Access Key for AWS Terraform User"
   type = string
   sensitive = true
 }
 
-variable "aws-secret-access-key" {
+variable "aws_secret_access_key" {
   description = "Secret Access Key for AWS Terraform User"
   type = string
   sensitive = true
 }
 
-variable "domain-name" {
-  description = "Domain Name to be used for Deployment"
-  type    = string
-  default = "cloudresume-agb.jp"
-}
-
-variable "sanitized-domain-name" {
-  description = "Sanitized Domain Name used for the Key Alias"
-  type    = string
-  default = "cloudresume-agb-jp"
-}
-
-variable "api-current-stage" {
-  description = "Current Stage Identifier for the API"
-  type = string
-  default = "v1"
-}
-
-variable "assume_role" {
+variable "assume_role_target" {
   description = "Role Used for Terraform Actions in AWS"
   type    = string
   sensitive = true
-  default = "arn:aws:iam::339712851438:role/crc-devops-terraform-AssumeRole"
+}
+
+variable "deployment_region" {
+  description = "Target Region for Resource Deployment"
+  type = string
+}
+
+variable "hosted_zone_id" {
+  description = "Target Hosted Zone to Import during initialization"
+  type = string
+}
+
+variable "domain_name" {
+  description = "Domain Name to be used for Deployment"
+  type    = string
+}
+
+variable "sanitized_domain_name" {
+  description = "Sanitized Domain Name used for the Key Alias"
+  type    = string
+}
+
+variable "api_current_stage" {
+  description = "Current Stage Identifier for the API"
+  type = string
 }
 
 variable "tags" {

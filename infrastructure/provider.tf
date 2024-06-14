@@ -16,12 +16,11 @@ terraform {
 }
 
 provider "aws" {
-  region      = var.deployment-region
-  profile     = var.aws-profile
-  access_key  = var.aws-access-key
-  secret_key  = var.aws-secret-access-key
+  region      = var.deployment_region
+  access_key  = var.aws_access_key
+  secret_key  = var.aws_secret_access_key
   assume_role {
-    role_arn  = var.assume_role
+    role_arn  = var.assume_role_target
   }
   default_tags {
     tags      = var.tags

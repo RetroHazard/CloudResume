@@ -1,0 +1,57 @@
+name: Build and Upload to S3 (Production)
+
+defaults: 
+  run:
+    working-directory: website
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'website/**'
+    tags:
+      - 'build*'
+  workflow_run:
+    workflows: [ "Terraform Deploy" ]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo REACT_APP_RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }} >> .env
+
+      - name: Test app
+        run: npm run test
+
+      - name: Build
+        run: npm run build-prod
+
+      - name: Upload to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --acl public-read
+        env:
+          SOURCE_DIR: website/build/prod/
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}

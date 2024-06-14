@@ -19,7 +19,6 @@ data "archive_file" "sendMessage_lambda_function_code" {
   output_path = "${path.root}/codepacks/sendMessage.zip"
 }
 
-
 ###################
 # Begin SQS Block #
 
