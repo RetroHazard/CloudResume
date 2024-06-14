@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    overflow-x: hidden;
+    margin-right: calc(-1 * (100vw - 100%));
+}
+
+html.disable-fix {
+    overflow-x: initial;
+    margin-right: initial;
+}
+
+@layer base {
+    a {
+        @apply text-content-accent underline hover:text-content-body;
+    }
+
+    body {
+        @apply bg-secondary-900 text-content-body;
+    }
+}
+
+@layer components {
+    .social-link {
+        @apply flex h-7 w-7 items-center justify-center rounded bg-content-boxbg text-content-icons no-underline hover:bg-content-boxhl active:translate-y-px;
+    }
+
+    .open-for-block {
+        @apply flex w-fit items-center gap-x-1.5 rounded bg-content-boxbg tracking-wide text-content-icons no-underline hover:bg-content-boxhl max-sm:h-5 max-sm:px-1.5 max-sm:text-xs max-sm:font-semibold sm:h-5 sm:px-2 sm:text-sm sm:font-semibold md:h-6 md:px-2.5 md:text-sm md:font-semibold;
+    }
+
+    .skill-block {
+        @apply flex w-fit items-center gap-x-1.5 rounded bg-content-boxbg tracking-wide text-content-icons no-underline hover:bg-content-boxhl hover:text-content-icons max-sm:h-4 max-sm:px-1.5 max-sm:text-xs max-sm:font-light sm:h-5 sm:px-2 sm:text-sm sm:font-normal md:h-6 md:px-2.5 md:text-sm md:font-medium;
+    }
+
+    .skill-progress-bar {
+        @apply h-2.5 rounded-full bg-gradient-to-r from-skill-3 from-35% to-skill-1 max-sm:h-1.5;
+    }
+
+    .skill-progress-bar-outline {
+        @apply mb-4 rounded-full bg-skill-0 ring-2 ring-content-outline/35 max-sm:h-1.5 max-sm:w-12 sm:h-2 sm:w-40 md:h-2.5 md:w-44;
+    }
+
+    .text-entry {
+        @apply block w-full rounded-lg border border-secondary-300 bg-secondary-100 p-2.5 text-sm text-secondary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500;
+    }
+
+    .nav-block-active {
+        @apply mb-1.5 mt-1 inline-flex max-h-10 w-full items-center rounded-lg bg-secondary-500 px-4 py-3 text-content-title no-underline max-sm:w-fit;
+    }
+
+    .nav-block-inactive {
+        @apply mb-1.5 mt-1 inline-flex max-h-10 w-full items-center rounded-lg bg-secondary-800 px-4 py-3 no-underline hover:bg-secondary-600 hover:text-content-title max-sm:w-fit;
+    }
+
+    #navbar {
+        i {
+            @apply mr-2.5 h-5 w-5 text-base max-sm:m-0;
+        }
+    }
+
+    .icon-box {
+        @apply m-0 content-center justify-center justify-items-center align-middle;
+    }
+
+    .content-block {
+        @apply flex w-full flex-col justify-center gap-6 rounded-2xl bg-secondary-700 p-8 shadow-md;
+    }
+}

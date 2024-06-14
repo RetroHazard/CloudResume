@@ -1,0 +1,54 @@
+{
+  "Certifications": [
+    {
+      "certification": "Systems Security Certified Practitioner",
+      "issuer": "ISC2",
+      "credential_id": "497518",
+      "date": "2014",
+      "logo": "./images/logos/certifications/sscp.png",
+      "links": [
+        {
+          "verification": [
+            {
+              "website": "#",
+              "icon": "fa6-solid:award",
+              "display": false
+            }
+          ],
+          "credential_info": [
+            {
+              "website": "https://www.isc2.org/certifications/sscp",
+              "icon": "fa6-solid:info",
+              "display": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "certification": "ITIL 3 Foundations",
+      "issuer": "AXELOS",
+      "credential_id": "953058",
+      "date": "2012",
+      "logo": "./images/logos/certifications/itil-foundation.png",
+      "links": [
+        {
+          "verification": [
+            {
+              "website": "#",
+              "icon": "fa6-solid:award",
+              "display": false
+            }
+          ],
+          "credential_info": [
+            {
+              "website": "https://www.axelos.com/certifications/itil/itil-v3-foundation-certification/",
+              "icon": "fa6-solid:info",
+              "display": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
