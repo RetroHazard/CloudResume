@@ -358,7 +358,7 @@ resource "aws_lambda_function" "crc-sendMessage" {
 
   environment {
     variables = {
-      mailRegion      = "us-east-1" //todo get region from terraform
+      mailRegion      = data.aws_region
       sendFromAddress = "noreply@${aws_ses_domain_identity.crc-mail-domain.domain}"
       sendToAddress   = aws_ses_email_identity.crc-mail-destination.email
     }

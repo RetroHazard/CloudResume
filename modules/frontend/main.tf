@@ -552,6 +552,10 @@ resource "aws_route53_zone" "crc-hosted-zone" {
   comment       = "Hosted Zone for Cloud Resume Project"
   force_destroy = "false"
   name          = var.domain-name
+  
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_route53_key_signing_key" "crc-dnssec-ksk" {
@@ -611,7 +615,7 @@ resource "aws_route53_record" "crc-dns-zone-api-record-A" {
 
 resource "aws_route53_record" "crc-dns-zone-ses-record-MX" {
   name                             = var.ses-mail-from-domain
-  records                          = ["10 feedback-smtp.us-east-1.amazonses.com"] //todo Update Region Based On Deployment
+  records                          = ["10 feedback-smtp.${data.aws_region}.amazonses.com"]
   ttl                              = "600"
   type                             = "MX"
   zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id

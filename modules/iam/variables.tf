@@ -1,18 +1,5 @@
 data "aws_region" "current" {}
 
-variable "account_id" {
-  type = string
-}
-
-variable "caller_arn" {
-  type = string
-}
-
-variable "caller_user" {
-  type = string
-}
-
-
 variable "crc-visitor-record_arn" {
   type = string
 }
