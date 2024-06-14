@@ -1,0 +1,59 @@
+{
+  "Projects": [
+    {
+      "name": "Private WebApp",
+      "company": "Undisclosed",
+      "category": "Full Stack",
+      "role": "Project Lead",
+      "size": "5",
+      "start": "2018",
+      "end": "2019",
+      "logo": "./images/placeholder.png",
+      "details": [
+        "In tristique vulputate augue vel egestas.",
+        "Quisque ac imperdiet tortor, at lacinia ex.",
+        "Duis vel ex hendrerit, commodo odio sed, aliquam enim.",
+        "Ut arcu nulla, tincidunt eget arcu eget, molestie vulputate nisi."
+      ],
+      "links": [
+        {
+          "demo": [
+            {
+              "website": "#",
+              "icon": "fa-solid:external-link-alt"
+            }
+          ],
+          "repo": [
+            {
+              "website": "#",
+              "icon": "simple-icons:git"
+            }
+          ],
+          "spec": [
+            {
+              "website": "#",
+              "icon": "fa6-solid:info"
+            }
+          ]
+        }
+      ],
+      "technologies": [
+        {
+          "name": "Skill",
+          "logo": "ph:placeholder-fill",
+          "website": "#"
+        },
+        {
+          "name": "Skill",
+          "logo": "ph:placeholder-fill",
+          "website": "#"
+        },
+        {
+          "name": "Skill",
+          "logo": "ph:placeholder-fill",
+          "website": "#"
+        }
+      ]
+    }
+  ]
+}

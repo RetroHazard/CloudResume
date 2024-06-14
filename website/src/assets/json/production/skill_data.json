@@ -1,0 +1,219 @@
+{
+  "core_skills": [
+    {
+      "name": "Amazon Web Services",
+      "category": "Cloud",
+      "level": "65%",
+      "logo": "skill-icons:aws-light",
+      "website": "https://aws.amazon.com/"
+    },
+    {
+      "name": "Docker",
+      "category": "Platform",
+      "level": "30%",
+      "logo": "devicon:docker",
+      "website": "https://www.docker.com/"
+    },
+    {
+      "name": "Unreal Engine",
+      "category": "Game Development",
+      "level": "60%",
+      "logo": "devicon:unrealengine",
+      "website": "https://www.unrealengine.com/"
+    },
+    {
+      "name": "JetBrains IDEs",
+      "category": "Software",
+      "level": "60%",
+      "logo": "devicon:jetbrains",
+      "website": "https://www.jetbrains.com/"
+    },
+    {
+      "name": "C++",
+      "category": "Programming Language",
+      "level": "30%",
+      "logo": "devicon:cplusplus",
+      "website": "https://cplusplus.com/"
+    },
+    {
+      "name": "Python",
+      "category": "Scripting Language",
+      "level": "30%",
+      "logo": "devicon:python",
+      "website": "https://www.python.org"
+    },
+    {
+      "name": "BASh",
+      "category": "Command Language",
+      "level": "65%",
+      "logo": "logos:bash-icon",
+      "website": "https://www.gnu.org/software/bash/"
+    },
+    {
+      "name": "Perl",
+      "category": "Scripting Language",
+      "level": "30%",
+      "logo": "devicon:perl",
+      "website": "https://www.perl.org/"
+    },
+    {
+      "name": "Javascript",
+      "category": "Scripting Language",
+      "level": "30%",
+      "logo": "devicon:javascript",
+      "website": "https://developer.oracle.com/languages/javascript.html"
+    },
+    {
+      "name": "React",
+      "category": "Library",
+      "level": "45%",
+      "logo": "devicon:react",
+      "website": "https://react.dev/"
+    },
+    {
+      "name": "Node.js",
+      "category": "Software",
+      "level": "40%",
+      "logo": "devicon:nodejs",
+      "website": "https://nodejs.org"
+    },
+    {
+      "name": "tailwindCSS",
+      "category": "Framework",
+      "level": "50%",
+      "logo": "devicon:tailwindcss",
+      "website": "https://tailwindcss.com"
+    },
+    {
+      "name": "Terraform",
+      "category": "Automation",
+      "level": "35%",
+      "logo": "devicon:terraform",
+      "website": "https://www.terraform.io/"
+    },
+    {
+      "name": "Cypress",
+      "category": "Automation",
+      "level": "25%",
+      "logo": "devicon:cypressio",
+      "website": "https://www.cypress.io/"
+    },
+    {
+      "name": "SideFX Houdini",
+      "category": "Software",
+      "level": "30%",
+      "logo": "simple-icons:houdini",
+      "website": "https://www.sidefx.com/"
+    },
+    {
+      "name": "Blender",
+      "category": "Software",
+      "level": "55%",
+      "logo": "devicon:blender",
+      "website": "https://www.blender.org/"
+    },
+    {
+      "name": "Google Workspace",
+      "category": "Software",
+      "level": "85%",
+      "logo": "devicon:google",
+      "website": "https://www.google.com"
+    },
+    {
+      "name": "Creative Cloud",
+      "category": "Software",
+      "level": "70%",
+      "logo": "simple-icons:adobecreativecloud",
+      "website": "https://www.adobe.com/creativecloud.html"
+    },
+    {
+      "name": "Github",
+      "category": "Source Control",
+      "level": "50%",
+      "logo": "devicon:github",
+      "website": "https://github.com/"
+    },
+    {
+      "name": "Perforce",
+      "category": "Source Control",
+      "level": "45%",
+      "logo": "simple-icons:perforce",
+      "website": "https://www.perforce.com/"
+    },
+    {
+      "name": "Windows",
+      "category": "Operating System",
+      "level": "100%",
+      "logo": "devicon:windows11",
+      "website": "https://www.microsoft.com/en-us/windows"
+    },
+    {
+      "name": "Kali Linux",
+      "category": "Operating System",
+      "level": "40%",
+      "logo": "skill-icons:kali-light",
+      "website": "https://www.kali.org/"
+    },
+    {
+      "name": "macOS",
+      "category": "Operating System",
+      "level": "65%",
+      "logo": "devicon:apple",
+      "website": "https://www.apple.com"
+    }
+  ],
+  "target_skills": [
+    {
+      "name": "Next.js",
+      "logo": "simple-icons:nextdotjs",
+      "website": "https://nextjs.org/"
+    },
+    {
+      "name": "Go",
+      "logo": "simple-icons:go",
+      "website": "https://go.dev/"
+    },
+    {
+      "name": "Google Cloud",
+      "logo": "simple-icons:googlecloud",
+      "website": "https://cloud.google.com/"
+    },
+    {
+      "name": "Microsoft Azure",
+      "logo": "simple-icons:microsoftazure",
+      "website": "https://azure.microsoft.com/en-us"
+    },
+    {
+      "name": "Grafana",
+      "logo": "simple-icons:grafana",
+      "website": "https://grafana.com/"
+    },
+    {
+      "name": "Datadog",
+      "logo": "simple-icons:datadog",
+      "website": "https://www.datadoghq.com/"
+    },
+    {
+      "name": "Ansible",
+      "logo": "simple-icons:ansible",
+      "website": "https://www.ansible.com/"
+    },
+    {
+      "name": "Kubernetes",
+      "logo": "simple-icons:kubernetes",
+      "website": "https://kubernetes.io/"
+    }
+  ],
+  "language_skills": [
+    {
+      "language": "English",
+      "level": "Native",
+      "flag": "circle-flags:ca"
+    },
+    {
+      "language": "Japanese",
+      "level": "N5",
+      "flag": "circle-flags:jp"
+    }
+  ]
+}

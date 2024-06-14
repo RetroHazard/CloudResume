@@ -1,0 +1,29 @@
+{
+  "Certifications": [
+    {
+      "certification": "Cool Certification",
+      "issuer": "The Institute",
+      "credential_id": "12345678",
+      "date": "2022",
+      "logo": "./images/placeholder.png",
+      "links": [
+        {
+          "verification": [
+            {
+              "website": "#",
+              "icon": "fa6-solid:award",
+              "display": true
+            }
+          ],
+          "credential_info": [
+            {
+              "website": "#",
+              "icon": "fa6-solid:info",
+              "display": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

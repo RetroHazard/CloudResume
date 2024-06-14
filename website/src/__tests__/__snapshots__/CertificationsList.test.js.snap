@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CertificationList Component matches snapshot 1`] = `
+<div>
+  <div>
+    <div
+      class="flex flex-col gap-3"
+    >
+      <div
+        class="flex w-full justify-between gap-2"
+      >
+        <div
+          class="flex gap-4"
+        >
+          <img
+            alt="Sample Certification Logo"
+            class="h-[5.7rem] w-[5.7rem] rounded-xl"
+            src="sample_logo.png"
+          />
+          <div
+            class="flex flex-col"
+          >
+            <h3
+              class="h3 mb-0 font-extrabold text-content-title max-sm:text-sm sm:text-xs md:text-base"
+            >
+              Sample Certification
+            </h3>
+            <p
+              class="mb-0.5 font-semibold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base"
+            >
+              Sample Issuer
+            </p>
+            <p
+              class="mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-sm"
+            >
+              <strong>
+                Credential ID:
+              </strong>
+               
+              123456789
+            </p>
+            <p
+              class="mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-sm"
+            >
+              <strong>
+                Date Issued:
+              </strong>
+               
+              2024-05-24
+            </p>
+          </div>
+        </div>
+        <div
+          class="flex flex-wrap gap-3 sm:flex-nowrap"
+          id="Sample Certification Links"
+        >
+          <a
+            class="social-link"
+            href="https://samplewebsite.com"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <iconify-icon
+              height="1.25em"
+              icon="sample-icon"
+              width="1.25em"
+            />
+          </a>
+          <a
+            class="social-link"
+            href="https://samplewebsite.com"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <iconify-icon
+              height="1.25em"
+              icon="sample-icon"
+              width="1.25em"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

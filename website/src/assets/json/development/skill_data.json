@@ -1,0 +1,66 @@
+{
+  "core_skills": [
+    {
+      "name": "Placeholder",
+      "category": "Category",
+      "level": "50%",
+      "logo": "ph:placeholder-fill",
+      "website": ""
+    },
+    {
+      "name": "Placeholder",
+      "category": "Category",
+      "level": "25%",
+      "logo": "ph:placeholder-fill",
+      "website": "#"
+    },
+    {
+      "name": "Placeholder",
+      "category": "Category",
+      "level": "60%",
+      "logo": "ph:placeholder-fill",
+      "website": "#"
+    },
+    {
+      "name": "Placeholder",
+      "category": "Category",
+      "level": "50%",
+      "logo": "ph:placeholder-fill",
+      "website": "#"
+    }
+  ],
+  "target_skills": [
+    {
+      "name": "Skill",
+      "logo": "ph:placeholder-fill",
+      "website": "#"
+    },
+    {
+      "name": "Skill",
+      "logo": "ph:placeholder-fill",
+      "website": "#"
+    },
+    {
+      "name": "Skill",
+      "logo": "ph:placeholder-fill",
+      "website": "#"
+    },
+    {
+      "name": "Skill",
+      "logo": "ph:placeholder-fill",
+      "website": "#"
+    },
+    {
+      "name": "Skill",
+      "logo": "ph:placeholder-fill",
+      "website": "#"
+    }
+  ],
+  "language_skills": [
+    {
+      "language": "Language",
+      "level": "Fluency",
+      "flag": "ph:placeholder-fill"
+    }
+  ]
+}
