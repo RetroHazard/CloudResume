@@ -3,5 +3,6 @@ data "github_user" "current" {
 }
 
 data "github_repository" "current" {
+  name = "CloudResume"
   full_name = "RetroHazard/CloudResume"
 }
