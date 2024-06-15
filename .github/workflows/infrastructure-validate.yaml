@@ -1,4 +1,4 @@
-name: Terraform Deploy
+name: Terraform Validate
 
 defaults: 
   run:
