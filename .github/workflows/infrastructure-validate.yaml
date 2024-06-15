@@ -26,6 +26,7 @@ jobs:
       TF_VAR_aws_access_key_id: ${{ secrets.AWS_TF_ACCESS_KEY }}
       TF_VAR_aws_secret_access_key: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
       TF_VAR_assume_role_target: ${{ secrets.AWS_TF_ASSUME_ROLE_TARGET }}
+      TF_VAR_github_token: ${{ secrets.GITHUB_TOKEN }}
       TF_VAR_deployment_region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
       TF_VAR_domain_name: ${{ vars.AWS_TF_DOMAIN_NAME }}
       TF_VAR_sanitized_domain_name: ${{ vars.AWS_TF_SANITIZED_DOMAIN_NAME }}
