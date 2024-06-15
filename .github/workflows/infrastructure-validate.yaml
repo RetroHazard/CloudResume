@@ -23,14 +23,16 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ACCESS_KEY }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
+      TF_VAR_AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ACCESS_KEY }}
+      TF_VAR_AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
       TF_VAR_assume_role_target: ${{ secrets.AWS_TF_ASSUME_ROLE_TARGET }}
       TF_VAR_deployment_region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
       TF_VAR_domain_name: ${{ vars.AWS_TF_DOMAIN_NAME }}
       TF_VAR_sanitized_domain_name: ${{ vars.AWS_TF_SANITIZED_DOMAIN_NAME }}
       TF_VAR_api_current_stage: ${{ vars.AWS_TF_API_CURRENT_STAGE }}
       TF_VAR_hosted_zone_id: ${{ vars.AWS_TF_HOSTED_ZONE_ID }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
 
     steps:
       - name: Checkout code
