@@ -169,6 +169,11 @@
       "website": "https://nextjs.org/"
     },
     {
+      "name": "Nuxt",
+      "logo": "simple-icons:nuxtdotjs",
+      "website": "https://nuxt.com/"
+    },
+    {
       "name": "Go",
       "logo": "simple-icons:go",
       "website": "https://go.dev/"
