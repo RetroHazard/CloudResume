@@ -8,6 +8,4 @@ terraform {
   }
 }
 
-provider "github" {
-  owner = data.github_user.current.username
-}
+provider "github" {}
