@@ -14,6 +14,12 @@ variable "assume_role_target" {
   sensitive = true
 }
 
+variable "github_token" {
+  description = "Token provided by GitHub Runner to Authenticate GitHub Operations"
+  type = string
+  sensitive = true
+}
+
 variable "deployment_region" {
   description = "Target Region for Resource Deployment"
   type = string

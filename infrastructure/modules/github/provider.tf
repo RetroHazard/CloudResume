@@ -7,3 +7,8 @@ terraform {
     }
   }
 }
+
+provider "github" {
+  owner = "RetroHazard"
+  token = var.github-token
+}

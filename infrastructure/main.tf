@@ -71,4 +71,5 @@ module "github" {
   crc-iam-github-secret-access-key = module.iam.aws_iam_access_key_crc-iam-github-key_secret-key
   crc-s3-bucket-prod               = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_id
   crc-s3-bucket-stage              = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_id
+  github-token                     = var.github_token
 }
