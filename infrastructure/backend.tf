@@ -5,6 +5,5 @@ terraform {
         dynamodb_table  = "crc-terraform-locks"
         region          = "us-east-1"
         encrypt         = true
-        profile         = "crc-terraformer"
   }
 }
