@@ -3,8 +3,7 @@ terraform {
         bucket          = "crc-s3-terraform-state-7ahwqu"
         key             = "aws-services.tfstate"
         dynamodb_table  = "crc-terraform-locks"
-        region          = var.deployment_region
+        region          = "us-east-1"
         encrypt         = true
-        profile         = "crc-terraformer"
   }
 }

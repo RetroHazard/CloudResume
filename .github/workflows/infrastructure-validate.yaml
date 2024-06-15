@@ -1,4 +1,4 @@
-name: Terraform Deploy
+name: Terraform Validate
 
 defaults: 
   run:
@@ -7,12 +7,14 @@ defaults:
 on:
   push:
     branches:
-      - main
+      - 'dev'
+      - 'prod'
     paths:
       - 'infrastructure/**'
   pull_request:
     branches:
-      - main
+      - 'dev'
+      - 'prod'
     paths:
       - 'infrastructure/**'
 
@@ -21,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      TF_VAR_aws_access_key: ${{ secrets.AWS_TF_ACCESS_KEY_ID }}
+      TF_VAR_aws_access_key_id: ${{ secrets.AWS_TF_ACCESS_KEY }}
       TF_VAR_aws_secret_access_key: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
       TF_VAR_assume_role_target: ${{ secrets.AWS_TF_ASSUME_ROLE_TARGET }}
       TF_VAR_deployment_region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
@@ -29,6 +31,8 @@ jobs:
       TF_VAR_sanitized_domain_name: ${{ vars.AWS_TF_SANITIZED_DOMAIN_NAME }}
       TF_VAR_api_current_stage: ${{ vars.AWS_TF_API_CURRENT_STAGE }}
       TF_VAR_hosted_zone_id: ${{ vars.AWS_TF_HOSTED_ZONE_ID }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
 
     steps:
       - name: Checkout code
@@ -37,7 +41,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.0.0
+          terraform_version: latest
           terraform_wrapper: true
 
       - name: Terraform Format
@@ -55,4 +59,4 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -input-false
+        run: terraform plan -input=false

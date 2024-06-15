@@ -1,19 +1,17 @@
-name: Build and Upload to S3 (Production)
+name: Build React App and Upload to S3 (Production)
 
 defaults: 
   run:
     working-directory: website
 
 on:
-  push:
+  merge_group:
     branches:
-      - 'main'
+      - 'prod'
     paths:
       - 'website/**'
-    tags:
-      - 'build*'
   workflow_run:
-    workflows: [ "Terraform Deploy" ]
+    workflows: [ "Terraform Validate" ]
     types:
       - completed
 

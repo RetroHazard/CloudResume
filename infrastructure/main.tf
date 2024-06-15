@@ -63,3 +63,12 @@ module "backend" {
   r53-ses-verification-mx         = module.frontend.aws_route53_record_crc-ses-verification-record_MX
   r53-ses-verification-txt        = module.frontend.aws_route53_record_crc-ses-verification-record_TXT
 }
+
+module "github" {
+  source = "./modules/github"
+
+  crc-iam-github-access-key        = module.iam.aws_iam_access_key_crc-iam-github-key_key-id
+  crc-iam-github-secret-access-key = module.iam.aws_iam_access_key_crc-iam-github-key_secret-key
+  crc-s3-bucket-prod               = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_id
+  crc-s3-bucket-stage              = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_id
+}

@@ -1,12 +1,10 @@
-variable "aws_access_key" {
+variable "aws_access_key_id" {
   description = "Access Key for AWS Terraform User"
-  type = string
   sensitive = true
 }
 
 variable "aws_secret_access_key" {
   description = "Secret Access Key for AWS Terraform User"
-  type = string
   sensitive = true
 }
 
@@ -24,6 +22,7 @@ variable "deployment_region" {
 variable "hosted_zone_id" {
   description = "Target Hosted Zone to Import during initialization"
   type = string
+  sensitive = true
 }
 
 variable "domain_name" {

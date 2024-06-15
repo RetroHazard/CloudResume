@@ -1,19 +1,17 @@
-name: Build and Upload to S3 (Staging)
+name: Build React App and Upload to S3 (Staging)
 
 defaults: 
   run:
     working-directory: website
 
 on:
-  push:
+  merge_group:
     branches:
       - 'dev'
     paths:
       - 'website/**'
-    tags:
-      - 'dev-build*'
   workflow_run:
-    workflows: [ "Terraform Deploy" ]
+    workflows: [ "Terraform Validate" ]
     types:
       - completed
 
@@ -52,6 +50,6 @@ jobs:
           args: --acl public-read
         env:
           SOURCE_DIR: website/build/dev/
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_STAGE }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
