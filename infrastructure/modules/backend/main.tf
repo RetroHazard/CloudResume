@@ -361,7 +361,7 @@ resource "aws_lambda_function" "crc-sendMessage" {
       mailRegion      = data.aws_region
       sendFromAddress = "noreply@${aws_ses_domain_identity.crc-mail-domain.domain}"
       sendToAddress   = aws_ses_email_identity.crc-mail-destination.email
-      allowedOrigin   = var.domain-name
+      allowedOrigin   = "*.${var.domain-name}"
     }
   }
 
