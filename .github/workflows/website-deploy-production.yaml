@@ -7,11 +7,9 @@ defaults:
 on:
   push:
     branches:
-      - 'main'
+      - 'prod'
     paths:
       - 'website/**'
-    tags:
-      - 'build*'
   workflow_run:
     workflows: [ "Terraform Deploy" ]
     types:

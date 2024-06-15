@@ -10,8 +10,6 @@ on:
       - 'dev'
     paths:
       - 'website/**'
-    tags:
-      - 'dev-build*'
   workflow_run:
     workflows: [ "Terraform Deploy" ]
     types:
