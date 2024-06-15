@@ -1,13 +1,21 @@
+data "github_user" "current" {
+  username = "RetroHazard"
+}
+
+data "github_repository" "current" {
+  full_name = "RetroHazard/CloudResume"
+}
+
 resource "github_actions_secret" "aws-s3-key" {
   repository  = data.github_repository.current.full_name
   secret_name = "AWS_S3_ACCESS_KEY"
-  encrypted_value = var.crc-iam-github-access-key
+  plaintext_value = var.crc-iam-github-access-key
 }
 
 resource "github_actions_secret" "aws-s3-secret" {
   repository  = data.github_repository.current.full_name
   secret_name = "AWS_S3_SECRET_ACCESS_KEY"
-  encrypted_value = var.crc-iam-github-secret-access-key
+  plaintext_value = var.crc-iam-github-secret-access-key
 }
 
 resource "github_actions_variable" "aws-s3-bucket-prod" {
