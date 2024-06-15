@@ -65,10 +65,6 @@ module "backend" {
 }
 
 module "github" {
-  depends_on = [
-    module.frontend,
-    module.iam
-  ]
   source = "./modules/github"
 
   crc-iam-github-access-key        = module.iam.aws_iam_access_key_crc-iam-github-key_key-id
