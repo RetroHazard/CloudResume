@@ -23,8 +23,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      aws_access_key_id: ${{ secrets.AWS_TF_ACCESS_KEY }}
-      aws_secret_access_key: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
       assume_role_target: ${{ secrets.AWS_TF_ASSUME_ROLE_TARGET }}
       deployment_region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
       domain_name: ${{ vars.AWS_TF_DOMAIN_NAME }}
