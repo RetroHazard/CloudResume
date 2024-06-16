@@ -90,7 +90,7 @@ resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
       {
         Effect = "Allow"
         Principal = {
-          AWS = var.iam-s3-github-group
+          AWS = var.iam-s3-github-user
         }
         Action = [
           "s3:PutObject"
@@ -202,7 +202,16 @@ resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "PublicReadGetObject"
+        Effect = "Allow"
+        Principal = {
+          AWS = var.iam-s3-github-user
+        }
+        Action = [
+          "s3:PutObject"
+        ]
+        Resource = "${aws_s3_bucket.crc-agb-s3-website-staging.arn}/*"
+      },
+      {
         Effect    = "Allow"
         Principal = "*"
         Action    = "s3:GetObject"

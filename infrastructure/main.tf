@@ -31,7 +31,7 @@ module "frontend" {
   api-current-stage     = var.api_current_stage
 
   api-gateway-cw-logs-role = module.iam.aws_iam_role_crc-api-CloudwatchLogs_arn
-  iam-s3-github-group       = module.iam.aws_iam_group_crc-iam-github-users_arn
+  iam-s3-github-user       = module.iam.aws_iam_user_crc-iam-github-actions_arn
 
   waf-acl-arn               = module.backend.aws_wafv2_web_acl_crc-web-acl_arn
   api-lambda-contact-uri    = module.backend.aws_lambda_function_crc-sendMessage_uri

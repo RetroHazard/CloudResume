@@ -22,7 +22,7 @@ variable "api-gateway-cw-logs-role" {
   type = string
 }
 
-variable "iam-s3-github-group" {
+variable "iam-s3-github-user" {
   type = string
 }
 

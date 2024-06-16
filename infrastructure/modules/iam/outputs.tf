@@ -18,8 +18,8 @@ output "aws_iam_role_crc-VisitorTracker_arn" {
   value = aws_iam_role.crc-VisitorTracker.arn
 }
 
-output "aws_iam_group_crc-iam-github-users_arn" {
-  value = aws_iam_group.crc-iam-github-users.arn
+output "aws_iam_user_crc-iam-github-actions_arn" {
+  value = aws_iam_user.crc-iam-github-actions.arn
 }
 
 output "aws_iam_access_key_crc-iam-github-key_key-id" {
