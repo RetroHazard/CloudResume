@@ -94,5 +94,9 @@ output "aws_api_gateway_resource_crc-api-resource-contact_id" {
   value = aws_api_gateway_resource.crc-api-resource-contact.id
 }
 
+output "aws_api_gateway_crc-api-endpoint_fqdn" {
+  value = "https://${aws_route53_record.crc-dns-zone-api-record-A.name}/${aws_api_gateway_stage.crc-api-stage.stage_name}"
+}
+
 #  End API Gateway Block  #
 ###########################

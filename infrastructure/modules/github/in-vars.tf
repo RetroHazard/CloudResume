@@ -20,6 +20,11 @@ variable "crc-s3-bucket-stage" {
   type = string
 }
 
+variable "crc-api-endpoint" {
+  description = "API Gateway Endpoint (FQDN + Stage)"
+  type = string
+}
+
 variable "github-token" {
   description = "Token provided by GitHub Runner to Authenticate GitHub Operations"
   type = string
