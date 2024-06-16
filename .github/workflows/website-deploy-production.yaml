@@ -47,8 +47,6 @@ jobs:
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read
         env:
           SOURCE_DIR: website/build/prod/
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
