@@ -54,13 +54,6 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-prod" {
   }
 }
 
-resource "aws_s3_bucket_ownership_controls" "crc-agb-s3-website-prod" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
 resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
 
@@ -68,33 +61,6 @@ resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-prod" {
   restrict_public_buckets = false
   block_public_acls       = false
   ignore_public_acls      = false
-}
-
-resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
-  depends_on = [aws_s3_bucket_public_access_block.crc-agb-s3-website-prod]
-  bucket     = aws_s3_bucket.crc-agb-s3-website-prod.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          AWS = var.iam-s3-github-user
-        }
-        Action = [
-          "s3:PutObject"
-        ]
-        Resource = "${aws_s3_bucket.crc-agb-s3-website-prod.arn}/*"
-      },
-      {
-        Effect    = "Allow"
-        Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.crc-agb-s3-website-prod.arn}/*"
-      }
-    ]
-  })
 }
 
 resource "aws_s3_bucket_website_configuration" "crc-agb-s3-website-prod" {
@@ -158,13 +124,6 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-staging" {
   }
 }
 
-resource "aws_s3_bucket_ownership_controls" "crc-agb-s3-website-staging" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-  rule {
-    object_ownership = "BucketOwnerPreferred"
-  }
-}
-
 resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-staging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
 
@@ -172,33 +131,6 @@ resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-staging" {
   restrict_public_buckets = false
   block_public_acls       = false
   ignore_public_acls      = false
-}
-
-resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
-  depends_on = [aws_s3_bucket_public_access_block.crc-agb-s3-website-staging]
-  bucket     = aws_s3_bucket.crc-agb-s3-website-staging.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          AWS = var.iam-s3-github-user
-        }
-        Action = [
-          "s3:PutObject"
-        ]
-        Resource = "${aws_s3_bucket.crc-agb-s3-website-staging.arn}/*"
-      },
-      {
-        Effect    = "Allow"
-        Principal = "*"
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.crc-agb-s3-website-staging.arn}/*"
-      }
-    ]
-  })
 }
 
 resource "aws_s3_bucket_website_configuration" "crc-agb-s3-website-staging" {
