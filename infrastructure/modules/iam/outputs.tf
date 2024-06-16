@@ -24,6 +24,6 @@ output "aws_iam_access_key_crc-iam-github-key_key-id" {
 }
 
 output "aws_iam_access_key_crc-iam-github-key_secret-key" {
-  value     = aws_iam_access_key.crc-iam-github-key.encrypted_secret
+  value     = aws_iam_access_key.crc-iam-github-key.secret
   sensitive = true
 }
