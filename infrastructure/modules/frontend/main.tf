@@ -3,9 +3,9 @@
 #######################################
 
 resource "random_string" "bucket_suffix" {
-  length = 6
+  length  = 6
   special = false
-  upper = false
+  upper   = false
 }
 
 ##################
@@ -57,25 +57,25 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-prod" {
 resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
 
-  block_public_policy = false
+  block_public_policy     = false
   restrict_public_buckets = false
-  block_public_acls = false
-  ignore_public_acls = false
+  block_public_acls       = false
+  ignore_public_acls      = false
 }
 
 resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
   depends_on = [aws_s3_bucket_public_access_block.crc-agb-s3-website-prod]
-  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
+  bucket     = aws_s3_bucket.crc-agb-s3-website-prod.id
 
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Sid = "PublicReadGetObject"
-        Effect = "Allow"
+        Sid       = "PublicReadGetObject"
+        Effect    = "Allow"
         Principal = "*"
-        Action = "s3:GetObject"
-        Resource = "${aws_s3_bucket.crc-agb-s3-website-prod.arn}/*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.crc-agb-s3-website-prod.arn}/*"
       }
     ]
   })
@@ -93,7 +93,7 @@ resource "aws_s3_bucket_notification" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
 
   queue {
-    events = ["s3:ObjectCreated:*"]
+    events    = ["s3:ObjectCreated:*"]
     queue_arn = var.sqs-cf-invalidation-queue
   }
 }
@@ -145,25 +145,25 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-staging" {
 resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-staging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
 
-  block_public_policy = false
+  block_public_policy     = false
   restrict_public_buckets = false
-  block_public_acls = false
-  ignore_public_acls = false
+  block_public_acls       = false
+  ignore_public_acls      = false
 }
 
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
   depends_on = [aws_s3_bucket_public_access_block.crc-agb-s3-website-staging]
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-  
+  bucket     = aws_s3_bucket.crc-agb-s3-website-staging.id
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
       {
-        Sid = "PublicReadGetObject"
-        Effect = "Allow"
+        Sid       = "PublicReadGetObject"
+        Effect    = "Allow"
         Principal = "*"
-        Action = "s3:GetObject"
-        Resource = "${aws_s3_bucket.crc-agb-s3-website-staging.arn}/*"
+        Action    = "s3:GetObject"
+        Resource  = "${aws_s3_bucket.crc-agb-s3-website-staging.arn}/*"
       }
     ]
   })
@@ -181,7 +181,7 @@ resource "aws_s3_bucket_notification" "crc-agb-s3-website-staging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
 
   queue {
-    events = ["s3:ObjectCreated:*"]
+    events    = ["s3:ObjectCreated:*"]
     queue_arn = var.sqs-cf-invalidation-queue
   }
 }
@@ -201,12 +201,12 @@ resource "aws_s3_bucket_policy" "crc-agb-s3-website-logging" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid = "S3PolicyStmt-DO-NOT-MODIFY"
+        Sid    = "S3PolicyStmt-DO-NOT-MODIFY"
         Effect = "Allow"
         Principal = {
           Service = "logging.s3.amazonaws.com"
         }
-        Action = "s3:PutObject"
+        Action   = "s3:PutObject"
         Resource = "${aws_s3_bucket.crc-agb-s3-website-logging.arn}/*"
         Condition = {
           StringEquals = {
@@ -278,8 +278,8 @@ resource "aws_s3_bucket_acl" "crc-agb-s3-website-logging" {
 
 resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
-  aliases = ["www.${var.domain-name}", "*.${var.domain-name}"]
-  comment = "Production Distribution for Cloud Resume"
+  aliases    = ["www.${var.domain-name}", "*.${var.domain-name}"]
+  comment    = "Production Distribution for Cloud Resume"
 
   custom_error_response {
     error_caching_min_ttl = "10"
@@ -301,10 +301,10 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
-  enabled         = "true"
+  enabled             = "true"
   default_root_object = "index.html"
-  http_version    = "http2"
-  is_ipv6_enabled = "false"
+  http_version        = "http2"
+  is_ipv6_enabled     = "false"
 
   logging_config {
     bucket          = aws_s3_bucket.crc-agb-s3-website-logging.bucket_domain_name
@@ -357,8 +357,8 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
 
 resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
   depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
-  aliases = ["staging.${var.domain-name}"]
-  comment = "Staging Distribution for Cloud Resume"
+  aliases    = ["staging.${var.domain-name}"]
+  comment    = "Staging Distribution for Cloud Resume"
 
   default_cache_behavior {
     allowed_methods = ["GET", "HEAD"]
@@ -379,10 +379,10 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
-  enabled         = "true"
+  enabled             = "true"
   default_root_object = "index.html"
-  http_version    = "http2"
-  is_ipv6_enabled = "true"
+  http_version        = "http2"
+  is_ipv6_enabled     = "true"
 
   logging_config {
     bucket          = aws_s3_bucket.crc-agb-s3-website-logging.bucket_domain_name
@@ -448,8 +448,8 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 # Begin Certificates Block #
 
 resource "aws_acm_certificate" "crc-website-certificate" {
-  domain_name   = "*.${var.domain-name}"
-  key_algorithm = "RSA_2048"
+  domain_name       = "*.${var.domain-name}"
+  key_algorithm     = "RSA_2048"
   validation_method = "DNS"
 
   tags = {
@@ -466,8 +466,8 @@ resource "aws_acm_certificate" "crc-website-certificate" {
 }
 
 resource "aws_acm_certificate_validation" "crc-website-certificate-validation" {
-  certificate_arn = aws_acm_certificate.crc-website-certificate.arn
-  validation_record_fqdns = [for record in aws_route53_record.crc-hosted-zone-validation-record: record.fqdn]
+  certificate_arn         = aws_acm_certificate.crc-website-certificate.arn
+  validation_record_fqdns = [for record in aws_route53_record.crc-hosted-zone-validation-record : record.fqdn]
 }
 
 #  End Certificates Block  #
@@ -552,16 +552,16 @@ resource "aws_route53_zone" "crc-hosted-zone" {
   comment       = "Hosted Zone for Cloud Resume Project"
   force_destroy = "false"
   name          = var.domain-name
-  
+
   lifecycle {
     prevent_destroy = true
   }
 }
 
 resource "aws_route53_key_signing_key" "crc-dnssec-ksk" {
-  name = var.domain-name
-  hosted_zone_id = data.aws_route53_zone.crc-domain-name.id
-  status = "ACTIVE"
+  name                       = var.domain-name
+  hosted_zone_id             = data.aws_route53_zone.crc-domain-name.id
+  status                     = "ACTIVE"
   key_management_service_arn = aws_kms_key.crc-dnssec-key.arn
 }
 
@@ -608,33 +608,33 @@ resource "aws_route53_record" "crc-dns-zone-api-record-A" {
     zone_id                = aws_api_gateway_domain_name.crc-api-domain.cloudfront_zone_id
   }
 
-  name                             = "api.${var.domain-name}"
-  type                             = "A"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+  name    = "api.${var.domain-name}"
+  type    = "A"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-record-MX" {
-  name                             = var.ses-mail-from-domain
-  records                          = ["10 feedback-smtp.${data.aws_region.current.name}.amazonses.com"]
-  ttl                              = "600"
-  type                             = "MX"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+  name    = var.ses-mail-from-domain
+  records = ["10 feedback-smtp.${data.aws_region.current.name}.amazonses.com"]
+  ttl     = "600"
+  type    = "MX"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-record-TXT" {
-  name                             = var.ses-mail-from-domain
-  records                          = ["v=spf1 include:amazonses.com -all"]
-  ttl                              = "600"
-  type                             = "TXT"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+  name    = var.ses-mail-from-domain
+  records = ["v=spf1 include:amazonses.com -all"]
+  ttl     = "600"
+  type    = "TXT"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-ses-dkim-record-CNAME" {
-  count  = 3
-  name   = "${aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens[count.index]}._domainkey"
+  count   = 3
+  name    = "${aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens[count.index]}._domainkey"
   records = ["${aws_ses_domain_dkim.crc-ses-domain-dkim.dkim_tokens[count.index]}.dkim.amazonses.com"]
-  ttl    = "600"
-  type   = "CNAME"
+  ttl     = "600"
+  type    = "CNAME"
   zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
@@ -653,9 +653,9 @@ resource "aws_route53_record" "crc-dns-zone-record-A" {
     zone_id                = aws_cloudfront_distribution.crc-cf-production-distribution.hosted_zone_id
   }
 
-  name                             = var.domain-name
-  type                             = "A"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+  name    = var.domain-name
+  type    = "A"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-www-record-A" {
@@ -665,9 +665,9 @@ resource "aws_route53_record" "crc-dns-zone-www-record-A" {
     zone_id                = aws_cloudfront_distribution.crc-cf-production-distribution.hosted_zone_id
   }
 
-  name                             = "www.${var.domain-name}"
-  type                             = "A"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+  name    = "www.${var.domain-name}"
+  type    = "A"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
@@ -677,9 +677,9 @@ resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
     zone_id                = aws_cloudfront_distribution.crc-cf-staging-distribution.hosted_zone_id
   }
 
-  name                             = "staging.${var.domain-name}"
-  type                             = "A"
-  zone_id                          = aws_route53_zone.crc-hosted-zone.zone_id
+  name    = "staging.${var.domain-name}"
+  type    = "A"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 #  End Route53 Block  #
@@ -701,8 +701,8 @@ resource "aws_api_gateway_rest_api" "crc-rest-api" {
 }
 
 resource "aws_api_gateway_domain_name" "crc-api-domain" {
-  depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
-  domain_name = "api.${var.domain-name}"
+  depends_on      = [aws_acm_certificate_validation.crc-website-certificate-validation]
+  domain_name     = "api.${var.domain-name}"
   certificate_arn = aws_acm_certificate.crc-website-certificate.arn
   endpoint_configuration {
     types = ["EDGE"]
@@ -713,7 +713,7 @@ resource "aws_api_gateway_base_path_mapping" "crc-api-domain-deploy" {
   api_id      = aws_api_gateway_rest_api.crc-rest-api.id
   stage_name  = aws_api_gateway_stage.crc-api-stage.stage_name
   domain_name = aws_api_gateway_domain_name.crc-api-domain.domain_name
-  base_path = aws_api_gateway_stage.crc-api-stage.stage_name
+  base_path   = aws_api_gateway_stage.crc-api-stage.stage_name
 }
 
 resource "aws_api_gateway_stage" "crc-api-stage" {

@@ -4,33 +4,33 @@
 // IAM Policy Documents
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
   statement {
-      sid    = "Statement1"
-      effect = "Allow"
+    sid    = "Statement1"
+    effect = "Allow"
 
-      actions = [
-        "logs:CreateLogGroup",
-        "logs:CreateLogStream",
-        "logs:PutLogEvents"
-      ]
-      resources = [
-        "${var.crc-cw-lambda-log-group-trackVisitors}:*"
-      ]
-    }
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "${var.crc-cw-lambda-log-group-trackVisitors}:*"
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
   statement {
-  sid = "VisualEditor0"
-  effect = "Allow"
-  actions = [
-    "dynamodb:PutItem",
-    "dynamodb:GetItem",
-    "dynamodb:UpdateItem"
-  ]
-  resources = [
-    var.crc-visitor-count_arn,
-    var.crc-visitor-record_arn
-  ]
+    sid    = "VisualEditor0"
+    effect = "Allow"
+    actions = [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem"
+    ]
+    resources = [
+      var.crc-visitor-count_arn,
+      var.crc-visitor-record_arn
+    ]
   }
 }
 
@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy
 
 data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy" {
   statement {
-    sid = "Stmt1505004397098"
+    sid    = "Stmt1505004397098"
     effect = "Allow"
     actions = [
       "cloudfront:CreateInvalidation",
@@ -115,8 +115,8 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
 
 data "aws_iam_policy_document" "crc-s3-github-actions" {
   statement {
-    sid    = "VisualEditor1"
-    effect = "Allow"
+    sid     = "VisualEditor1"
+    effect  = "Allow"
     actions = ["s3:PutObject"]
     resources = [
       var.crc-s3-production-arn,

@@ -78,8 +78,8 @@ resource "aws_iam_role" "crc-api-CloudwatchLogs" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action    = "sts:AssumeRole",
-        Effect    = "Allow",
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
         Principal = {
           Service = "apigateway.amazonaws.com"
         }
@@ -87,8 +87,8 @@ resource "aws_iam_role" "crc-api-CloudwatchLogs" {
     ]
   })
 
-  description          = "Allows API Gateway to push logs to CloudWatch Logs."
-  managed_policy_arns  = [
+  description = "Allows API Gateway to push logs to CloudWatch Logs."
+  managed_policy_arns = [
     "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
   ]
   max_session_duration = "3600"
@@ -101,8 +101,8 @@ resource "aws_iam_role" "crc-CloudfrontManager" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action    = "sts:AssumeRole",
-        Effect    = "Allow",
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -110,9 +110,9 @@ resource "aws_iam_role" "crc-CloudfrontManager" {
     ]
   })
 
-  managed_policy_arns  = [
+  managed_policy_arns = [
     aws_iam_policy.crc-Lambda-CloudfrontInvalidation-AccessPolicy.arn,
-    ]
+  ]
   max_session_duration = "3600"
   name                 = "crc-CloudFrontManager"
   path                 = "/"
@@ -124,8 +124,8 @@ resource "aws_iam_role" "crc-MessageSender" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action    = "sts:AssumeRole",
-        Effect    = "Allow",
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -133,8 +133,8 @@ resource "aws_iam_role" "crc-MessageSender" {
     ]
   })
 
-  description          = "Allows Lambda functions to call AWS services on your behalf."
-  managed_policy_arns  = [
+  description = "Allows Lambda functions to call AWS services on your behalf."
+  managed_policy_arns = [
     aws_iam_policy.crc-Lambda-SendMessage-AccessPolicy.arn,
   ]
   max_session_duration = "3600"
@@ -148,8 +148,8 @@ resource "aws_iam_role" "crc-VisitorTracker" {
     Version = "2012-10-17",
     Statement = [
       {
-        Action    = "sts:AssumeRole",
-        Effect    = "Allow",
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
         Principal = {
           Service = "lambda.amazonaws.com"
         }
@@ -157,8 +157,8 @@ resource "aws_iam_role" "crc-VisitorTracker" {
     ]
   })
 
-  description          = "Allows Lambda functions to call AWS services on your behalf."
-  managed_policy_arns  = [
+  description = "Allows Lambda functions to call AWS services on your behalf."
+  managed_policy_arns = [
     aws_iam_policy.crc-Lambda-TrackVisitors-AccessPolicy.arn,
   ]
   max_session_duration = "3600"
@@ -180,7 +180,7 @@ resource "aws_iam_group" "crc-iam-github-users" {
 
 resource "aws_iam_user_group_membership" "crc-iam-assign-github-actions" {
   groups = [aws_iam_group.crc-iam-github-users.name]
-  user = aws_iam_user.crc-iam-github-actions.name
+  user   = aws_iam_user.crc-iam-github-actions.name
 }
 
 resource "aws_iam_access_key" "crc-iam-github-key" {

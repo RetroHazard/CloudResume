@@ -24,5 +24,5 @@ data "archive_file" "sendMessage_lambda_function_code" {
 
 data "aws_sqs_queue" "crc_cloudfront_invalidation_queue" {
   depends_on = [aws_sqs_queue.crc-cloudfront-invalidation-queue]
-  name = aws_sqs_queue.crc-cloudfront-invalidation-queue.name
+  name       = aws_sqs_queue.crc-cloudfront-invalidation-queue.name
 }

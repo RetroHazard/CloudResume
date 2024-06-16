@@ -1,4 +1,4 @@
-﻿#######################################
+#######################################
 # Cloud Resume - Back End Components #
 #######################################
 
@@ -134,7 +134,7 @@ resource "aws_dynamodb_table" "crc-visitor-count" {
   read_capacity  = "1"
   stream_enabled = "false"
   table_class    = "STANDARD"
-  
+
   write_capacity = "1"
 }
 
@@ -173,9 +173,9 @@ resource "aws_dynamodb_table" "crc-visitor-record" {
 #  Begin SES Block  #
 
 resource "random_string" "configuration_suffix" {
-  length = 6
+  length  = 6
   special = false
-  upper = false
+  upper   = false
 }
 
 resource "aws_ses_configuration_set" "crc-contact-mail" {
@@ -238,44 +238,44 @@ resource "aws_sqs_queue" "crc-cloudfront-invalidation-queue" {
 resource "aws_sqs_queue_policy" "crc_cloudfront_invalidation_queue_policy" {
   queue_url = aws_sqs_queue.crc-cloudfront-invalidation-queue.id
   policy = jsonencode({
-    "Id": "Policy1717464010087",
-    "Statement": [
+    "Id" : "Policy1717464010087",
+    "Statement" : [
       {
-        "Action": "SQS:SendMessage",
-        "Condition": {
-          "ArnLike": {
-            "aws:SourceArn": [
+        "Action" : "SQS:SendMessage",
+        "Condition" : {
+          "ArnLike" : {
+            "aws:SourceArn" : [
               var.s3-bucket-production-arn,
               var.s3-bucket-staging-arn
             ]
           },
-          "StringEquals": {
-            "aws:SourceAccount": var.account_id
+          "StringEquals" : {
+            "aws:SourceAccount" : var.account_id
           }
         },
-        "Effect": "Allow",
-        "Principal": {
-          "Service": "s3.amazonaws.com"
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "s3.amazonaws.com"
         },
-        "Resource": data.aws_sqs_queue.crc_cloudfront_invalidation_queue.arn,
-        "Sid": "Stmt1717463975055"
+        "Resource" : data.aws_sqs_queue.crc_cloudfront_invalidation_queue.arn,
+        "Sid" : "Stmt1717463975055"
       },
       {
-        "Action": [
+        "Action" : [
           "SQS:ChangeMessageVisibility",
           "SQS:DeleteMessage",
           "SQS:ReceiveMessage",
           "SQS:GetQueueAttributes"
         ],
-        "Effect": "Allow",
-        "Principal": {
-          "AWS": var.iam-role-cloudfront-manager-arn
+        "Effect" : "Allow",
+        "Principal" : {
+          "AWS" : var.iam-role-cloudfront-manager-arn
         },
-        "Resource": data.aws_sqs_queue.crc_cloudfront_invalidation_queue.arn,
-        "Sid": "Stmt1717464008331"
+        "Resource" : data.aws_sqs_queue.crc_cloudfront_invalidation_queue.arn,
+        "Sid" : "Stmt1717464008331"
       }
     ],
-    "Version": "2012-10-17"
+    "Version" : "2012-10-17"
   })
 }
 
@@ -434,7 +434,7 @@ resource "aws_lambda_function" "crc-trackVisitors" {
   timeout                        = "3"
 
   depends_on = [
-  aws_cloudwatch_log_group.crc-trackVisitors-log-group
+    aws_cloudwatch_log_group.crc-trackVisitors-log-group
   ]
 }
 
