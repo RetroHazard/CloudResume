@@ -1,11 +1,10 @@
-name: Terraform Validate
+name: Terraform Deploy
 
 defaults: 
   run:
     working-directory: infrastructure
 
 on:
-  workflow_dispatch: 
   push:
     branches:
       - 'dev'
@@ -18,6 +17,10 @@ on:
       - 'prod'
     paths:
       - 'infrastructure/**'
+  workflow_run:
+    workflows: [ "Terraform Validate" ]
+    types:
+      - completed
 
 jobs:
   terraform:
@@ -48,19 +51,10 @@ jobs:
           terraform_version: latest
           terraform_wrapper: true
 
-      - name: Terraform Format
-        id: format
-        run: terraform fmt -check -recursive -list=true
-        continue-on-error: true
-
       - name: Terraform Init
         id: initialize
         run: terraform init
 
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate
-
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan -input=false
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve
