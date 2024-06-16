@@ -18,7 +18,7 @@ function VisitorCount() {
                 }
 
                 // Send the visitorId as a query parameter
-                let response = await fetch(`https://api.cloudresume-agb.jp/v1/visitors?visitorId=${visitorId}`, {
+                let response = await fetch(`${process.env.REACT_APP_AWS_API_ENDPOINT}/visitors?visitorId=${visitorId}`, {
                     method: 'GET',
                 });
 

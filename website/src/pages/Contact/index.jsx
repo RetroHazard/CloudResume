@@ -39,7 +39,7 @@ const ContactForm = () => {
             let responseStatus = 'success'; // Default to success, change to error if necessary
 
             try {
-                const response = await fetch(`https://api.cloudresume-agb.jp/v1/contact?uuid=${uuid}`, {
+                const response = await fetch(`${process.env.REACT_APP_AWS_API_ENDPOINT}/contact?uuid=${uuid}`, {
                     method: 'POST',
                     mode: 'cors',
                     cache: 'no-cache',
