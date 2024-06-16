@@ -1,33 +1,15 @@
-name: Terraform Deploy
+name: Terraform Destroy
 
 defaults: 
   run:
     working-directory: infrastructure
 
 on:
-  push:
-    branches:
-      - 'dev'
-      - 'prod'
-    paths:
-      - 'infrastructure/**'
-  pull_request:
-    branches:
-      - 'dev'
-      - 'prod'
-    paths:
-      - 'infrastructure/**'
-  workflow_run:
-    workflows: [ "Terraform Validate" ]
-    types:
-      - completed
+  workflow_dispatch: 
 
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    permissions: write-all
-    
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -57,6 +39,6 @@ jobs:
         id: initialize
         run: terraform init
 
-      - name: Terraform Apply
+      - name: Terraform Destroy
         id: apply
-        run: terraform apply -auto-approve
+        run: terraform destroy -auto-approve
