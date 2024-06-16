@@ -8,7 +8,7 @@ SEND_AS = os.environ['sendFromAddress']
 ALLOWED_ORIGIN = os.environ['allowedOrigin']
 
 
-def lambda_handler(event):
+def lambda_handler(event, context):
     # Initialize the SES client
     ses_client = boto3.client('ses', region_name=AWS_REGION)
 

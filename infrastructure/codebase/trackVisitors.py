@@ -14,7 +14,7 @@ count_table = dynamodb.Table(count_table_name)
 record_table = dynamodb.Table(record_table_name)
 
 
-def lambda_handler(event):
+def lambda_handler(event, context):
     visitor_id = event['queryStringParameters']['visitorId']
     current_time = datetime.now(timezone.utc)
     ttl_time = int((current_time + timedelta(days=1)).timestamp())
