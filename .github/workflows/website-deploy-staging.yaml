@@ -37,6 +37,7 @@ jobs:
         run: |
           touch .env
           echo REACT_APP_RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }} >> .env
+          echo REACT_APP_AWS_API_ENDPOINT=${{ secrets.AWS_API_ENDPOINT }} >> .env
 
       - name: Test app
         run: npm run test
