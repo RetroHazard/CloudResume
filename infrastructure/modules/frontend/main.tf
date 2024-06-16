@@ -75,9 +75,9 @@ resource "aws_s3_bucket_acl" "crc-agb-s3-website-prod" {
     aws_s3_bucket_ownership_controls.crc-agb-s3-website-prod,
     aws_s3_bucket_public_access_block.crc-agb-s3-website-prod
   ]
-  
+
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
-  acl = "public-read"
+  acl    = "public-read"
 }
 
 resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
@@ -88,7 +88,16 @@ resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "PublicReadGetObject"
+        Effect = "Allow"
+        Principal = {
+          AWS = var.iam-s3-github-group
+        }
+        Action = [
+          "s3:PutObject"
+        ]
+        Resource = "${aws_s3_bucket.crc-agb-s3-website-prod.arn}/*"
+      },
+      {
         Effect    = "Allow"
         Principal = "*"
         Action    = "s3:GetObject"
@@ -182,7 +191,7 @@ resource "aws_s3_bucket_acl" "crc-agb-s3-website-staging" {
   ]
 
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-  acl = "public-read"
+  acl    = "public-read"
 }
 
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {

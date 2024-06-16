@@ -22,6 +22,10 @@ variable "api-gateway-cw-logs-role" {
   type = string
 }
 
+variable "iam-s3-github-group" {
+  type = string
+}
+
 # Inputs from Backend Module
 
 variable "waf-acl-arn" {
