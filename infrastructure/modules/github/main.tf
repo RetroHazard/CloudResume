@@ -16,20 +16,20 @@ resource "github_actions_secret" "aws-s3-secret" {
   plaintext_value = var.crc-iam-github-secret-access-key
 }
 
-resource "github_actions_variable" "aws-s3-bucket-prod" {
+resource "github_actions_secret" "aws-s3-bucket-prod" {
   repository    = var.github-repository
-  variable_name = "AWS_S3_BUCKET_PROD"
+  secret_name = "AWS_S3_BUCKET_PROD"
   value         = var.crc-s3-bucket-prod
 }
 
-resource "github_actions_variable" "aws-s3-bucket-stage" {
+resource "github_actions_secret" "aws-s3-bucket-stage" {
   repository    = var.github-repository
-  variable_name = "AWS_S3_BUCKET_STAGE"
+  secret_name = "AWS_S3_BUCKET_STAGE"
   value         = var.crc-s3-bucket-stage
 }
 
-resource "github_actions_variable" "aws-api-endpoint" {
+resource "github_actions_secret" "aws-api-endpoint" {
   repository    = var.github-repository
-  variable_name = "AWS_API_ENDPOINT"
+  secret_name = "AWS_API_ENDPOINT"
   value         = var.crc-api-endpoint
 }
