@@ -70,16 +70,6 @@ resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-prod" {
   ignore_public_acls      = false
 }
 
-resource "aws_s3_bucket_acl" "crc-agb-s3-website-prod" {
-  depends_on = [
-    aws_s3_bucket_ownership_controls.crc-agb-s3-website-prod,
-    aws_s3_bucket_public_access_block.crc-agb-s3-website-prod
-  ]
-
-  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
-  acl    = "public-read"
-}
-
 resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
   depends_on = [aws_s3_bucket_public_access_block.crc-agb-s3-website-prod]
   bucket     = aws_s3_bucket.crc-agb-s3-website-prod.id
@@ -182,16 +172,6 @@ resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-staging" {
   restrict_public_buckets = false
   block_public_acls       = false
   ignore_public_acls      = false
-}
-
-resource "aws_s3_bucket_acl" "crc-agb-s3-website-staging" {
-  depends_on = [
-    aws_s3_bucket_ownership_controls.crc-agb-s3-website-staging,
-    aws_s3_bucket_public_access_block.crc-agb-s3-website-staging
-  ]
-
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-  acl    = "public-read"
 }
 
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
