@@ -265,7 +265,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     }
 
     domain_name = aws_s3_bucket.crc-agb-s3-website-prod.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket.crc-agb-s3-website-prod.website_endpoint
+    origin_id   = aws_s3_bucket_website_configuration.crc-agb-s3-website-prod.website_endpoint
 
     origin_shield {
       enabled              = "true"
@@ -343,7 +343,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
     }
 
     domain_name = aws_s3_bucket.crc-agb-s3-website-staging.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket.crc-agb-s3-website-staging.website_endpoint
+    origin_id   = aws_s3_bucket_website_configuration.crc-agb-s3-website-staging.website_endpoint
 
     origin_shield {
       enabled              = "true"
