@@ -30,6 +30,6 @@ resource "github_actions_variable" "aws-s3-bucket-stage" {
 
 resource "github_actions_variable" "aws-api-endpoint" {
   repository    = var.github-repository
-  value         = "AWS_API_ENDPOINT"
-  variable_name = var.crc-api-endpoint
+  variable_name = "AWS_API_ENDPOINT"
+  value         = var.crc-api-endpoint
 }
