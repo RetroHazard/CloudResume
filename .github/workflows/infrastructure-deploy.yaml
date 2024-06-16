@@ -32,10 +32,10 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.PAT }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
-      TF_VAR_github_token: ${{ secrets.GITHUB_TOKEN }}
+      TF_VAR_github_token: ${{ secrets.PAT }}
       TF_VAR_aws_access_key_id: ${{ secrets.AWS_TF_ACCESS_KEY }}
       TF_VAR_aws_secret_access_key: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
       TF_VAR_assume_role_target: ${{ secrets.AWS_TF_ASSUME_ROLE_TARGET }}
