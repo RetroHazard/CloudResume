@@ -25,7 +25,9 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    permissions: write-all
+    permissions:
+      contents: write
+      actions: write
     
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
