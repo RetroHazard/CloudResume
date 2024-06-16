@@ -17,19 +17,19 @@ resource "github_actions_secret" "aws-s3-secret" {
 }
 
 resource "github_actions_secret" "aws-s3-bucket-prod" {
-  repository    = var.github-repository
-  secret_name = "AWS_S3_BUCKET_PROD"
-  value         = var.crc-s3-bucket-prod
+  repository      = var.github-repository
+  secret_name     = "AWS_S3_BUCKET_PROD"
+  plaintext_value = var.crc-s3-bucket-prod
 }
 
 resource "github_actions_secret" "aws-s3-bucket-stage" {
-  repository    = var.github-repository
-  secret_name = "AWS_S3_BUCKET_STAGE"
-  value         = var.crc-s3-bucket-stage
+  repository      = var.github-repository
+  secret_name     = "AWS_S3_BUCKET_STAGE"
+  plaintext_value = var.crc-s3-bucket-stage
 }
 
 resource "github_actions_secret" "aws-api-endpoint" {
-  repository    = var.github-repository
-  secret_name = "AWS_API_ENDPOINT"
-  value         = var.crc-api-endpoint
+  repository      = var.github-repository
+  secret_name     = "AWS_API_ENDPOINT"
+  plaintext_value = var.crc-api-endpoint
 }
