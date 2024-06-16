@@ -232,11 +232,8 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     cached_methods         = ["GET", "HEAD"]
     compress               = "true"
-    default_ttl            = "0"
-    max_ttl                = "0"
-    min_ttl                = "0"
     smooth_streaming       = "false"
-    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-prod.id
+    target_origin_id       = aws_s3_bucket_website_configuration.crc-agb-s3-website-prod.website_endpoint
     viewer_protocol_policy = "redirect-to-https"
   }
 
@@ -258,9 +255,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     custom_origin_config {
       http_port                = "80"
       https_port               = "443"
-      origin_keepalive_timeout = "5"
       origin_protocol_policy   = "http-only"
-      origin_read_timeout      = "30"
       origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
