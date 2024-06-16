@@ -1,7 +1,7 @@
 variable "github-repository" {
   description = "GitHub Repository to store Secrets and Variables in"
   type        = string
-  default     = "RetroHazard/CloudResume"
+  default     = "CloudResume"
 }
 
 resource "github_actions_secret" "aws-s3-key" {

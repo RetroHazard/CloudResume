@@ -249,9 +249,6 @@ resource "aws_sqs_queue_policy" "crc_cloudfront_invalidation_queue_policy" {
               var.s3-bucket-staging-arn
             ]
           },
-          "StringEquals" : {
-            "aws:SourceAccount" : var.account_id
-          }
         },
         "Effect" : "Allow",
         "Principal" : {
