@@ -231,8 +231,6 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     allowed_methods        = ["GET", "HEAD"]
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     cached_methods         = ["GET", "HEAD"]
-    compress               = "true"
-    smooth_streaming       = "false"
     target_origin_id       = aws_s3_bucket_website_configuration.crc-agb-s3-website-prod.website_endpoint
     viewer_protocol_policy = "redirect-to-https"
   }
