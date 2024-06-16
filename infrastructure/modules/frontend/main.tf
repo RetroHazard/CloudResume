@@ -54,6 +54,13 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-prod" {
   }
 }
 
+resource "aws_s3_bucket_ownership_controls" "crc-agb-s3-website-prod" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
 
@@ -61,6 +68,16 @@ resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-prod" {
   restrict_public_buckets = false
   block_public_acls       = false
   ignore_public_acls      = false
+}
+
+resource "aws_s3_bucket_acl" "crc-agb-s3-website-prod" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.crc-agb-s3-website-prod,
+    aws_s3_bucket_public_access_block.crc-agb-s3-website-prod
+  ]
+  
+  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
+  acl = "public-read"
 }
 
 resource "aws_s3_bucket_policy" "crc_agb_s3_website_prod" {
@@ -142,6 +159,13 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-staging" {
   }
 }
 
+resource "aws_s3_bucket_ownership_controls" "crc-agb-s3-website-staging" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-staging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
 
@@ -149,6 +173,16 @@ resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-staging" {
   restrict_public_buckets = false
   block_public_acls       = false
   ignore_public_acls      = false
+}
+
+resource "aws_s3_bucket_acl" "crc-agb-s3-website-staging" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.crc-agb-s3-website-staging,
+    aws_s3_bucket_public_access_block.crc-agb-s3-website-staging
+  ]
+
+  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
+  acl = "public-read"
 }
 
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
@@ -250,31 +284,6 @@ resource "aws_s3_bucket_acl" "crc-agb-s3-website-logging" {
 
 ##########################
 # Begin CloudFront Block #
-
-/*resource "aws_cloudfront_cache_policy" "crc-default-caching-policy" {
-  comment     = "Policy with caching enabled. Supports Gzip and Brotli compression."
-  default_ttl = "86400"
-  max_ttl     = "31536000"
-  min_ttl     = "1"
-  name        = "CRC-CachingOptimized"
-
-  parameters_in_cache_key_and_forwarded_to_origin {
-    cookies_config {
-      cookie_behavior = "none"
-    }
-
-    enable_accept_encoding_brotli = "true"
-    enable_accept_encoding_gzip   = "true"
-
-    headers_config {
-      header_behavior = "none"
-    }
-
-    query_strings_config {
-      query_string_behavior = "none"
-    }
-  }
-}*/
 
 resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
