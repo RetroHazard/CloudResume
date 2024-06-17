@@ -7,15 +7,6 @@ defaults:
 on:
   workflow_dispatch: 
   push:
-    branches:
-      - 'dev'
-      - 'prod'
-    paths:
-      - 'infrastructure/**'
-  pull_request:
-    branches:
-      - 'dev'
-      - 'prod'
     paths:
       - 'infrastructure/**'
 

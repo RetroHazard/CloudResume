@@ -5,9 +5,7 @@ defaults:
     working-directory: website
 
 on:
-  merge_group:
-    branches:
-      - 'dev'
+  push:
     paths:
       - 'website/**'
   workflow_run:

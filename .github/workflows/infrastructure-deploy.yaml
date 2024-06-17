@@ -6,15 +6,6 @@ defaults:
 
 on:
   push:
-    branches:
-      - 'dev'
-      - 'prod'
-    paths:
-      - 'infrastructure/**'
-  pull_request:
-    branches:
-      - 'dev'
-      - 'prod'
     paths:
       - 'infrastructure/**'
   workflow_run:
@@ -25,9 +16,7 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      actions: write
+    permissions: write-all
     
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
