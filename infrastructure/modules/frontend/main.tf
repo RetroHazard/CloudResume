@@ -231,7 +231,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     allowed_methods        = ["GET", "HEAD"]
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = aws_s3_bucket_website_configuration.crc-agb-s3-website-prod.website_endpoint
+    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-prod.id
     viewer_protocol_policy = "redirect-to-https"
   }
 
@@ -257,8 +257,8 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
       origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = aws_s3_bucket.crc-agb-s3-website-prod.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket_website_configuration.crc-agb-s3-website-prod.website_endpoint
+    domain_name = aws_s3_bucket.crc-agb-s3-website-prod.website_endpoint
+    origin_id   = aws_s3_bucket.crc-agb-s3-website-prod.id
 
     origin_shield {
       enabled              = "true"
@@ -297,18 +297,14 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
     cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     cached_methods  = ["GET", "HEAD"]
     compress        = "true"
-    default_ttl     = "0"
-
+    smooth_streaming       = "false"
+    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-staging.id
+    viewer_protocol_policy = "redirect-to-https"
+    
     function_association {
       event_type   = "viewer-request"
       function_arn = aws_cloudfront_function.crc-StagingAuthorization.arn
     }
-
-    max_ttl                = "0"
-    min_ttl                = "0"
-    smooth_streaming       = "false"
-    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-staging.id
-    viewer_protocol_policy = "redirect-to-https"
   }
 
   enabled             = "true"
@@ -329,14 +325,12 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
     custom_origin_config {
       http_port                = "80"
       https_port               = "443"
-      origin_keepalive_timeout = "5"
       origin_protocol_policy   = "http-only"
-      origin_read_timeout      = "30"
       origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = aws_s3_bucket.crc-agb-s3-website-staging.bucket_regional_domain_name
-    origin_id   = aws_s3_bucket_website_configuration.crc-agb-s3-website-staging.website_endpoint
+    domain_name = aws_s3_bucket.crc-agb-s3-website-staging.website_endpoint
+    origin_id   = aws_s3_bucket.crc-agb-s3-website-staging.id
 
     origin_shield {
       enabled              = "true"
