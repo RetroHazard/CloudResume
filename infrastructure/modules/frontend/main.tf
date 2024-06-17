@@ -257,7 +257,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
       origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = aws_s3_bucket.crc-agb-s3-website-prod.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.crc-agb-s3-website-prod.website_endpoint
     origin_id   = aws_s3_bucket.crc-agb-s3-website-prod.id
 
     origin_shield {
@@ -329,7 +329,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
       origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = aws_s3_bucket.crc-agb-s3-website-staging.website_endpoint
+    domain_name = aws_s3_bucket_website_configuration.crc-agb-s3-website-staging.website_endpoint
     origin_id   = aws_s3_bucket.crc-agb-s3-website-staging.id
 
     origin_shield {
