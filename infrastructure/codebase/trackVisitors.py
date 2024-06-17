@@ -9,6 +9,7 @@ dynamodb = boto3.resource('dynamodb')
 # Set dynamodb table names from env
 count_table_name = os.environ['countTableName']
 record_table_name = os.environ['recordTableName']
+ALLOWED_ORIGIN = os.environ['allowedOrigin']
 
 count_table = dynamodb.Table(count_table_name)
 record_table = dynamodb.Table(record_table_name)
@@ -65,7 +66,7 @@ def lambda_handler(event, context):
         "statusCode": 200,
         'headers': {
             # 'Access-Control-Allow-Headers': 'application/json',
-            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
             # 'Access-Control-Allow-Methods': 'OPTIONS,GET'
         },
         "body": response_body
