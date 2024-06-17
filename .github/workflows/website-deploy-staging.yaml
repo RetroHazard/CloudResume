@@ -6,11 +6,6 @@ defaults:
 
 on:
   workflow_dispatch: 
-  push:
-    paths:
-      - 'website/**'
-    tags:
-      - 'devbuild-*'
   workflow_run:
     workflows: [ "Terraform Deploy" ]
     types:
@@ -19,8 +14,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
