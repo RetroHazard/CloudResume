@@ -5,9 +5,12 @@ defaults:
     working-directory: website
 
 on:
+  workflow_dispatch: 
   push:
     paths:
       - 'website/**'
+    tags:
+      - 'devbuild-*'
   workflow_run:
     workflows: [ "Terraform Deploy" ]
     types:
@@ -22,6 +25,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Check last Terraform Deploy run status
+        id: check_status
+        run: |
+          status=$(gh run list --workflow="Terraform Deploy" --branch=main --limit=1 --json conclusion --jq '.[0].conclusion')
+          echo "status=$status" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check status output
+        run:
+          echo "Last Terraform Deploy status was ${{ env.status }}"
+
+      - name: Build and Upload
+        if: ${{ env.status == 'success' }}
+        run: |
+          echo "Running Build and Upload because last Terraform Deploy was successful"
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
