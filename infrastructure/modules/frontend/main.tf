@@ -18,6 +18,31 @@ resource "aws_s3_bucket" "crc-agb-s3-website-prod" {
   object_lock_enabled = "false"
 }
 
+resource "aws_s3_bucket_policy" "crc-agb-s3-website-prod" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "AllowCloudFrontServicePrincipalReadOnly",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "cloudfront.amazonaws.com"
+        },
+        "Action" : "s3:GetObject",
+        "Resource" : "${aws_s3_bucket.crc-agb-s3-website-prod.arn}}/*",
+        "Condition" : {
+          "StringEquals" : {
+            "AWS:SourceArn" : "${aws_cloudfront_distribution.crc-cf-production-distribution.arn}"
+          }
+        }
+      }
+    ]
+  })
+}
+
+
 resource "aws_s3_bucket_lifecycle_configuration" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
 
@@ -54,23 +79,6 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-prod" {
   }
 }
 
-resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-prod" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
-
-  block_public_policy     = false
-  restrict_public_buckets = false
-  block_public_acls       = false
-  ignore_public_acls      = false
-}
-
-resource "aws_s3_bucket_website_configuration" "crc-agb-s3-website-prod" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
-
-  index_document {
-    suffix = "index.html"
-  }
-}
-
 resource "aws_s3_bucket_notification" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
 
@@ -86,6 +94,30 @@ resource "aws_s3_bucket" "crc-agb-s3-website-staging" {
   force_destroy = "false"
 
   object_lock_enabled = "false"
+}
+
+resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Sid" : "AllowCloudFrontServicePrincipalReadOnly",
+        "Effect" : "Allow",
+        "Principal" : {
+          "Service" : "cloudfront.amazonaws.com"
+        },
+        "Action" : "s3:GetObject",
+        "Resource" : "${aws_s3_bucket.crc-agb-s3-website-staging.arn}}/*",
+        "Condition" : {
+          "StringEquals" : {
+            "AWS:SourceArn" : "${aws_cloudfront_distribution.crc-cf-staging-distribution.arn}"
+          }
+        }
+      }
+    ]
+  })
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "crc-agb-s3-website-staging" {
@@ -121,23 +153,6 @@ resource "aws_s3_bucket_versioning" "crc-agb-s3-website-staging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
   versioning_configuration {
     status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "crc-agb-s3-website-staging" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-
-  block_public_policy     = false
-  restrict_public_buckets = false
-  block_public_acls       = false
-  ignore_public_acls      = false
-}
-
-resource "aws_s3_bucket_website_configuration" "crc-agb-s3-website-staging" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-
-  index_document {
-    suffix = "index.html"
   }
 }
 
@@ -257,15 +272,15 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
       origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = aws_s3_bucket_website_configuration.crc-agb-s3-website-prod.website_endpoint
+    domain_name = aws_s3_bucket.crc-agb-s3-website-prod.bucket_regional_domain_name
     origin_id   = aws_s3_bucket.crc-agb-s3-website-prod.id
+    origin_access_control_id = aws_cloudfront_origin_access_control.crc-cf-production-oac.id
 
     origin_shield {
       enabled              = "true"
       origin_shield_region = aws_s3_bucket.crc-agb-s3-website-prod.region
     }
   }
-
 
   price_class = "PriceClass_All"
 
@@ -285,6 +300,13 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     ssl_support_method             = "sni-only"
   }
   web_acl_id = var.waf-acl-arn
+}
+
+resource "aws_cloudfront_origin_access_control" "crc-cf-production-oac" {
+  name                              = aws_s3_bucket.crc-agb-s3-website-prod.id
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
@@ -329,8 +351,9 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
       origin_ssl_protocols     = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
 
-    domain_name = aws_s3_bucket_website_configuration.crc-agb-s3-website-staging.website_endpoint
+    domain_name = aws_s3_bucket.crc-agb-s3-website-staging.bucket_regional_domain_name
     origin_id   = aws_s3_bucket.crc-agb-s3-website-staging.id
+    origin_access_control_id = aws_cloudfront_origin_access_control.crc-cf-staging-oac.id
 
     origin_shield {
       enabled              = "true"
@@ -356,6 +379,13 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
     ssl_support_method             = "sni-only"
   }
   web_acl_id = var.waf-acl-arn
+}
+
+resource "aws_cloudfront_origin_access_control" "crc-cf-staging-oac" {
+  name                              = aws_s3_bucket.crc-agb-s3-website-staging.id
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_function" "crc-StagingAuthorization" {
