@@ -9,7 +9,7 @@ on:
     paths:
       - 'infrastructure/**'
   workflow_run:
-    workflows: [ "Terraform Validate" ]
+    workflows: [ "Terraform Validation" ]
     types:
       - completed
 

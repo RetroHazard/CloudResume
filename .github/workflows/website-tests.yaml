@@ -1,4 +1,4 @@
-name: Run Website Tests on Pull Request
+name: Website Tests
 
 defaults: 
   run:

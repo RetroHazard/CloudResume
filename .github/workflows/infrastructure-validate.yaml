@@ -1,4 +1,4 @@
-name: Terraform Validate
+name: Terraform Validation
 
 defaults: 
   run:
