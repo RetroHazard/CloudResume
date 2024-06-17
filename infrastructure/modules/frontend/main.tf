@@ -34,14 +34,13 @@ resource "aws_s3_bucket_policy" "crc-agb-s3-website-prod" {
         "Resource" : "${aws_s3_bucket.crc-agb-s3-website-prod.arn}}/*",
         "Condition" : {
           "StringEquals" : {
-            "AWS:SourceArn" : "${aws_cloudfront_distribution.crc-cf-production-distribution.arn}"
+            "AWS:SourceArn" : aws_cloudfront_distribution.crc-cf-production-distribution.arn
           }
         }
       }
     ]
   })
 }
-
 
 resource "aws_s3_bucket_lifecycle_configuration" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
@@ -112,7 +111,7 @@ resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
         "Resource" : "${aws_s3_bucket.crc-agb-s3-website-staging.arn}}/*",
         "Condition" : {
           "StringEquals" : {
-            "AWS:SourceArn" : "${aws_cloudfront_distribution.crc-cf-staging-distribution.arn}"
+            "AWS:SourceArn" : aws_cloudfront_distribution.crc-cf-staging-distribution.arn
           }
         }
       }
