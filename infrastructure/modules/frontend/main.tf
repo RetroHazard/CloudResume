@@ -38,7 +38,7 @@ data "aws_iam_policy_document" "crc-agb-s3-website-prod-oac" {
   }
 }
 
-resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
+resource "aws_s3_bucket_policy" "crc-agb-s3-website-prod" {
   bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
   policy = data.aws_iam_policy_document.crc-agb-s3-website-prod-oac.json
 }
