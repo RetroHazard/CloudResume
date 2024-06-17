@@ -18,28 +18,29 @@ resource "aws_s3_bucket" "crc-agb-s3-website-prod" {
   object_lock_enabled = "false"
 }
 
-resource "aws_s3_bucket_policy" "crc-agb-s3-website-prod" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
+data "aws_iam_policy_document" "crc-agb-s3-website-prod-oac" {
 
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "AllowCloudFrontServicePrincipalReadOnly",
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "cloudfront.amazonaws.com"
-        },
-        "Action" : "s3:GetObject",
-        "Resource" : "${aws_s3_bucket.crc-agb-s3-website-prod.arn}}/*",
-        "Condition" : {
-          "StringEquals" : {
-            "AWS:SourceArn" : aws_cloudfront_distribution.crc-cf-production-distribution.arn
-          }
-        }
-      }
-    ]
-  })
+  version = "2012-10-17"
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.crc-agb-s3-website-prod.arn}/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.crc-cf-production-distribution.arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
+  bucket = aws_s3_bucket.crc-agb-s3-website-prod.id
+  policy = data.aws_iam_policy_document.crc-agb-s3-website-prod-oac.json
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "crc-agb-s3-website-prod" {
@@ -95,28 +96,29 @@ resource "aws_s3_bucket" "crc-agb-s3-website-staging" {
   object_lock_enabled = "false"
 }
 
+data "aws_iam_policy_document" "crc-agb-s3-website-staging-oac" {
+
+  version = "2012-10-17"
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.crc-agb-s3-website-staging.arn}/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.crc-cf-staging-distribution.arn]
+    }
+  }
+}
+
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-
-  policy = jsonencode({
-    "Version" : "2012-10-17",
-    "Statement" : [
-      {
-        "Sid" : "AllowCloudFrontServicePrincipalReadOnly",
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "cloudfront.amazonaws.com"
-        },
-        "Action" : "s3:GetObject",
-        "Resource" : "${aws_s3_bucket.crc-agb-s3-website-staging.arn}}/*",
-        "Condition" : {
-          "StringEquals" : {
-            "AWS:SourceArn" : aws_cloudfront_distribution.crc-cf-staging-distribution.arn
-          }
-        }
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.crc-agb-s3-website-staging-oac.json
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "crc-agb-s3-website-staging" {
