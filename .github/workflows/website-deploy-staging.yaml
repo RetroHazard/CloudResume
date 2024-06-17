@@ -5,7 +5,11 @@ defaults:
     working-directory: website
 
 on:
-  workflow_dispatch: 
+  push:
+    paths:
+      - 'website/**'
+    tags:
+      - 'devbuild-*'
   workflow_run:
     workflows: [ "Terraform Deploy" ]
     types:
