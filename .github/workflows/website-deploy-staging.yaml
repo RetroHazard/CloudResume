@@ -11,7 +11,7 @@ on:
     tags:
       - 'devbuild-*'
   workflow_run:
-    workflows: [ "Terraform Deploy" ]
+    workflows: [ "Terraform Deploy", "Website Tests" ]
     types:
       - completed
 
@@ -24,21 +24,30 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check last Terraform Deploy run status
-        id: check_status
+        id: check_tf_status
         run: |
-          status=$(gh run list --workflow="Terraform Deploy" --branch=main --limit=1 --json conclusion --jq '.[0].conclusion')
-          echo "status=$status" >> $GITHUB_ENV
+          tf_status=$(gh run list --workflow="Terraform Deploy" --branch=main --limit=1 --json conclusion --jq '.[0].conclusion')
+          echo "tf_status=$tf_status" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check status output
-        run:
-          echo "Last Terraform Deploy status was ${{ env.status }}"
+      - name: Check last Website Tests run status
+        id: check_test_status
+        run: |
+          test_status=$(gh run list --workflow="Website Tests" --branch=main --limit=1 --json conclusion --jq '.[0].conclusion')
+          echo "test_status=$test_status" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check status outputs
+        run: |
+          echo "Last Terraform Deploy status was ${{ env.tf_status }}"
+          echo "Last Website Tests status was ${{ env.test_status }}"
 
       - name: Build and Upload
-        if: ${{ env.status == 'success' }}
+        if: ${{ env.tf_status == 'success' && env.test_status == 'success' }}
         run: |
-          echo "Running Build and Upload because last Terraform Deploy was successful"
+          echo "Running Build and Upload because last Terraform Deploy and Website Tests were successful"
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
