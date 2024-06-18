@@ -3,6 +3,7 @@
 ![Infrastructure Deployment](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure-deploy.yaml/badge.svg)
 
 ![Page Tests](https://github.com/RetroHazard/CloudResume/actions/workflows/website-tests.yaml/badge.svg)
+
 ![React App (Staging)](https://github.com/RetroHazard/CloudResume/actions/workflows/website-deploy-staging.yaml/badge.svg)
 ![React App (Prod)](https://github.com/RetroHazard/CloudResume/actions/workflows/website-deploy-production.yaml/badge.svg)
 
@@ -13,6 +14,22 @@
 
 ## Architecture
 
+### Iteration 1
+
+### Iteration 2
+
+### Iteration 3
+
+### Iteration 4
+
+### Iteration 5
+
+
+## ToDo
+- [ ] #44
+- [ ] #42
+- [ ] #35
+- [ ] Write a Blog Post Detailing the Project
 
 
 ## Technologies Leveraged
@@ -40,3 +57,5 @@
    + React
    + Tailwind CSS
    + Google reCAPTCHA
+
+## Blog Post
