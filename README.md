@@ -1,5 +1,5 @@
 # CloudResume
-![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure-yml/badge.svg)
+![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure.yml/badge.svg)
 
 ![Page Tests](https://github.com/RetroHazard/CloudResume/actions/workflows/website-tests.yaml/badge.svg)
 
