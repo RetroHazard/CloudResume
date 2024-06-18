@@ -27,9 +27,9 @@
 ## ToDo
 - [ ] Test New Deployment Workflow for WebApp
 - [ ] Use Caching to carry Terraform files between jobs
-- [ ] #44
-- [ ] #42
-- [ ] #35
+- [ ] [#44]
+- [ ] [#42]
+- [ ] [#35]
 - [ ] Write a Blog Post Detailing the Project
 
 
