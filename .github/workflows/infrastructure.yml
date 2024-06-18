@@ -37,10 +37,6 @@ jobs:
         with:
           terraform_version: latest
 
-      - name: Format Configuration
-        run: terraform fmt -check -recursive -list=true
-        continue-on-error: true
-
       - name: Initialize
         run: terraform init
 
@@ -60,7 +56,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
-          terraform_wrapped: true
+          terraform_wrapper: true
 
       - name: Terraform Init
         id: initialize
@@ -83,7 +79,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
-          terraform_wrapped: true
+          terraform_wrapper: true
 
       - name: Terraform Init
         id: initialize
