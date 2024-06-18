@@ -1,6 +1,17 @@
 #  End Key Manager Block  #
 ###########################
 
+##########################
+# Begin CloudFront Block #
+
+data "template_file" "crc-cf-staging-auth" {
+  template = file("${path.root}/codebase/stagingAuthorization.js")
+
+  vars = {
+    STAGINGUSER = var.staging-user
+    STAGINGPASS = var.staging-pass
+  }
+}
 
 #######################
 # Begin Route53 Block #

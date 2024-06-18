@@ -380,7 +380,7 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
   runtime = "cloudfront-js-1.0"
   comment = "Simple Authorization for Access to Staging Distribution"
   publish = true
-  code    = file("${path.root}/codebase/stagingAuthorization.js")
+  code    = data.template_file.crc-cf-staging-auth.rendered
 }
 
 #  End CloudFront Block  #

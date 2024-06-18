@@ -29,6 +29,8 @@ module "frontend" {
   domain-name           = var.domain_name
   sanitized-domain-name = var.sanitized_domain_name
   api-current-stage     = var.api_current_stage
+  staging-user          = var.staging_user
+  staging-pass          = var.staging_pass
 
   api-gateway-cw-logs-role = module.iam.aws_iam_role_crc-api-CloudwatchLogs_arn
   iam-s3-github-user       = module.iam.aws_iam_user_crc-iam-github-actions_arn

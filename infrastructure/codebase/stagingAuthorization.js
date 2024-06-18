@@ -1,5 +1,5 @@
-var USERNAME = 'CHANGEME';
-var PASSWORD = 'CHANGEME';
+var USERNAME = `${STAGINGUSER}`;
+var PASSWORD = `${STAGINGPASS}`;
 
 var response401 = {
   statusCode: 401,

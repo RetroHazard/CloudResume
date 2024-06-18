@@ -46,6 +46,18 @@ variable "api_current_stage" {
   type        = string
 }
 
+variable "staging_user" {
+  description = "Username to be injected into Simple Auth for Staging Distribution"
+  type = string
+  sensitive = true
+}
+
+variable "staging_pass" {
+  description = "Password to be injected into Simple Auth for Staging Distribution"
+  type = string
+  sensitive = true
+}
+
 variable "tags" {
   type        = map(string)
   description = "Default Tags, applied to all resources"
