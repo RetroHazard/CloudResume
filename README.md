@@ -1,6 +1,5 @@
 # CloudResume
-![Infrastructure Validation](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure-validate.yaml/badge.svg)
-![Infrastructure Deployment](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure-deploy.yaml/badge.svg)
+![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure-yml/badge.svg)
 
 ![Page Tests](https://github.com/RetroHazard/CloudResume/actions/workflows/website-tests.yaml/badge.svg)
 
