@@ -26,7 +26,7 @@ jobs:
         id: check_tf_status
         run: |
           tf_status=$(gh run list --workflow="Terraform" --branch=main --limit=1 --json conclusion | jq -r '.[0].conclusion')
-          echo "::set-output name=status::$tf_status"
+          echo "status=$tf_status" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -90,7 +90,7 @@ jobs:
 
       - name: Mark build as successful for deploy job
         id: mark_dev_build_success
-        run: echo "::set-output name=success::true"
+        run: echo "success=true" >> $GITHUB_OUTPUT
 
   build_prod:
     name: Build Production Version
@@ -130,7 +130,7 @@ jobs:
 
       - name: Mark build as successful for deploy job
         id: mark_prod_build_success
-        run: echo "::set-output name=success::true"
+        run: echo "success=true" >> $GITHUB_OUTPUT
 
   deploy:
     name: Upload to S3
