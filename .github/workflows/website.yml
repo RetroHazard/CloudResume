@@ -190,6 +190,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-prod-
 
+      - name: debug - list directory
+        run: |
+          ls -al
+          cd ..
+          ls -al
+          ls -al /
+
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
 
