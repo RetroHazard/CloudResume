@@ -47,6 +47,9 @@ build/*
 node_modules/
 jspm_packages/
 
+# Ignore Snapshots
+src/__tests__/__snapshots__/*.snap
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
