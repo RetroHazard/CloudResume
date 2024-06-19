@@ -1,6 +1,5 @@
 # CloudResume
 ![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure.yml/badge.svg)
-
 ![Website](https://github.com/RetroHazard/CloudResume/actions/workflows/website.yml/badge.svg)
 
 
@@ -23,20 +22,23 @@
 
 ## Technologies Leveraged
 
- + AWS
-   + IAM
-   + KMS
-   + ACM
+ + Amazon Web Services
+   + Organizations
+   + IAM Identity Center
+   + Identity & Access Management
+   + Key Management Service
+   + Certificate Manager
    + Route53
    + CloudFront
    + API Gateway
    + S3
    + DynamoDB
    + Lambda
-   + SQS
-   + SES
+   + Simple Queue Service
+   + Simple Email Service
    + CloudWatch
- + Terraform
+   + CloudTrail
+ + Terraform Providers
    + AWS
    + GitHub
    + Random
