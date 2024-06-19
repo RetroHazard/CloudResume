@@ -77,7 +77,7 @@ jobs:
     needs:
       - setup
       - website_tests
-    if: ${{ needs.website_tests.result == 'success' && startsWith(github.ref, 'refs/tags/devbuild-') }}
+#    if: ${{ needs.website_tests.result == 'success' && startsWith(github.ref, 'refs/tags/devbuild-') }}
 
     steps:
       - uses: actions/checkout@v4
