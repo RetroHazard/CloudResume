@@ -166,8 +166,10 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - setup
+      - build_dev
+      - build_prod
 
-    if: ${{ needs.build_dev.outputs.status == 'true' || needs.build_prod.outputs.status == 'true' }}
+    if: always
 
     steps:
       - name: Checkout repository
