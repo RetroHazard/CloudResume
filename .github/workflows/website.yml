@@ -13,9 +13,6 @@ on:
       - 'devbuild-*'
       - 'release-*'
 
-env:
-  NODE_VERSION: '22'
-
 jobs:
   check_infrastructure:
     name: Check Terraform Status
@@ -50,10 +47,11 @@ jobs:
         id: cache-node
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: | 
+            **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - name: install dependencies
-        run: npm ci --ignore-scripts
+        run: npm ci
 
   website_tests:
     name: Website Tests
@@ -68,7 +66,8 @@ jobs:
         id: cache-node
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: | 
+            **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - name: Run Tests on Website Components
         run: npm run test
@@ -88,7 +87,8 @@ jobs:
         id: cache-node
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: | 
+            **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: 'Create env file'
@@ -128,7 +128,8 @@ jobs:
         id: cache-node
         uses: actions/cache@v4
         with:
-          path: node_modules
+          path: | 
+            **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Create env file
