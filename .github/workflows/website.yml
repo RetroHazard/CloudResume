@@ -100,18 +100,23 @@ jobs:
           echo REACT_APP_RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }} >> .env
           echo REACT_APP_AWS_API_ENDPOINT=${{ secrets.AWS_API_ENDPOINT }} >> .env
 
+      - name: debug list pre
+        run: ls -al
+
       - name: Build Development Version
         run: npm run build-dev
+
+      - name: debug list post
+        run: ls -al
 
       - name: Save cache
         uses: actions/cache@v4
         with:
-          path: |
-            **/build/dev/
+          path: build/dev/
           key: ${{ runner.os }}-build-dev-${{ github.sha }}
 
-      - name: Set environment variable for build path
-        run: echo "BUILD_DATA=build/dev/" >> $GITHUB_ENV
+      - name: Set build path
+        run: echo "BUILD_DATA=build/dev/" >> $GITHUB_OUTPUT
 
       - name: Mark build as successful for deploy job
         id: mark_dev_build_success
@@ -154,8 +159,8 @@ jobs:
           path: build/prod/
           key: ${{ runner.os }}-build-prod-${{ github.sha }}
 
-      - name: Set environment variable for build path
-        run: echo "BUILD_DATA=build/prod/" >> $GITHUB_ENV
+      - name: Set build path
+        run: echo "BUILD_DATA=build/prod/" >> $GITHUB_OUTPUT
 
       - name: Mark build as successful for deploy job
         id: mark_prod_build_success
