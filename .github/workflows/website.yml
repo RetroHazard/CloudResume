@@ -13,6 +13,9 @@ on:
       - 'devbuild-*'
       - 'release-*'
 
+env:
+  NODE_VERSION: '22'
+
 jobs:
   check_infrastructure:
     name: Check Terraform Status
@@ -30,45 +33,61 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  website_tests:
-    name: Website Tests
+  setup:
+    name: Setup Node
     runs-on: ubuntu-latest
-    needs: check_infrastructure
+    needs:
+      - check_infrastructure
 
     if: ${{ needs.check_infrastructure.outputs.status == 'success' }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: cache node modules
+        id: cache-node
+        uses: actions/cache@v4
         with:
-          node-version: '22'
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: install dependencies
+        run: npm ci --ignore-scripts
 
-      - name: Install dependencies
-        run: npm install
+  website_tests:
+    name: Website Tests
+    runs-on: ubuntu-latest
+    needs:
+      - setup
 
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: restore node modules
+        id: cache-node
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
       - name: Run Tests on Website Components
         run: npm run test
 
   build_dev:
     name: Build Development Version
     runs-on: ubuntu-latest
-    needs: website_tests
+    needs:
+      - setup
+      - website_tests
     if: ${{ needs.website_tests.result == 'success' && startsWith(github.ref, 'refs/tags/devbuild-') }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: restore node modules
+        id: cache-node
+        uses: actions/cache@v4
         with:
-          node-version: '22'
-
-      - name: Install dependencies
-        run: npm install
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: 'Create env file'
         run: |
@@ -95,20 +114,20 @@ jobs:
   build_prod:
     name: Build Production Version
     runs-on: ubuntu-latest
-    needs: website_tests
+    needs:
+      - setup
+      - website_tests
     if: ${{ needs.website_tests.result == 'success' && startsWith(github.ref, 'refs/tags/release-') }}
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: restore node modules
+        id: cache-node
+        uses: actions/cache@v4
         with:
-          node-version: '22'
-
-      - name: Install dependencies
-        run: npm install
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
 
       - name: Create env file
         run: |
@@ -136,6 +155,7 @@ jobs:
     name: Upload to S3
     runs-on: ubuntu-latest
     needs:
+      - setup
       - build_dev
       - build_prod
 
