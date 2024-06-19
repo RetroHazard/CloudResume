@@ -106,7 +106,8 @@ jobs:
       - name: Save cache
         uses: actions/cache@v4
         with:
-          path: build/dev/
+          path: |
+            **/build/dev/
           key: ${{ runner.os }}-build-dev-${{ github.sha }}
 
       - name: Set environment variable for build path
