@@ -177,7 +177,7 @@ jobs:
 
       - name: Restore cache from Dev
         if: ${{ needs.build_dev.outputs.status == 'true' }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: build/dev/
           key: ${{ runner.os }}-build-dev-${{ github.sha }}
@@ -186,7 +186,7 @@ jobs:
 
       - name: Restore cache from Prod
         if: ${{ needs.build_prod.outputs.status == 'true' }}
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: build/prod/
           key: ${{ runner.os }}-build-prod-${{ github.sha }}
