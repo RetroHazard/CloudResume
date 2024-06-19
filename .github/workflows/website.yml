@@ -20,6 +20,8 @@ jobs:
   check_infrastructure:
     name: Check Terraform Status
     runs-on: ubuntu-latest
+    outputs:
+      status: ${{ steps.check_tf_status.outputs.status }}
 
     steps:
       - name: Checkout repository
