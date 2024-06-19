@@ -23,9 +23,9 @@
   "scripts": {
     "test": "cross-env react-scripts test -u --coverage",
     "start-dev": "cross-env NODE_ENV=development REACT_APP_ENV=development REACT_APP_DATA_SET=development react-scripts start",
-    "build-dev": "cross-env NODE_ENV=development REACT_APP_ENV=development REACT_APP_DATA_SET=development BUILD_PATH='build/dev' react-scripts build",
+    "build-dev": "cross-env NODE_ENV=development REACT_APP_ENV=development REACT_APP_DATA_SET=development react-scripts build",
     "start-prod": "cross-env NODE_ENV=production REACT_APP_ENV=production REACT_APP_DATA_SET=production react-scripts start",
-    "build-prod": "cross-env NODE_ENV=production REACT_APP_ENV=production REACT_APP_DATA_SET=production BUILD_PATH='build/prod' react-scripts build"
+    "build-prod": "cross-env NODE_ENV=production REACT_APP_ENV=production REACT_APP_DATA_SET=production react-scripts build"
   },
   "eslintConfig": {
     "extends": [

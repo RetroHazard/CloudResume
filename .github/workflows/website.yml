@@ -100,24 +100,15 @@ jobs:
           echo REACT_APP_RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }} >> .env
           echo REACT_APP_AWS_API_ENDPOINT=${{ secrets.AWS_API_ENDPOINT }} >> .env
 
-      - name: debug list pre
-        run: ls -al
-
       - name: Build Development Version
         run: npm run build-dev
-
-      - name: debug list post
-        run: ls -al
 
       - name: Save cache
         uses: actions/cache@v4
         with:
           path: |
-            **/build/dev
+            **/build
           key: ${{ runner.os }}-build-dev-${{ github.sha }}
-
-      - name: Set build path
-        run: echo "BUILD_DATA=build/dev/" >> $GITHUB_OUTPUT
 
       - name: Mark build as successful for deploy job
         id: mark_dev_build_success
@@ -157,11 +148,9 @@ jobs:
       - name: Save cache
         uses: actions/cache@v4
         with:
-          path: build/prod/
+          path: |
+            **/build
           key: ${{ runner.os }}-build-prod-${{ github.sha }}
-
-      - name: Set build path
-        run: echo "BUILD_DATA=build/prod/" >> $GITHUB_OUTPUT
 
       - name: Mark build as successful for deploy job
         id: mark_prod_build_success
@@ -186,7 +175,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
-            **/build/dev
+            **/build
           key: ${{ runner.os }}-build-dev-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-build-dev-
@@ -195,23 +184,17 @@ jobs:
         if: ${{ needs.build_prod.outputs.status == 'true' }}
         uses: actions/cache@v4
         with:
-          path: build/prod/
+          path: |
+            **/build
           key: ${{ runner.os }}-build-prod-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-build-prod-
-
-      - name: debug - list directory
-        run: |
-          ls -al
-          cd ..
-          ls -al
-          ls -al /
 
 #      - name: Upload to S3
 #        uses: jakejarvis/s3-sync-action@master
 #
 #        env:
-#          SOURCE_DIR: ${{ env.BUILD_DATA }}
+          SOURCE_DIR: 'build'
 #          AWS_S3_BUCKET: ${{ needs.build_dev.outputs.status == 'true' && secrets.AWS_S3_BUCKET_STAGE || needs.build_prod.outputs.status == 'true' && secrets.AWS_S3_BUCKET_PROD }}
 #          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY }}
 #          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
