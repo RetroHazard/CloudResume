@@ -5,7 +5,6 @@ defaults:
     working-directory: infrastructure
 
 on:
-  workflow_dispatch:
   push:
     paths:
       - 'infrastructure/**'
