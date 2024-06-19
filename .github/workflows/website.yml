@@ -148,6 +148,9 @@ jobs:
       - name: Build Production Version
         run: npm run build-prod
 
+      - name: debug item
+        run: ls -al
+
       - name: Save cache
         uses: actions/cache@v4
         with:
