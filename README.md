@@ -1,10 +1,7 @@
 # CloudResume
 ![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure.yml/badge.svg)
 
-![Page Tests](https://github.com/RetroHazard/CloudResume/actions/workflows/website-tests.yaml/badge.svg)
-
-![React App (Staging)](https://github.com/RetroHazard/CloudResume/actions/workflows/website-deploy-staging.yaml/badge.svg)
-![React App (Prod)](https://github.com/RetroHazard/CloudResume/actions/workflows/website-deploy-production.yaml/badge.svg)
+![Website](https://github.com/RetroHazard/CloudResume/actions/workflows/website.yml/badge.svg)
 
 
 ## Overview
