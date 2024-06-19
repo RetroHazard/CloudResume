@@ -81,7 +81,7 @@ jobs:
     outputs:
       status: ${{ steps.mark_dev_build_success.outputs.success }}
 
-#    if: ${{ needs.website_tests.result == 'success' && startsWith(github.ref, 'refs/tags/devbuild-') }}
+    if: ${{ needs.website_tests.result == 'success' && startsWith(github.ref, 'refs/tags/devbuild-') }}
 
     steps:
       - uses: actions/checkout@v4
@@ -189,13 +189,6 @@ jobs:
           key: ${{ runner.os }}-build-prod-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-build-prod-
-
-      - name: debug - list directory
-        run: |
-          ls -al
-          cd ..
-          ls -al
-          ls -al /
 
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
