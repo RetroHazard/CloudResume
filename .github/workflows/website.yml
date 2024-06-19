@@ -169,7 +169,7 @@ jobs:
       - build_dev
       - build_prod
 
-    if: always
+    if: ${{ always() }}
 
     steps:
       - name: Checkout repository
