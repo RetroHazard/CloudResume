@@ -8,6 +8,10 @@ variable "domain-name" {
   type = string
 }
 
+variable "waf-enabled" {
+  type = bool
+}
+
 # Inputs from IAM
 
 variable "iam-role-cloudfront-manager-arn" {

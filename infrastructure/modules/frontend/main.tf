@@ -293,7 +293,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
   }
-  web_acl_id = var.waf-acl-arn
+  web_acl_id = var.waf-enabled ? var.waf-acl-arn : null
 }
 
 resource "aws_cloudfront_origin_access_control" "crc-cf-production-oac" {
@@ -365,7 +365,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
   }
-  web_acl_id = var.waf-acl-arn
+  web_acl_id = var.waf-enabled ? var.waf-acl-arn : null
 }
 
 resource "aws_cloudfront_origin_access_control" "crc-cf-staging-oac" {
@@ -433,6 +433,7 @@ resource "aws_kms_key" "crc-dnssec-key" {
   is_enabled               = "true"
   key_usage                = "SIGN_VERIFY"
   multi_region             = "false"
+  deletion_window_in_days = 7
   policy = jsonencode({
     Statement = [
       {

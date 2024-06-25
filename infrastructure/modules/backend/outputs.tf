@@ -2,7 +2,7 @@
 # Begin Web Application Firewall Block #
 
 output "aws_wafv2_web_acl_crc-web-acl_arn" {
-  value = aws_wafv2_web_acl.crc-web-acl.arn
+  value = var.waf-enabled && length(aws_wafv2_web_acl.crc-web-acl) > 0 ? aws_wafv2_web_acl.crc-web-acl[0].arn : null
 }
 
 

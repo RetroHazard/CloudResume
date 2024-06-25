@@ -27,6 +27,7 @@ module "frontend" {
   account_id = data.aws_caller_identity.current.account_id
 
   domain-name           = var.domain_name
+  waf-enabled           = var.waf_enabled
   sanitized-domain-name = var.sanitized_domain_name
   api-current-stage     = var.api_current_stage
   staging-user          = var.staging_user
@@ -48,6 +49,7 @@ module "backend" {
   account_id = data.aws_caller_identity.current.account_id
 
   domain-name = var.domain_name
+  waf-enabled = var.waf_enabled
 
   iam-role-cloudfront-manager-arn = module.iam.aws_iam_role_crc-CloudFrontManager_arn
   iam-role-message-sender-arn     = module.iam.aws_iam_role_crc-MessageSender_arn

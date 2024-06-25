@@ -65,3 +65,8 @@ variable "tags" {
     ManagedByTerraform = true
   }
 }
+
+variable "waf_enabled" {
+  type = bool
+  default = false
+}

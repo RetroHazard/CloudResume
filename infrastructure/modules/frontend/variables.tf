@@ -55,3 +55,7 @@ variable "ses-mail-from-domain" {
 variable "sqs-cf-invalidation-queue" {
   type = string
 }
+
+variable "waf-enabled" {
+  type = bool
+}

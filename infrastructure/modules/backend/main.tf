@@ -6,6 +6,7 @@
 # Begin Web Application Firewall Block #
 
 resource "aws_wafv2_web_acl" "crc-web-acl" {
+  count = var.waf-enabled ? 1 : 0
   description = "Web Application Protection for the Cloud Resume"
   name        = "CloudResume-WebACL"
   scope       = "CLOUDFRONT"
