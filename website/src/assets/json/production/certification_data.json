@@ -1,6 +1,31 @@
 {
   "Certifications": [
     {
+      "certification": "AWS Solutions Architect - Associate",
+      "issuer": "Amazon Web Services",
+      "credential_id": "N/A",
+      "date": "2024",
+      "logo": "./images/logos/certifications/aws-saa.png",
+      "links": [
+        {
+          "verification": [
+            {
+              "website": "https://www.credly.com/badges/e7414d31-ce44-4096-832c-78b93abbeaac/public_url",
+              "icon": "fa6-solid:award",
+              "display": true
+            }
+          ],
+          "credential_info": [
+            {
+              "website": "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+              "icon": "fa6-solid:info",
+              "display": true
+            }
+          ]
+        }
+      ]
+    },
+    {
       "certification": "Systems Security Certified Practitioner",
       "issuer": "ISC2",
       "credential_id": "497518",

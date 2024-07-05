@@ -87,7 +87,7 @@
     {
       "name": "Terraform",
       "category": "Automation",
-      "level": "35%",
+      "level": "40%",
       "logo": "devicon:terraform",
       "website": "https://www.terraform.io/"
     },
@@ -122,21 +122,21 @@
     {
       "name": "Creative Cloud",
       "category": "Software",
-      "level": "70%",
+      "level": "80%",
       "logo": "simple-icons:adobecreativecloud",
       "website": "https://www.adobe.com/creativecloud.html"
     },
     {
       "name": "Github",
       "category": "Source Control",
-      "level": "50%",
+      "level": "60%",
       "logo": "devicon:github",
       "website": "https://github.com/"
     },
     {
       "name": "Perforce",
       "category": "Source Control",
-      "level": "45%",
+      "level": "50%",
       "logo": "simple-icons:perforce",
       "website": "https://www.perforce.com/"
     },
@@ -157,7 +157,7 @@
     {
       "name": "macOS",
       "category": "Operating System",
-      "level": "65%",
+      "level": "70%",
       "logo": "devicon:apple",
       "website": "https://www.apple.com"
     }
@@ -167,11 +167,6 @@
       "name": "Next.js",
       "logo": "simple-icons:nextdotjs",
       "website": "https://nextjs.org/"
-    },
-    {
-      "name": "Nuxt",
-      "logo": "simple-icons:nuxtdotjs",
-      "website": "https://nuxt.com/"
     },
     {
       "name": "Go",
@@ -217,7 +212,7 @@
     },
     {
       "language": "Japanese",
-      "level": "N5",
+      "level": "Basic Conversation",
       "flag": "circle-flags:jp"
     }
   ]
