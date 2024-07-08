@@ -43,7 +43,7 @@ function PersonalSummary() {
                 </p>
 
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    Outside of work, I immerse myself in hobbies like photography, mountain biking, and music—I’ve
+                    Outside of work, whenever possible, I immerse myself in hobbies like photography, mountain biking, and music—I’ve
                     played piano for over a <em>decade</em> and guitar for <em>five years</em>. I also have a passion
                     for video games, which led me to learn <strong>C++</strong>, Unreal Engine, Blender, and other
                     3D/VFX software(s). I’ve <em>independently developed</em> a component on the Unreal Marketplace and
