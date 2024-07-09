@@ -10,7 +10,7 @@
       "end": "NOW",
       "logo": "./images/logos/companies/hollowsouls.png",
       "details": [
-        "Completed the Cloud Resume Challenge, gaining practical experience in deploying a full-stack cloud project, including front-end, back-end, and database components on AWS.",
+        "Completed the Cloud Resume Challenge, gaining practical experience in deploying a full-stack cloud project, including frontend, backend, and database components on AWS.",
         "Implemented Continuous Integration and Continuous Deployment (CI/CD) pipelines, automating the deployment process and ensuring seamless updates and maintenance.",
         "Utilized Infrastructure as Code (IaC) tools like AWS CloudFormation or Terraform to define and manage cloud infrastructure, demonstrating advanced cloud engineering skills.",
         "Integrated various AWS services such as S3, Lambda, API Gateway, and DynamoDB, showcasing the ability to design and implement scalable and efficient cloud solutions.",
@@ -26,7 +26,7 @@
           ],
           "blog": [
             {
-              "website": "#",
+              "website": "https://www.linkedin.com/pulse/taking-cloud-resume-challenge-alexander-bracken-gm0wc/",
               "icon": "fa6-solid:blog"
             }
           ],
@@ -45,7 +45,12 @@
           "website": "https://aws.amazon.com/"
         },
         {
-          "name": "react.js",
+          "name": "Terraform",
+          "logo": "simple-icons:terraform",
+          "website": "https://www.terraform.io/"
+        },
+        {
+          "name": "React",
           "logo": "simple-icons:react",
           "website": "https://react.dev/"
         },

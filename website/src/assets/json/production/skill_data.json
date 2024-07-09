@@ -87,14 +87,14 @@
     {
       "name": "Terraform",
       "category": "Automation",
-      "level": "40%",
+      "level": "50%",
       "logo": "devicon:terraform",
       "website": "https://www.terraform.io/"
     },
     {
       "name": "Cypress",
       "category": "Automation",
-      "level": "25%",
+      "level": "15%",
       "logo": "devicon:cypressio",
       "website": "https://www.cypress.io/"
     },
