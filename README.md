@@ -38,6 +38,7 @@ My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/t
    + Certificate Manager
    + Route53
    + CloudFront
+   + Web Application Firewall
    + API Gateway
    + S3
    + DynamoDB
