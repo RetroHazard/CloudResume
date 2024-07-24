@@ -16,7 +16,7 @@ Completing this Challenge requires a multi-disciplinary approach, covering a wid
 + Documentation
 + etc.
 
-The entire challenge culminated in my developing a Single Page WebApp /w API integration, architecting and connecting a variety of AWS services, developing website test scripts, learning how to utilize Infrastrcture-as-Code using Terraform, and many other skills.
+The entire challenge culminated in my developing a Single Page WebApp /w API integration, architecting and connecting a variety of AWS services, developing website test scripts, learning how to utilize Infrastructure-as-Code using Terraform, and many other skills.
 When I first started this project, I had nearly zero experience in every single technology stack that I leveraged. What began as a way to help reinforce the AWS courses I was following, ended up being a incredibly fun personal project and I'm looking forward to finding the next one.
 
 For a more detailed breakdown of my journey, please read the blog post, linked below.
@@ -59,3 +59,11 @@ My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/t
    + React
    + Tailwind CSS
    + Google reCAPTCHA
+ + Language and Syntax
+   + HTML
+   + CSS
+   + Python
+   + JavaScript
+   + YAML
+   + JSON
+   + HCL
