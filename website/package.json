@@ -23,9 +23,9 @@
   "scripts": {
     "test": "cross-env react-scripts test -u --coverage",
     "start-dev": "cross-env NODE_ENV=development REACT_APP_ENV=development REACT_APP_DATA_SET=development react-scripts start",
-    "build-dev": "cross-env NODE_ENV=development REACT_APP_ENV=development REACT_APP_DATA_SET=development react-scripts build",
+    "build-dev": "cross-env NODE_ENV=development REACT_APP_ENV=development REACT_APP_DATA_SET=development BUILD_PATH='build/dev' react-scripts build",
     "start-prod": "cross-env NODE_ENV=production REACT_APP_ENV=production REACT_APP_DATA_SET=production react-scripts start",
-    "build-prod": "cross-env NODE_ENV=production REACT_APP_ENV=production REACT_APP_DATA_SET=production react-scripts build"
+    "build-prod": "cross-env NODE_ENV=production REACT_APP_ENV=production REACT_APP_DATA_SET=production BUILD_PATH='build/prod' react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -52,8 +52,8 @@
     "@testing-library/user-event": "^13.5.0",
     "autoprefixer": "^10.4.19",
     "cross-env": "^7.0.3",
-    "nth-check": "^2.0.1",
-    "postcss": "^8.4.31",
+    "nth-check": ">=2.0.1",
+    "postcss": ">=8.4.31",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "react-test-renderer": "^18.3.1"

@@ -1,4 +1,4 @@
-name: Deploy Website
+name: Deploy Website to Staging
 
 defaults:
   run:
@@ -8,9 +8,6 @@ on:
   push:
     paths:
       - 'website/**'
-    tags:
-      - 'devbuild-*'
-      - 'release-*'
 
 jobs:
   check_infrastructure:
@@ -80,7 +77,7 @@ jobs:
     outputs:
       status: ${{ steps.mark_dev_build_success.outputs.success }}
 
-    if: ${{ needs.website_tests.result == 'success' && startsWith(github.ref, 'refs/tags/devbuild-') }}
+    if: ${{ needs.website_tests.result == 'success' }}
 
     steps:
       - uses: actions/checkout@v4
@@ -113,57 +110,12 @@ jobs:
         id: mark_dev_build_success
         run: echo "success=true" >> $GITHUB_OUTPUT
 
-  build_prod:
-    name: Build Production Version
-    runs-on: ubuntu-latest
-    needs:
-      - setup
-      - website_tests
-    outputs:
-      status: ${{ steps.mark_prod_build_success.outputs.success }}
-
-    if: ${{ needs.website_tests.result == 'success' && startsWith(github.ref, 'refs/tags/release-') }}
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - name: restore node modules
-        id: cache-node
-        uses: actions/cache@v4
-        with:
-          path: | 
-            **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Create env file
-        run: |
-          touch .env
-          echo REACT_APP_RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }} >> .env
-          echo REACT_APP_AWS_API_ENDPOINT=${{ secrets.AWS_API_ENDPOINT }} >> .env
-
-      - name: Build Production Version
-        run: npm run build-prod
-
-      - name: Save cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/build
-          key: ${{ runner.os }}-build-prod-${{ github.sha }}
-
-      - name: Mark build as successful for deploy job
-        id: mark_prod_build_success
-        run: echo "success=true" >> $GITHUB_OUTPUT
-
   deploy:
     name: Upload to S3
     runs-on: ubuntu-latest
     needs:
       - setup
       - build_dev
-      - build_prod
-
-    if: ${{ always() }}
 
     steps:
       - name: Checkout repository
@@ -179,22 +131,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-dev-
 
-      - name: Restore cache from Prod
-        if: ${{ needs.build_prod.outputs.status == 'true' }}
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/build
-          key: ${{ runner.os }}-build-prod-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-prod-
-
       - name: Upload to S3
         uses: jakejarvis/s3-sync-action@master
 
         env:
-          SOURCE_DIR: website/build/
-          AWS_S3_BUCKET: ${{ needs.build_dev.outputs.status == 'true' && secrets.AWS_S3_BUCKET_STAGE || needs.build_prod.outputs.status == 'true' && secrets.AWS_S3_BUCKET_PROD }}
+          SOURCE_DIR: website/build/dev/
+          AWS_S3_BUCKET: ${{ needs.build_dev.outputs.status == 'true' && secrets.AWS_S3_BUCKET_STAGE }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_S3_ACCESS_KEY }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY }}
 
