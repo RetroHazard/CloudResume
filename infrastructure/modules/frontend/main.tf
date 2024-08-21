@@ -630,6 +630,44 @@ resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
 #  End Route53 Block  #
 #######################
 
+###########################
+# Begin CloudWatch Alarms #
+
+resource "aws_cloudwatch_metric_alarm" "crc-dnssec-internal-failure" {
+  alarm_name          = "DNSSEC Internal Failure"
+  alarm_description   = "Detects any objects within Hosted Zone as having a INTERNAL_FAILURE state"
+  namespace           = "AWS/Route53"
+  metric_name         = "DNSSECInternalFailure"
+  comparison_operator = "GreaterThanOrEqualToTheThreshold"
+  statistic           = "Sum"
+  unit                = "Count"
+  evaluation_periods  = 1
+  threshold           = 1
+  period              = 60
+  dimensions          = {
+    HostedZoneId      = data.aws_route53_zone.crc-domain-name.id
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "crc-dnssec-ksk-action-needed" {
+  alarm_name          = "DNSSEC KSK Action Needed"
+  alarm_description   = "Detects errors related to the Key Signing Key necessary for DNSSEC"
+  namespace           = "AWS/Route53"
+  metric_name         = "DNSSECKeySigningKeysNeedingAction"
+  comparison_operator = "GreaterThanOrEqualToTheThreshold"
+  statistic           = "Sum"
+  unit                = "Count"
+  evaluation_periods  = 1
+  threshold           = 1
+  period              = 60
+  dimensions          = {
+    HostedZoneId      = data.aws_route53_zone.crc-domain-name.id
+  }
+}
+
+#  End CloudWatch Alarms  #
+###########################
+
 
 ###########################
 # Begin API Gateway Block #
