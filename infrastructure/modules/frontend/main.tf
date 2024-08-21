@@ -643,7 +643,7 @@ resource "aws_cloudwatch_metric_alarm" "crc-dnssec-internal-failure" {
   unit                = "Count"
   evaluation_periods  = 1
   threshold           = 1
-  period              = 60
+  period              = 3600
   dimensions          = {
     HostedZoneId      = data.aws_route53_zone.crc-domain-name.id
   }
@@ -659,7 +659,7 @@ resource "aws_cloudwatch_metric_alarm" "crc-dnssec-ksk-action-needed" {
   unit                = "Count"
   evaluation_periods  = 1
   threshold           = 1
-  period              = 60
+  period              = 3600
   dimensions          = {
     HostedZoneId      = data.aws_route53_zone.crc-domain-name.id
   }
