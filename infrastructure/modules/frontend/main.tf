@@ -640,9 +640,9 @@ resource "aws_cloudwatch_metric_alarm" "crc-dnssec-internal-failure" {
   metric_name         = "DNSSECInternalFailure"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   statistic           = "Sum"
-  unit                = "Count"
   evaluation_periods  = 1
   threshold           = 1
+  datapoints_to_alarm = 1
   period              = 3600
   dimensions          = {
     HostedZoneId      = data.aws_route53_zone.crc-domain-name.id
@@ -656,9 +656,9 @@ resource "aws_cloudwatch_metric_alarm" "crc-dnssec-ksk-action-needed" {
   metric_name         = "DNSSECKeySigningKeysNeedingAction"
   comparison_operator = "GreaterThanOrEqualToThreshold"
   statistic           = "Sum"
-  unit                = "Count"
   evaluation_periods  = 1
   threshold           = 1
+  datapoints_to_alarm = 1
   period              = 3600
   dimensions          = {
     HostedZoneId      = data.aws_route53_zone.crc-domain-name.id
