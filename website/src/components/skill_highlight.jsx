@@ -15,7 +15,7 @@ const SkillHighlight = () => {
                         {skillData.map((skill, index) => (
                             <div key={index} className='flex flex-col gap-2'>
                                 <div
-                                    className='flex items-center justify-between max-sm:size-12 max-sm:justify-center max-sm:rounded-full max-sm:bg-secondary-600 max-sm:align-middle max-sm:hover:bg-secondary-500'
+                                    className='flex items-center justify-between max-sm:size-12 max-sm:justify-center max-sm:rounded-lg max-sm:bg-secondary-600 max-sm:align-middle max-sm:hover:bg-secondary-500'
                                     data-tooltip-id='skill-tooltip'
                                     data-tooltip-content={skill.name}
                                 >
@@ -25,7 +25,7 @@ const SkillHighlight = () => {
                                         target='_blank'
                                         rel='noopener noreferrer'
                                     >
-                                        <Icon inline icon={skill.logo} width='1.6em' height='1.6em' />
+                                        <Icon inline icon={skill.logo} width='1.9em' height='1.9em'/>
                                         <div className='flex flex-col max-sm:hidden'>
                                             <span className='text-content-subtitle hover:text-secondary-100 sm:text-xs sm:font-light md:text-xs md:font-semibold'>
                                                 {skill.name}
