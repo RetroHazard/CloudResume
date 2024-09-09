@@ -359,7 +359,7 @@ resource "aws_lambda_function" "crc-sendMessage" {
       mailRegion      = data.aws_region.current.name
       sendFromAddress = "noreply@${aws_ses_domain_identity.crc-mail-domain.domain}"
       sendToAddress   = aws_ses_email_identity.crc-mail-destination.email
-      allowedOrigin   = "https://${var.domain-name}"
+      allowedOrigin   = "https://www.${var.domain-name}"
     }
   }
 
@@ -404,7 +404,7 @@ resource "aws_lambda_function" "crc-trackVisitors" {
     variables = {
       countTableName  = aws_dynamodb_table.crc-visitor-count.id
       recordTableName = aws_dynamodb_table.crc-visitor-record.id
-      allowedOrigin   = "https://${var.domain-name}"
+      allowedOrigin   = "https://www.${var.domain-name}"
     }
   }
 
