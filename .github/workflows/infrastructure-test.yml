@@ -5,6 +5,9 @@ defaults:
     working-directory: infrastructure
 
 on:
+  pull_request:
+    branches:
+      - '**'
   push:
     branches:
       - '**'
