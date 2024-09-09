@@ -25,8 +25,28 @@ jobs:
       - name: Check last Terraform run status
         id: check_tf_status
         run: |
-          tf_status=$(gh run list --workflow="Terraform" --branch=main --limit=1 --json conclusion | jq -r '.[0].conclusion')
-          echo "status=$tf_status" >> $GITHUB_OUTPUT
+          while :; do
+            tf_status=$(gh run list --workflow="Terraform" --branch=main --limit=1 --json status,conclusion | jq -r '.[0].status + " " + (.[0].conclusion // "")')
+
+            # Split the status and conclusion
+            status=$(echo "$tf_status" | awk '{print $1}')
+            conclusion=$(echo "$tf_status" | awk '{print $2}')
+
+            echo "Current Terraform status: $status, conclusion: $conclusion"
+
+            # If the workflow is completed, break out of the loop
+            if [ "$status" = "completed" ]; then
+              echo "Terraform run finished with conclusion: $conclusion"
+              echo "status=$conclusion" >> $GITHUB_OUTPUT
+              break
+            fi
+
+            # If the workflow is still running, wait for 30 seconds before checking again
+            if [ "$status" = "in_progress" ] || [ "$status" = "queued" ]; then
+              echo "Terraform workflow is still running. Waiting for completion..."
+              sleep 30
+            fi
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
