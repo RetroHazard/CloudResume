@@ -6,6 +6,8 @@ defaults:
 
 on:
   push:
+    branches:
+      - 'main'
     paths:
       - 'website/**'
 
