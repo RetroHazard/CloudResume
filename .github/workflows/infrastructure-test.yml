@@ -1,4 +1,4 @@
-name: Terraform - Planning
+name: Terraform - Plan Only
 
 defaults:
   run:
