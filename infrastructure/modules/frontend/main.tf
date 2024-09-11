@@ -454,7 +454,7 @@ resource "aws_ses_domain_dkim" "crc-ses-domain-dkim" {
 
 resource "aws_route53_zone" "crc-hosted-zone" {
   comment       = "Hosted Zone for Cloud Resume Project"
-  force_destroy = "false"
+  force_destroy = false
   name          = "cloudresume-agb.jp"
 
   lifecycle {
@@ -463,10 +463,22 @@ resource "aws_route53_zone" "crc-hosted-zone" {
   }
 }
 
+resource "aws_route53_record" "crc-hosted-zone-forwarder" {
+  alias {
+    evaluate_target_health = true
+    name                   = var.domain-name
+    zone_id                = aws_route53_zone.crc-new-hosted-zone.zone_id
+  }
+
+  name    = aws_route53_zone.crc-hosted-zone.name
+  type    = "A"
+  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
+}
+
 resource "aws_route53_zone" "crc-new-hosted-zone" {
-  name          = var.domain-name
-  force_destroy = false
   comment       = "Cloud Resume Domain"
+  force_destroy = false
+  name          = var.domain-name
 
   lifecycle {
     prevent_destroy       = true
