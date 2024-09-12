@@ -83,6 +83,11 @@
           "website": "https://aws.amazon.com/"
         },
         {
+          "name": "Terraform",
+          "logo": "simple-icons:terraform",
+          "website": "https://www.terraform.io/"
+        },
+        {
           "name": "Atlassian Suite",
           "logo": "simple-icons:atlassian",
           "website": "https://www.atlassian.com"
@@ -111,7 +116,7 @@
     },
     {
       "company": "Indeed",
-      "job_title": "L2 Service Engineer",
+      "job_title": "L2 Support Engineer",
       "location": "Tokyo, Japan",
       "type": "Full Time",
       "start": "2021",

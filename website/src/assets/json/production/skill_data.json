@@ -22,6 +22,13 @@
       "website": "https://cloud.google.com/"
     },
     {
+      "name": "Terraform",
+      "category": "Automation",
+      "level": "60%",
+      "logo": "skill-icons:terraform-light",
+      "website": "https://www.terraform.io/"
+    },
+    {
       "name": "Docker",
       "category": "Platform",
       "level": "30%",
@@ -41,6 +48,20 @@
       "level": "60%",
       "logo": "skill-icons:unrealengine",
       "website": "https://www.unrealengine.com/"
+    },
+    {
+      "name": "Github",
+      "category": "Source Control",
+      "level": "60%",
+      "logo": "skill-icons:github-light",
+      "website": "https://github.com/"
+    },
+    {
+      "name": "Perforce",
+      "category": "Source Control",
+      "level": "50%",
+      "logo": "simple-icons:perforce",
+      "website": "https://www.perforce.com/"
     },
     {
       "name": "C++",
@@ -78,13 +99,6 @@
       "website": "https://developer.oracle.com/languages/javascript.html"
     },
     {
-      "name": "React",
-      "category": "Library",
-      "level": "45%",
-      "logo": "skill-icons:react-dark",
-      "website": "https://react.dev/"
-    },
-    {
       "name": "Node.js",
       "category": "Software",
       "level": "40%",
@@ -92,18 +106,18 @@
       "website": "https://nodejs.org"
     },
     {
+      "name": "React",
+      "category": "Library",
+      "level": "45%",
+      "logo": "skill-icons:react-dark",
+      "website": "https://react.dev/"
+    },
+    {
       "name": "tailwindCSS",
       "category": "Framework",
       "level": "50%",
       "logo": "skill-icons:tailwindcss-dark",
       "website": "https://tailwindcss.com"
-    },
-    {
-      "name": "Terraform",
-      "category": "Automation",
-      "level": "60%",
-      "logo": "skill-icons:terraform-light",
-      "website": "https://www.terraform.io/"
     },
     {
       "name": "SideFX Houdini",
@@ -132,20 +146,6 @@
       "level": "80%",
       "logo": "simple-icons:adobecreativecloud",
       "website": "https://www.adobe.com/creativecloud.html"
-    },
-    {
-      "name": "Github",
-      "category": "Source Control",
-      "level": "60%",
-      "logo": "skill-icons:github-light",
-      "website": "https://github.com/"
-    },
-    {
-      "name": "Perforce",
-      "category": "Source Control",
-      "level": "50%",
-      "logo": "simple-icons:perforce",
-      "website": "https://www.perforce.com/"
     },
     {
       "name": "Windows",
