@@ -6,7 +6,7 @@
 # Begin Web Application Firewall Block #
 
 resource "aws_wafv2_web_acl" "crc-web-acl" {
-  count = var.waf-enabled ? 1 : 0
+  count       = var.waf-enabled ? 1 : 0
   description = "Web Application Protection for the Cloud Resume"
   name        = "CloudResume-WebACL"
   scope       = "CLOUDFRONT"
@@ -435,24 +435,6 @@ resource "aws_lambda_function" "crc-trackVisitors" {
   depends_on = [
     aws_cloudwatch_log_group.crc-trackVisitors-log-group
   ]
-}
-
-resource "aws_lambda_permission" "crc-event-permissions-s3-production" {
-  action         = "lambda:InvokeFunction"
-  function_name  = aws_lambda_function.crc-cloudfrontInvalidation.function_name
-  principal      = "s3.amazonaws.com"
-  source_account = var.account_id
-  source_arn     = var.s3-bucket-production-arn
-  statement_id   = uuid()
-}
-
-resource "aws_lambda_permission" "crc-event-permissions-s3-staging" {
-  action         = "lambda:InvokeFunction"
-  function_name  = aws_lambda_function.crc-cloudfrontInvalidation.function_name
-  principal      = "s3.amazonaws.com"
-  source_account = var.account_id
-  source_arn     = var.s3-bucket-staging-arn
-  statement_id   = uuid()
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-api-visitors" {

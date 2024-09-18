@@ -52,21 +52,6 @@ resource "aws_iam_policy" "crc-S3-GitHubActions" {
 }
 
 // IAM Policy Attachment
-resource "aws_iam_role_policy_attachment" "crc-cloudwatch-VisitorTracker" {
-  policy_arn = aws_iam_policy.crc-Lambda-TrackVisitors-Logging.arn
-  role       = aws_iam_role.crc-VisitorTracker.name
-}
-
-resource "aws_iam_role_policy_attachment" "crc-cloudwatch-MessageSender" {
-  policy_arn = aws_iam_policy.crc-Lambda-SendMessage-Logging.arn
-  role       = aws_iam_role.crc-MessageSender.name
-}
-
-resource "aws_iam_role_policy_attachment" "crc-cloudwatch-CloudfrontManager" {
-  policy_arn = aws_iam_policy.crc-Lambda-CloudfrontInvalidation-Logging.arn
-  role       = aws_iam_role.crc-CloudfrontManager.name
-}
-
 resource "aws_iam_group_policy_attachment" "crc-iam-github-users" {
   group      = aws_iam_group.crc-iam-github-users.name
   policy_arn = aws_iam_policy.crc-S3-GitHubActions.arn
@@ -112,6 +97,7 @@ resource "aws_iam_role" "crc-CloudfrontManager" {
 
   managed_policy_arns = [
     aws_iam_policy.crc-Lambda-CloudfrontInvalidation-AccessPolicy.arn,
+    aws_iam_policy.crc-Lambda-CloudfrontInvalidation-Logging.arn
   ]
   max_session_duration = "3600"
   name                 = "crc-CloudFrontManager"
@@ -136,6 +122,7 @@ resource "aws_iam_role" "crc-MessageSender" {
   description = "Allows Lambda functions to call AWS services on your behalf."
   managed_policy_arns = [
     aws_iam_policy.crc-Lambda-SendMessage-AccessPolicy.arn,
+    aws_iam_policy.crc-Lambda-SendMessage-Logging.arn,
   ]
   max_session_duration = "3600"
   name                 = "crc-MessageSender"
@@ -160,6 +147,7 @@ resource "aws_iam_role" "crc-VisitorTracker" {
   description = "Allows Lambda functions to call AWS services on your behalf."
   managed_policy_arns = [
     aws_iam_policy.crc-Lambda-TrackVisitors-AccessPolicy.arn,
+    aws_iam_policy.crc-Lambda-TrackVisitors-Logging.arn,
   ]
   max_session_duration = "3600"
   name                 = "crc-VisitorTracker"
