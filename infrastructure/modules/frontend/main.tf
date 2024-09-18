@@ -351,9 +351,10 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 # Begin Certificates Block #
 
 resource "aws_acm_certificate" "crc-website-certificate" {
-  domain_name       = [var.domain-name, "*.${var.domain-name}"]
-  key_algorithm     = "RSA_2048"
-  validation_method = "DNS"
+  domain_name               = aws_route53_zone.crc-new-hosted-zone.name
+  subject_alternative_names = ["*.${aws_route53_zone.crc-new-hosted-zone.name}"]
+  key_algorithm             = "RSA_2048"
+  validation_method         = "DNS"
 
   tags = {
     Name : var.domain-name
