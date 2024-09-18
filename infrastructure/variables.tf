@@ -48,14 +48,14 @@ variable "api_current_stage" {
 
 variable "staging_user" {
   description = "Username to be injected into Simple Auth for Staging Distribution"
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }
 
 variable "staging_pass" {
   description = "Password to be injected into Simple Auth for Staging Distribution"
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }
 
 variable "tags" {
@@ -67,6 +67,6 @@ variable "tags" {
 }
 
 variable "waf_enabled" {
-  type = bool
+  type    = bool
   default = false
 }

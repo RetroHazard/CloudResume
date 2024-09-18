@@ -1,10 +1,13 @@
-name: Terraform
+name: Terraform - Plan Only
 
 defaults:
   run:
     working-directory: infrastructure
 
 on:
+  pull_request:
+    branches:
+      - '**'
   push:
     branches:
       - '!main'
