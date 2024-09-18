@@ -320,7 +320,7 @@ resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
   staging          = "false"
 
   viewer_certificate {
-    acm_certificate_arn            = aws_acm_certificate.crc-website-certificate.arn
+    acm_certificate_arn            = aws_acm_certificate.crc-sub-certificate.arn
     cloudfront_default_certificate = "false"
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
@@ -351,10 +351,9 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 # Begin Certificates Block #
 
 resource "aws_acm_certificate" "crc-website-certificate" {
-  domain_name               = aws_route53_zone.crc-new-hosted-zone.name
-  subject_alternative_names = ["*.${aws_route53_zone.crc-new-hosted-zone.name}"]
-  key_algorithm             = "RSA_2048"
-  validation_method         = "DNS"
+  domain_name       = aws_route53_zone.crc-new-hosted-zone.name
+  key_algorithm     = "RSA_2048"
+  validation_method = "DNS"
 
   tags = {
     Name : var.domain-name
@@ -371,6 +370,29 @@ resource "aws_acm_certificate" "crc-website-certificate" {
 
 resource "aws_acm_certificate_validation" "crc-website-certificate-validation" {
   certificate_arn         = aws_acm_certificate.crc-website-certificate.arn
+  validation_record_fqdns = [for record in aws_route53_record.crc-new-hosted-zone-validation-record : record.fqdn]
+}
+
+resource "aws_acm_certificate" "crc-sub-certificate" {
+  domain_name       = ["*.${aws_route53_zone.crc-new-hosted-zone.name}"]
+  key_algorithm     = "RSA_2048"
+  validation_method = "DNS"
+
+  tags = {
+    Name : var.domain-name
+  }
+
+  options {
+    certificate_transparency_logging_preference = "ENABLED"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_acm_certificate_validation" "crc-sub-certificate-validation" {
+  certificate_arn         = aws_acm_certificate.crc-sub-certificate.arn
   validation_record_fqdns = [for record in aws_route53_record.crc-new-hosted-zone-validation-record : record.fqdn]
 }
 
@@ -647,7 +669,7 @@ resource "aws_api_gateway_rest_api" "crc-rest-api" {
 resource "aws_api_gateway_domain_name" "crc-api-domain" {
   depends_on      = [aws_acm_certificate_validation.crc-website-certificate-validation]
   domain_name     = "api.${var.domain-name}"
-  certificate_arn = aws_acm_certificate.crc-website-certificate.arn
+  certificate_arn = aws_acm_certificate.crc-sub-certificate.arn
   endpoint_configuration {
     types = ["EDGE"]
   }
