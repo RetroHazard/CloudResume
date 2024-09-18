@@ -374,7 +374,7 @@ resource "aws_acm_certificate_validation" "crc-website-certificate-validation" {
 }
 
 resource "aws_acm_certificate" "crc-sub-certificate" {
-  domain_name       = ["*.${aws_route53_zone.crc-new-hosted-zone.name}"]
+  domain_name       = "*.${aws_route53_zone.crc-new-hosted-zone.name}"
   key_algorithm     = "RSA_2048"
   validation_method = "DNS"
 
