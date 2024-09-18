@@ -193,7 +193,7 @@ resource "aws_s3_bucket_acl" "crc-agb-s3-website-logging" {
 
 resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
-  aliases    = var.domain-name
+  aliases    = [var.domain-name]
   comment    = "Production Distribution for Cloud Resume"
 
   custom_error_response {
