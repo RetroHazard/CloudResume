@@ -12,16 +12,8 @@ on:
       - 'website/**'
 
 jobs:
-  delayed_start:
-    name: Pause for Infrastructure
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for 10 seconds
-        run: sleep 10
-
   check_infrastructure:
     name: Check Terraform Status
-    needs: delayed_start
     runs-on: ubuntu-latest
     outputs:
       status: ${{ steps.check_tf_status.outputs.status }}
