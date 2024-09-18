@@ -193,7 +193,7 @@ resource "aws_s3_bucket_acl" "crc-agb-s3-website-logging" {
 
 resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
-  aliases    = [var.domain-name]
+  aliases    = ["*.${var.domain-name}"]
   comment    = "Production Distribution for Cloud Resume"
 
   custom_error_response {
@@ -461,18 +461,6 @@ resource "aws_route53_zone" "crc-hosted-zone" {
     prevent_destroy       = true
     create_before_destroy = true
   }
-}
-
-resource "aws_route53_record" "crc-hosted-zone-forwarder" {
-  alias {
-    evaluate_target_health = true
-    name                   = var.domain-name
-    zone_id                = aws_route53_zone.crc-new-hosted-zone.zone_id
-  }
-
-  name    = aws_route53_zone.crc-hosted-zone.name
-  type    = "A"
-  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_zone" "crc-new-hosted-zone" {
