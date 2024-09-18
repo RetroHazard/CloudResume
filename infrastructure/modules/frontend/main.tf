@@ -351,9 +351,10 @@ resource "aws_cloudfront_function" "crc-StagingAuthorization" {
 # Begin Certificates Block #
 
 resource "aws_acm_certificate" "crc-website-certificate" {
-  domain_name       = "*.${var.domain-name}"
-  key_algorithm     = "RSA_2048"
-  validation_method = "DNS"
+  domain_name               = var.domain-name
+  subject_alternative_names = "*.${var.domain-name}"
+  key_algorithm             = "RSA_2048"
+  validation_method         = "DNS"
 
   tags = {
     Name : var.domain-name
@@ -456,23 +457,6 @@ resource "aws_route53_zone" "crc-hosted-zone" {
   comment       = "Hosted Zone for Cloud Resume Project"
   force_destroy = false
   name          = "cloudresume-agb.jp"
-
-  lifecycle {
-    prevent_destroy       = true
-    create_before_destroy = true
-  }
-}
-
-resource "aws_route53_record" "crc-hosted-zone-forwarder" {
-  alias {
-    evaluate_target_health = true
-    name                   = var.domain-name
-    zone_id                = aws_route53_zone.crc-new-hosted-zone.zone_id
-  }
-
-  name    = aws_route53_zone.crc-hosted-zone.name
-  type    = "A"
-  zone_id = aws_route53_zone.crc-hosted-zone.zone_id
 }
 
 resource "aws_route53_zone" "crc-new-hosted-zone" {
