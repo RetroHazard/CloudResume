@@ -27,7 +27,7 @@ My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/t
 
 
 ## Architectural Overview
-![Current Architectural Version](https://media.licdn.com/dms/image/D5612AQHV6b2IgcGYxw/article-inline_image-shrink_1000_1488/0/1720409517025?e=1726099200&v=beta&t=lMS00bjuDtDAtyFUVPDj2Ac6q_uuRbCVaCJfmw1HzJw)
+![Current Architectural Version](https://img.retrohazard.com/1720409517025.png)
 
 
 ## Technologies Leveraged
