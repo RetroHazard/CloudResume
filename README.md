@@ -1,6 +1,6 @@
 # CloudResume
 ![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure.yml/badge.svg)
-![Website_Production](https://github.com/RetroHazard/CloudResume/actions/workflows/website_production.yml/badge.svg)
+![Website](https://github.com/RetroHazard/CloudResume/actions/workflows/website.yml/badge.svg)
 
 
 ## Summary
