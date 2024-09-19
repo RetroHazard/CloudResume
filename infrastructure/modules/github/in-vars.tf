@@ -15,11 +15,6 @@ variable "crc-s3-bucket-prod" {
   type        = string
 }
 
-variable "crc-s3-bucket-stage" {
-  description = "S3 Bucket for Staging Website"
-  type        = string
-}
-
 variable "crc-api-endpoint" {
   description = "API Gateway Endpoint (FQDN + Stage)"
   type        = string

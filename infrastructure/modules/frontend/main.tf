@@ -69,64 +69,6 @@ resource "aws_s3_bucket_notification" "crc-agb-s3-website-prod" {
 }
 
 
-resource "aws_s3_bucket" "crc-agb-s3-website-staging" {
-  bucket        = "crc-agb-s3-website-staging-${random_string.bucket_suffix.result}"
-  force_destroy = "false"
-
-  object_lock_enabled = "false"
-}
-
-resource "aws_s3_bucket_policy" "crc-agb-s3-website-staging" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-  policy = data.aws_iam_policy_document.crc-agb-s3-website-staging-oac.json
-}
-
-resource "aws_s3_bucket_lifecycle_configuration" "crc-agb-s3-website-staging" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-
-  rule {
-    id     = "Remove Stale Entries"
-    status = "Enabled"
-
-    abort_incomplete_multipart_upload {
-      days_after_initiation = 7
-    }
-
-    expiration {
-      expired_object_delete_marker = true
-      days                         = 0
-    }
-
-    noncurrent_version_expiration {
-      noncurrent_days = 7
-    }
-  }
-}
-
-resource "aws_s3_bucket_logging" "crc-agb-s3-website-staging" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-
-  target_bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
-  target_prefix = "crc_access_log-stage/"
-}
-
-resource "aws_s3_bucket_versioning" "crc-agb-s3-website-staging" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_notification" "crc-agb-s3-website-staging" {
-  bucket = aws_s3_bucket.crc-agb-s3-website-staging.id
-
-  queue {
-    events    = ["s3:ObjectCreated:*"]
-    queue_arn = var.sqs-cf-invalidation-queue
-  }
-}
-
-
 resource "aws_s3_bucket" "crc-agb-s3-website-logging" {
   bucket        = "crc-agb-s3-website-logging-${random_string.bucket_suffix.result}"
   force_destroy = "false"
@@ -263,85 +205,6 @@ resource "aws_cloudfront_origin_access_control" "crc-cf-production-oac" {
   signing_protocol                  = "sigv4"
 }
 
-resource "aws_cloudfront_distribution" "crc-cf-staging-distribution" {
-  depends_on = [aws_acm_certificate_validation.crc-website-certificate-validation]
-  aliases    = ["staging.${var.domain-name}"]
-  comment    = "Staging Distribution for Cloud Resume"
-
-  default_cache_behavior {
-    allowed_methods        = ["GET", "HEAD"]
-    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
-    cached_methods         = ["GET", "HEAD"]
-    compress               = "true"
-    smooth_streaming       = "false"
-    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-staging.id
-    viewer_protocol_policy = "redirect-to-https"
-
-    function_association {
-      event_type   = "viewer-request"
-      function_arn = aws_cloudfront_function.crc-StagingAuthorization.arn
-    }
-  }
-
-  enabled             = "true"
-  default_root_object = "index.html"
-  http_version        = "http2"
-  is_ipv6_enabled     = "true"
-
-  logging_config {
-    bucket          = aws_s3_bucket.crc-agb-s3-website-logging.bucket_domain_name
-    include_cookies = "false"
-    prefix          = "cf_crc_staging/"
-  }
-
-  origin {
-    connection_attempts = "3"
-    connection_timeout  = "10"
-
-    domain_name              = aws_s3_bucket.crc-agb-s3-website-staging.bucket_regional_domain_name
-    origin_id                = aws_s3_bucket.crc-agb-s3-website-staging.id
-    origin_access_control_id = aws_cloudfront_origin_access_control.crc-cf-staging-oac.id
-
-    origin_shield {
-      enabled              = "true"
-      origin_shield_region = aws_s3_bucket.crc-agb-s3-website-staging.region
-    }
-  }
-
-  price_class = "PriceClass_All"
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "none"
-    }
-  }
-
-  retain_on_delete = "false"
-  staging          = "false"
-
-  viewer_certificate {
-    acm_certificate_arn            = aws_acm_certificate.crc-website-certificate.arn
-    cloudfront_default_certificate = "false"
-    minimum_protocol_version       = "TLSv1.2_2021"
-    ssl_support_method             = "sni-only"
-  }
-  web_acl_id = var.waf-enabled ? var.waf-acl-arn : null
-}
-
-resource "aws_cloudfront_origin_access_control" "crc-cf-staging-oac" {
-  name                              = aws_s3_bucket.crc-agb-s3-website-staging.id
-  origin_access_control_origin_type = "s3"
-  signing_behavior                  = "always"
-  signing_protocol                  = "sigv4"
-}
-
-resource "aws_cloudfront_function" "crc-StagingAuthorization" {
-  name    = "StagingAuthorization"
-  runtime = "cloudfront-js-1.0"
-  comment = "Simple Authorization for Access to Staging Distribution"
-  publish = true
-  code    = data.template_file.crc-cf-staging-auth.rendered
-}
 
 #  End CloudFront Block  #
 ##########################
@@ -453,12 +316,6 @@ resource "aws_ses_domain_dkim" "crc-ses-domain-dkim" {
   domain = aws_ses_domain_identity.crc-ses-domain-id.domain
 }
 
-resource "aws_route53_zone" "crc-hosted-zone" {
-  comment       = "Hosted Zone for Cloud Resume Project"
-  force_destroy = false
-  name          = "cloudresume-agb.jp"
-}
-
 resource "aws_route53_zone" "crc-new-hosted-zone" {
   comment       = "Cloud Resume Domain"
   force_destroy = false
@@ -568,18 +425,6 @@ resource "aws_route53_record" "crc-dns-zone-record-A" {
   }
 
   name    = var.domain-name
-  type    = "A"
-  zone_id = aws_route53_zone.crc-new-hosted-zone.zone_id
-}
-
-resource "aws_route53_record" "crc-dns-zone-staging-record-A" {
-  alias {
-    evaluate_target_health = "false"
-    name                   = aws_cloudfront_distribution.crc-cf-staging-distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.crc-cf-staging-distribution.hosted_zone_id
-  }
-
-  name    = "staging.${var.domain-name}"
   type    = "A"
   zone_id = aws_route53_zone.crc-new-hosted-zone.zone_id
 }

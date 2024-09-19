@@ -16,14 +16,6 @@ variable "api-current-stage" {
   type = string
 }
 
-variable "staging-user" {
-  type = string
-}
-
-variable "staging-pass" {
-  type = string
-}
-
 # Inputs from IAM
 
 variable "api-gateway-cw-logs-role" {

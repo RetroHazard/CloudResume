@@ -9,14 +9,6 @@ output "aws_s3_bucket_crc-agb-s3-website-prod_arn" {
   value = aws_s3_bucket.crc-agb-s3-website-prod.arn
 }
 
-output "aws_s3_bucket_crc-agb-s3-website-staging_id" {
-  value = aws_s3_bucket.crc-agb-s3-website-staging.id
-}
-
-output "aws_s3_bucket_crc-agb-s3-website-staging_arn" {
-  value = aws_s3_bucket.crc-agb-s3-website-staging.arn
-}
-
 #  End S3 Block  #
 ##################
 
@@ -30,14 +22,6 @@ output "aws_cloudfront_distribution_crc-cf-production-distribution_id" {
 
 output "aws_cloudfront_distribution_crc-cf-production-distribution_arn" {
   value = aws_cloudfront_distribution.crc-cf-production-distribution.arn
-}
-
-output "aws_cloudfront_distribution_crc-cf-staging-distribution_id" {
-  value = aws_cloudfront_distribution.crc-cf-staging-distribution.id
-}
-
-output "aws_cloudfront_distribution_crc-cf-staging-distribution_arn" {
-  value = aws_cloudfront_distribution.crc-cf-staging-distribution.arn
 }
 
 #  End CloudFront Block  #

@@ -12,15 +12,7 @@ variable "crc-s3-production-arn" {
   type = string
 }
 
-variable "crc-s3-staging-arn" {
-  type = string
-}
-
 variable "crc-cf-production-distribution" {
-  type = string
-}
-
-variable "crc-cf-staging-distribution" {
   type = string
 }
 

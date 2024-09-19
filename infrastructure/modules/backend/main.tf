@@ -246,8 +246,7 @@ resource "aws_sqs_queue_policy" "crc_cloudfront_invalidation_queue_policy" {
         "Condition" : {
           "ArnLike" : {
             "aws:SourceArn" : [
-              var.s3-bucket-production-arn,
-              var.s3-bucket-staging-arn
+              var.s3-bucket-production-arn
             ]
           },
         },
@@ -310,8 +309,6 @@ resource "aws_lambda_function" "crc-cloudfrontInvalidation" {
 
   environment {
     variables = {
-      dev_bucket        = var.s3-bucket-staging-name
-      dev_distribution  = var.cf-staging-distribution
       prod_bucket       = var.s3-bucket-production-name
       prod_distribution = var.cf-production-distribution
     }

@@ -93,8 +93,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
       "cloudfront:ListInvalidations"
     ]
     resources = [
-      var.crc-cf-production-distribution,
-      var.crc-cf-staging-distribution
+      var.crc-cf-production-distribution
     ]
   }
 
@@ -106,17 +105,15 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
     ]
     resources = [
       var.crc-s3-production-arn,
-      "${var.crc-s3-production-arn}/*",
-      var.crc-s3-staging-arn,
-      "${var.crc-s3-staging-arn}/*"
+      "${var.crc-s3-production-arn}/*"
     ]
   }
 }
 
 data "aws_iam_policy_document" "crc-s3-github-actions" {
   statement {
-    sid     = "VisualEditor1"
-    effect  = "Allow"
+    sid    = "VisualEditor1"
+    effect = "Allow"
     actions = [
       "s3:PutObject",
       "s3:GetObject",
@@ -125,9 +122,7 @@ data "aws_iam_policy_document" "crc-s3-github-actions" {
     ]
     resources = [
       var.crc-s3-production-arn,
-      "${var.crc-s3-production-arn}/*",
-      var.crc-s3-staging-arn,
-      "${var.crc-s3-staging-arn}/*"
+      "${var.crc-s3-production-arn}/*"
     ]
   }
 }

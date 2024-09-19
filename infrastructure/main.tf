@@ -1,15 +1,8 @@
-import {
-  to = module.frontend.aws_route53_zone.crc-hosted-zone
-  id = var.hosted_zone_id
-}
-
 module "iam" {
   source = "./modules/iam"
 
   crc-s3-production-arn          = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_arn
-  crc-s3-staging-arn             = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_arn
   crc-cf-production-distribution = module.frontend.aws_cloudfront_distribution_crc-cf-production-distribution_arn
-  crc-cf-staging-distribution    = module.frontend.aws_cloudfront_distribution_crc-cf-staging-distribution_arn
 
   crc-visitor-record_arn                         = module.backend.aws_dynamodb_table_crc-visitor-record_arn
   crc-visitor-count_arn                          = module.backend.aws_dynamodb_table_crc-visitor-count_arn
@@ -30,8 +23,6 @@ module "frontend" {
   waf-enabled           = var.waf_enabled
   sanitized-domain-name = var.sanitized_domain_name
   api-current-stage     = var.api_current_stage
-  staging-user          = var.staging_user
-  staging-pass          = var.staging_pass
 
   api-gateway-cw-logs-role = module.iam.aws_iam_role_crc-api-CloudwatchLogs_arn
   iam-s3-github-user       = module.iam.aws_iam_user_crc-iam-github-actions_arn
@@ -60,11 +51,8 @@ module "backend" {
   api-resource-send-message   = module.frontend.aws_api_gateway_resource_crc-api-resource-contact_id
   api-resource-track-visitors = module.frontend.aws_api_gateway_resource_crc-api-resource-visitors_id
   cf-production-distribution  = module.frontend.aws_cloudfront_distribution_crc-cf-production-distribution_id
-  cf-staging-distribution     = module.frontend.aws_cloudfront_distribution_crc-cf-staging-distribution_id
   s3-bucket-production-arn    = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_arn
   s3-bucket-production-name   = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_id
-  s3-bucket-staging-arn       = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_arn
-  s3-bucket-staging-name      = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_id
   r53-ses-verification-mx     = module.frontend.aws_route53_record_crc-ses-verification-record_MX
   r53-ses-verification-txt    = module.frontend.aws_route53_record_crc-ses-verification-record_TXT
 }
@@ -75,7 +63,6 @@ module "github" {
   crc-iam-github-access-key        = module.iam.aws_iam_access_key_crc-iam-github-key_key-id
   crc-iam-github-secret-access-key = module.iam.aws_iam_access_key_crc-iam-github-key_secret-key
   crc-s3-bucket-prod               = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_id
-  crc-s3-bucket-stage              = module.frontend.aws_s3_bucket_crc-agb-s3-website-staging_id
   crc-api-endpoint                 = module.frontend.aws_api_gateway_crc-api-endpoint_fqdn
   github-token                     = var.github_token
 }

@@ -36,14 +36,6 @@ variable "s3-bucket-production-name" {
   type = string
 }
 
-variable "s3-bucket-staging-arn" {
-  type = string
-}
-
-variable "s3-bucket-staging-name" {
-  type = string
-}
-
 variable "api-resource-track-visitors" {
   type = string
 }
@@ -53,10 +45,6 @@ variable "api-resource-send-message" {
 }
 
 variable "cf-production-distribution" {
-  type = string
-}
-
-variable "cf-staging-distribution" {
   type = string
 }
 
