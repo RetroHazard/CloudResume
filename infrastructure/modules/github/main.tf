@@ -22,12 +22,6 @@ resource "github_actions_secret" "aws-s3-bucket-prod" {
   plaintext_value = var.crc-s3-bucket-prod
 }
 
-resource "github_actions_secret" "aws-s3-bucket-stage" {
-  repository      = var.github-repository
-  secret_name     = "AWS_S3_BUCKET_STAGE"
-  plaintext_value = var.crc-s3-bucket-stage
-}
-
 resource "github_actions_secret" "aws-api-endpoint" {
   repository      = var.github-repository
   secret_name     = "AWS_API_ENDPOINT"

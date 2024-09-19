@@ -1,6 +1,5 @@
 # CloudResume
 ![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure.yml/badge.svg)
-![Website_Staging](https://github.com/RetroHazard/CloudResume/actions/workflows/website_staging.yml/badge.svg)
 ![Website_Production](https://github.com/RetroHazard/CloudResume/actions/workflows/website_production.yml/badge.svg)
 
 
@@ -27,7 +26,9 @@ My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/t
 
 
 ## Architectural Overview
-![Current Architectural Version](https://img.retrohazard.com/1720409517025.png)
+**Architectural revisions can be found within the published article, linked above.**
+
+![Current Architectural Version](https://img.retrohazard.com/crc-arch-7.png)
 
 
 ## Technologies Leveraged

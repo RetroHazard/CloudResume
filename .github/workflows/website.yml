@@ -1,4 +1,4 @@
-name: Deploy Website to Prod
+name: Deploy Website
 
 defaults:
   run:
