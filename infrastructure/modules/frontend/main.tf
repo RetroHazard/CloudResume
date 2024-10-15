@@ -243,7 +243,7 @@ resource "aws_acm_certificate_validation" "crc-website-certificate-validation" {
 
 ###########################
 # Begin Key Manager Block #
-
+/* Deprecated as per #61
 resource "aws_kms_alias" "crc-dnssec-key" {
   name          = "alias/${var.sanitized-domain-name}_dnssec"
   target_key_id = aws_kms_key.crc-dnssec-key.key_id
@@ -300,7 +300,7 @@ resource "aws_kms_key" "crc-dnssec-key" {
     Version = "2012-10-17"
   })
 }
-
+*/
 #  End Key Manager Block  #
 ###########################
 
@@ -327,6 +327,7 @@ resource "aws_route53_zone" "crc-new-hosted-zone" {
   }
 }
 
+/* Deprecated as per #61
 resource "aws_route53_key_signing_key" "crc-dnssec-ksk" {
   name                       = var.domain-name
   hosted_zone_id             = data.aws_route53_zone.crc-domain-name.id
@@ -340,6 +341,7 @@ resource "aws_route53_hosted_zone_dnssec" "crc-new-hosted-zone" {
   ]
   hosted_zone_id = aws_route53_key_signing_key.crc-dnssec-ksk.hosted_zone_id
 }
+*/
 
 resource "aws_route53_health_check" "crc-website-health-check-prod" {
   depends_on = [
@@ -435,6 +437,7 @@ resource "aws_route53_record" "crc-dns-zone-record-A" {
 ###########################
 # Begin CloudWatch Alarms #
 
+/* Deprecated as per #61
 resource "aws_cloudwatch_metric_alarm" "crc-dnssec-internal-failure" {
   alarm_name          = "DNSSEC Internal Failure"
   alarm_description   = "Detects any objects within Hosted Zone as having a INTERNAL_FAILURE state"
@@ -466,6 +469,7 @@ resource "aws_cloudwatch_metric_alarm" "crc-dnssec-ksk-action-needed" {
     HostedZoneId = data.aws_route53_zone.crc-domain-name.id
   }
 }
+*/
 
 #  End CloudWatch Alarms  #
 ###########################
