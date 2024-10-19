@@ -7,21 +7,18 @@ import json
 
 prodBucket = os.environ.get('prod_bucket')
 prodDistribution = os.environ.get('prod_distribution')
-devBucket = os.environ.get('dev_bucket')
-devDistribution = os.environ.get('dev_distribution')
 min_wait_time = 5
 
 
 def lambda_handler(event, context):
-    if not prodDistribution or not devDistribution:
+    if not prodDistribution:
         raise ValueError("Environment variables 'prod_distribution' or 'dev_distribution' are not set.")
 
     client = boto3.client('cloudfront')
 
     # Dictionary to hold paths for each distribution
     invalidation_paths = {
-        prodDistribution: [],
-        devDistribution: []
+        prodDistribution: []
     }
 
     for record in event['Records']:
@@ -37,8 +34,6 @@ def lambda_handler(event, context):
             # Determine the distribution ID based on the bucket name
             if bucket_name == prodBucket:
                 invalidation_paths[prodDistribution].append(path)
-            elif bucket_name == devBucket:
-                invalidation_paths[devDistribution].append(path)
             else:
                 print(f"Bucket {bucket_name} is not configured for cache invalidation.")
                 continue
