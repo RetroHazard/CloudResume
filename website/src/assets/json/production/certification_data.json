@@ -1,6 +1,31 @@
 {
   "Certifications": [
     {
+      "certification": "AWS Certified Security - Specialty",
+      "issuer": "Amazon Web Services",
+      "credential_id": "N/A",
+      "date": "2024",
+      "logo": "./images/logos/certifications/aws-scs.png",
+      "links": [
+        {
+          "verification": [
+            {
+              "website": "https://www.credly.com/badges/74bfe684-d074-4a72-a0b9-310da4b7f2f7/public_url",
+              "icon": "fa6-solid:award",
+              "display": true
+            }
+          ],
+          "credential_info": [
+            {
+              "website": "https://aws.amazon.com/certification/certified-security-specialty/",
+              "icon": "fa6-solid:info",
+              "display": true
+            }
+          ]
+        }
+      ]
+    },
+    {
       "certification": "AWS Certified SysOps Administrator - Associate",
       "issuer": "Amazon Web Services",
       "credential_id": "N/A",
