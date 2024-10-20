@@ -9,7 +9,8 @@ const sampleData = {
             certification: 'Sample Certification',
             issuer: 'Sample Issuer',
             credential_id: '123456789',
-            date: '2024-05-24',
+            issued_date: '2024-05-24',
+            expiry_date: '2027-05-24',
             logo: 'sample_logo.png',
             links: [
                 {
@@ -45,7 +46,8 @@ describe('CertificationList Component', () => {
         expect(getByText('Sample Certification')).toBeInTheDocument();
         expect(getByText('Sample Issuer')).toBeInTheDocument();
         expect(getByText(/Credential ID:/)).toBeInTheDocument(); // Using a regular expression
-        expect(getByText(/Date Issued:/)).toBeInTheDocument(); // Using a regular expression
+        expect(getByText(/Issued:/)).toBeInTheDocument(); // Using a regular expression
+        expect(getByText(/Expiry:/)).toBeInTheDocument(); // Using a regular expression
     });
 
     it('matches snapshot', () => {

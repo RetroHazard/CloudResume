@@ -26,11 +26,14 @@ const CertificationList = () => {
                                             <p className='mb-0.5 font-semibold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base'>
                                                 {item.issuer}
                                             </p>
-                                            <p className='mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-sm'>
+                                            <p className='mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-xs'>
                                                 <strong>Credential ID:</strong> {item.credential_id}
                                             </p>
-                                            <p className='mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-sm'>
-                                                <strong>Date Issued:</strong> {item.date}
+                                            <p className='mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-xs'>
+                                                <strong>Issued:</strong> {item.issued_date}
+                                            </p>
+                                            <p className='mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-xs'>
+                                                <strong>Expiry:</strong> {item.expiry_date}
                                             </p>
                                         </div>
                                     </div>

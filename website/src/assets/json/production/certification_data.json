@@ -4,7 +4,8 @@
       "certification": "AWS Certified Security - Specialty",
       "issuer": "Amazon Web Services",
       "credential_id": "N/A",
-      "date": "2024",
+      "issued_date": "2024-10-19",
+      "expiry_date": "2027-10-19",
       "logo": "./images/logos/certifications/aws-scs.png",
       "links": [
         {
@@ -29,7 +30,8 @@
       "certification": "AWS Certified SysOps Administrator - Associate",
       "issuer": "Amazon Web Services",
       "credential_id": "N/A",
-      "date": "2024",
+      "issued_date": "2024-8-16",
+      "expiry_date": "2027-8-16",
       "logo": "./images/logos/certifications/aws-soa.png",
       "links": [
         {
@@ -54,7 +56,8 @@
       "certification": "AWS Certified Solutions Architect - Associate",
       "issuer": "Amazon Web Services",
       "credential_id": "N/A",
-      "date": "2024",
+      "issued_date": "2024-07-05",
+      "expiry_date": "2027-07-05",
       "logo": "./images/logos/certifications/aws-saa.png",
       "links": [
         {
@@ -79,15 +82,16 @@
       "certification": "Systems Security Certified Practitioner",
       "issuer": "ISC2",
       "credential_id": "497518",
-      "date": "2014",
+      "issued_date": "2014-11-07",
+      "expiry_date": "2017-11-30",
       "logo": "./images/logos/certifications/sscp.png",
       "links": [
         {
           "verification": [
             {
-              "website": "#",
+              "website": "https://www.credly.com/badges/16895fc2-023c-466c-8118-29c7a239c9c6/public_url",
               "icon": "fa6-solid:award",
-              "display": false
+              "display": true
             }
           ],
           "credential_info": [
@@ -101,10 +105,11 @@
       ]
     },
     {
-      "certification": "ITIL 3 Foundations",
+      "certification": "ITIL v3 Foundations",
       "issuer": "AXELOS",
       "credential_id": "953058",
-      "date": "2012",
+      "issued_date": "2012-10-25",
+      "expiry_date": "N/A",
       "logo": "./images/logos/certifications/itil-foundation.png",
       "links": [
         {
