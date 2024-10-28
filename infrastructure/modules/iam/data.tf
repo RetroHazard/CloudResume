@@ -4,7 +4,7 @@
 // IAM Policy Documents
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
   statement {
-    sid    = "Statement1"
+    sid    = "Allow Function to Write to Cloudwatch"
     effect = "Allow"
 
     actions = [
@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
   statement {
-    sid    = "VisualEditor0"
+    sid    = "Allow Function to Read/Write to Specified DynamoDB Resources"
     effect = "Allow"
     actions = [
       "dynamodb:PutItem",
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-SendMessage-logging-policy" {
   statement {
-    sid    = "Statement1"
+    sid    = "Allow Function to Write to Cloudwatch"
     effect = "Allow"
 
     actions = [
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-logging-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
   statement {
-    sid    = "VisualEditor0"
+    sid    = "Allow Function to Generate Emails"
     effect = "Allow"
     actions = [
       "ses:SendEmail",
@@ -69,7 +69,7 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy" {
   statement {
-    sid    = "Statement1"
+    sid    = "Allow Function to Write to Cloudwatch"
     effect = "Allow"
 
     actions = [
@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy
 
 data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy" {
   statement {
-    sid    = "Stmt1505004397098"
+    sid    = "Allow Cloudfront Actions to Refresh Cache"
     effect = "Allow"
     actions = [
       "cloudfront:CreateInvalidation",
@@ -98,6 +98,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
   }
 
   statement {
+    sid    = "Allow S3 Actions to Determine Cloudfront Invalidations"
     effect = "Allow"
     actions = [
       "s3:Get*",
@@ -112,7 +113,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
 
 data "aws_iam_policy_document" "crc-s3-github-actions" {
   statement {
-    sid    = "VisualEditor1"
+    sid    = "Allow S3 Access to GitHub Runner"
     effect = "Allow"
     actions = [
       "s3:PutObject",
