@@ -23,6 +23,6 @@ provider "aws" {
     role_arn = var.assume_role_target
   }
   default_tags {
-    tags = var.tags
+    tags = var.default_tags
   }
 }

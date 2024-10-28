@@ -117,8 +117,7 @@ data "aws_iam_policy_document" "crc-s3-github-actions" {
     actions = [
       "s3:PutObject",
       "s3:GetObject",
-      "s3:ListBucket",
-      "s3:DeleteObject"
+      "s3:ListBucket"
     ]
     resources = [
       var.crc-s3-production-arn,

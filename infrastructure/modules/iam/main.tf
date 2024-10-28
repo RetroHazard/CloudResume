@@ -51,12 +51,6 @@ resource "aws_iam_policy" "crc-S3-GitHubActions" {
   policy = data.aws_iam_policy_document.crc-s3-github-actions.json
 }
 
-// IAM Policy Attachment
-resource "aws_iam_group_policy_attachment" "crc-iam-github-users" {
-  group      = aws_iam_group.crc-iam-github-users.name
-  policy_arn = aws_iam_policy.crc-S3-GitHubActions.arn
-}
-
 // IAM Roles
 resource "aws_iam_role" "crc-api-CloudwatchLogs" {
   assume_role_policy = jsonencode({
@@ -153,24 +147,4 @@ resource "aws_iam_role" "crc-VisitorTracker" {
   name                 = "crc-VisitorTracker"
   path                 = "/"
 
-}
-
-// IAM Users
-
-resource "aws_iam_user" "crc-iam-github-actions" {
-  name = "crc-s3-github-actions"
-}
-
-// IAM Groups
-resource "aws_iam_group" "crc-iam-github-users" {
-  name = "GitHubUsers"
-}
-
-resource "aws_iam_user_group_membership" "crc-iam-assign-github-actions" {
-  groups = [aws_iam_group.crc-iam-github-users.name]
-  user   = aws_iam_user.crc-iam-github-actions.name
-}
-
-resource "aws_iam_access_key" "crc-iam-github-key" {
-  user = aws_iam_user.crc-iam-github-actions.name
 }

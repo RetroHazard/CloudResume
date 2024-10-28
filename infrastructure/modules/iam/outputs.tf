@@ -18,16 +18,6 @@ output "aws_iam_role_crc-VisitorTracker_arn" {
   value = aws_iam_role.crc-VisitorTracker.arn
 }
 
-output "aws_iam_user_crc-iam-github-actions_arn" {
-  value = aws_iam_user.crc-iam-github-actions.arn
-}
-
-output "aws_iam_access_key_crc-iam-github-key_key-id" {
-  value     = aws_iam_access_key.crc-iam-github-key.id
-  sensitive = true
-}
-
-output "aws_iam_access_key_crc-iam-github-key_secret-key" {
-  value     = aws_iam_access_key.crc-iam-github-key.secret
-  sensitive = true
+output "aws_iam_policy_document_crc-s3-github-actions_arn" {
+  value = aws_iam_policy.crc-S3-GitHubActions.arn
 }
