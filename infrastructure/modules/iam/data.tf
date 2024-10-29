@@ -111,6 +111,23 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
   }
 }
 
+// IAM Policy Documents
+data "aws_iam_policy_document" "crc-LambdaAPI-assume-role-policy" {
+  statement {
+    sid     = "Assume Role Policy for Lambda and API Gateway"
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "apigateway.amazonaws.com",
+        "lambda.amazonaws.com"
+      ]
+    }
+  }
+}
+
 // GitHub Policy Documents
 data "aws_iam_policy_document" "crc-s3-github-actions" {
   statement {
