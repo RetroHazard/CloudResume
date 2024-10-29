@@ -111,8 +111,8 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
   }
 }
 
-// IAM Policy Documents
-data "aws_iam_policy_document" "crc-LambdaAPI-assume-role-policy" {
+// Role Policy Documents
+data "aws_iam_policy_document" "crc-function-assume-role-policy" {
   statement {
     sid     = "Assume Role Policy for Lambda and API Gateway"
     effect  = "Allow"
