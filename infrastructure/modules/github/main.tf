@@ -1,8 +1,3 @@
-variable "github-repository" {
-  description = "GitHub Repository to store Secrets/Variables in"
-  type        = string
-}
-
 resource "github_actions_secret" "aws-s3-bucket-prod" {
   repository      = var.github-repository
   secret_name     = "AWS_S3_BUCKET_PROD"

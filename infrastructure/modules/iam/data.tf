@@ -1,7 +1,7 @@
 ##########################
 # Begin Core IAM Resources
 
-// IAM Policy Documents
+// Lambda Policy Documents
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
   statement {
     sid    = "Allow Function to Write to Cloudwatch"
@@ -111,6 +111,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
   }
 }
 
+// GitHub Policy Documents
 data "aws_iam_policy_document" "crc-s3-github-actions" {
   statement {
     sid    = "Allow S3 Access to GitHub Runner"

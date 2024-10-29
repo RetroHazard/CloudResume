@@ -1,3 +1,13 @@
+variable "github-organization" {
+  description = "GitHub User/Organization to Operate as"
+  type        = string
+}
+
+variable "github-repository" {
+  description = "GitHub Repository to store Secrets/Variables in"
+  type        = string
+}
+
 variable "crc-s3-bucket-prod" {
   description = "S3 Bucket for Production Website"
   type        = string
