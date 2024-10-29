@@ -162,7 +162,7 @@ jobs:
         with:
           aws-region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
           role-to-assume: ${{ secrets.AWS_S3_OIDC_ROLE }}
-          role-session-name: GitHubCloudResumeDeploy
+          role-session-name: GitHubWebsiteDeploy
 
       - name: Upload to S3
         env:
