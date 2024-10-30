@@ -8,6 +8,8 @@ module "iam_github_oidc_role" {
   policies = {
     S3Limited = module.iam.aws_iam_policy_document_crc-s3-github-actions_arn
   }
+  path = "/CloudResume/"
+  name = "crc-github-oidc-role"
 }
 
 module "iam" {
