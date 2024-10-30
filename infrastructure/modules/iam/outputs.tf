@@ -23,6 +23,6 @@ output "aws_iam_policy_document_crc-github-s3-actions_arn" {
   value = aws_iam_policy.crc-GitHub-S3Actions.arn
 }
 
-output "aws_iam_policy_document_crc-github-terraform-actions_arn" {
-  value = aws_iam_policy.crc-GitHub-TerraformActions.arn
+output "aws_iam_policy_document_crc-github-terraform-limited-iam_arn" {
+  value = aws_iam_policy.crc-GitHub-Terraform-LimitedIAM.arn
 }

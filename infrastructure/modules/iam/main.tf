@@ -51,11 +51,11 @@ resource "aws_iam_policy" "crc-GitHub-S3Actions" {
   policy = data.aws_iam_policy_document.crc-github-s3-actions.json
 }
 
-resource "aws_iam_policy" "crc-GitHub-TerraformActions" {
+resource "aws_iam_policy" "crc-GitHub-Terraform-LimitedIAM" {
   name = "crc-s3-github-actions"
   path = "/CloudResume/"
 
-  policy = data.aws_iam_policy_document.crc-github-terraform-actions.json
+  policy = data.aws_iam_policy_document.crc-github-terraform-limited-iam
 }
 
 // IAM Roles

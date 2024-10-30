@@ -145,24 +145,57 @@ data "aws_iam_policy_document" "crc-github-s3-actions" {
   }
 }
 
-data "aws_iam_policy_document" "crc-github-terraform-actions" {
+data "aws_iam_policy_document" "crc-github-terraform-limited-iam" {
   statement {
-    sid    = "Allow Access to GitHub Runner for Terraform Operations"
+    sid    = "Allow Limited IAM Access for Terraform Operations"
     effect = "Allow"
     actions = [
-      "s3:*",
-      "lambda:*",
-      "iam:*",
-      "route53:*",
-      "dynamodb:*",
-      "cloudwatch:*",
-      "cloudfront:*",
-      "acm:*",
-      "ses:*",
-      "sqs:*",
-      "wafv2:*",
-      "apigateway:*",
-      "kms:*"
+      "iam:CreateInstanceProfile",
+      "iam:List*",
+      "iam:Untag*",
+      "iam:Tag*",
+      "iam:RemoveRoleFromInstanceProfile",
+      "iam:DeletePolicy",
+      "iam:CreateRole",
+      "iam:AttachRolePolicy",
+      "iam:PutRolePolicy",
+      "iam:AddRoleToInstanceProfile",
+      "iam:PassRole",
+      "iam:Get*",
+      "iam:DetachRolePolicy",
+      "iam:DeleteRolePolicy",
+      "iam:CreatePolicyVersion",
+      "iam:DeleteInstanceProfile",
+      "iam:DeleteRole",
+      "iam:UpdateRoleDescription",
+      "iam:CreatePolicy",
+      "iam:CreateServiceLinkedRole",
+      "iam:UpdateRole",
+      "iam:DeleteServiceLinkedRole",
+      "iam:DeletePolicyVersion",
+      "iam:SetDefaultPolicyVersion",
+      "iam:AttachUserPolicy",
+      "iam:DetachUserPolicy",
+      "iam:PutUserPolicy",
+      "iam:DeleteUserPolicy",
+      "iam:AddUserToGroup",
+      "iam:AttachGroupPolicy",
+      "iam:CreateGroup",
+      "iam:DeleteGroup",
+      "iam:DeleteGroupPolicy",
+      "iam:DetachGroupPolicy",
+      "iam:GetGroup",
+      "iam:GetGroupPolicy",
+      "iam:ListAttachedGroupPolicies",
+      "iam:ListGroupPolicies",
+      "iam:ListGroups",
+      "iam:ListGroupsForUser",
+      "iam:PutGroupPolicy",
+      "iam:RemoveUserFromGroup",
+      "iam:UpdateGroup",
+      "iam:GenerateServiceLastAccessedDetails",
+      "iam:UpdateAssumeRolePolicy",
+      "iam:UpdateAccessKey"
     ]
     resources = ["*"]
   }

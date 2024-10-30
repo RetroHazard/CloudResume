@@ -16,7 +16,8 @@ module "iam_github_tf_oidc_role" {
   source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
   subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
   policies = {
-    Terraformer = module.iam.aws_iam_policy_document_crc-github-terraform-actions_arn
+    LimitedIAM   = module.iam.aws_iam_policy_document_crc-github-terraform-limited-iam_arn,
+    AWSPowerUser = "arn:aws:iam::aws:policy/PowerUserAccess"
   }
   path = "/CloudResume/"
   name = "crc-github-tf-oidc-role"
