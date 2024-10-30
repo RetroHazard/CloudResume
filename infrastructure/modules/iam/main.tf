@@ -44,11 +44,18 @@ resource "aws_iam_policy" "crc-Lambda-SendMessage-Logging" {
   policy = data.aws_iam_policy_document.crc-lambda-SendMessage-logging-policy.json
 }
 
-resource "aws_iam_policy" "crc-S3-GitHubActions" {
+resource "aws_iam_policy" "crc-GitHub-S3Actions" {
   name = "crc-s3-github-actions"
   path = "/CloudResume/"
 
-  policy = data.aws_iam_policy_document.crc-s3-github-actions.json
+  policy = data.aws_iam_policy_document.crc-github-s3-actions.json
+}
+
+resource "aws_iam_policy" "crc-GitHub-TerraformActions" {
+  name = "crc-s3-github-actions"
+  path = "/CloudResume/"
+
+  policy = data.aws_iam_policy_document.crc-github-terraform-actions.json
 }
 
 // IAM Roles

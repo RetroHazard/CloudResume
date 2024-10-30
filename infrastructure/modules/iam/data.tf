@@ -129,9 +129,9 @@ data "aws_iam_policy_document" "crc-function-assume-role-policy" {
 }
 
 // GitHub Policy Documents
-data "aws_iam_policy_document" "crc-s3-github-actions" {
+data "aws_iam_policy_document" "crc-github-s3-actions" {
   statement {
-    sid    = "Allow S3 Access to GitHub Runner"
+    sid    = "Allow Access to GitHub Runner for S3 Upload"
     effect = "Allow"
     actions = [
       "s3:PutObject",
@@ -142,5 +142,28 @@ data "aws_iam_policy_document" "crc-s3-github-actions" {
       var.crc-s3-production-arn,
       "${var.crc-s3-production-arn}/*"
     ]
+  }
+}
+
+data "aws_iam_policy_document" "crc-github-terraform-actions" {
+  statement {
+    sid    = "Allow Access to GitHub Runner for Terraform Operations"
+    effect = "Allow"
+    actions = [
+      "s3:*",
+      "lambda:*",
+      "iam:*",
+      "route53:*",
+      "dynamodb:*",
+      "cloudwatch:*",
+      "cloudfront:*",
+      "acm:*",
+      "ses:*",
+      "sqs:*",
+      "wafv2:*",
+      "apigateway:*",
+      "kms:*"
+    ]
+    resources = ["*"]
   }
 }

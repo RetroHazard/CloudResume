@@ -6,10 +6,20 @@ module "iam_github_oidc_role" {
   source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
   subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
   policies = {
-    S3Limited = module.iam.aws_iam_policy_document_crc-s3-github-actions_arn
+    S3Limited = module.iam.aws_iam_policy_document_crc-github-s3-actions_arn
   }
   path = "/CloudResume/"
-  name = "crc-github-oidc-role"
+  name = "crc-github-s3-oidc-role"
+}
+
+module "iam_github_oidc_role" {
+  source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
+  subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
+  policies = {
+    Terraformer = module.iam.aws_iam_policy_document_crc-github-terraform-actions_arn
+  }
+  path = "/CloudResume/"
+  name = "crc-github-tf-oidc-role"
 }
 
 module "iam" {

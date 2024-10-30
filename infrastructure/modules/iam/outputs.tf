@@ -19,6 +19,10 @@ output "aws_iam_role_crc-VisitorTracker_arn" {
 }
 
 // IAM Policy Documents
-output "aws_iam_policy_document_crc-s3-github-actions_arn" {
-  value = aws_iam_policy.crc-S3-GitHubActions.arn
+output "aws_iam_policy_document_crc-github-s3-actions_arn" {
+  value = aws_iam_policy.crc-GitHub-S3Actions.arn
+}
+
+output "aws_iam_policy_document_crc-github-terraform-actions_arn" {
+  value = aws_iam_policy.crc-GitHub-TerraformActions.arn
 }
