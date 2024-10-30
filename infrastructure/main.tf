@@ -2,7 +2,7 @@ module "iam_github_oidc_provider" {
   source = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider"
 }
 
-module "iam_github_oidc_role" {
+module "iam_github_s3_oidc_role" {
   source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
   subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
   policies = {
@@ -12,7 +12,7 @@ module "iam_github_oidc_role" {
   name = "crc-github-s3-oidc-role"
 }
 
-module "iam_github_oidc_role" {
+module "iam_github_tf_oidc_role" {
   source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
   subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
   policies = {
