@@ -6,7 +6,7 @@ module "iam_github_oidc_role" {
   source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
   subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
   policies = {
-    S3Restricted = module.iam.aws_iam_policy_document_crc-s3-github-actions_arn
+    S3Limited = module.iam.aws_iam_policy_document_crc-s3-github-actions_arn
   }
 }
 

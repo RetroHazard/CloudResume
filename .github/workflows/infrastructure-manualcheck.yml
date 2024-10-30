@@ -1,4 +1,4 @@
-name: Terraform - Detect Drift
+name: Terraform - Manual Test
 
 defaults:
   run:
