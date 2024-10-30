@@ -15,3 +15,9 @@ resource "github_actions_secret" "aws-s3-oidc-role" {
   secret_name     = "AWS_S3_OIDC_ROLE"
   plaintext_value = var.crc-s3-oidc-role
 }
+
+resource "github_actions_secret" "aws-tf-oidc-role" {
+  repository      = var.github-repository
+  secret_name     = "AWS_TF_OIDC_ROLE"
+  plaintext_value = var.crc-tf-oidc-role
+}

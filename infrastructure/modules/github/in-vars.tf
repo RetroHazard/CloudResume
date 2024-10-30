@@ -24,6 +24,12 @@ variable "crc-s3-oidc-role" {
   sensitive   = true
 }
 
+variable "crc-tf-oidc-role" {
+  description = "Role create by OIDC Module for Terraform to Assume"
+  type        = string
+  sensitive   = true
+}
+
 variable "github-token" {
   description = "Token provided by GitHub Runner to Authenticate GitHub Operations"
   type        = string

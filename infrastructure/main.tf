@@ -85,7 +85,8 @@ module "github" {
 
   crc-s3-bucket-prod  = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_id
   crc-api-endpoint    = module.frontend.aws_api_gateway_crc-api-endpoint_fqdn
-  crc-s3-oidc-role    = module.iam_github_oidc_role.arn
+  crc-s3-oidc-role    = module.iam_github_s3_oidc_role.arn
+  crc-tf-oidc-role    = module.iam_github_tf_oidc_role.arn
   github-token        = var.github_token
   github-organization = var.default_tags.GithubOrg
   github-repository   = var.default_tags.GithubRepo
