@@ -2,6 +2,7 @@
 ![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure.yml/badge.svg)
 ![Website](https://github.com/RetroHazard/CloudResume/actions/workflows/website.yml/badge.svg)
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/L3L51987AN)
 
 ## Summary
 The Cloud Resume Challenge was developed by Forrest Brazeal and is a loosely defined, objective based Cloud Project, setting a number of goals within predefined chunks, while avoiding the trap of being too hand-holdy; The Challenge can be adressed in as simple or complex terms as one chooses, so long as the objective(s) are met.

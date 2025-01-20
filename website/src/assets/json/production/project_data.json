@@ -1,10 +1,75 @@
 {
   "Projects": [
     {
+      "name": "Japan Immigration Statistics Dashboard",
+      "company": "Hollow Souls",
+      "category": "Frontend",
+      "role": "Solo Dev",
+      "size": "1",
+      "start": "2025",
+      "end": "NOW",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "details": [
+        "Designed and launched a React-based immigration statistics dashboard, attracting over 2,000 unique users in the first 30 days of availability.",
+        "Developed customizable charts (stacked bar, radar, bubble) with dynamic filtering to analyze application trends and processing efficiency.",
+        "Built a processing time estimator using historical trends and 3-month rolling averages to forecast queue positions and completion dates.",
+        "Utilized React, Chart.js, and Tailwind CSS to deliver a mobile-friendly, visually appealing interface with theme support.",
+        "Connected to Japan’s e-Stat API for accurate immigration statistics, ensuring reliability and up-to-date insights for users."
+      ],
+      "links": [
+        {
+          "repo": [
+            {
+              "website": "https://github.com/RetroHazard/JP_Immigration_Dashboard",
+              "icon": "simple-icons:git"
+            }
+          ],
+          "link": [
+            {
+              "website": "https://dashboard.retrohazard.jp/",
+              "icon": "fa6-solid:globe"
+            }
+          ]
+        }
+      ],
+      "technologies": [
+        {
+          "name": "React",
+          "logo": "simple-icons:react",
+          "website": "https://react.dev/"
+        },
+        {
+          "name": "Node.js",
+          "logo": "simple-icons:nodedotjs",
+          "website": "https://nodejs.org/en"
+        },
+        {
+          "name": "tailwindCSS",
+          "logo": "simple-icons:tailwindcss",
+          "website": "https://tailwindcss.com"
+        },
+        {
+          "name": "chartJS",
+          "logo": "file-icons:chartjs",
+          "website": "https://www.chartjs.org"
+        },
+        {
+          "name": "Python",
+          "logo": "simple-icons:python",
+          "website": "https://www.python.org"
+        },
+        {
+          "name": "GitHub",
+          "logo": "simple-icons:github",
+          "website": "https://github.com"
+        }
+      ]
+    },
+    {
       "name": "Cloud Resume Challenge",
       "company": "Hollow Souls",
       "category": "Full Stack",
-      "role": "Project Lead",
+      "role": "Solo Dev",
       "size": "1",
       "start": "2024",
       "end": "NOW",
@@ -75,7 +140,7 @@
       "name": "Untitled Project",
       "company": "Hollow Souls",
       "category": "Commercial Game Component",
-      "role": "Project Lead",
+      "role": "Solo Dev",
       "size": "1",
       "start": "2022",
       "end": "2023",
