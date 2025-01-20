@@ -61,7 +61,7 @@
     },
     {
       "company": "Indeed",
-      "job_title": "Lead, IT Support",
+      "job_title": "Lead, IT Solutions",
       "location": "Tokyo, Japan",
       "type": "Full Time",
       "start": "2023",
@@ -69,12 +69,10 @@
       "logo": "./images/logos/companies/indeed.png",
       "website": "https://www.indeed.com/",
       "details": [
-        "Managed IT equipment and resources for Indeed's R&D offices, supporting over 700 users during WFH and Hybrid/RTO periods.",
-        "Ensured balanced utilization of team and resources, maintaining consistency in ticket resolution, training, and project work.",
-        "Designed, documented, and globally deployed Indeed's Enterprise Printing Solution for over 18,000 users.",
-        "Monitored team performance against SLAs and SLOs, ensuring customer-centric service delivery.",
-        "Conducted interviews and hired additional support resources to enhance team capabilities.",
-        "Developed and maintained effective communication channels with senior management, clients, and team members."
+        "Designed, documented, and successfully implemented the company's Global Enterprise Printing Solution, providing reliable and scalable printing services to over 10,000 users across multiple locations.",
+        "Led the IT Service Desk team, ensuring timely resolution of technical issues while maintaining clear and effective communication with stakeholders to align support services with business needs.",
+        "Oversaw inventory management for IT hardware and software assets, ensuring accurate tracking, procurement planning, and compliance with organizational policies.",
+        "Directed IT service-related projects from initiation to completion, streamlining workflows, optimizing service delivery processes, and driving continuous improvement initiatives to enhance user satisfaction."
       ],
       "technologies": [
         {
@@ -124,9 +122,9 @@
       "logo": "./images/logos/companies/indeed.png",
       "website": "https://www.indeed.com/",
       "details": [
-        "Technical Troubleshooting and Support: Provided direct customer support and resolved software and hardware issues across diverse technical disciplines, including client computing, infrastructure, networking, and system security.",
-        "Network Device and Server Management: Collaborated with Infrastructure teams to troubleshoot, install, and manage network devices and servers, ensuring seamless connectivity and system functionality.",
-        "Technical Project Execution: Completed various technical projects and tasks, demonstrating adaptability and proactive problem-solving to enhance team productivity and end-user satisfaction."
+        "Provided direct customer support and resolved software and hardware issues across diverse technical disciplines, including client computing, infrastructure, networking, and system security.",
+        "Collaborated with Infrastructure teams to troubleshoot, install, and manage network devices and servers, ensuring seamless connectivity and system functionality.",
+        "Completed various technical projects and tasks, demonstrating adaptability and proactive problem-solving to enhance team productivity and end-user satisfaction."
       ],
       "technologies": [
         {
@@ -158,7 +156,7 @@
     },
     {
       "company": "University of Calgary",
-      "job_title": "Systems Support Specialist",
+      "job_title": "Senior Systems Specialist",
       "location": "Calgary, Canada",
       "type": "Contract",
       "start": "2017",
@@ -166,11 +164,10 @@
       "logo": "./images/logos/companies/uofc.png",
       "website": "https://www.ucalgary.ca/",
       "details": [
-        "Documented technology-related inquiries and solutions to compile comprehensive knowledge-base resources.",
-        "Provided technical support and troubleshooting to optimize system performance.",
-        "Coordinated technical communications and instructions to enhance organizational IT effectiveness.",
-        "Responded to service requests, delivering resolutions based on industry knowledge.",
-        "Updated departmental documentation, including license databases, infrastructure maps, and FAQs, to maintain consistent response levels."
+        "Managed and supported Office 365 and Azure Active Directory environments, including user account provisioning, group management, and troubleshooting authentication issues to ensure seamless operations for the Faculty of Arts department.",
+        "Administered Active Directory for user access control and resource management while providing enterprise-level support for both Windows and Mac systems in a mixed-platform environment.",
+        "Planned and executed system updates, security patches, and hardware upgrades across departmental servers and workstations to maintain optimal performance and compliance with institutional standards.",
+        "Delivered technical support to faculty and staff, resolving hardware, software, and connectivity issues efficiently while conducting training sessions to enhance user proficiency with enterprise tools."
       ],
       "technologies": [
         {
@@ -197,7 +194,7 @@
     },
     {
       "company": "Pythian",
-      "job_title": "Systems Administrator",
+      "job_title": "Site Reliability Engineer",
       "location": "Ottawa, Canada",
       "type": "Contract",
       "start": "2014",
@@ -205,12 +202,10 @@
       "logo": "./images/logos/companies/pythian.png",
       "website": "https://www.pythian.com/",
       "details": [
-        "Conducted remote and onsite testing and troubleshooting for client server infrastructures to ensure operational readiness.",
-        "Managed and supported critical public infrastructure systems, ensuring their reliability and security.",
-        "Implemented inventory control measures to maintain and replenish IT equipment, supplies, tools, and replacement parts.",
-        "Developed modification and integration programs to ensure software compatibility.",
-        "Monitored networks and devices to promptly resolve technical problems.",
-        "Provided knowledgeable support and quality service to resolve issues and escalate problems effectively."
+        "Monitored large-scale distributed systems to ensure high availability and reliability, responding promptly to incidents to minimize downtime and maintain service-level objectives.",
+        "Developed and deployed automation scripts  to streamline infrastructure management, reduce manual interventions, and enhance system scalability.",
+        "Improved system performance through tuning and capacity planning while identifying and addressing potential risks to prevent issues.",
+        "Partnered with development teams to improve release processes, documented operational procedures, and conducted post-incident reviews to drive continuous improvement across systems."
       ],
       "technologies": [
         {
@@ -237,7 +232,7 @@
     },
     {
       "company": "Long View Systems",
-      "job_title": "Systems Consultant",
+      "job_title": "Network Operations Analyst",
       "location": "Calgary, Canada",
       "type": "Full Time",
       "start": "2012",
@@ -245,11 +240,10 @@
       "logo": "./images/logos/companies/longviewsystems.png",
       "website": "https://www.longviewsystems.com/",
       "details": [
-        "Acted as the primary liaison between customers and management, addressing and relaying feedback and concerns.",
-        "Managed security operations for multiple client networks, systems, and maintenance protocols.",
-        "Continuously enhanced operational and security procedures for client environments, including systems administration and maintenance.",
-        "Routinely evaluated security measures and recommended remediation to stakeholders.",
-        "Identified and resolved hardware and software compatibility issues."
+        "Monitored cloud and on-premise network systems 24/7 to ensure high availability, promptly identifying and resolving performance issues to minimize downtime.",
+        "Maintained and repaired critical network components, including firewalls, IP switching, and remote access protocols, ensuring seamless operations across global cloud environments.",
+        "Documented incidents, resolutions, and operational procedures while collaborating with teams to refine workflows and enhance the efficiency of network operations.",
+        "Managed vendor services for telecommunications and secure data storage while maintaining clear communication with stakeholders to align technical solutions with business objectives."
       ],
       "technologies": [
         {
@@ -271,7 +265,7 @@
     },
     {
       "company": "Cloudwerx Data Solutions",
-      "job_title": "Technical Analyst",
+      "job_title": "Field Engineer",
       "location": "Calgary, Canada",
       "type": "Full Time",
       "start": "2011",
@@ -279,11 +273,10 @@
       "logo": "./images/logos/companies/cloudwerx.png",
       "website": "https://cloudwerx.com/",
       "details": [
-        "Standardized technical operations reporting to eliminate redundancy and improve efficiency across multidisciplinary teams.",
-        "Mitigated risk and managed liability by applying the latest cybersecurity advisories and best practices to internal operations and product development.",
-        "Authored technical requirement documentation aligned with business goals and technological constraints.",
-        "Resolved program-level dependencies to prevent bottlenecks and maintain efficiency in ongoing efforts.",
-        "Implemented and fully managed the Asigra Cloud Backup platform in a multi-client environment."
+        "Administered and maintained VMware vSphere environments to support virtualized workloads, ensuring high availability and performance for healthcare applications and services.",
+        "Managed NetApp storage systems, including provisioning, monitoring, and troubleshooting, to ensure secure and scalable data storage for critical healthcare operations.",
+        "Oversaw data center operations, including hardware maintenance, environmental controls, and Cisco IOS network configuration, to maintain a reliable and secure IT infrastructure.",
+        "Provided technical support for hosted solutions such as Microsoft Exchange, Blackberry Enterprise, Citrix Cloud, and Sun Terminals, while ensuring compliance with healthcare industry standards and regulations."
       ],
       "technologies": [
         {
