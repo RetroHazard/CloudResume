@@ -1,10 +1,65 @@
 {
   "Projects": [
     {
+      "name": "Japan Immigration Statistics Dashboard",
+      "company": "Hollow Souls",
+      "category": "Frontend",
+      "role": "Solo Dev",
+      "size": "1",
+      "start": "2025",
+      "end": "NOW",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "details": [
+        "A React-based dashboard for visualizing and analyzing Japanese Immigration application processing statistics. The dashboard provides estimates and visual analytics for application processing times across different immigration bureaus using a combination of predictive averages and confirmed statistics reported by Immigration Services Agency of Japan."
+      ],
+      "links": [
+        {
+          "repo": [
+            {
+              "website": "https://github.com/RetroHazard/JP_Immigration_Dashboard",
+              "icon": "simple-icons:git"
+            }
+          ]
+        }
+      ],
+      "technologies": [
+        {
+          "name": "React",
+          "logo": "simple-icons:react",
+          "website": "https://react.dev/"
+        },
+        {
+          "name": "Node.js",
+          "logo": "simple-icons:nodedotjs",
+          "website": "https://nodejs.org/en"
+        },
+        {
+          "name": "tailwindCSS",
+          "logo": "simple-icons:tailwindcss",
+          "website": "https://tailwindcss.com"
+        },
+        {
+          "name": "chartJS",
+          "logo": "file-icons:chartjs",
+          "website": "https://www.chartjs.org"
+        },
+        {
+          "name": "Python",
+          "logo": "simple-icons:python",
+          "website": "https://www.python.org"
+        },
+        {
+          "name": "GitHub",
+          "logo": "simple-icons:github",
+          "website": "https://github.com"
+        }
+      ]
+    },
+    {
       "name": "Cloud Resume Challenge",
       "company": "Hollow Souls",
       "category": "Full Stack",
-      "role": "Project Lead",
+      "role": "Solo Dev",
       "size": "1",
       "start": "2024",
       "end": "NOW",
@@ -75,7 +130,7 @@
       "name": "Untitled Project",
       "company": "Hollow Souls",
       "category": "Commercial Game Component",
-      "role": "Project Lead",
+      "role": "Solo Dev",
       "size": "1",
       "start": "2022",
       "end": "2023",
