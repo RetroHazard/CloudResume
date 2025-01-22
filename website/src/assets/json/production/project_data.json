@@ -10,7 +10,11 @@
       "end": "NOW",
       "logo": "./images/logos/companies/hollowsouls.png",
       "details": [
-        "A React-based dashboard for visualizing and analyzing Japanese Immigration application processing statistics. The dashboard provides estimates and visual analytics for application processing times across different immigration bureaus using a combination of predictive averages and confirmed statistics reported by Immigration Services Agency of Japan."
+        "React dashboard visualizing Japanese immigration processing times using official data and predictive analytics.",
+        "Interactive stacked bar charts show application metrics with flexible time ranges up to 36 months.",
+        "Smart estimator tracks queue positions and predicts processing times using historical data analysis.",
+        "Built with React, Chart.js, and Tailwind CSS, featuring 3-month rolling averages for predictions.",
+        "Direct integration with Japan's e-Stat API ensures reliable, real-time immigration statistics."
       ],
       "links": [
         {
@@ -18,6 +22,12 @@
             {
               "website": "https://github.com/RetroHazard/JP_Immigration_Dashboard",
               "icon": "simple-icons:git"
+            }
+          ],
+          "link": [
+            {
+              "website": "https://dashboard.retrohazard.jp/",
+              "icon": "fa6-solid:globe"
             }
           ]
         }
