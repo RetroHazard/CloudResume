@@ -9,6 +9,6 @@ terraform {
 }
 
 provider "github" {
-  owner = "RetroHazard"
+  owner = var.github-organization
   token = var.github-token
 }

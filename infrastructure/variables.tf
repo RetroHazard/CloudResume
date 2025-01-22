@@ -25,12 +25,6 @@ variable "deployment_region" {
   type        = string
 }
 
-variable "hosted_zone_id" {
-  description = "Target Hosted Zone to Import during Initialization"
-  type        = string
-  sensitive   = true
-}
-
 variable "domain_name" {
   description = "Domain Name to be used for Deployment"
   type        = string
@@ -46,11 +40,13 @@ variable "api_current_stage" {
   type        = string
 }
 
-variable "tags" {
+variable "default_tags" {
   type        = map(string)
   description = "Default Tags, applied to all resources"
   default = {
-    ManagedByTerraform = true
+    ManagedByTerraform = "true",
+    GithubRepo         = "CloudResume",
+    GithubOrg          = "RetroHazard"
   }
 }
 

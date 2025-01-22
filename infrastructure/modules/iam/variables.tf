@@ -1,5 +1,3 @@
-data "aws_region" "current" {}
-
 variable "crc-visitor-record_arn" {
   type = string
 }
