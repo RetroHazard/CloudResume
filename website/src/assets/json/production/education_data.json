@@ -65,7 +65,7 @@
       ]
     },
     {
-      "school": "Centre for Arts and Technology",
+      "school": "College for Arts and Technology",
       "degree": "AS. Network Administration and Security",
       "location": "Kelowna, Canada",
       "category": "Computer Science",
@@ -82,13 +82,13 @@
         {
           "school": [
             {
-              "website": "https://digitalartschool.com/",
+              "website": "https://collegeforartsandtech.com/",
               "icon": "fa6-solid:globe"
             }
           ],
           "program": [
             {
-              "website": "https://digitalartschool.com/program/network-administration-security/",
+              "website": "https://collegeforartsandtech.com/program/network-administration-security/",
               "icon": "fa6-solid:circle-info"
             }
           ]
