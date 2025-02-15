@@ -78,26 +78,7 @@ resource "aws_s3_bucket" "crc-agb-s3-website-logging" {
 
 resource "aws_s3_bucket_policy" "crc-agb-s3-website-logging" {
   bucket = aws_s3_bucket.crc-agb-s3-website-logging.id
-
-  policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Sid    = "S3PolicyStmt-DO-NOT-MODIFY"
-        Effect = "Allow"
-        Principal = {
-          Service = "logging.s3.amazonaws.com"
-        }
-        Action   = "s3:PutObject"
-        Resource = "${aws_s3_bucket.crc-agb-s3-website-logging.arn}/*"
-        Condition = {
-          StringEquals = {
-            "aws:SourceAccount" = var.account_id
-          }
-        }
-      }
-    ]
-  })
+  policy = data.aws_iam_policy_document.crc-agb-s3-website-logging.json
 }
 
 resource "aws_s3_bucket_ownership_controls" "crc-agb-s3-website-logging" {
@@ -237,77 +218,6 @@ resource "aws_acm_certificate_validation" "crc-website-certificate-validation" {
   validation_record_fqdns = [for record in aws_route53_record.crc-new-hosted-zone-validation-record : record.fqdn]
 }
 
-#  End Certificates Block  #
-############################
-
-
-###########################
-# Begin Key Manager Block #
-/* Deprecated as per #61
-resource "aws_kms_alias" "crc-dnssec-key" {
-  name          = "alias/${var.sanitized-domain-name}_dnssec"
-  target_key_id = aws_kms_key.crc-dnssec-key.key_id
-}
-
-resource "aws_kms_key" "crc-dnssec-key" {
-
-  customer_master_key_spec = "ECC_NIST_P256"
-  description              = "Keys used for the purpose of signing DNSSEC"
-  enable_key_rotation      = "false"
-  is_enabled               = "true"
-  key_usage                = "SIGN_VERIFY"
-  multi_region             = "false"
-  deletion_window_in_days  = 7
-  policy = jsonencode({
-    Statement = [
-      {
-        Action = [
-          "kms:DescribeKey",
-          "kms:GetPublicKey",
-          "kms:Sign",
-        ],
-        Effect = "Allow"
-        Principal = {
-          Service = "dnssec-route53.amazonaws.com"
-        }
-        Sid      = "Allow Route 53 DNSSEC Service",
-        Resource = "*"
-      },
-      {
-        Action = "kms:CreateGrant",
-        Effect = "Allow"
-        Principal = {
-          Service = "dnssec-route53.amazonaws.com"
-        }
-        Sid      = "Allow Route 53 DNSSEC Service to CreateGrant",
-        Resource = "*"
-        Condition = {
-          Bool = {
-            "kms:GrantIsForAWSResource" = "true"
-          }
-        }
-      },
-      {
-        Action = "kms:*"
-        Effect = "Allow"
-        Principal = {
-          AWS = "*"
-        }
-        Resource = "*"
-        Sid      = "IAM User Permissions"
-      },
-    ]
-    Version = "2012-10-17"
-  })
-}
-*/
-#  End Key Manager Block  #
-###########################
-
-
-#######################
-# Begin Route53 Block #
-
 resource "aws_ses_domain_identity" "crc-ses-domain-id" {
   domain = var.domain-name
 }
@@ -433,46 +343,6 @@ resource "aws_route53_record" "crc-dns-zone-record-A" {
 
 #  End Route53 Block  #
 #######################
-
-###########################
-# Begin CloudWatch Alarms #
-
-/* Deprecated as per #61
-resource "aws_cloudwatch_metric_alarm" "crc-dnssec-internal-failure" {
-  alarm_name          = "DNSSEC Internal Failure"
-  alarm_description   = "Detects any objects within Hosted Zone as having a INTERNAL_FAILURE state"
-  namespace           = "AWS/Route53"
-  metric_name         = "DNSSECInternalFailure"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  statistic           = "Sum"
-  evaluation_periods  = 1
-  threshold           = 1
-  datapoints_to_alarm = 1
-  period              = 3600
-  dimensions = {
-    HostedZoneId = data.aws_route53_zone.crc-domain-name.id
-  }
-}
-
-resource "aws_cloudwatch_metric_alarm" "crc-dnssec-ksk-action-needed" {
-  alarm_name          = "DNSSEC KSK Action Needed"
-  alarm_description   = "Detects errors related to the Key Signing Key necessary for DNSSEC"
-  namespace           = "AWS/Route53"
-  metric_name         = "DNSSECKeySigningKeysNeedingAction"
-  comparison_operator = "GreaterThanOrEqualToThreshold"
-  statistic           = "Sum"
-  evaluation_periods  = 1
-  threshold           = 1
-  datapoints_to_alarm = 1
-  period              = 3600
-  dimensions = {
-    HostedZoneId = data.aws_route53_zone.crc-domain-name.id
-  }
-}
-*/
-
-#  End CloudWatch Alarms  #
-###########################
 
 
 ###########################

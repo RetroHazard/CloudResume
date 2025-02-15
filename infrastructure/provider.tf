@@ -12,6 +12,10 @@ terraform {
       source  = "hashicorp/archive"
       version = "~> 2.2.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0.0"
+    }
   }
 }
 
@@ -23,6 +27,6 @@ provider "aws" {
     role_arn = var.assume_role_target
   }
   default_tags {
-    tags = var.tags
+    tags = var.default_tags
   }
 }

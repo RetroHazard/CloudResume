@@ -1,3 +1,28 @@
+module "iam_github_oidc_provider" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider"
+}
+
+module "iam_github_s3_oidc_role" {
+  source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
+  subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
+  policies = {
+    S3Limited = module.iam.aws_iam_policy_document_crc-github-s3-actions_arn
+  }
+  path = "/CloudResume/"
+  name = "crc-github-s3-oidc-role"
+}
+
+module "iam_github_tf_oidc_role" {
+  source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
+  subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
+  policies = {
+    LimitedIAM   = module.iam.aws_iam_policy_document_crc-github-terraform-limited-iam_arn,
+    AWSPowerUser = "arn:aws:iam::aws:policy/PowerUserAccess"
+  }
+  path = "/CloudResume/"
+  name = "crc-github-tf-oidc-role"
+}
+
 module "iam" {
   source = "./modules/iam"
 
@@ -25,7 +50,6 @@ module "frontend" {
   api-current-stage     = var.api_current_stage
 
   api-gateway-cw-logs-role = module.iam.aws_iam_role_crc-api-CloudwatchLogs_arn
-  iam-s3-github-user       = module.iam.aws_iam_user_crc-iam-github-actions_arn
 
   waf-acl-arn               = module.backend.aws_wafv2_web_acl_crc-web-acl_arn
   api-lambda-contact-uri    = module.backend.aws_lambda_function_crc-sendMessage_uri
@@ -60,9 +84,11 @@ module "backend" {
 module "github" {
   source = "./modules/github"
 
-  crc-iam-github-access-key        = module.iam.aws_iam_access_key_crc-iam-github-key_key-id
-  crc-iam-github-secret-access-key = module.iam.aws_iam_access_key_crc-iam-github-key_secret-key
-  crc-s3-bucket-prod               = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_id
-  crc-api-endpoint                 = module.frontend.aws_api_gateway_crc-api-endpoint_fqdn
-  github-token                     = var.github_token
+  crc-s3-bucket-prod  = module.frontend.aws_s3_bucket_crc-agb-s3-website-prod_id
+  crc-api-endpoint    = module.frontend.aws_api_gateway_crc-api-endpoint_fqdn
+  crc-s3-oidc-role    = module.iam_github_s3_oidc_role.arn
+  crc-tf-oidc-role    = module.iam_github_tf_oidc_role.arn
+  github-token        = var.github_token
+  github-organization = var.default_tags.GithubOrg
+  github-repository   = var.default_tags.GithubRepo
 }

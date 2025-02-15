@@ -238,42 +238,7 @@ resource "aws_sqs_queue" "crc-cloudfront-invalidation-queue" {
 
 resource "aws_sqs_queue_policy" "crc_cloudfront_invalidation_queue_policy" {
   queue_url = aws_sqs_queue.crc-cloudfront-invalidation-queue.id
-  policy = jsonencode({
-    "Id" : "Policy1717464010087",
-    "Statement" : [
-      {
-        "Action" : "SQS:SendMessage",
-        "Condition" : {
-          "ArnLike" : {
-            "aws:SourceArn" : [
-              var.s3-bucket-production-arn
-            ]
-          },
-        },
-        "Effect" : "Allow",
-        "Principal" : {
-          "Service" : "s3.amazonaws.com"
-        },
-        "Resource" : data.aws_sqs_queue.crc_cloudfront_invalidation_queue.arn,
-        "Sid" : "Stmt1717463975055"
-      },
-      {
-        "Action" : [
-          "SQS:ChangeMessageVisibility",
-          "SQS:DeleteMessage",
-          "SQS:ReceiveMessage",
-          "SQS:GetQueueAttributes"
-        ],
-        "Effect" : "Allow",
-        "Principal" : {
-          "AWS" : var.iam-role-cloudfront-manager-arn
-        },
-        "Resource" : data.aws_sqs_queue.crc_cloudfront_invalidation_queue.arn,
-        "Sid" : "Stmt1717464008331"
-      }
-    ],
-    "Version" : "2012-10-17"
-  })
+  policy    = data.aws_iam_policy_document.crc_cloudfront_invalidation_queue_policy.json
 }
 
 #  End SQS Block  #

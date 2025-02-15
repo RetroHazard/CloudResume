@@ -1,13 +1,11 @@
-variable "crc-iam-github-access-key" {
-  description = "Access Key ID for GitHub S3 User"
+variable "github-organization" {
+  description = "GitHub User/Organization to Operate as"
   type        = string
-  sensitive   = true
 }
 
-variable "crc-iam-github-secret-access-key" {
-  description = "Secret Access Key for GitHub S3 User"
+variable "github-repository" {
+  description = "GitHub Repository to store Secrets/Variables in"
   type        = string
-  sensitive   = true
 }
 
 variable "crc-s3-bucket-prod" {
@@ -18,6 +16,18 @@ variable "crc-s3-bucket-prod" {
 variable "crc-api-endpoint" {
   description = "API Gateway Endpoint (FQDN + Stage)"
   type        = string
+}
+
+variable "crc-s3-oidc-role" {
+  description = "Role created by OIDC Module for GitHub to Assume"
+  type        = string
+  sensitive   = true
+}
+
+variable "crc-tf-oidc-role" {
+  description = "Role create by OIDC Module for Terraform to Assume"
+  type        = string
+  sensitive   = true
 }
 
 variable "github-token" {

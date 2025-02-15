@@ -1,10 +1,10 @@
 ##########################
 # Begin Core IAM Resources
 
-// IAM Policy Documents
+// Lambda Policy Documents
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
   statement {
-    sid    = "Statement1"
+    sid    = "Allow Function to Write to Cloudwatch"
     effect = "Allow"
 
     actions = [
@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
   statement {
-    sid    = "VisualEditor0"
+    sid    = "Allow Function to Read/Write to Specified DynamoDB Resources"
     effect = "Allow"
     actions = [
       "dynamodb:PutItem",
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-SendMessage-logging-policy" {
   statement {
-    sid    = "Statement1"
+    sid    = "Allow Function to Write to Cloudwatch"
     effect = "Allow"
 
     actions = [
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-logging-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
   statement {
-    sid    = "VisualEditor0"
+    sid    = "Allow Function to Generate Emails"
     effect = "Allow"
     actions = [
       "ses:SendEmail",
@@ -69,7 +69,7 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy" {
   statement {
-    sid    = "Statement1"
+    sid    = "Allow Function to Write to Cloudwatch"
     effect = "Allow"
 
     actions = [
@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy
 
 data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy" {
   statement {
-    sid    = "Stmt1505004397098"
+    sid    = "Allow Cloudfront Actions to Refresh Cache"
     effect = "Allow"
     actions = [
       "cloudfront:CreateInvalidation",
@@ -98,6 +98,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
   }
 
   statement {
+    sid    = "Allow S3 Actions to Determine Cloudfront Invalidations"
     effect = "Allow"
     actions = [
       "s3:Get*",
@@ -110,19 +111,92 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
   }
 }
 
-data "aws_iam_policy_document" "crc-s3-github-actions" {
+// Role Policy Documents
+data "aws_iam_policy_document" "crc-function-assume-role-policy" {
   statement {
-    sid    = "VisualEditor1"
+    sid     = "Assume Role Policy for Lambda and API Gateway"
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "apigateway.amazonaws.com",
+        "lambda.amazonaws.com"
+      ]
+    }
+  }
+}
+
+// GitHub Policy Documents
+data "aws_iam_policy_document" "crc-github-s3-actions" {
+  statement {
+    sid    = "Allow Access to GitHub Runner for S3 Upload"
     effect = "Allow"
     actions = [
       "s3:PutObject",
       "s3:GetObject",
-      "s3:ListBucket",
-      "s3:DeleteObject"
+      "s3:ListBucket"
     ]
     resources = [
       var.crc-s3-production-arn,
       "${var.crc-s3-production-arn}/*"
     ]
+  }
+}
+
+data "aws_iam_policy_document" "crc-github-terraform-limited-iam" {
+  statement {
+    sid    = "Allow Limited IAM Access for Terraform Operations"
+    effect = "Allow"
+    actions = [
+      "iam:CreateInstanceProfile",
+      "iam:List*",
+      "iam:Untag*",
+      "iam:Tag*",
+      "iam:RemoveRoleFromInstanceProfile",
+      "iam:DeletePolicy",
+      "iam:CreateRole",
+      "iam:AttachRolePolicy",
+      "iam:PutRolePolicy",
+      "iam:AddRoleToInstanceProfile",
+      "iam:PassRole",
+      "iam:Get*",
+      "iam:DetachRolePolicy",
+      "iam:DeleteRolePolicy",
+      "iam:CreatePolicyVersion",
+      "iam:DeleteInstanceProfile",
+      "iam:DeleteRole",
+      "iam:UpdateRoleDescription",
+      "iam:CreatePolicy",
+      "iam:CreateServiceLinkedRole",
+      "iam:UpdateRole",
+      "iam:DeleteServiceLinkedRole",
+      "iam:DeletePolicyVersion",
+      "iam:SetDefaultPolicyVersion",
+      "iam:AttachUserPolicy",
+      "iam:DetachUserPolicy",
+      "iam:PutUserPolicy",
+      "iam:DeleteUserPolicy",
+      "iam:AddUserToGroup",
+      "iam:AttachGroupPolicy",
+      "iam:CreateGroup",
+      "iam:DeleteGroup",
+      "iam:DeleteGroupPolicy",
+      "iam:DetachGroupPolicy",
+      "iam:GetGroup",
+      "iam:GetGroupPolicy",
+      "iam:ListAttachedGroupPolicies",
+      "iam:ListGroupPolicies",
+      "iam:ListGroups",
+      "iam:ListGroupsForUser",
+      "iam:PutGroupPolicy",
+      "iam:RemoveUserFromGroup",
+      "iam:UpdateGroup",
+      "iam:GenerateServiceLastAccessedDetails",
+      "iam:UpdateAssumeRolePolicy",
+      "iam:UpdateAccessKey"
+    ]
+    resources = ["*"]
   }
 }

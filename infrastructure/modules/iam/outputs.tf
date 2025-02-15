@@ -18,16 +18,11 @@ output "aws_iam_role_crc-VisitorTracker_arn" {
   value = aws_iam_role.crc-VisitorTracker.arn
 }
 
-output "aws_iam_user_crc-iam-github-actions_arn" {
-  value = aws_iam_user.crc-iam-github-actions.arn
+// IAM Policy Documents
+output "aws_iam_policy_document_crc-github-s3-actions_arn" {
+  value = aws_iam_policy.crc-GitHub-S3Actions.arn
 }
 
-output "aws_iam_access_key_crc-iam-github-key_key-id" {
-  value     = aws_iam_access_key.crc-iam-github-key.id
-  sensitive = true
-}
-
-output "aws_iam_access_key_crc-iam-github-key_secret-key" {
-  value     = aws_iam_access_key.crc-iam-github-key.secret
-  sensitive = true
+output "aws_iam_policy_document_crc-github-terraform-limited-iam_arn" {
+  value = aws_iam_policy.crc-GitHub-Terraform-LimitedIAM.arn
 }
