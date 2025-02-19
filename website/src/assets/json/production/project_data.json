@@ -10,11 +10,11 @@
       "end": "NOW",
       "logo": "./images/logos/companies/hollowsouls.png",
       "details": [
-        "React dashboard visualizing Japanese immigration processing times using official data and predictive analytics.",
-        "Interactive stacked bar charts show application metrics with flexible time ranges up to 36 months.",
-        "Smart estimator tracks queue positions and predicts processing times using historical data analysis.",
-        "Built with React, Chart.js, and Tailwind CSS, featuring 3-month rolling averages for predictions.",
-        "Direct integration with Japan's e-Stat API ensures reliable, real-time immigration statistics."
+        "Designed and launched a React-based immigration statistics dashboard, attracting over 2,000 unique users in the first 30 days of availability.",
+        "Developed customizable charts (stacked bar, radar, bubble) with dynamic filtering to analyze application trends and processing efficiency.",
+        "Built a processing time estimator using historical trends and 3-month rolling averages to forecast queue positions and completion dates.",
+        "Utilized React, Chart.js, and Tailwind CSS to deliver a mobile-friendly, visually appealing interface with theme support.",
+        "Connected to Japan’s e-Stat API for accurate immigration statistics, ensuring reliability and up-to-date insights for users."
       ],
       "links": [
         {
