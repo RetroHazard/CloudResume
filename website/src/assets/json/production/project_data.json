@@ -18,21 +18,26 @@
       ],
       "links": [
         {
-          "repo": [
-            {
-              "website": "https://github.com/RetroHazard/JP_Immigration_Dashboard",
-              "icon": "simple-icons:git"
-            }
-          ],
           "link": [
             {
               "website": "https://dashboard.retrohazard.jp/",
               "icon": "fa6-solid:globe"
             }
+          ],
+          "repo": [
+            {
+              "website": "https://github.com/RetroHazard/JP_Immigration_Dashboard",
+              "icon": "simple-icons:git"
+            }
           ]
         }
       ],
       "technologies": [
+        {
+          "name": "Next.js",
+          "logo": "simple-icons:nextdotjs",
+          "website": "https://nextjs.org/"
+        },
         {
           "name": "React",
           "logo": "simple-icons:react",
@@ -42,6 +47,11 @@
           "name": "Node.js",
           "logo": "simple-icons:nodedotjs",
           "website": "https://nodejs.org/en"
+        },
+        {
+          "name": "TypeScript",
+          "logo": "simple-icons:typescript",
+          "website": "https://www.typescriptlang.org/"
         },
         {
           "name": "tailwindCSS",
@@ -54,9 +64,9 @@
           "website": "https://www.chartjs.org"
         },
         {
-          "name": "Python",
-          "logo": "simple-icons:python",
-          "website": "https://www.python.org"
+          "name": "KaTeX",
+          "logo": "file-icons:latex",
+          "website": "https://katex.org"
         },
         {
           "name": "GitHub",

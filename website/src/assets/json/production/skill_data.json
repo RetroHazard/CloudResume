@@ -10,37 +10,37 @@
     {
       "name": "Microsoft Azure",
       "category": "Cloud",
-      "level": "10%",
+      "level": "14%",
       "logo": "skill-icons:azure-light",
       "website": "https://azure.microsoft.com/"
     },
     {
       "name": "Google Cloud Platform",
       "category": "Cloud",
-      "level": "10%",
+      "level": "12%",
       "logo": "skill-icons:gcp-light",
       "website": "https://cloud.google.com/"
     },
     {
       "name": "Terraform",
       "category": "Automation",
-      "level": "60%",
+      "level": "65%",
       "logo": "skill-icons:terraform-light",
       "website": "https://www.terraform.io/"
     },
     {
       "name": "Docker",
-      "category": "Platform",
-      "level": "30%",
+      "category": "Containerization",
+      "level": "37%",
       "logo": "skill-icons:docker",
       "website": "https://www.docker.com/"
     },
     {
       "name": "Kubernetes",
       "category": "Orchestration",
-      "level": "10%",
+      "level": "30%",
       "logo": "skill-icons:kubernetes",
-      "website": "https://www.docker.com/"
+      "website": "https://kubernetes.io/"
     },
     {
       "name": "Unreal Engine",
@@ -52,7 +52,7 @@
     {
       "name": "Github",
       "category": "Source Control",
-      "level": "60%",
+      "level": "65%",
       "logo": "skill-icons:github-light",
       "website": "https://github.com/"
     },
@@ -80,30 +80,37 @@
     {
       "name": "BASh",
       "category": "Command Language",
-      "level": "65%",
+      "level": "70%",
       "logo": "skill-icons:bash-light",
       "website": "https://www.gnu.org/software/bash/"
     },
     {
-      "name": "Perl",
+      "name": "JavaScript",
       "category": "Scripting Language",
-      "level": "30%",
-      "logo": "skill-icons:perl",
-      "website": "https://www.perl.org/"
-    },
-    {
-      "name": "Javascript",
-      "category": "Scripting Language",
-      "level": "30%",
+      "level": "35%",
       "logo": "skill-icons:javascript",
       "website": "https://developer.oracle.com/languages/javascript.html"
     },
     {
+      "name": "TypeScript",
+      "category": "Scripting Language",
+      "level": "30%",
+      "logo": "skill-icons:typescript",
+      "website": "https://www.typescriptlang.org"
+    },
+    {
       "name": "Node.js",
       "category": "Software",
-      "level": "40%",
-      "logo": "devicon:nodejs",
+      "level": "30%",
+      "logo": "skill-icons:nodejs-light",
       "website": "https://nodejs.org"
+    },
+    {
+      "name": "Next.js",
+      "category": "Framework",
+      "level": "35%",
+      "logo": "skill-icons:nextjs-light",
+      "website": "https://nextjs.org/"
     },
     {
       "name": "React",
@@ -132,13 +139,6 @@
       "level": "55%",
       "logo": "skill-icons:blender-dark",
       "website": "https://www.blender.org/"
-    },
-    {
-      "name": "Google Workspace",
-      "category": "Software",
-      "level": "85%",
-      "logo": "flat-color-icons:google",
-      "website": "https://www.google.com"
     },
     {
       "name": "Creative Cloud",
@@ -170,11 +170,6 @@
     }
   ],
   "target_skills": [
-    {
-      "name": "Next.js",
-      "logo": "simple-icons:nextdotjs",
-      "website": "https://nextjs.org/"
-    },
     {
       "name": "Go",
       "logo": "simple-icons:go",

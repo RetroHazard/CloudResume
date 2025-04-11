@@ -69,10 +69,10 @@
       "logo": "./images/logos/companies/indeed.png",
       "website": "https://www.indeed.com/",
       "details": [
-        "Designed, documented, and successfully implemented the company's Global Enterprise Printing Solution, providing reliable and scalable printing services to over 10,000 users across multiple locations.",
-        "Led the IT Service Desk team, ensuring timely resolution of technical issues while maintaining clear and effective communication with stakeholders to align support services with business needs.",
-        "Oversaw inventory management for IT hardware and software assets, ensuring accurate tracking, procurement planning, and compliance with organizational policies.",
-        "Directed IT service-related projects from initiation to completion, streamlining workflows, optimizing service delivery processes, and driving continuous improvement initiatives to enhance user satisfaction."
+        "Chief architect and implementation lead for a Global Enterprise Printing Solution based in the cloud, improving printing reliability and scalability for over 10,000 users across multiple locations, reducing print-related issues by 80%, reducing costs by 45%, and increasing user satisfaction by 25%.",
+        "Implemented a comprehensive IT asset and inventory management system, achieving 99% accuracy in asset tracking, reducing procurement costs by 15%, and ensuring 100% compliance with organizational policies.",
+        "Led process improvement initiatives and streamlined workflows, reducing average ticket resolution time by 30% and increasing user satisfaction scores by 20%.",
+        "Led the IT Service Desk team, ensuring timely resolution of technical issues while maintaining clear and effective communication with stakeholders to align support services with business needs."
       ],
       "technologies": [
         {
