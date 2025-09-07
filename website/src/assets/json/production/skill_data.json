@@ -43,6 +43,13 @@
       "website": "https://kubernetes.io/"
     },
     {
+      "name": "Okta",
+      "category": "Security",
+      "level": "35%",
+      "logo": "devicon-plain:okta",
+      "website": "https://www.okta.com/"
+    },
+    {
       "name": "Unreal Engine",
       "category": "Game Development",
       "level": "60%",

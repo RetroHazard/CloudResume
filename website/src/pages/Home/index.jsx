@@ -84,9 +84,9 @@ function Home() {
                         <div className='flex flex-col gap-4'>
                             <PersonalSummary />
                             <div className='flex flex-wrap gap-3'>
-                                <div className='open-for-block'>Open for work</div>
+                                {/*<div className='open-for-block'>Open for work</div>*/}
                                 <div className='open-for-block'>Available for consulting</div>
-                                <div className='open-for-block'>Looking to learn</div>
+                                {/*<div className='open-for-block'>Looking to learn</div>*/}
                                 <div className='open-for-block'>Working on side project</div>
                             </div>
                         </div>
