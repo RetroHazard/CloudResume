@@ -94,8 +94,4 @@ module "github" {
   github-token        = var.github_token
   github-organization = var.default_tags.GithubOrg
   github-repository   = var.default_tags.GithubRepo
-
-  # Legacy credentials (retained during OIDC migration — remove in follow-up PR)
-  crc-iam-github-access-key        = module.iam.aws_iam_access_key_crc-iam-github-key_key-id
-  crc-iam-github-secret-access-key = module.iam.aws_iam_access_key_crc-iam-github-key_secret-key
 }
