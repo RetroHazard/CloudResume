@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Check last Terraform run status
         id: check_tf_status
@@ -56,10 +56,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           aws-region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
           role-to-assume: ${{ secrets.AWS_S3_OIDC_ROLE }}

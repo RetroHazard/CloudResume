@@ -1,16 +1,3 @@
-// Legacy credential variables (retained during OIDC migration — remove in follow-up PR)
-variable "crc-iam-github-access-key" {
-  description = "Access Key ID for GitHub S3 User"
-  type        = string
-  sensitive   = true
-}
-
-variable "crc-iam-github-secret-access-key" {
-  description = "Secret Access Key for GitHub S3 User"
-  type        = string
-  sensitive   = true
-}
-
 variable "github-organization" {
   description = "GitHub User/Organization to Operate as"
   type        = string
@@ -38,7 +25,7 @@ variable "crc-s3-oidc-role" {
 }
 
 variable "crc-tf-oidc-role" {
-  description = "Role create by OIDC Module for Terraform to Assume"
+  description = "Role created by OIDC Module for Terraform to Assume"
   type        = string
   sensitive   = true
 }
