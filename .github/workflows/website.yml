@@ -11,14 +11,15 @@ on:
     paths:
       - 'website/**'
 
-permissions:
-  id-token: write
-  contents: read
+permissions: {}
 
 jobs:
   check_infrastructure:
     name: Check Terraform Status
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
     outputs:
       status: ${{ steps.check_tf_status.outputs.status }}
 
@@ -59,6 +60,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - check_infrastructure
+    permissions:
+      contents: read
 
     if: ${{ needs.check_infrastructure.outputs.status == 'success' }}
 
@@ -69,7 +72,7 @@ jobs:
         id: cache-node
         uses: actions/cache@v5
         with:
-          path: | 
+          path: |
             **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('website/package-lock.json') }}
       - name: install dependencies
@@ -80,6 +83,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - setup
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@v6
@@ -88,7 +93,7 @@ jobs:
         id: cache-node
         uses: actions/cache@v5
         with:
-          path: | 
+          path: |
             **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('website/package-lock.json') }}
       - name: Run Tests on Website Components
@@ -100,6 +105,8 @@ jobs:
     needs:
       - setup
       - website_tests
+    permissions:
+      contents: read
     outputs:
       status: ${{ steps.mark_prod_build_success.outputs.success }}
 
@@ -112,7 +119,7 @@ jobs:
         id: cache-node
         uses: actions/cache@v5
         with:
-          path: | 
+          path: |
             **/node_modules
           key: ${{ runner.os }}-${{ hashFiles('website/package-lock.json') }}
 
@@ -142,6 +149,9 @@ jobs:
     needs:
       - setup
       - build_prod
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout repository
