@@ -1,5 +1,4 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
 import Navigation from '../components/navbar';

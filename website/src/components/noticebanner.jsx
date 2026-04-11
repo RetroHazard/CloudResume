@@ -3,7 +3,7 @@ import React from 'react';
 import { Icon } from '@iconify-icon/react';
 
 function NoticeBanner() {
-    if (process.env.REACT_APP_DATA_SET === 'development') {
+    if (import.meta.env.VITE_DATA_SET === 'development') {
         return (
             <div className='inline-flex w-full flex-row flex-nowrap justify-center'>
                 <div className='flex h-20 w-fit justify-center rounded-b-xl bg-secondary-600'>

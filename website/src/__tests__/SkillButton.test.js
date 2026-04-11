@@ -1,8 +1,7 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import SkillButton from '../components/skill_button';
 
-jest.mock('../utils/dataLoader', () => ({
+vi.mock('../utils/dataLoader', () => ({
     __esModule: true,
     default: ({ children }) =>
         children({

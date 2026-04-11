@@ -1,12 +1,10 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import SkillHighlight from '../components/skill_highlight';
 
 // Mock the DataLoader component
-jest.mock('../utils/dataLoader', () => ({
+vi.mock('../utils/dataLoader', () => ({
     __esModule: true,
-    default: ({ file, children }) => children({
+    default: ({ children }) => children({
         core_skills: [
             {
                 name: 'Skill A',

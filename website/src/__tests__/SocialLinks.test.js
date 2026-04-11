@@ -1,10 +1,8 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import SocialLinks from '../components/social_links';
 
 // Mock the DataLoader component
-jest.mock('../utils/dataLoader', () => ({ children }) => {
+vi.mock('../utils/dataLoader', () => {
     const generateRandomSocials = () => {
         const numberOfSocials = Math.floor(Math.random() * 5) + 1; // Random number between 1 and 5
         return {
@@ -17,13 +15,17 @@ jest.mock('../utils/dataLoader', () => ({ children }) => {
         };
     };
 
-    const data = generateRandomSocials();
-    return children(data);
+    return {
+        default: ({ children }) => {
+            const data = generateRandomSocials();
+            return children(data);
+        },
+    };
 });
 
 describe('SocialLinks Component', () => {
     test('renders the correct number of social links', () => {
-        const { container } = render(<SocialLinks />);
+        render(<SocialLinks />);
 
         const socialLinks = screen.getAllByRole('link');
         const numberOfLinks = socialLinks.length;

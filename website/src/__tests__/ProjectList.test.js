@@ -1,6 +1,4 @@
-import React from 'react';
 import { render } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 import ProjectList from '../components/project_list';
 
 // Sample JSON data
@@ -64,7 +62,7 @@ const sampleData = {
 };
 
 // Mock the DataLoader component
-jest.mock('../utils/dataLoader', () => ({
+vi.mock('../utils/dataLoader', () => ({
     __esModule: true,
     default: ({ children }) => children(sampleData),
 }));

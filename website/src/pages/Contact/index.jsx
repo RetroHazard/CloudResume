@@ -39,7 +39,7 @@ const ContactForm = () => {
             let responseStatus = 'success'; // Default to success, change to error if necessary
 
             try {
-                const response = await fetch(`${process.env.REACT_APP_AWS_API_ENDPOINT}/contact?uuid=${uuid}`, {
+                const response = await fetch(`${import.meta.env.VITE_AWS_API_ENDPOINT}/contact?uuid=${uuid}`, {
                     method: 'POST',
                     mode: 'cors',
                     cache: 'no-cache',
@@ -156,7 +156,7 @@ const ContactForm = () => {
                 ></textarea>
             </div>
             <div className='flex flex-col gap-y-3'>
-                <ReCAPTCHA sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY} ref={captchaRef} />
+                <ReCAPTCHA sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY} ref={captchaRef} />
                 <button
                     type='submit'
                     className={

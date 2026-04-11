@@ -1,10 +1,11 @@
 export const jsonLoader = async (fileName) => {
-    const envPath = process.env.REACT_APP_DATA_SET;
-    const context = require.context('../assets/json/', true, /\.json$/);
+    const envPath = import.meta.env.VITE_DATA_SET;
+    const modules = import.meta.glob('../assets/json/**/*.json');
+    const key = `../assets/json/${envPath}/${fileName}`;
 
     try {
-        const dataModule = context(`./${envPath}/${fileName}`);
-        return dataModule;
+        const module = await modules[key]();
+        return module.default;
     } catch (error) {
         console.error('Error loading JSON file:', error);
         throw error;
