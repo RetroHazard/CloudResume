@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Check last Terraform run status
         id: check_tf_status
@@ -63,11 +63,11 @@ jobs:
     if: ${{ needs.check_infrastructure.outputs.status == 'success' }}
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
       - name: cache node modules
         id: cache-node
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: | 
             **/node_modules
@@ -82,11 +82,11 @@ jobs:
       - setup
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
       - name: restore node modules
         id: cache-node
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: | 
             **/node_modules
@@ -106,11 +106,11 @@ jobs:
     if: ${{ needs.website_tests.result == 'success' }}
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
       - name: restore node modules
         id: cache-node
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: | 
             **/node_modules
@@ -126,7 +126,7 @@ jobs:
         run: npm run build-prod
 
       - name: Save cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             **/build
@@ -145,11 +145,11 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Restore cache from Prod
         if: ${{ needs.build_prod.outputs.status == 'true' }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             **/build
@@ -158,7 +158,7 @@ jobs:
             ${{ runner.os }}-build-prod-
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         with:
           aws-region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
           role-to-assume: ${{ secrets.AWS_S3_OIDC_ROLE }}
@@ -166,9 +166,6 @@ jobs:
 
       - name: Upload to S3
         env:
-          SOURCE_DIR: website/build/prod/
           AWS_S3_BUCKET: ${{ needs.build_prod.outputs.status == 'true' && secrets.AWS_S3_BUCKET_PROD }}
-
         run: |
-          cd ${{ env.SOURCE_DIR }}
-          aws s3 cp ./* s3://${{ env.AWS_S3_BUCKET }}/ --recursive
+          aws s3 sync build/prod/ s3://${{ env.AWS_S3_BUCKET }}/ --delete
