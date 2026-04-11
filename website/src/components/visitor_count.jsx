@@ -18,7 +18,7 @@ function VisitorCount() {
                 }
 
                 // Send the visitorId as a query parameter
-                let response = await fetch(`${process.env.REACT_APP_AWS_API_ENDPOINT}/visitors?visitorId=${visitorId}`, {
+                let response = await fetch(`${import.meta.env.VITE_AWS_API_ENDPOINT}/visitors?visitorId=${visitorId}`, {
                     method: 'GET',
                 });
 

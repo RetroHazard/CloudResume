@@ -1,7 +1,7 @@
 import React from 'react';
 
 function PersonalSummary() {
-    if (process.env.REACT_APP_DATA_SET === 'development') {
+    if (import.meta.env.VITE_DATA_SET === 'development') {
         return (
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
@@ -22,7 +22,7 @@ function PersonalSummary() {
                 </p>
             </>
         );
-    } else if (process.env.REACT_APP_DATA_SET === 'production') {
+    } else if (import.meta.env.VITE_DATA_SET === 'production') {
         return (
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>

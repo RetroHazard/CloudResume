@@ -1,4 +1,3 @@
-import React from "react";
 import { render, screen } from "@testing-library/react";
 import Certifications from "../pages/Certifications";
 import Education from "../pages/Education";
@@ -14,13 +13,13 @@ import SkillButton from "../components/skill_button";
 import LanguageItem from "../components/language_item";
 
 // Mock components or functions
-jest.mock("../components/certification_list", () => jest.fn());
-jest.mock("../components/education_list", () => jest.fn());
-jest.mock("../components/experience_list", () => jest.fn());
-jest.mock("../components/project_list", () => jest.fn());
-jest.mock("../components/skill_highlight", () => jest.fn());
-jest.mock("../components/skill_button", () => jest.fn());
-jest.mock("../components/language_item", () => jest.fn());
+vi.mock("../components/certification_list", () => ({ default: vi.fn() }));
+vi.mock("../components/education_list", () => ({ default: vi.fn() }));
+vi.mock("../components/experience_list", () => ({ default: vi.fn() }));
+vi.mock("../components/project_list", () => ({ default: vi.fn() }));
+vi.mock("../components/skill_highlight", () => ({ default: vi.fn() }));
+vi.mock("../components/skill_button", () => ({ default: vi.fn() }));
+vi.mock("../components/language_item", () => ({ default: vi.fn() }));
 
 describe("Content Pages", () => {
     test("Certifications page renders correctly, calls CertificationList, and matches snapshot", () => {

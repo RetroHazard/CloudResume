@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Home from '../pages/Home/index';
 
@@ -15,13 +14,13 @@ const mockData = {
 };
 
 // Mock the DataLoader component
-jest.mock('../utils/dataLoader', () => ({
+vi.mock('../utils/dataLoader', () => ({
     __esModule: true,
     default: ({ children }) => children(mockData),
 }));
 
 // Mock the SocialLinks component
-jest.mock('../components/social_links', () => ({
+vi.mock('../components/social_links', () => ({
     __esModule: true,
     default: () => null, // Mocking the component behavior without rendering its content
 }));
