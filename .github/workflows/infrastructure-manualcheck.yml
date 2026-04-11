@@ -6,9 +6,7 @@ defaults:
 
 on: workflow_dispatch
 
-permissions:
-  id-token: write
-  contents: read
+permissions: {}
 
 env:
   GITHUB_TOKEN: ${{ secrets.PAT }}
@@ -21,6 +19,9 @@ env:
 jobs:
   validation:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout Code

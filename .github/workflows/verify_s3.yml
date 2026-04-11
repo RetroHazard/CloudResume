@@ -6,14 +6,15 @@ defaults:
 
 on: workflow_dispatch
 
-permissions:
-  id-token: write
-  contents: read
+permissions: {}
 
 jobs:
   check_infrastructure:
     name: Check Terraform Status
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
     outputs:
       status: ${{ steps.check_tf_status.outputs.status }}
 
@@ -53,6 +54,9 @@ jobs:
     name: Upload to S3
     runs-on: ubuntu-latest
     needs: check_infrastructure
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout repository
