@@ -71,7 +71,7 @@ jobs:
         with:
           path: | 
             **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('website/package-lock.json') }}
       - name: install dependencies
         run: npm ci
 
@@ -90,7 +90,7 @@ jobs:
         with:
           path: | 
             **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('website/package-lock.json') }}
       - name: Run Tests on Website Components
         run: npm run test
 
@@ -114,7 +114,7 @@ jobs:
         with:
           path: | 
             **/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('website/package-lock.json') }}
 
       - name: 'Create env file'
         run: |
