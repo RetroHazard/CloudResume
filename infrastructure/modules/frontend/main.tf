@@ -38,7 +38,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "crc-agb-s3-website-prod" {
 
     expiration {
       expired_object_delete_marker = true
-      days                         = 0
     }
 
     noncurrent_version_expiration {
