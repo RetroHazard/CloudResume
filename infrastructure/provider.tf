@@ -12,17 +12,16 @@ terraform {
       source  = "hashicorp/archive"
       version = "~> 2.2.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0.0"
+    }
   }
 }
 
 provider "aws" {
-  region     = var.deployment_region
-  access_key = var.aws_access_key_id
-  secret_key = var.aws_secret_access_key
-  assume_role {
-    role_arn = var.assume_role_target
-  }
+  region = var.deployment_region
   default_tags {
-    tags = var.tags
+    tags = var.default_tags
   }
 }

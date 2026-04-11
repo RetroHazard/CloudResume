@@ -18,6 +18,16 @@ output "aws_iam_role_crc-VisitorTracker_arn" {
   value = aws_iam_role.crc-VisitorTracker.arn
 }
 
+// IAM Policy Documents
+output "aws_iam_policy_document_crc-github-s3-actions_arn" {
+  value = aws_iam_policy.crc-S3-GitHubActions.arn
+}
+
+output "aws_iam_policy_document_crc-github-terraform-limited-iam_arn" {
+  value = aws_iam_policy.crc-GitHub-Terraform-LimitedIAM.arn
+}
+
+// Legacy IAM User outputs (retained during OIDC migration — remove in follow-up PR)
 output "aws_iam_user_crc-iam-github-actions_arn" {
   value = aws_iam_user.crc-iam-github-actions.arn
 }
