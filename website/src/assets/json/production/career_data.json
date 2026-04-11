@@ -1,80 +1,58 @@
 {
   "Experience": [
     {
-      "company": "Hollow Souls",
-      "job_title": "Independant Developer",
+      "company": "BitMEX",
+      "job_title": "Senior IAM Solutions Engineer",
       "location": "Remote",
-      "type": "Freelance",
-      "start": "2020",
-      "end": "NOW",
-      "logo": "./images/logos/companies/hollowsouls.png",
-      "website": "https://www.hollowsouls.com",
+      "type": "Contract",
+      "start": "2025-09",
+      "end": "---",
+      "logo": "./images/logos/companies/bitmex.png",
+      "website": "https://bitmex.com/",
       "details": [
-        "Designed and built game components using Blueprint and C++.",
-        "Created detailed 3D models and visual effects for interactive media.",
-        "Developed user interfaces with a focus on intuitive and engaging user experiences.",
-        "Implemented and managed cloud-based solutions for scalable and reliable application support.",
-        "Produced and integrated digital media assets, enhancing overall project quality and engagement."
       ],
       "technologies": [
-        {
-          "name": "C++",
-          "logo": "ph:file-cpp-fill",
-          "website": "https://cplusplus.com/"
-        },
-        {
-          "name": "Blender",
-          "logo": "simple-icons:blender",
-          "website": "https://www.blender.org/"
-        },
-        {
-          "name": "Unreal Engine",
-          "logo": "simple-icons:unrealengine",
-          "website": "https://www.unrealengine.com/"
-        },
-        {
-          "name": "Perforce",
-          "logo": "simple-icons:perforce",
-          "website": "https://www.perforce.com/"
-        },
-        {
-          "name": "Jetbrains Rider",
-          "logo": "simple-icons:rider",
-          "website": "https://www.jetbrains.com/rider/"
-        },
-        {
-          "name": "Creative Cloud",
-          "logo": "simple-icons:adobecreativecloud",
-          "website": "https://www.adobe.com/creativecloud.html"
-        },
-        {
-          "name": "Houdini",
-          "logo": "simple-icons:houdini",
-          "website": "https://www.sidefx.com/"
-        },
         {
           "name": "AWS",
           "logo": "simple-icons:amazonaws",
           "website": "https://aws.amazon.com/"
+        },
+        {
+          "name": "Terraform",
+          "logo": "simple-icons:terraform",
+          "website": "https://www.terraform.io/"
+        },
+        {
+          "name": "Google Suite",
+          "logo": "simple-icons:google",
+          "website": "https://www.google.com"
+        },
+        {
+          "name": "Okta",
+          "logo": "simple-icons:okta",
+          "website": "https://www.okta.com/"
+        },
+        {
+          "name": "Python",
+          "logo": "simple-icons:python",
+          "website": "https://www.python.org"
         }
       ]
     },
     {
       "company": "Indeed",
-      "job_title": "Lead, IT Support",
+      "job_title": "Lead, IT Solutions",
       "location": "Tokyo, Japan",
       "type": "Full Time",
-      "start": "2023",
-      "end": "NOW",
+      "start": "2021-04",
+      "end": "2025-09",
       "logo": "./images/logos/companies/indeed.png",
       "website": "https://www.indeed.com/",
       "details": [
-        "Managed IT equipment and resources for Indeed's R&D offices, supporting over 700 users during WFH and Hybrid/RTO periods.",
-        "Ensured balanced utilization of team and resources, maintaining consistency in ticket resolution, training, and project work.",
-        "Designed, documented, and globally deployed Indeed's Enterprise Printing Solution for over 18,000 users.",
-        "Monitored team performance against SLAs and SLOs, ensuring customer-centric service delivery.",
-        "Conducted interviews and hired additional support resources to enhance team capabilities.",
-        "Developed and maintained effective communication channels with senior management, clients, and team members."
+        "Architecture and implementation lead for a Secure Global Printing Solution, improving printing reliability and scalability for over 10,000 users in Indeed offices around the world, reducing print-related issues by over 80%, reducing costs by up to 45%, and increasing user satisfaction by roughly 25%.",
+        "Implemented a comprehensive IT asset and inventory management system, achieving 99% accuracy in asset tracking, reducing procurement costs by 15%, and ensuring 100% compliance with organizational policies.",
+        "Led process improvement initiatives and streamlined workflows, reducing average ticket resolution time by 30% and increasing user satisfaction scores by 20%.",
+        "Led the IT Service Desk team, ensuring timely resolution of technical issues while maintaining clear and effective communication with stakeholders to align support services with business needs."
       ],
       "technologies": [
         {
@@ -115,62 +93,19 @@
       ]
     },
     {
-      "company": "Indeed",
-      "job_title": "L2 Support Engineer",
-      "location": "Tokyo, Japan",
-      "type": "Full Time",
-      "start": "2021",
-      "end": "2023",
-      "logo": "./images/logos/companies/indeed.png",
-      "website": "https://www.indeed.com/",
-      "details": [
-        "Technical Troubleshooting and Support: Provided direct customer support and resolved software and hardware issues across diverse technical disciplines, including client computing, infrastructure, networking, and system security.",
-        "Network Device and Server Management: Collaborated with Infrastructure teams to troubleshoot, install, and manage network devices and servers, ensuring seamless connectivity and system functionality.",
-        "Technical Project Execution: Completed various technical projects and tasks, demonstrating adaptability and proactive problem-solving to enhance team productivity and end-user satisfaction."
-      ],
-      "technologies": [
-        {
-          "name": "Atlassian Suite",
-          "logo": "simple-icons:atlassian",
-          "website": "https://www.atlassian.com"
-        },
-        {
-          "name": "Google Suite",
-          "logo": "simple-icons:google",
-          "website": "https://www.google.com"
-        },
-        {
-          "name": "Python",
-          "logo": "simple-icons:python",
-          "website": "https://www.python.org/"
-        },
-        {
-          "name": "Linux",
-          "logo": "simple-icons:linux",
-          "website": "https://www.linux.org/"
-        },
-        {
-          "name": "macOS",
-          "logo": "simple-icons:apple",
-          "website": "https://www.apple.com"
-        }
-      ]
-    },
-    {
       "company": "University of Calgary",
-      "job_title": "Systems Support Specialist",
+      "job_title": "Senior Systems Specialist",
       "location": "Calgary, Canada",
       "type": "Contract",
-      "start": "2017",
-      "end": "2021",
+      "start": "2017-05",
+      "end": "2021-01",
       "logo": "./images/logos/companies/uofc.png",
       "website": "https://www.ucalgary.ca/",
       "details": [
-        "Documented technology-related inquiries and solutions to compile comprehensive knowledge-base resources.",
-        "Provided technical support and troubleshooting to optimize system performance.",
-        "Coordinated technical communications and instructions to enhance organizational IT effectiveness.",
-        "Responded to service requests, delivering resolutions based on industry knowledge.",
-        "Updated departmental documentation, including license databases, infrastructure maps, and FAQs, to maintain consistent response levels."
+        "Managed and supported Office 365 and Azure Active Directory environments, including user account provisioning, group management, and troubleshooting authentication issues to ensure seamless operations for the Faculty of Arts department.",
+        "Administered Active Directory for user access control and resource management while providing enterprise-level support for both Windows and Mac systems in a mixed-platform environment.",
+        "Planned and executed system updates, security patches, and hardware upgrades across departmental servers and workstations to maintain optimal performance and compliance with institutional standards.",
+        "Delivered technical support to faculty and staff, resolving hardware, software, and connectivity issues efficiently while conducting training sessions to enhance user proficiency with enterprise tools."
       ],
       "technologies": [
         {
@@ -197,20 +132,18 @@
     },
     {
       "company": "Pythian",
-      "job_title": "Systems Administrator",
+      "job_title": "Site Reliability Engineer",
       "location": "Ottawa, Canada",
       "type": "Contract",
-      "start": "2014",
-      "end": "2014",
+      "start": "2014-04",
+      "end": "2014-11",
       "logo": "./images/logos/companies/pythian.png",
       "website": "https://www.pythian.com/",
       "details": [
-        "Conducted remote and onsite testing and troubleshooting for client server infrastructures to ensure operational readiness.",
-        "Managed and supported critical public infrastructure systems, ensuring their reliability and security.",
-        "Implemented inventory control measures to maintain and replenish IT equipment, supplies, tools, and replacement parts.",
-        "Developed modification and integration programs to ensure software compatibility.",
-        "Monitored networks and devices to promptly resolve technical problems.",
-        "Provided knowledgeable support and quality service to resolve issues and escalate problems effectively."
+        "Monitored large-scale distributed systems to ensure high availability and reliability, responding promptly to incidents to minimize downtime and maintain service-level objectives.",
+        "Developed and deployed automation scripts  to streamline infrastructure management, reduce manual interventions, and enhance system scalability.",
+        "Improved system performance through tuning and capacity planning while identifying and addressing potential risks to prevent issues.",
+        "Partnered with development teams to improve release processes, documented operational procedures, and conducted post-incident reviews to drive continuous improvement across systems."
       ],
       "technologies": [
         {
@@ -237,19 +170,18 @@
     },
     {
       "company": "Long View Systems",
-      "job_title": "Systems Consultant",
+      "job_title": "Network Operations Analyst",
       "location": "Calgary, Canada",
       "type": "Full Time",
-      "start": "2012",
-      "end": "2014",
+      "start": "2012-08",
+      "end": "2014-01",
       "logo": "./images/logos/companies/longviewsystems.png",
       "website": "https://www.longviewsystems.com/",
       "details": [
-        "Acted as the primary liaison between customers and management, addressing and relaying feedback and concerns.",
-        "Managed security operations for multiple client networks, systems, and maintenance protocols.",
-        "Continuously enhanced operational and security procedures for client environments, including systems administration and maintenance.",
-        "Routinely evaluated security measures and recommended remediation to stakeholders.",
-        "Identified and resolved hardware and software compatibility issues."
+        "Monitored cloud and on-premise network systems 24/7 to ensure high availability, promptly identifying and resolving performance issues to minimize downtime.",
+        "Maintained and repaired critical network components, including firewalls, IP switching, and remote access protocols, ensuring seamless operations across global cloud environments.",
+        "Documented incidents, resolutions, and operational procedures while collaborating with teams to refine workflows and enhance the efficiency of network operations.",
+        "Managed vendor services for telecommunications and secure data storage while maintaining clear communication with stakeholders to align technical solutions with business objectives."
       ],
       "technologies": [
         {
@@ -271,19 +203,18 @@
     },
     {
       "company": "Cloudwerx Data Solutions",
-      "job_title": "Technical Analyst",
+      "job_title": "Field Engineer",
       "location": "Calgary, Canada",
       "type": "Full Time",
-      "start": "2011",
-      "end": "2012",
+      "start": "2011-02",
+      "end": "2012-02",
       "logo": "./images/logos/companies/cloudwerx.png",
       "website": "https://cloudwerx.com/",
       "details": [
-        "Standardized technical operations reporting to eliminate redundancy and improve efficiency across multidisciplinary teams.",
-        "Mitigated risk and managed liability by applying the latest cybersecurity advisories and best practices to internal operations and product development.",
-        "Authored technical requirement documentation aligned with business goals and technological constraints.",
-        "Resolved program-level dependencies to prevent bottlenecks and maintain efficiency in ongoing efforts.",
-        "Implemented and fully managed the Asigra Cloud Backup platform in a multi-client environment."
+        "Administered and maintained VMware vSphere environments to support virtualized workloads, ensuring high availability and performance for healthcare applications and services.",
+        "Managed NetApp storage systems, including provisioning, monitoring, and troubleshooting, to ensure secure and scalable data storage for critical healthcare operations.",
+        "Oversaw data center operations, including hardware maintenance, environmental controls, and Cisco IOS network configuration, to maintain a reliable and secure IT infrastructure.",
+        "Provided technical support for hosted solutions such as Microsoft Exchange, Blackberry Enterprise, Citrix Cloud, and Sun Terminals, while ensuring compliance with healthcare industry standards and regulations."
       ],
       "technologies": [
         {

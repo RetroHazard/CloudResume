@@ -75,9 +75,6 @@ const ProjectList = () => {
                                     </div>
                                 </div>
                                 <div className='flex flex-col gap-1.5'>
-                                    <span className='font-medium leading-snug text-content-accent max-sm:text-xs sm:text-xs md:text-sm'>
-                                        Technologies:
-                                    </span>
                                     <SkillButton skills={project.technologies} />
                                 </div>
                                 {index < data.Projects.length - 1 && (

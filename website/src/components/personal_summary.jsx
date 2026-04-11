@@ -29,7 +29,7 @@ function PersonalSummary() {
                     Drawing on <strong>15 years of experience</strong> in the tech industry, I'm a versatile
                     professional specializing in both on-prem and cloud technologies, cybersecurity, and building
                     innovative client solutions. My expertise spans client support, systems administration,
-                    architecture, project management, and consulting.
+                    architecture, identity and access management, project management, and consulting.
                 </p>
 
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
@@ -37,7 +37,7 @@ function PersonalSummary() {
                     diverse background allows me to approach challenges with a <em>unique perspective</em>, designing
                     secure and efficient technology solutions that drive business growth. I thrive when presented with
                     challenges that require out-of-the-box thinking and enjoy finding more <strong>efficient</strong>{' '}
-                    ways to achieve goals. Keeping mentally engaged and continuously learning is crucial for me.
+                    ways to achieve goals. Keeping mentally engaged and continual learning is crucial for me.
                 </p>
 
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>

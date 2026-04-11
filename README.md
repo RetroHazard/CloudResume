@@ -29,7 +29,7 @@ My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/t
 ## Architectural Overview
 **Architectural revisions can be found within the published article, linked above.**
 
-![Current Architectural Version](https://img.retrohazard.com/crc-arch-7.png)
+![Current Architectural Version](https://img.retrohazard.jp/i/crc-arch-7.png)
 
 
 ## Technologies Leveraged
