@@ -1,19 +1,3 @@
-variable "aws_access_key_id" {
-  description = "Access Key for AWS Terraform User"
-  sensitive   = true
-}
-
-variable "aws_secret_access_key" {
-  description = "Secret Access Key for AWS Terraform User"
-  sensitive   = true
-}
-
-variable "assume_role_target" {
-  description = "Role Used for Terraform Actions in AWS"
-  type        = string
-  sensitive   = true
-}
-
 variable "github_token" {
   description = "Token provided by GitHub Runner to Authenticate GitHub Operations"
   type        = string

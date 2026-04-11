@@ -1,9 +1,11 @@
 module "iam_github_oidc_provider" {
-  source = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider"
+  version = "~> 5.0"
 }
 
 module "iam_github_s3_oidc_role" {
   source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
+  version  = "~> 5.0"
   subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
   policies = {
     S3Limited = module.iam.aws_iam_policy_document_crc-github-s3-actions_arn
@@ -14,6 +16,7 @@ module "iam_github_s3_oidc_role" {
 
 module "iam_github_tf_oidc_role" {
   source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
+  version  = "~> 5.0"
   subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
   policies = {
     LimitedIAM   = module.iam.aws_iam_policy_document_crc-github-terraform-limited-iam_arn,
@@ -91,4 +94,8 @@ module "github" {
   github-token        = var.github_token
   github-organization = var.default_tags.GithubOrg
   github-repository   = var.default_tags.GithubRepo
+
+  # Legacy credentials (retained during OIDC migration — remove in follow-up PR)
+  crc-iam-github-access-key        = module.iam.aws_iam_access_key_crc-iam-github-key_key-id
+  crc-iam-github-secret-access-key = module.iam.aws_iam_access_key_crc-iam-github-key_secret-key
 }

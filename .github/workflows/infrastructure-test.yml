@@ -14,14 +14,13 @@ on:
     paths:
       - 'infrastructure/**'
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   GITHUB_TOKEN: ${{ secrets.PAT }}
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_TF_ACCESS_KEY }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
   TF_VAR_github_token: ${{ secrets.PAT }}
-  TF_VAR_aws_access_key_id: ${{ secrets.AWS_TF_ACCESS_KEY }}
-  TF_VAR_aws_secret_access_key: ${{ secrets.AWS_TF_SECRET_ACCESS_KEY }}
-  TF_VAR_assume_role_target: ${{ secrets.AWS_TF_ASSUME_ROLE_TARGET }}
   TF_VAR_deployment_region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
   TF_VAR_domain_name: ${{ vars.AWS_TF_DOMAIN_NAME }}
   TF_VAR_sanitized_domain_name: ${{ vars.AWS_TF_SANITIZED_DOMAIN_NAME }}
@@ -34,6 +33,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
+          role-to-assume: ${{ secrets.AWS_TF_OIDC_ROLE }}
+          role-session-name: GitHubTerraformValidation
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -49,11 +55,20 @@ jobs:
   planning:
     runs-on: ubuntu-latest
     needs: validation
-    permissions: write-all
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
+          role-to-assume: ${{ secrets.AWS_TF_OIDC_ROLE }}
+          role-session-name: GitHubTerraformPlan
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3

@@ -4,7 +4,7 @@
 // Lambda Policy Documents
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
   statement {
-    sid    = "Allow Function to Write to Cloudwatch"
+    sid    = "AllowFunctionToWriteToCloudwatch"
     effect = "Allow"
 
     actions = [
@@ -20,7 +20,7 @@ data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
   statement {
-    sid    = "Allow Function to Read/Write to Specified DynamoDB Resources"
+    sid    = "AllowFunctionToReadWriteToDynamoDB"
     effect = "Allow"
     actions = [
       "dynamodb:PutItem",
@@ -36,7 +36,7 @@ data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-SendMessage-logging-policy" {
   statement {
-    sid    = "Allow Function to Write to Cloudwatch"
+    sid    = "AllowFunctionToWriteToCloudwatch"
     effect = "Allow"
 
     actions = [
@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-logging-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
   statement {
-    sid    = "Allow Function to Generate Emails"
+    sid    = "AllowFunctionToGenerateEmails"
     effect = "Allow"
     actions = [
       "ses:SendEmail",
@@ -69,7 +69,7 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
 
 data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy" {
   statement {
-    sid    = "Allow Function to Write to Cloudwatch"
+    sid    = "AllowFunctionToWriteToCloudwatch"
     effect = "Allow"
 
     actions = [
@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy
 
 data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy" {
   statement {
-    sid    = "Allow Cloudfront Actions to Refresh Cache"
+    sid    = "AllowCloudfrontActionsToRefreshCache"
     effect = "Allow"
     actions = [
       "cloudfront:CreateInvalidation",
@@ -98,7 +98,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
   }
 
   statement {
-    sid    = "Allow S3 Actions to Determine Cloudfront Invalidations"
+    sid    = "AllowS3ActionsForCloudfrontInvalidations"
     effect = "Allow"
     actions = [
       "s3:Get*",
@@ -114,7 +114,7 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
 // Role Policy Documents
 data "aws_iam_policy_document" "crc-function-assume-role-policy" {
   statement {
-    sid     = "Assume Role Policy for Lambda and API Gateway"
+    sid     = "AssumeRolePolicyForLambdaAndAPIGateway"
     effect  = "Allow"
     actions = ["sts:AssumeRole"]
 
@@ -131,7 +131,7 @@ data "aws_iam_policy_document" "crc-function-assume-role-policy" {
 // GitHub Policy Documents
 data "aws_iam_policy_document" "crc-github-s3-actions" {
   statement {
-    sid    = "Allow Access to GitHub Runner for S3 Upload"
+    sid    = "AllowAccessToGitHubRunnerForS3Upload"
     effect = "Allow"
     actions = [
       "s3:PutObject",
@@ -147,7 +147,7 @@ data "aws_iam_policy_document" "crc-github-s3-actions" {
 
 data "aws_iam_policy_document" "crc-github-terraform-limited-iam" {
   statement {
-    sid    = "Allow Limited IAM Access for Terraform Operations"
+    sid    = "AllowLimitedIAMAccessForTerraformOperations"
     effect = "Allow"
     actions = [
       "iam:CreateInstanceProfile",
