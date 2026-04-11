@@ -195,7 +195,11 @@ data "aws_iam_policy_document" "crc-github-terraform-limited-iam" {
       "iam:UpdateGroup",
       "iam:GenerateServiceLastAccessedDetails",
       "iam:UpdateAssumeRolePolicy",
-      "iam:UpdateAccessKey"
+      "iam:UpdateAccessKey",
+      "iam:CreateUser",
+      "iam:DeleteUser",
+      "iam:DeleteAccessKey",
+      "iam:CreateAccessKey"
     ]
     resources = ["*"]
   }

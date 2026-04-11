@@ -7,6 +7,10 @@ resource "aws_iam_policy" "crc-Lambda-TrackVisitors-AccessPolicy" {
   path = "/CloudResume/"
 
   policy = data.aws_iam_policy_document.crc-lambda-TrackVisitors-access-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_policy" "crc-Lambda-TrackVisitors-Logging" {
@@ -14,6 +18,10 @@ resource "aws_iam_policy" "crc-Lambda-TrackVisitors-Logging" {
   path = "/CloudResume/"
 
   policy = data.aws_iam_policy_document.crc-lambda-TrackVisitors-logging-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-AccessPolicy" {
@@ -21,6 +29,10 @@ resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-AccessPolicy" {
   path = "/CloudResume/"
 
   policy = data.aws_iam_policy_document.crc-lambda-CloudfrontInvalidation-access-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-Logging" {
@@ -28,6 +40,10 @@ resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-Logging" {
   path = "/CloudResume/"
 
   policy = data.aws_iam_policy_document.crc-lambda-CloudfrontInvalidation-logging-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_policy" "crc-Lambda-SendMessage-AccessPolicy" {
@@ -35,6 +51,10 @@ resource "aws_iam_policy" "crc-Lambda-SendMessage-AccessPolicy" {
   path = "/CloudResume/"
 
   policy = data.aws_iam_policy_document.crc-lambda-SendMessage-access-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_policy" "crc-Lambda-SendMessage-Logging" {
@@ -42,6 +62,10 @@ resource "aws_iam_policy" "crc-Lambda-SendMessage-Logging" {
   path = "/CloudResume/"
 
   policy = data.aws_iam_policy_document.crc-lambda-SendMessage-logging-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_policy" "crc-GitHub-S3Actions" {
@@ -49,6 +73,10 @@ resource "aws_iam_policy" "crc-GitHub-S3Actions" {
   path = "/CloudResume/"
 
   policy = data.aws_iam_policy_document.crc-github-s3-actions.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_policy" "crc-GitHub-Terraform-LimitedIAM" {
@@ -56,6 +84,10 @@ resource "aws_iam_policy" "crc-GitHub-Terraform-LimitedIAM" {
   path = "/CloudResume/"
 
   policy = data.aws_iam_policy_document.crc-github-terraform-limited-iam.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 // IAM Roles
@@ -69,6 +101,10 @@ resource "aws_iam_role" "crc-api-CloudwatchLogs" {
   max_session_duration = 3600
   name                 = "CloudResume_API_CloudWatchLogs"
   path                 = "/CloudResume/"
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_role" "crc-CloudfrontManager" {
@@ -82,6 +118,10 @@ resource "aws_iam_role" "crc-CloudfrontManager" {
   max_session_duration = 3600
   name                 = "crc-CloudFrontManager"
   path                 = "/CloudResume/"
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_role" "crc-MessageSender" {
@@ -95,6 +135,10 @@ resource "aws_iam_role" "crc-MessageSender" {
   max_session_duration = 3600
   name                 = "crc-MessageSender"
   path                 = "/CloudResume/"
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_iam_role" "crc-VisitorTracker" {
@@ -108,4 +152,8 @@ resource "aws_iam_role" "crc-VisitorTracker" {
   max_session_duration = 3600
   name                 = "crc-VisitorTracker"
   path                 = "/CloudResume/"
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
