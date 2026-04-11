@@ -102,9 +102,11 @@ resource "aws_iam_role" "crc-api-CloudwatchLogs" {
   name                 = "CloudResume_API_CloudWatchLogs"
   path                 = "/CloudResume/"
 
+
   lifecycle {
     create_before_destroy = false
   }
+
 }
 
 resource "aws_iam_role" "crc-CloudfrontManager" {
@@ -119,9 +121,11 @@ resource "aws_iam_role" "crc-CloudfrontManager" {
   name                 = "crc-CloudFrontManager"
   path                 = "/CloudResume/"
 
+
   lifecycle {
     create_before_destroy = false
   }
+
 }
 
 resource "aws_iam_role" "crc-MessageSender" {
@@ -136,9 +140,11 @@ resource "aws_iam_role" "crc-MessageSender" {
   name                 = "crc-MessageSender"
   path                 = "/CloudResume/"
 
+
   lifecycle {
     create_before_destroy = false
   }
+
 }
 
 resource "aws_iam_role" "crc-VisitorTracker" {
@@ -153,7 +159,9 @@ resource "aws_iam_role" "crc-VisitorTracker" {
   name                 = "crc-VisitorTracker"
   path                 = "/CloudResume/"
 
+
   lifecycle {
     create_before_destroy = false
   }
+
 }
