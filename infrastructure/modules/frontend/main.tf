@@ -261,7 +261,7 @@ resource "aws_route53_health_check" "crc-website-health-check-prod" {
   reference_name    = "crc-website-prod"
   fqdn              = var.domain-name
   port              = 443
-  resource_path     = "index.html"
+  resource_path     = "/index.html"
   type              = "HTTPS"
   failure_threshold = "5"
   request_interval  = "30"

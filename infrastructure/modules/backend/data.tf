@@ -2,21 +2,24 @@
 # Begin Lambda Block #
 
 data "archive_file" "trackvisitors_lambda_function_code" {
-  type        = "zip"
-  source_file = "${path.root}/codebase/trackVisitors.py"
-  output_path = "${path.root}/codepacks/trackVisitors.zip"
+  type             = "zip"
+  source_file      = "${path.root}/codebase/trackVisitors.py"
+  output_path      = "${path.root}/codepacks/trackVisitors.zip"
+  output_file_mode = "0666"
 }
 
 data "archive_file" "cloudfrontInvalidation_lambda_function_code" {
-  type        = "zip"
-  source_file = "${path.root}/codebase/cloudfrontInvalidation.py"
-  output_path = "${path.root}/codepacks/cloudfrontInvalidation.zip"
+  type             = "zip"
+  source_file      = "${path.root}/codebase/cloudfrontInvalidation.py"
+  output_path      = "${path.root}/codepacks/cloudfrontInvalidation.zip"
+  output_file_mode = "0666"
 }
 
 data "archive_file" "sendMessage_lambda_function_code" {
-  type        = "zip"
-  source_file = "${path.root}/codebase/sendMessage.py"
-  output_path = "${path.root}/codepacks/sendMessage.zip"
+  type             = "zip"
+  source_file      = "${path.root}/codebase/sendMessage.py"
+  output_path      = "${path.root}/codepacks/sendMessage.zip"
+  output_file_mode = "0666"
 }
 
 ###################
