@@ -30,13 +30,14 @@ resource "aws_s3_bucket_lifecycle_configuration" "crc-agb-s3-website-prod" {
     id     = "Remove Stale Entries"
     status = "Enabled"
 
+    filter {}
+
     abort_incomplete_multipart_upload {
       days_after_initiation = 7
     }
 
     expiration {
       expired_object_delete_marker = true
-      days                         = 0
     }
 
     noncurrent_version_expiration {
@@ -403,7 +404,7 @@ resource "aws_api_gateway_deployment" "crc-api-deployment" {
 
 
 resource "aws_api_gateway_request_validator" "crc-api-param-validator" {
-  name                        = uuid()
+  name                        = "validate-request-parameters"
   rest_api_id                 = aws_api_gateway_rest_api.crc-rest-api.id
   validate_request_body       = false
   validate_request_parameters = true

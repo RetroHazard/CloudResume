@@ -404,7 +404,7 @@ resource "aws_lambda_permission" "crc-event-permissions-api-visitors" {
   function_name = aws_lambda_function.crc-trackVisitors.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${var.api-execution-arn}/*/GET/visitors"
-  statement_id  = uuid()
+  statement_id  = "AllowAPIGatewayInvokeVisitors"
 }
 
 resource "aws_lambda_permission" "crc-event-permissions-api-contact" {
@@ -412,7 +412,7 @@ resource "aws_lambda_permission" "crc-event-permissions-api-contact" {
   function_name = aws_lambda_function.crc-sendMessage.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${var.api-execution-arn}/*/POST/contact"
-  statement_id  = uuid()
+  statement_id  = "AllowAPIGatewayInvokeContact"
 }
 
 #  End Lambda Block  #
