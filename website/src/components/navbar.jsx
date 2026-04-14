@@ -20,16 +20,10 @@ function NavItem({ to, icon, label }) {
                 end={to === '/'}
                 className={({ isActive }) => (isActive ? 'nav-block-active' : 'nav-block-inactive')}
             >
-                {({ isActive }) => (
-                    <>
-                        <i className='icon-box mr-2.5 h-5 w-5 text-base max-sm:m-0' aria-hidden='true'>
-                            <Icon icon={icon} />
-                        </i>
-                        <span className='max-sm:sr-only'>
-                            {label}
-                        </span>
-                    </>
-                )}
+                <i className='icon-box mr-2.5 h-5 w-5 text-base max-sm:m-0' aria-hidden='true'>
+                    <Icon icon={icon} />
+                </i>
+                <span className='max-sm:sr-only'>{label}</span>
             </NavLink>
         </li>
     );
