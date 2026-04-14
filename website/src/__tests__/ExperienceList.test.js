@@ -45,10 +45,9 @@ const sampleData = {
     ]
 };
 
-// Mock the DataLoader component
-vi.mock('../utils/dataLoader', () => ({
-    __esModule: true,
-    default: ({ children }) => children(sampleData),
+vi.mock('../utils/useJsonData', () => ({
+    useJsonData: vi.fn(() => ({ data: sampleData, loading: false, error: null })),
+    LoadingSkeleton: () => null,
 }));
 
 describe('ExperienceList Component', () => {
