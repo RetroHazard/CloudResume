@@ -1,4 +1,3 @@
-import React from 'react';
 import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
 

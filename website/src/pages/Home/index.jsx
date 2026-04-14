@@ -1,5 +1,3 @@
-import React from 'react';
-
 import PersonalSummary from '../../components/personal_summary';
 import SocialLinks from '../../components/social_links';
 import { useJsonData, LoadingSkeleton } from '../../utils/useJsonData';

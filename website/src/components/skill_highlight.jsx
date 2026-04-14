@@ -1,4 +1,3 @@
-import React from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
