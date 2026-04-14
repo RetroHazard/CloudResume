@@ -1,5 +1,3 @@
-import React from 'react';
-
 import SkillHighlight from '../../components/skill_highlight';
 import SkillButton from '../../components/skill_button';
 import LanguageItem from '../../components/language_item';
@@ -15,13 +13,13 @@ function Skills() {
                     </div>
                     <div className='flex flex-col gap-3'>
                         <h3 className='mb-0 font-extrabold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base'>
-                            Interested in:
+                            Exploring
                         </h3>
                         <SkillButton />
                     </div>
                     <div className='flex flex-col gap-3'>
                         <h3 className='mb-0 font-extrabold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base'>
-                            I speak
+                            Languages
                         </h3>
                         <LanguageItem />
                     </div>

@@ -5,8 +5,8 @@ vi.mock('../utils/useJsonData', () => ({
     useJsonData: vi.fn(() => ({
         data: {
             core_skills: [
-                { name: 'Skill A', category: 'Category A', level: '70%', logo: 'logos:skillA', website: 'https://example.com/skillA' },
-                { name: 'Skill B', category: 'Category B', level: '85%', logo: 'logos:skillB', website: 'https://example.com/skillB' },
+                { name: 'Skill A', category: 'Category A', logo: 'logos:skillA', website: 'https://example.com/skillA' },
+                { name: 'Skill B', category: 'Category B', logo: 'logos:skillB', website: 'https://example.com/skillB' },
             ],
         },
         loading: false,
@@ -16,13 +16,12 @@ vi.mock('../utils/useJsonData', () => ({
 }));
 
 describe('SkillHighlight', () => {
-    test('renders skill names and links correctly', () => {
+    test('renders skill names and links; no progress bars', () => {
         render(<SkillHighlight />);
         expect(screen.getByText('Skill A')).toBeInTheDocument();
         expect(screen.getByText('Category A')).toBeInTheDocument();
         expect(screen.getByText('Skill B')).toBeInTheDocument();
-        expect(screen.getByText('Category B')).toBeInTheDocument();
-        expect(screen.getByText('Skill A').closest('a')).toHaveAttribute('href', 'https://example.com/skillA');
-        expect(screen.getByText('Skill B').closest('a')).toHaveAttribute('href', 'https://example.com/skillB');
+        expect(screen.queryAllByRole('progressbar')).toHaveLength(0);
+        expect(screen.getByLabelText(/Skill A/i).closest('a')).toHaveAttribute('href', 'https://example.com/skillA');
     });
 });

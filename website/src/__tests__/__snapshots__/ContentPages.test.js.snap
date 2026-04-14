@@ -86,7 +86,7 @@ exports[`Content Pages > Skills page renders correctly, calls SkillHighlight, Sk
       <h3
         class="mb-0 font-extrabold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base"
       >
-        Interested in:
+        Exploring
       </h3>
     </div>
     <div
@@ -95,7 +95,7 @@ exports[`Content Pages > Skills page renders correctly, calls SkillHighlight, Sk
       <h3
         class="mb-0 font-extrabold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base"
       >
-        I speak
+        Languages
       </h3>
     </div>
   </div>
