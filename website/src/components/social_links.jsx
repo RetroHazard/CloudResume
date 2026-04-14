@@ -16,7 +16,7 @@ const SocialLinks = () => {
                     rel='noopener noreferrer'
                     aria-label={`${social.name} (opens in new tab)`}
                 >
-                    <i className='text-base text-content-icons' aria-hidden='true'>
+                    <i className='flex items-center text-base text-content-icons' aria-hidden='true'>
                         <Icon icon={social.logo} height='1.25em' width='1.25em' />
                     </i>
                 </a>

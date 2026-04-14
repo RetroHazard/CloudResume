@@ -8,9 +8,9 @@ const SkillHighlight = () => {
     if (error || !data) return null;
     const skillData = data.core_skills;
     return (
-        <div className='flex flex-wrap justify-start gap-x-8 gap-y-4'>
+        <div className='flex flex-wrap justify-evenly gap-x-8 gap-y-2'>
             {skillData.map((skill) => (
-                <div key={skill.name} className='flex flex-col gap-1'>
+                <div key={skill.name} className='flex flex-col gap-2'>
                     <div
                         className='flex items-center justify-between max-sm:size-12 max-sm:justify-center max-sm:rounded-lg max-sm:bg-secondary-600 max-sm:align-middle max-sm:hover:bg-secondary-500'
                         data-tooltip-id='skill-tooltip'
@@ -33,6 +33,15 @@ const SkillHighlight = () => {
                                 </span>
                             </div>
                         </a>
+                    </div>
+                    <div className='flex gap-1'>
+                        <div className='skill-progress-bar-outline'>
+                            <div
+                                className='skill-progress-bar'
+                                style={{ width: skill.level }}
+                                role='progressbar'
+                            />
+                        </div>
                     </div>
                 </div>
             ))}

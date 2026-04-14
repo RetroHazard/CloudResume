@@ -33,7 +33,7 @@ function Navigation() {
     return (
         <nav
             aria-label='Primary navigation'
-            className='sticky top-6 mr-5 flex h-fit self-start rounded-2xl bg-secondary-700 p-2'
+            className='sticky top-28 mt-28 mr-5 flex h-fit self-start rounded-xl bg-secondary-700 p-2'
             id='navbar'
         >
             <ul className='flex flex-col space-y-1 text-sm font-medium text-content-accent'>

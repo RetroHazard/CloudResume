@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -20,7 +19,7 @@ class ErrorBoundary extends React.Component {
             return (
                 <div className='content-block' role='alert'>
                     <p className='text-content-accent'>Something went wrong loading this page.</p>
-                    <Link to='/'>Return to home</Link>
+                    <a href='/'>Return to home</a>
                 </div>
             );
         }

@@ -5,6 +5,8 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import { useVisitorId } from '../../utils/useVisitorId';
 import { apiPost } from '../../utils/apiClient';
 
+const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+
 // ── Form state ──────────────────────────────────────────────────────────────
 const initialForm = { firstName: '', lastName: '', email: '', subject: '', message: '' };
 function formReducer(state, { field, value }) {
@@ -25,8 +27,8 @@ function useContactSubmit(captchaRef) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const token = captchaRef.current?.getValue();
-        if (!token) {
+        const token = RECAPTCHA_SITE_KEY ? captchaRef.current?.getValue() : null;
+        if (RECAPTCHA_SITE_KEY && !token) {
             setStatus({ type: 'error', text: 'Please complete the reCAPTCHA.' });
             return;
         }
@@ -35,7 +37,8 @@ function useContactSubmit(captchaRef) {
         let resultType = 'success';
 
         try {
-            await apiPost(`/contact?uuid=${visitorId}`, { ...formData, token });
+            const body = token ? { ...formData, token } : { ...formData };
+            await apiPost(`/contact?uuid=${visitorId}`, body);
             dispatch({ field: 'firstName', value: '' });
             dispatch({ field: 'lastName', value: '' });
             dispatch({ field: 'email', value: '' });
@@ -97,7 +100,7 @@ const ContactForm = () => {
     const { formData, setField, status, isLoading, handleSubmit } = useContactSubmit(captchaRef);
 
     return (
-        <form onSubmit={handleSubmit} className='space-y-8'>
+        <form onSubmit={handleSubmit} className='space-y-4'>
             <fieldset>
                 <legend className='mb-2 block text-sm font-medium text-content-subtitle'>Name</legend>
                 <div className='flex flex-row gap-6'>
@@ -171,11 +174,13 @@ const ContactForm = () => {
                 />
             </div>
             <div className='flex flex-col gap-y-3'>
-                <ReCAPTCHA
-                    sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
-                    ref={captchaRef}
-                    theme='dark'
-                />
+                {RECAPTCHA_SITE_KEY && (
+                    <ReCAPTCHA
+                        sitekey={RECAPTCHA_SITE_KEY}
+                        ref={captchaRef}
+                        theme='dark'
+                    />
+                )}
                 <button
                     type='submit'
                     disabled={isLoading}
@@ -214,10 +219,10 @@ function Contact() {
             <div className='content-block' id='contact'>
                 <h2 className='h2 mb-0 font-extrabold text-content-header'>CONTACT ME</h2>
                 <div className='mx-auto max-w-screen-md'>
-                    <p className='mb-6 font-sans text-content-accent sm:text-xl'>
+                    <p className='mb-1 font-sans text-content-accent sm:text-xl'>
                         Questions? Comments? Have a potential opportunity or project you'd like to collaborate on?
                     </p>
-                    <p className='mb-6 font-sans text-content-accent sm:text-xl'>
+                    <p className='mb-4 font-sans text-content-accent sm:text-xl'>
                         Feel free to reach out using the contact form below.
                     </p>
                     <ContactForm />

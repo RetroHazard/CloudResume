@@ -13,7 +13,7 @@ function Home() {
                 <title>Cloud Resume</title>
             </Helmet>
             <div className='content-block' id='profile'>
-                <div className='flex flex-col items-start gap-6 max-sm:flex-row sm:flex-row'>
+                <div className='flex flex-col gap-6 sm:flex-row sm:items-start'>
                     <div className='flex flex-col items-center gap-4'>
                         <img
                             className='max-w-none rounded-xl max-sm:size-40 sm:size-40 md:size-56'
@@ -52,7 +52,7 @@ function Home() {
                                 <iconify-icon
                                     icon='fa6-solid:cloud-arrow-down'
                                     aria-hidden='true'
-                                    class='mr-2'
+                                    class='mr-2 text-content-header'
                                 />
                                 <span className='text-sm text-content-header max-sm:text-xs max-sm:font-light'>
                                     Download CV
