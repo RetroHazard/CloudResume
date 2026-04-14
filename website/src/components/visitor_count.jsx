@@ -1,52 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid'; // Importing the v4 function from the uuid package
-
+// website/src/components/visitor_count.jsx
+import { useState, useEffect } from 'react';
 import { Icon } from '@iconify-icon/react';
+import { useVisitorId } from '../utils/useVisitorId';
+import { apiGet } from '../utils/apiClient';
 
 function VisitorCount() {
     const [visitors, setVisitors] = useState(null);
     const [error, setError] = useState(null);
+    const visitorId = useVisitorId();
 
     useEffect(() => {
-        async function fetchVisitorCount() {
-            try {
-                // Generate or retrieve a unique identifier for the visitor
-                let visitorId = localStorage.getItem('uuid');
-                if (!visitorId) {
-                    visitorId = uuidv4(); // Use uuidv4 to generate a unique identifier
-                    localStorage.setItem('uuid', visitorId);
+        const controller = new AbortController();
+        apiGet('/visitors', { visitorId }, controller.signal)
+            .then((data) => setVisitors(data['count']))
+            .catch((err) => {
+                if (err.name !== 'AbortError') {
+                    console.error('Visitor count fetch failed:', err);
+                    setError(true);
                 }
+            });
+        return () => controller.abort();
+    }, [visitorId]);
 
-                // Send the visitorId as a query parameter
-                let response = await fetch(`${import.meta.env.VITE_AWS_API_ENDPOINT}/visitors?visitorId=${visitorId}`, {
-                    method: 'GET',
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                let data = await response.json();
-                setVisitors(data['count']);
-            } catch (err) {
-                console.error(err);
-                setError(err.message);
-            }
-        }
-
-        fetchVisitorCount();
-    }, []);
-
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+    if (error) return null;
 
     return (
-        <div className='mb-1 mt-1 inline-flex w-full items-center px-4 py-1 max-sm:hidden'>
-            <i className='icon-box'>
-                <Icon inline='' icon='fa6-solid:users' />
+        <div
+            className='mb-1 mt-1 inline-flex w-full items-center px-4 py-1 max-sm:hidden'
+            role='status'
+            aria-live='polite'
+            aria-atomic='true'
+        >
+            <i className='icon-box mr-2.5 h-5 w-5 text-base' aria-hidden='true'>
+                <Icon icon='fa6-solid:users' />
             </i>
-            <span className='font-sans text-base'>{visitors !== null ? visitors : 'Loading...'}</span>
+            <span className='font-sans text-base'>
+                <span className='sr-only'>Site visitors: </span>
+                {visitors !== null ? visitors : '—'}
+            </span>
         </div>
     );
 }
