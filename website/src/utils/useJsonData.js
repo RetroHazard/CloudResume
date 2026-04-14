@@ -16,8 +16,6 @@ export function useJsonData(file) {
     return state;
 }
 
-import React from 'react';
-
 export function LoadingSkeleton() {
     return (
         <div className='content-block animate-pulse' role='status' aria-label='Loading content'>
