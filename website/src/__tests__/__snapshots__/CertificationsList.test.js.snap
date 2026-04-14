@@ -13,25 +13,25 @@ exports[`CertificationList Component > matches snapshot 1`] = `
           class="flex gap-4"
         >
           <img
-            alt="Sample Certification Logo"
-            class="h-[5.7rem] w-[5.7rem] rounded-xl"
+            alt=""
+            class="size-12 rounded-xl sm:h-[5.7rem] sm:w-[5.7rem]"
             src="sample_logo.png"
           />
           <div
             class="flex flex-col"
           >
             <h3
-              class="h3 mb-0 font-extrabold text-content-title max-sm:text-sm sm:text-xs md:text-base"
+              class="card-title"
             >
               Sample Certification
             </h3>
             <p
-              class="mb-0.5 font-semibold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base"
+              class="card-subtitle"
             >
               Sample Issuer
             </p>
             <p
-              class="mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-xs"
+              class="card-meta"
             >
               <strong>
                 Credential ID:
@@ -40,7 +40,7 @@ exports[`CertificationList Component > matches snapshot 1`] = `
               123456789
             </p>
             <p
-              class="mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-xs"
+              class="card-meta"
             >
               <strong>
                 Issued:
@@ -49,7 +49,7 @@ exports[`CertificationList Component > matches snapshot 1`] = `
               2024-05-24
             </p>
             <p
-              class="mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-xs"
+              class="card-meta"
             >
               <strong>
                 Expiry:
@@ -61,27 +61,30 @@ exports[`CertificationList Component > matches snapshot 1`] = `
         </div>
         <div
           class="flex flex-wrap gap-3 max-sm:flex-col sm:flex-col"
-          id="Sample Certification Links"
         >
           <a
+            aria-label="Sample Certification – verification (opens in new tab)"
             class="social-link"
             href="https://samplewebsite.com"
             rel="noopener noreferrer"
             target="_blank"
           >
             <iconify-icon
+              aria-hidden="true"
               height="1.25em"
               icon="sample-icon"
               width="1.25em"
             />
           </a>
           <a
+            aria-label="Sample Certification – credential_info (opens in new tab)"
             class="social-link"
             href="https://samplewebsite.com"
             rel="noopener noreferrer"
             target="_blank"
           >
             <iconify-icon
+              aria-hidden="true"
               height="1.25em"
               icon="sample-icon"
               width="1.25em"

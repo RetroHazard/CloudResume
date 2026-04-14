@@ -45,7 +45,7 @@ vi.mock('../utils/useJsonData', () => ({
 
 describe('EducationList Component', () => {
     it('renders correctly', () => {
-        const { getByText, getByAltText, getAllByRole } = render(<EducationList />);
+        const { getByText, getAllByRole, container } = render(<EducationList />);
 
         // Check for education details
         expect(getByText('Sample University')).toBeInTheDocument();
@@ -53,7 +53,7 @@ describe('EducationList Component', () => {
         expect(getByText('Sample Category')).toBeInTheDocument();
         expect(getByText('2000 - 2004')).toBeInTheDocument();
         expect(getByText('Sample City, Country')).toBeInTheDocument();
-        expect(getByAltText('Sample University Logo')).toBeInTheDocument();
+        expect(container.querySelector('img[alt=""]')).toBeInTheDocument();
 
         // Check for details
         sampleData.Education[0].details.forEach(detail => {

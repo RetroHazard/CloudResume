@@ -68,14 +68,14 @@ vi.mock('../utils/useJsonData', () => ({
 
 describe('ProjectList Component', () => {
     it('renders correctly', () => {
-        const { getByText, getByAltText, getAllByRole } = render(<ProjectList />);
+        const { getByText, getAllByRole, container } = render(<ProjectList />);
 
         expect(getByText('Generic Project')).toBeInTheDocument();
         expect(getByText('Generic Company')).toBeInTheDocument();
         expect(getByText('Generic Category')).toBeInTheDocument();
         expect(getByText('Generic Role')).toBeInTheDocument();
         expect(getByText('2020 - 2021')).toBeInTheDocument();
-        expect(getByAltText('Generic Project logo')).toBeInTheDocument();
+        expect(container.querySelector('img[alt=""]')).toBeInTheDocument();
 
         sampleData.Projects[0].details.forEach((detail) => {
             expect(getByText(detail)).toBeInTheDocument();

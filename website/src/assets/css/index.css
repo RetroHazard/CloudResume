@@ -64,4 +64,24 @@ html.disable-fix {
     .content-block {
         @apply flex w-full flex-col justify-center gap-6 rounded-2xl bg-secondary-700 p-8 shadow-md;
     }
+
+    .card-title {
+        @apply mb-0 font-extrabold text-content-title text-xs sm:text-sm md:text-base;
+    }
+
+    .card-subtitle {
+        @apply mb-0.5 font-semibold leading-snug text-content-subtitle text-xs sm:text-sm md:text-base;
+    }
+
+    .card-meta {
+        @apply mb-0 font-medium leading-snug text-content-date text-xs;
+    }
+
+    .card-accent {
+        @apply mb-0 font-medium leading-snug text-content-accent text-xs sm:text-xs md:text-sm;
+    }
+
+    .card-fine {
+        @apply mb-0 font-light leading-snug text-content-accent text-xs;
+    }
 }
