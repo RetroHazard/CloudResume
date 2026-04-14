@@ -24,7 +24,7 @@ html.disable-fix {
 
 @layer components {
     .social-link {
-        @apply flex h-7 w-7 items-center justify-center rounded bg-content-boxbg text-content-icons no-underline hover:bg-content-boxhl active:translate-y-px;
+        @apply flex h-10 w-10 items-center justify-center rounded bg-content-boxbg text-content-icons no-underline hover:bg-content-boxhl active:translate-y-px sm:h-7 sm:w-7;
     }
 
     .open-for-block {

@@ -69,6 +69,13 @@ module.exports = {
                 'Segoe UI Symbol',
                 'Noto Color Emoji',
             ],
+            heading: [
+                'Space Grotesk',
+                'ui-sans-serif',
+                'system-ui',
+                '-apple-system',
+                'sans-serif',
+            ],
         },
         extend: {
             spacing: {
