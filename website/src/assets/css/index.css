@@ -48,17 +48,11 @@ html.disable-fix {
     }
 
     .nav-block-active {
-        @apply mb-1.5 mt-1 inline-flex max-h-10 w-full items-center rounded-lg bg-secondary-500 px-4 py-3 text-content-title no-underline max-sm:w-fit;
+        @apply my-1 inline-flex max-h-10 w-full items-center rounded-lg border-l-2 border-primary-400 bg-secondary-600 px-4 py-3 text-content-title no-underline max-sm:w-fit max-sm:border-0;
     }
 
     .nav-block-inactive {
-        @apply mb-1.5 mt-1 inline-flex max-h-10 w-full items-center rounded-lg bg-secondary-800 px-4 py-3 no-underline hover:bg-secondary-600 hover:text-content-title max-sm:w-fit;
-    }
-
-    #navbar {
-        i {
-            @apply mr-2.5 h-5 w-5 text-base max-sm:m-0;
-        }
+        @apply my-1 inline-flex max-h-10 w-full items-center rounded-lg border-l-2 border-transparent bg-secondary-700 px-4 py-3 no-underline hover:bg-secondary-600 hover:text-content-title max-sm:w-fit max-sm:border-0;
     }
 
     .icon-box {

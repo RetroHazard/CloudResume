@@ -1,11 +1,11 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-
 import Navigation from '../components/navbar';
 
+vi.mock('../components/visitor_count', () => ({ default: () => null }));
+
 describe('Navigation component', () => {
-    it('renders navigation links correctly', () => {
-        // Render the Navigation component wrapped in MemoryRouter
+    it('renders all navigation links', () => {
         const { getByText } = render(
             <MemoryRouter initialEntries={['/']}>
                 <Routes>
@@ -13,8 +13,6 @@ describe('Navigation component', () => {
                 </Routes>
             </MemoryRouter>,
         );
-
-        // Assert that navigation links are rendered correctly
         expect(getByText('Home')).toBeInTheDocument();
         expect(getByText('Education')).toBeInTheDocument();
         expect(getByText('Experience')).toBeInTheDocument();
@@ -22,5 +20,16 @@ describe('Navigation component', () => {
         expect(getByText('Projects')).toBeInTheDocument();
         expect(getByText('Skills')).toBeInTheDocument();
         expect(getByText('Contact')).toBeInTheDocument();
+    });
+
+    it('nav has accessible name', () => {
+        render(
+            <MemoryRouter initialEntries={['/']}>
+                <Routes>
+                    <Route path='*' element={<Navigation />} />
+                </Routes>
+            </MemoryRouter>,
+        );
+        expect(screen.getByRole('navigation', { name: 'Primary navigation' })).toBeInTheDocument();
     });
 });
