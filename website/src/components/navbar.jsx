@@ -25,7 +25,7 @@ function NavItem({ to, icon, label }) {
                         <i className='icon-box mr-2.5 h-5 w-5 text-base max-sm:m-0' aria-hidden='true'>
                             <Icon icon={icon} />
                         </i>
-                        <span className='max-sm:sr-only' aria-current={isActive ? 'page' : undefined}>
+                        <span className='max-sm:sr-only'>
                             {label}
                         </span>
                     </>
@@ -42,11 +42,11 @@ function Navigation() {
             className='sticky top-6 mr-5 flex h-fit self-start rounded-2xl bg-secondary-700 p-2'
             id='navbar'
         >
-            <ul className='flex-col space-y-1 text-sm font-medium text-content-accent'>
+            <ul className='flex flex-col space-y-1 text-sm font-medium text-content-accent'>
                 {NAV_ITEMS.map((item) => (
                     <NavItem key={item.to} {...item} />
                 ))}
-                <li role='separator' aria-hidden='true' className='my-2 h-0.5 w-full bg-secondary-600 max-sm:hidden' />
+                <li aria-hidden='true' className='my-2 h-0.5 w-full bg-secondary-600 max-sm:hidden' />
             </ul>
             <VisitorCount />
         </nav>
