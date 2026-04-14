@@ -44,7 +44,9 @@ html.disable-fix {
     }
 
     .text-entry {
-        @apply block w-full rounded-lg border border-secondary-300 bg-secondary-100 p-2.5 text-sm text-secondary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500;
+        @apply block w-full rounded-lg border border-secondary-600 bg-secondary-800 p-2.5 text-sm
+               text-content-body placeholder:text-content-accent shadow-sm
+               focus:border-primary-400 focus:ring-primary-400 focus:outline-none;
     }
 
     .nav-block-active {

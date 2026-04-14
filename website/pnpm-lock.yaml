@@ -44,9 +44,6 @@ importers:
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.3
-      uuid:
-        specifier: ^9.0.1
-        version: 9.0.1
     devDependencies:
       '@testing-library/jest-dom':
         specifier: ^5.17.0
@@ -1705,10 +1702,6 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
-
-  uuid@9.0.1:
-    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
-    hasBin: true
 
   vite-node@3.2.4:
     resolution: {integrity: sha512-EbKSKh+bh1E1IFxeO0pg1n4dvoOTt0UDiXMd/qn++r98+jPO1xtJilvXldeuQ8giIB5IkpjCgMleHMNEsGH6pg==}
@@ -3371,8 +3364,6 @@ snapshots:
       picocolors: 1.1.1
 
   util-deprecate@1.0.2: {}
-
-  uuid@9.0.1: {}
 
   vite-node@3.2.4(@types/node@20.12.8)(jiti@1.21.0)(yaml@2.8.3):
     dependencies:
