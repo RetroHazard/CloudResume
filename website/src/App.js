@@ -33,10 +33,10 @@ export default function App() {
                 <NoticeBanner />
                 <div className='flex justify-center'>
                     <Navigation />
-                    <div className='sm:min-w-102 w-3/5 max-w-2xl flex-shrink space-y-8 px-2 py-20'>
+                    <div className='sm:min-w-102 w-3/5 max-w-2xl space-y-8 px-2 py-20'>
                         <ErrorBoundary>
                             <Suspense fallback={<LoadingSkeleton />}>
-                                <main id='content' tabIndex={-1}>
+                                <main id='content' tabIndex={-1} className='outline-none'>
                                     <Routes>
                                         <Route path='/' element={<Home />} />
                                         <Route path='/education' element={<Education />} />
