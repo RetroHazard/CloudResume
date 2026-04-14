@@ -105,6 +105,7 @@ module.exports = {
                 '2xl': '1920px',
             },
             colors: {
+                transparent: 'transparent',
                 current: 'currentColor',
                 content: {
                     title: '#e2e8f0',
