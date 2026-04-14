@@ -21,7 +21,7 @@ vi.mock('../components/personal_summary', () => ({ default: () => null }));
 
 describe('Home component', () => {
     it('renders profile data correctly', () => {
-        render(<HelmetProvider><Home /></HelmetProvider>);
+        render(<Home />, { wrapper: HelmetProvider });
         // Profile photo with descriptive alt
         expect(screen.getByAltText('Photo of John Doe')).toHaveAttribute('src', mockData.profilePicture);
         // Download CV is now a link (not button-in-anchor)
