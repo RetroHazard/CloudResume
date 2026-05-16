@@ -1,2 +1,7 @@
 **/.DS_Store
 **/.idea/*
+
+# Cypress artifacts
+website/cypress/screenshots
+website/cypress/videos
+website/cypress/downloads

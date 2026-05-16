@@ -22,7 +22,9 @@
     "start-dev": "cross-env VITE_DATA_SET=development vite",
     "start-prod": "cross-env VITE_DATA_SET=production vite",
     "build-dev": "cross-env VITE_DATA_SET=development vite build --outDir build/dev",
-    "build-prod": "cross-env VITE_DATA_SET=production vite build --outDir build/prod"
+    "build-prod": "cross-env VITE_DATA_SET=production vite build --outDir build/prod",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "browserslist": {
     "production": [
@@ -44,6 +46,7 @@
     "@vitest/coverage-v8": "^3.0.0",
     "autoprefixer": "^10.4.19",
     "cross-env": "^7.0.3",
+    "cypress": "13.0.0",
     "jsdom": "^26.0.0",
     "postcss": "^8.5.0",
     "prettier": "^3.2.5",
