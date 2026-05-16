@@ -45,22 +45,21 @@ const sampleData = {
     ]
 };
 
-// Mock the DataLoader component
-vi.mock('../utils/dataLoader', () => ({
-    __esModule: true,
-    default: ({ children }) => children(sampleData),
+vi.mock('../utils/useJsonData', () => ({
+    useJsonData: vi.fn(() => ({ data: sampleData, loading: false, error: null })),
+    LoadingSkeleton: () => null,
 }));
 
 describe('ExperienceList Component', () => {
     it('renders correctly', () => {
-        const { getByText, getByAltText } = render(<ExperienceList />);
+        const { getByText, container } = render(<ExperienceList />);
 
         expect(getByText('Generic Job Title')).toBeInTheDocument();
         expect(getByText('Generic Company')).toBeInTheDocument();
         expect(getByText('Generic Type')).toBeInTheDocument();
         expect(getByText('Generic Start - Generic End')).toBeInTheDocument();
         expect(getByText('Generic Location')).toBeInTheDocument();
-        expect(getByAltText('Generic Company logo')).toBeInTheDocument();
+        expect(container.querySelector('img[alt=""]')).toBeInTheDocument();
 
         sampleData.Experience[0].details.forEach(detail => {
             expect(getByText(detail)).toBeInTheDocument();

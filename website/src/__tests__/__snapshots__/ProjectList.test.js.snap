@@ -16,8 +16,8 @@ exports[`ProjectList Component > matches snapshot 1`] = `
             class="flex gap-4"
           >
             <img
-              alt="Generic Project logo"
-              class="hidden h-[7rem] w-[7rem] rounded-xl sm:block"
+              alt=""
+              class="size-10 rounded-xl sm:size-28"
               src="./images/generic_logo.png"
             />
             <div
@@ -27,29 +27,29 @@ exports[`ProjectList Component > matches snapshot 1`] = `
                 class="flex flex-col"
               >
                 <h3
-                  class="h3 mb-0 font-extrabold text-content-title max-sm:text-sm sm:text-xs md:text-base"
+                  class="card-title"
                 >
                   Generic Project
                 </h3>
                 <p
-                  class="mb-0.5 font-semibold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base"
+                  class="card-subtitle"
                 >
                   Generic Company
                 </p>
                 <p
-                  class="mb-0 font-medium leading-snug text-content-accent max-sm:text-xs sm:text-xs md:text-sm"
+                  class="card-accent"
                 >
                   Generic Role
                 </p>
                 <p
-                  class="mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-sm"
+                  class="card-accent"
                 >
                   2020
                    - 
                   2021
                 </p>
                 <p
-                  class="mb-0 font-light leading-snug text-content-accent max-sm:text-xs sm:text-xs md:text-xs"
+                  class="card-fine"
                 >
                   Generic Category
                 </p>
@@ -58,39 +58,42 @@ exports[`ProjectList Component > matches snapshot 1`] = `
                 class="flex flex-wrap gap-3 max-sm:flex-col sm:flex-col"
               >
                 <a
-                  aria-label="demo"
+                  aria-label="Generic Project demo (opens in new tab)"
                   class="social-link"
                   href="https://generic-demo.com"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     height="1.25em"
                     icon="fa-solid:external-link-alt"
                     width="1.25em"
                   />
                 </a>
                 <a
-                  aria-label="repo"
+                  aria-label="Generic Project repo (opens in new tab)"
                   class="social-link"
                   href="https://generic-repo.com"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     height="1.25em"
                     icon="simple-icons:git"
                     width="1.25em"
                   />
                 </a>
                 <a
-                  aria-label="spec"
+                  aria-label="Generic Project spec (opens in new tab)"
                   class="social-link"
                   href="https://generic-spec.com"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     height="1.25em"
                     icon="fa6-solid:info"
                     width="1.25em"
@@ -101,7 +104,7 @@ exports[`ProjectList Component > matches snapshot 1`] = `
           </div>
         </div>
         <div
-          class="mb-3 font-normal leading-relaxed max-sm:text-xs sm:text-xs sm:leading-relaxed md:text-sm"
+          class="mb-3 font-normal leading-relaxed text-xs sm:leading-relaxed sm:text-xs md:text-sm"
         >
           <ul
             class="list-disc pl-10 pr-5"

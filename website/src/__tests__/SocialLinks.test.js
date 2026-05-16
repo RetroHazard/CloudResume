@@ -1,43 +1,32 @@
 import { render, screen } from '@testing-library/react';
 import SocialLinks from '../components/social_links';
 
-// Mock the DataLoader component
-vi.mock('../utils/dataLoader', () => {
-    return {
-        default: ({ children }) => {
-            const data = {
-                Socials: Array.from({ length: 3 }, (_, index) => ({
-                    display: true,
-                    name: `Social${index + 1}`,
-                    link: `http://social${index + 1}.com`,
-                    logo: 'mdi:home',
-                })),
-            };
-            return children(data);
+vi.mock('../utils/useJsonData', () => ({
+    useJsonData: vi.fn(() => ({
+        data: {
+            Socials: Array.from({ length: 3 }, (_, index) => ({
+                display: true,
+                name: `Social${index + 1}`,
+                link: `http://social${index + 1}.com`,
+                logo: 'mdi:home',
+            })),
         },
-    };
-});
+        loading: false,
+        error: null,
+    })),
+    LoadingSkeleton: () => null,
+}));
 
 describe('SocialLinks Component', () => {
-    test('renders the correct number of social links', () => {
+    test('renders the correct number of social links with target/rel and descriptive aria-label', () => {
         render(<SocialLinks />);
-
         const socialLinks = screen.getAllByRole('link');
-        const numberOfLinks = socialLinks.length;
-
-        expect(numberOfLinks).toBe(3);
-
+        expect(socialLinks).toHaveLength(3);
         socialLinks.forEach((link, index) => {
             expect(link).toHaveAttribute('href', `http://social${index + 1}.com`);
-            expect(link).toHaveAttribute('aria-label', `Social${index + 1}`);
-            const icon = link.querySelector('.social-link');
-            expect(icon).toBeInTheDocument();
-            expect(icon).toHaveAttribute('icon', 'mdi:home');
+            expect(link).toHaveAttribute('aria-label', `Social${index + 1} (opens in new tab)`);
+            expect(link).toHaveAttribute('target', '_blank');
+            expect(link).toHaveAttribute('rel', 'noopener noreferrer');
         });
-    });
-
-    test('matches the snapshot', () => {
-        const { asFragment } = render(<SocialLinks />);
-        expect(asFragment()).toMatchSnapshot();
     });
 });

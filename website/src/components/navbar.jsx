@@ -1,113 +1,49 @@
-import React from 'react';
 import { NavLink } from 'react-router-dom';
-
 import { Icon } from '@iconify-icon/react';
-
 import VisitorCount from './visitor_count';
+
+const NAV_ITEMS = [
+    { to: '/', icon: 'fa6-solid:house', label: 'Home' },
+    { to: '/education', icon: 'fa6-solid:graduation-cap', label: 'Education' },
+    { to: '/experience', icon: 'fa6-solid:briefcase', label: 'Experience' },
+    { to: '/certifications', icon: 'fa6-solid:certificate', label: 'Certifications' },
+    { to: '/projects', icon: 'fa6-solid:layer-group', label: 'Projects' },
+    { to: '/skills', icon: 'fa6-solid:chart-simple', label: 'Skills' },
+    { to: '/contact', icon: 'fa6-solid:message', label: 'Contact' },
+];
+
+function NavItem({ to, icon, label }) {
+    return (
+        <li>
+            <NavLink
+                to={to}
+                end={to === '/'}
+                className={({ isActive }) => (isActive ? 'nav-block-active' : 'nav-block-inactive')}
+            >
+                <i className='icon-box mr-2.5 h-5 w-5 text-base max-sm:m-0' aria-hidden='true'>
+                    <Icon icon={icon} />
+                </i>
+                <span className='max-sm:sr-only'>{label}</span>
+            </NavLink>
+        </li>
+    );
+}
 
 function Navigation() {
     return (
-        <>
-            <nav className='float-left mr-5 mt-28 flex h-fit rounded-lg bg-secondary-700 p-2' id='navbar'>
-                <ul className='flex-col text-sm font-medium text-content-accent'>
-                    <li>
-                        <NavLink
-                            to={'/'}
-                            className={({ isActive }) => {
-                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
-                            }}
-                        >
-                            <i className='icon-box'>
-                                <Icon icon='fa6-solid:house' />
-                            </i>
-                            <div className='max-sm:hidden'>Home</div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to={'/education'}
-                            className={({ isActive }) => {
-                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
-                            }}
-                        >
-                            <i className='icon-box'>
-                                <Icon icon='fa6-solid:graduation-cap' />
-                            </i>
-                            <div className='max-sm:hidden'>Education</div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to={'/experience'}
-                            className={({ isActive }) => {
-                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
-                            }}
-                        >
-                            <i className='icon-box'>
-                                <Icon icon='fa6-solid:briefcase' />
-                            </i>
-                            <div className='max-sm:hidden'>Experience</div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to={'/certifications'}
-                            className={({ isActive }) => {
-                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
-                            }}
-                        >
-                            <i className='icon-box'>
-                                <Icon icon='fa6-solid:certificate' />
-                            </i>
-                            <div className='max-sm:hidden'>Certifications</div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to={'/projects'}
-                            className={({ isActive }) => {
-                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
-                            }}
-                        >
-                            <i className='icon-box'>
-                                <Icon icon='fa6-solid:layer-group' />
-                            </i>
-                            <div className='max-sm:hidden'>Projects</div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to={'/skills'}
-                            className={({ isActive }) => {
-                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
-                            }}
-                        >
-                            <i className='icon-box'>
-                                <Icon icon='fa6-solid:chart-simple' />
-                            </i>
-                            <div className='max-sm:hidden'>Skills</div>
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to={'/contact'}
-                            className={({ isActive }) => {
-                                return isActive ? 'nav-block-active' : 'nav-block-inactive';
-                            }}
-                        >
-                            <i className='icon-box'>
-                                <Icon icon='fa6-solid:message' />
-                            </i>
-                            <div className='max-sm:hidden'>Contact</div>
-                        </NavLink>
-                    </li>
-                    <div className='mb-2 mt-2 h-0.5 w-full justify-between bg-secondary-600 max-sm:hidden'></div>
-                    <li className='flex-col text-sm font-medium text-content-accent'>
-                        <VisitorCount />
-                    </li>
-                </ul>
-            </nav>
-        </>
+        <nav
+            aria-label='Primary navigation'
+            className='sticky top-28 mt-28 mr-5 flex h-fit self-start rounded-xl bg-secondary-700 p-2'
+            id='navbar'
+        >
+            <ul className='flex flex-col space-y-1 text-sm font-medium text-content-accent'>
+                {NAV_ITEMS.map((item) => (
+                    <NavItem key={item.to} {...item} />
+                ))}
+                <li aria-hidden='true' className='my-2 h-0.5 w-full bg-secondary-600 max-sm:hidden' />
+            </ul>
+            <VisitorCount />
+        </nav>
     );
 }
 

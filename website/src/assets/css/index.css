@@ -24,7 +24,7 @@ html.disable-fix {
 
 @layer components {
     .social-link {
-        @apply flex h-7 w-7 items-center justify-center rounded bg-content-boxbg text-content-icons no-underline hover:bg-content-boxhl active:translate-y-px;
+        @apply flex h-10 w-10 items-center justify-center rounded bg-content-boxbg text-content-icons no-underline hover:bg-content-boxhl active:translate-y-px sm:h-7 sm:w-7;
     }
 
     .open-for-block {
@@ -44,21 +44,17 @@ html.disable-fix {
     }
 
     .text-entry {
-        @apply block w-full rounded-lg border border-secondary-300 bg-secondary-100 p-2.5 text-sm text-secondary-600 shadow-sm focus:border-primary-500 focus:ring-primary-500;
+        @apply block w-full rounded-lg border border-secondary-600 bg-secondary-800 p-2.5 text-sm
+               text-content-body placeholder:text-content-accent shadow-sm
+               focus:border-primary-400 focus:ring-primary-400 focus:outline-none;
     }
 
     .nav-block-active {
-        @apply mb-1.5 mt-1 inline-flex max-h-10 w-full items-center rounded-lg bg-secondary-500 px-4 py-3 text-content-title no-underline max-sm:w-fit;
+        @apply my-1 inline-flex max-h-10 w-full items-center rounded-lg border-l-2 border-primary-400 bg-secondary-500 px-4 py-3 text-content-title no-underline max-sm:w-fit max-sm:border-0;
     }
 
     .nav-block-inactive {
-        @apply mb-1.5 mt-1 inline-flex max-h-10 w-full items-center rounded-lg bg-secondary-800 px-4 py-3 no-underline hover:bg-secondary-600 hover:text-content-title max-sm:w-fit;
-    }
-
-    #navbar {
-        i {
-            @apply mr-2.5 h-5 w-5 text-base max-sm:m-0;
-        }
+        @apply my-1 inline-flex max-h-10 w-full items-center rounded-lg border-l-2 border-transparent bg-secondary-800 px-4 py-3 no-underline hover:bg-secondary-600 hover:text-content-title max-sm:w-fit max-sm:border-0;
     }
 
     .icon-box {
@@ -67,5 +63,25 @@ html.disable-fix {
 
     .content-block {
         @apply flex w-full flex-col justify-center gap-6 rounded-2xl bg-secondary-700 p-8 shadow-md;
+    }
+
+    .card-title {
+        @apply mb-0 font-extrabold text-content-title text-xs sm:text-sm md:text-base;
+    }
+
+    .card-subtitle {
+        @apply mb-0.5 font-semibold leading-snug text-content-subtitle text-xs sm:text-sm md:text-base;
+    }
+
+    .card-meta {
+        @apply mb-0 font-medium leading-snug text-content-date text-xs;
+    }
+
+    .card-accent {
+        @apply mb-0 font-medium leading-snug text-content-accent text-xs sm:text-xs md:text-sm;
+    }
+
+    .card-fine {
+        @apply mb-0 font-light leading-snug text-content-accent text-xs;
     }
 }

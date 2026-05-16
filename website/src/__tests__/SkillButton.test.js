@@ -1,36 +1,28 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import SkillButton from '../components/skill_button';
 
-vi.mock('../utils/dataLoader', () => ({
-    __esModule: true,
-    default: ({ children }) =>
-        children({
-            target_skills: [
-                { name: 'Skill 1', website: 'https://skill1.com', logo: 'skill1-icon' },
-                { name: 'Skill 2', website: 'https://skill2.com', logo: 'skill2-icon' },
-                // Add more mock skills as needed
-            ]
-        })
+vi.mock('../utils/useJsonData', () => ({
+    useJsonData: vi.fn(() => ({
+        data: { target_skills: [] },
+        loading: false,
+        error: null,
+    })),
+    LoadingSkeleton: () => null,
 }));
 
-describe('SkillButton', () => {
-    it('renders skill buttons with correct data', () => {
-        const skills = [
-            { name: 'Skill 1', website: 'https://skill1.com', logo: 'skill1-icon' },
-            { name: 'Skill 2', website: 'https://skill2.com', logo: 'skill2-icon' }
-        ];
-        const { asFragment } = render(<SkillButton skills={skills} />);
+const skills = [
+    { name: 'Skill 1', website: 'https://skill1.com', logo: 'skill1-icon' },
+    { name: 'Skill 2', website: 'https://skill2.com', logo: 'skill2-icon' },
+];
 
-        // Check if skill buttons are rendered with correct data
-        expect(asFragment()).toMatchSnapshot();
+describe('SkillButton', () => {
+    it('renders skill buttons with provided skills prop (no data load)', () => {
+        render(<SkillButton skills={skills} />);
+        expect(screen.getByText('Skill 1')).toBeInTheDocument();
+        expect(screen.getByText('Skill 2')).toBeInTheDocument();
     });
 
-    // Manual snapshot for review
-    it('should match manual snapshot', () => {
-        const skills = [
-            { name: 'Skill 1', website: 'https://skill1.com', logo: 'skill1-icon' },
-            { name: 'Skill 2', website: 'https://skill2.com', logo: 'skill2-icon' }
-        ];
+    it('matches snapshot with skills prop', () => {
         const { asFragment } = render(<SkillButton skills={skills} />);
         expect(asFragment()).toMatchSnapshot();
     });

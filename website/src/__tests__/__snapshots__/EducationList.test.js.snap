@@ -13,37 +13,37 @@ exports[`EducationList Component > matches snapshot 1`] = `
           class="flex gap-4"
         >
           <img
-            alt="Sample University Logo"
-            class="hidden h-[7rem] w-[7rem] rounded-xl sm:block"
+            alt=""
+            class="size-10 rounded-xl sm:size-28"
             src="./images/placeholder.png"
           />
           <div
             class="flex flex-col"
           >
             <h3
-              class="h3 mb-0 font-extrabold text-content-title max-sm:text-sm sm:text-xs md:text-base"
+              class="card-title"
             >
               Sample University
             </h3>
             <p
-              class="mb-0.5 font-semibold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base"
+              class="card-subtitle"
             >
               BSc. Sample Degree
             </p>
             <p
-              class="mb-0 font-medium leading-snug text-content-accent max-sm:text-xs sm:text-xs md:text-sm"
+              class="card-accent"
             >
               Sample Category
             </p>
             <p
-              class="mb-0 font-medium leading-snug text-content-date max-sm:text-xs sm:text-xs md:text-sm"
+              class="card-accent"
             >
               2000
                - 
               2004
             </p>
             <p
-              class="mb-0 font-light leading-snug text-content-accent max-sm:text-xs sm:text-xs md:text-xs"
+              class="card-fine"
             >
               Sample City, Country
             </p>
@@ -51,29 +51,30 @@ exports[`EducationList Component > matches snapshot 1`] = `
         </div>
         <div
           class="flex flex-wrap gap-3 max-sm:flex-col sm:flex-col"
-          id="Sample University Links"
         >
           <a
-            aria-label="program"
+            aria-label="Sample University program (opens in new tab)"
             class="social-link"
             href="https://sampleprogram.com"
             rel="noopener noreferrer"
             target="_blank"
           >
             <iconify-icon
+              aria-hidden="true"
               height="1.25em"
               icon="fa6-solid:circle-info"
               width="1.25em"
             />
           </a>
           <a
-            aria-label="school"
+            aria-label="Sample University school (opens in new tab)"
             class="social-link"
             href="https://sampleuniversity.com"
             rel="noopener noreferrer"
             target="_blank"
           >
             <iconify-icon
+              aria-hidden="true"
               height="1.25em"
               icon="fa6-solid:globe"
               width="1.25em"
@@ -82,7 +83,7 @@ exports[`EducationList Component > matches snapshot 1`] = `
         </div>
       </div>
       <div
-        class="mb-3 font-normal leading-relaxed max-sm:text-xs sm:text-xs sm:leading-relaxed md:text-sm"
+        class="mb-3 font-normal leading-relaxed text-xs sm:leading-relaxed sm:text-xs md:text-sm"
       >
         <ul
           class="list-disc pl-10 pr-5"
