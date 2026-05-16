@@ -41,8 +41,10 @@ function Navigation() {
                     <NavItem key={item.to} {...item} />
                 ))}
                 <li aria-hidden='true' className='my-2 h-0.5 w-full bg-secondary-600 max-sm:hidden' />
+                <li>
+                    <VisitorCount />
+                </li>
             </ul>
-            <VisitorCount />
         </nav>
     );
 }
