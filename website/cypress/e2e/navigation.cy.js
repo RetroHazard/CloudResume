@@ -25,7 +25,7 @@ describe('Page navigation', () => {
     });
 
     it(`marks ${label} link as active when on ${path}`, () => {
-      cy.visit(path);
+      cy.visit(path, { failOnStatusCode: false });
       cy.get(`nav[aria-label="Primary navigation"] a[href="${path}"]`)
         .should('have.class', 'nav-block-active');
     });

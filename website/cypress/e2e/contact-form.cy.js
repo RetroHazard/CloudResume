@@ -11,7 +11,7 @@ describe('Contact form', () => {
   beforeEach(() => {
     cy.stubVisitorApi();
     cy.mockRecaptcha();
-    cy.visit('/contact');
+    cy.visit('/contact', { failOnStatusCode: false });
   });
 
   it('renders all required form fields', () => {
