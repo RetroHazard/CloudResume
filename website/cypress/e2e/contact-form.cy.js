@@ -71,16 +71,12 @@ describe('Contact form', () => {
 
     fillForm();
     cy.completeRecaptcha();
-
-    // cy.clock() must be called before clicking submit so it controls the
-    // 5-second minimum-display setTimeout queued inside handleSubmit.
-    cy.clock();
     cy.get('button[type="submit"]').click();
     cy.wait('@contactSubmit');
-    cy.tick(5001);
 
-    cy.contains('Message sent successfully!').should('be.visible');
-    cy.clock().invoke('restore');
+    // Component enforces a 5-second minimum display of the loading state before
+    // showing the result message. Wait up to 10 seconds for the real timer to fire.
+    cy.contains('Message sent successfully!', { timeout: 10000 }).should('be.visible');
   });
 
   it('shows error message when the API returns an error', () => {
@@ -88,14 +84,10 @@ describe('Contact form', () => {
 
     fillForm();
     cy.completeRecaptcha();
-
-    cy.clock();
     cy.get('button[type="submit"]').click();
     cy.wait('@contactSubmit');
-    cy.tick(5001);
 
-    cy.contains('Failed to send message.').should('be.visible');
-    cy.clock().invoke('restore');
+    cy.contains('Failed to send message.', { timeout: 10000 }).should('be.visible');
   });
 
   it('resets the form after successful submission', () => {
@@ -103,14 +95,10 @@ describe('Contact form', () => {
 
     fillForm();
     cy.completeRecaptcha();
-
-    cy.clock();
     cy.get('button[type="submit"]').click();
     cy.wait('@contactSubmit');
-    cy.tick(5001);
 
-    cy.get('#firstName').should('have.value', '');
+    cy.get('#firstName', { timeout: 10000 }).should('have.value', '');
     cy.get('#message').should('have.value', '');
-    cy.clock().invoke('restore');
   });
 });
