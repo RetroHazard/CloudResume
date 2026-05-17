@@ -208,7 +208,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run Cypress E2E tests
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6
         with:
           working-directory: website
           install: false

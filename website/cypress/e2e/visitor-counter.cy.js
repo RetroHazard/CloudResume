@@ -8,7 +8,7 @@ describe('Visitor counter', () => {
     cy.stubVisitorApi(42);
     cy.visit('/');
     cy.wait('@visitorApi');
-    cy.get('[role="status"]').contains('42').should('be.visible');
+    cy.get('nav[aria-label="Primary navigation"] [role="status"]').contains('42').should('be.visible');
   });
 
   it('sends the visitor ID as a query parameter', () => {

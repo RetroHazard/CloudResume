@@ -18,13 +18,8 @@ describe('Resume download', () => {
       .invoke('attr', 'href')
       .then((href) => {
         cy.request({ url: href, method: 'HEAD', failOnStatusCode: false })
-          .then((res) => {
-            if ([200, 301, 302].includes(res.status)) {
-              expect(res.status).to.be.oneOf([200, 301, 302]);
-            } else {
-              expect(href).to.match(/^https?:\/\/.+/);
-            }
-          });
+          .its('status')
+          .should('be.oneOf', [200, 301, 302]);
       });
   });
 });
