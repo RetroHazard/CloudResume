@@ -180,3 +180,46 @@ jobs:
           AWS_S3_BUCKET: ${{ needs.build_prod.outputs.status == 'true' && secrets.AWS_S3_BUCKET_PROD }}
         run: |
           aws s3 sync build/prod/ s3://${{ env.AWS_S3_BUCKET }}/ --delete
+
+  cypress_e2e:
+    name: Cypress E2E Tests
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: website
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+        with:
+          version: '10.33.0'
+
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
+        with:
+          cache: 'pnpm'
+          cache-dependency-path: website/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Cypress E2E tests
+        uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6
+        with:
+          working-directory: website
+          install: false
+          command: pnpm cypress:run
+        env:
+          CYPRESS_BASE_URL: https://${{ vars.AWS_TF_DOMAIN_NAME }}
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: cypress-screenshots
+          path: website/cypress/screenshots
+          if-no-files-found: ignore
