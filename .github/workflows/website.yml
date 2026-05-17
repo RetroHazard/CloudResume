@@ -214,7 +214,7 @@ jobs:
           install: false
           command: pnpm cypress:run
         env:
-          CYPRESS_BASE_URL: ${{ vars.CLOUDFRONT_URL }}
+          CYPRESS_BASE_URL: https://${{ vars.AWS_TF_DOMAIN_NAME }}
 
       - name: Upload screenshots on failure
         if: failure()
