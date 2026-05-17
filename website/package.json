@@ -26,6 +26,9 @@
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": ["cypress", "esbuild"]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
