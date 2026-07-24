@@ -19,6 +19,7 @@ const EducationList = () => {
                         status='past'
                         statusLabel='Completed'
                         defaultOpen={index === 0}
+                        name='education'
                     >
                         <div className='flex flex-col gap-3'>
                             <div className='flex items-start justify-between gap-3'>

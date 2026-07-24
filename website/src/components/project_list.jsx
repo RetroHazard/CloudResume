@@ -25,6 +25,7 @@ const ProjectList = () => {
                             status={ongoing ? 'on' : 'past'}
                             statusLabel={ongoing ? 'Running' : 'Completed'}
                             defaultOpen={index === 0}
+                            name='projects'
                         >
                             <div className='flex flex-col gap-3'>
                                 <div className='flex items-start justify-between gap-3'>

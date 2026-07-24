@@ -194,6 +194,7 @@ export function DepartureRow({
     status = 'past',
     statusLabel,
     defaultOpen = false,
+    name,
     children,
 }: {
     index: number;
@@ -204,11 +205,15 @@ export function DepartureRow({
     status?: 'on' | 'past' | 'alert';
     statusLabel?: string;
     defaultOpen?: boolean;
+    // Shared name groups rows into a native exclusive accordion: opening one
+    // closes the others. Degrades to independent toggles on older browsers.
+    name?: string;
     children: ReactNode;
 }) {
     return (
         <details
             open={defaultOpen}
+            name={name}
             className="group border-b border-border last:border-b-0 [&_summary::-webkit-details-marker]:hidden"
         >
             <summary className="grid cursor-pointer list-none items-center gap-3 px-3 py-3 transition-colors hover:bg-secondary-800/50 sm:px-4 [grid-template-columns:auto_1fr_auto]">

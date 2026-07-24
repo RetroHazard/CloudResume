@@ -25,6 +25,7 @@ const ExperienceList = () => {
                             status={ongoing ? 'on' : 'past'}
                             statusLabel={ongoing ? 'On Time' : 'Departed'}
                             defaultOpen={index === 0}
+                            name='experience'
                         >
                             <div className='flex flex-col gap-3'>
                                 <div className='flex items-start justify-between gap-3'>

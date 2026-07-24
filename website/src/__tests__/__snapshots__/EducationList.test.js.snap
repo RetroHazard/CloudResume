@@ -23,6 +23,7 @@ exports[`EducationList Component > matches snapshot 1`] = `
       <li>
         <details
           class="group border-b border-border last:border-b-0 [&_summary::-webkit-details-marker]:hidden"
+          name="education"
           open=""
         >
           <summary
