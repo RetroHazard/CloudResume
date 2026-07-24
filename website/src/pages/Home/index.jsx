@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import PersonalSummary from '../../components/personal_summary';
 import SocialLinks from '../../components/social_links';
 import { useJsonData, LoadingSkeleton } from '../../utils/useJsonData';
@@ -9,9 +8,7 @@ function Home() {
     if (error || !personalData) return null;
     return (
         <>
-            <Helmet>
-                <title>Cloud Resume</title>
-            </Helmet>
+            <title>Cloud Resume</title>
             <div className='content-block' id='profile'>
                 <div className='flex flex-col gap-6 sm:flex-row sm:items-start'>
                     <div className='flex flex-col items-center gap-4'>

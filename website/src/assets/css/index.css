@@ -1,7 +1,73 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
+/* ── Design tokens (Tailwind v4 CSS-first theme) ──────────────────────────── */
+@theme {
+    /* Custom breakpoints — many sm:/md:/lg: classes depend on these exact values */
+    --breakpoint-sm: 740px;
+    --breakpoint-md: 900px;
+    --breakpoint-lg: 1200px;
+    --breakpoint-xl: 1500px;
+    --breakpoint-2xl: 1920px;
+
+    /* Fonts */
+    --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+        'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    --font-sans: var(--font-body);
+    --font-heading: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
+
+    /* Brand — primary (blue) */
+    --color-primary-50: #eff6ff;
+    --color-primary-100: #dbeafe;
+    --color-primary-200: #bfdbfe;
+    --color-primary-300: #93c5fd;
+    --color-primary-400: #60a5fa;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+    --color-primary-900: #1e3a8a;
+
+    /* Neutral — secondary (slate) */
+    --color-secondary-50: #f8fafc;
+    --color-secondary-100: #f1f5f9;
+    --color-secondary-200: #e2e8f0;
+    --color-secondary-300: #cbd5e1;
+    --color-secondary-400: #94a3b8;
+    --color-secondary-500: #64748b;
+    --color-secondary-600: #475569;
+    --color-secondary-700: #334155;
+    --color-secondary-800: #1e293b;
+    --color-secondary-900: #0f172a;
+
+    /* Skill accents */
+    --color-skill-0: #64748b;
+    --color-skill-1: #e2e8f0;
+    --color-skill-2: #3b82f6;
+    --color-skill-3: #94a3b8;
+
+    /* Semantic content tokens (used by @layer component classes) */
+    --color-content-title: #e2e8f0;
+    --color-content-subtitle: #cbd5e1;
+    --color-content-header: #f1f5f9;
+    --color-content-body: #cbd5e1;
+    --color-content-accent: #94a3b8;
+    --color-content-date: #94a3b8;
+    --color-content-skill: #f1f5f9;
+    --color-content-outline: #e2e8f0;
+    --color-content-boxbg: #475569;
+    --color-content-boxhl: #64748b;
+    --color-content-icons: #e2e8f0;
+
+    /* Radius (preserve v3 overrides) */
+    --radius-sm: 0.125rem;
+    --radius: 0.25rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 1rem;
+    --radius-2xl: 2rem;
+}
+
+/* Scrollbar-width compensation (prevents horizontal shift) */
 html {
     overflow-x: hidden;
     margin-right: calc(-1 * (100vw - 100%));
@@ -18,7 +84,7 @@ html.disable-fix {
     }
 
     body {
-        @apply bg-secondary-900 text-content-body;
+        @apply bg-secondary-900 font-body text-content-body;
     }
 }
 
@@ -45,7 +111,7 @@ html.disable-fix {
 
     .text-entry {
         @apply block w-full rounded-lg border border-secondary-600 bg-secondary-800 p-2.5 text-sm
-               text-content-body placeholder:text-content-accent shadow-sm
+               text-content-body shadow-sm placeholder:text-content-accent
                focus:border-primary-400 focus:ring-primary-400 focus:outline-none;
     }
 
@@ -66,22 +132,22 @@ html.disable-fix {
     }
 
     .card-title {
-        @apply mb-0 font-extrabold text-content-title text-xs sm:text-sm md:text-base;
+        @apply mb-0 text-xs font-extrabold text-content-title sm:text-sm md:text-base;
     }
 
     .card-subtitle {
-        @apply mb-0.5 font-semibold leading-snug text-content-subtitle text-xs sm:text-sm md:text-base;
+        @apply mb-0.5 text-xs font-semibold leading-snug text-content-subtitle sm:text-sm md:text-base;
     }
 
     .card-meta {
-        @apply mb-0 font-medium leading-snug text-content-date text-xs;
+        @apply mb-0 text-xs font-medium leading-snug text-content-date;
     }
 
     .card-accent {
-        @apply mb-0 font-medium leading-snug text-content-accent text-xs sm:text-xs md:text-sm;
+        @apply mb-0 text-xs font-medium leading-snug text-content-accent sm:text-xs md:text-sm;
     }
 
     .card-fine {
-        @apply mb-0 font-light leading-snug text-content-accent text-xs;
+        @apply mb-0 text-xs font-light leading-snug text-content-accent;
     }
 }

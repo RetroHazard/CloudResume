@@ -1,4 +1,3 @@
-import { Helmet } from 'react-helmet-async';
 import SkillHighlight from '../../components/skill_highlight';
 import SkillButton from '../../components/skill_button';
 import LanguageItem from '../../components/language_item';
@@ -6,7 +5,7 @@ import LanguageItem from '../../components/language_item';
 function Skills() {
     return (
         <>
-            <Helmet><title>Skills | Cloud Resume</title></Helmet>
+            <title>Skills | Cloud Resume</title>
             <div className='content-block' id='skills'>
                 <h1 className='h1 mb-0 font-heading font-bold text-content-header text-2xl sm:text-3xl'>Skills</h1>
                 <div className='flex flex-col gap-8'>

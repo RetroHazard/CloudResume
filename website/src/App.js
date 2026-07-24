@@ -1,7 +1,6 @@
 // website/src/App.js
 import { lazy, Suspense } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
 
 import Navigation from './components/navbar';
 import NoticeBanner from './components/noticebanner';
@@ -22,7 +21,7 @@ const Contact = lazy(() => import('./pages/Contact'));
 
 export default function App() {
     return (
-        <HelmetProvider>
+        <>
             <a
                 href='#content'
                 className='sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-primary-500 focus:px-4 focus:py-2 focus:text-secondary-900'
@@ -53,6 +52,6 @@ export default function App() {
                     </div>
                 </div>
             </BrowserRouter>
-        </HelmetProvider>
+        </>
     );
 }

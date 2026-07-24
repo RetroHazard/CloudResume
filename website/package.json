@@ -5,20 +5,21 @@
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
     "@iconify-icon/react": "^2.1.0",
-    "@tailwindcss/forms": "^0.5.7",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "animejs": "^4.5.0",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.26.0",
+    "motion": "^12.42.2",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-google-recaptcha": "^3.1.0",
-    "react-helmet-async": "^3.0.0",
     "react-router": "^6.23.0",
     "react-router-dom": "^6.23.0",
     "react-tooltip": "^5.26.4",
-    "tailwind-merge": "^2.3.0",
-    "tailwind-scrollbar": "^3.1.0",
-    "tailwindcss": "^3.4.3"
+    "tailwind-merge": "^2.3.0"
   },
   "scripts": {
     "test": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
     "start-dev": "cross-env VITE_DATA_SET=development vite",
     "start-prod": "cross-env VITE_DATA_SET=production vite",
     "build-dev": "cross-env VITE_DATA_SET=development vite build --outDir build/dev",
@@ -27,7 +28,10 @@
     "cypress:run": "cypress run"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["cypress", "esbuild"]
+    "onlyBuiltDependencies": [
+      "cypress",
+      "esbuild"
+    ]
   },
   "browserslist": {
     "production": [
@@ -42,19 +46,24 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^15.0.6",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^4.0.0",
     "@vitest/coverage-v8": "^3.0.0",
-    "autoprefixer": "^10.4.19",
     "cross-env": "^7.0.3",
     "cypress": "^13.0.0",
     "jsdom": "^26.0.0",
     "postcss": "^8.5.0",
     "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.5.14",
-    "react-test-renderer": "^18.3.1",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
     "vite": "^6.0.0",
     "vitest": "^3.0.0"
   }

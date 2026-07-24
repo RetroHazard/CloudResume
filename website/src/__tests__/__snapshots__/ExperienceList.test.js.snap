@@ -104,7 +104,6 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               class="icon-box"
-              classname="icon-box"
               height="1.1em"
               icon="ph:placeholder-fill"
               width="1.1em"
@@ -119,7 +118,6 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               class="icon-box"
-              classname="icon-box"
               height="1.1em"
               icon="ph:placeholder-fill"
               width="1.1em"
@@ -134,7 +132,6 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               class="icon-box"
-              classname="icon-box"
               height="1.1em"
               icon="ph:placeholder-fill"
               width="1.1em"
@@ -149,7 +146,6 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               class="icon-box"
-              classname="icon-box"
               height="1.1em"
               icon="ph:placeholder-fill"
               width="1.1em"

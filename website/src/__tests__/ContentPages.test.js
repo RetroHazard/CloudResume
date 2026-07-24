@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { HelmetProvider } from 'react-helmet-async';
 import Certifications from '../pages/Certifications';
 import Education from '../pages/Education';
 import Experience from '../pages/Experience';
@@ -21,7 +20,7 @@ vi.mock('../components/skill_highlight', () => ({ default: vi.fn(() => null) }))
 vi.mock('../components/skill_button', () => ({ default: vi.fn(() => null) }));
 vi.mock('../components/language_item', () => ({ default: vi.fn(() => null) }));
 
-const renderPage = (ui) => render(ui, { wrapper: HelmetProvider });
+const renderPage = (ui) => render(ui);
 
 describe('Content Pages', () => {
     test('Certifications page renders correctly and calls CertificationList', () => {

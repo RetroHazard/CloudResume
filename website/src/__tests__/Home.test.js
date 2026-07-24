@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { HelmetProvider } from 'react-helmet-async';
 import Home from '../pages/Home/index';
 
 const mockData = {
@@ -21,7 +20,7 @@ vi.mock('../components/personal_summary', () => ({ default: () => null }));
 
 describe('Home component', () => {
     it('renders profile data correctly', () => {
-        render(<Home />, { wrapper: HelmetProvider });
+        render(<Home />);
         // Profile photo with descriptive alt
         expect(screen.getByAltText('Photo of John Doe')).toHaveAttribute('src', mockData.profilePicture);
         // Download CV is now a link (not button-in-anchor)

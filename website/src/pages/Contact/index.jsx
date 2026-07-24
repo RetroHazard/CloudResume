@@ -1,6 +1,5 @@
 // website/src/pages/Contact/index.jsx
 import { useRef, useEffect, useState, useReducer } from 'react';
-import { Helmet } from 'react-helmet-async';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useVisitorId } from '../../utils/useVisitorId';
 import { apiPost } from '../../utils/apiClient';
@@ -213,9 +212,7 @@ const ContactForm = () => {
 function Contact() {
     return (
         <>
-            <Helmet>
-                <title>Contact | Cloud Resume</title>
-            </Helmet>
+            <title>Contact | Cloud Resume</title>
             <div className='content-block' id='contact'>
                 <h2 className='h2 mb-0 font-extrabold text-content-header'>CONTACT ME</h2>
                 <div className='mx-auto max-w-screen-md'>

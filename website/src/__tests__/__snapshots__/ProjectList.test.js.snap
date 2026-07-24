@@ -138,7 +138,6 @@ exports[`ProjectList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               class="icon-box"
-              classname="icon-box"
               height="1.1em"
               icon="ph:generic-icon-1"
               width="1.1em"
@@ -153,7 +152,6 @@ exports[`ProjectList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               class="icon-box"
-              classname="icon-box"
               height="1.1em"
               icon="ph:generic-icon-2"
               width="1.1em"
@@ -168,7 +166,6 @@ exports[`ProjectList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               class="icon-box"
-              classname="icon-box"
               height="1.1em"
               icon="ph:generic-icon-3"
               width="1.1em"
