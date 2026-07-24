@@ -3,6 +3,10 @@ import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
 // GitHub-style contribution calendar, merged across the accounts baked into
 // contributions.json (see scripts/fetch-contributions.mjs). Reads the data the
 // same way every other panel does — a static JSON asset via useJsonData.
+//
+// The calendar is fluid: the 53 week-columns share the container width equally
+// and cells stay square via aspect-ratio, so a full year always fits the element
+// with no horizontal scroll, shrinking with the viewport.
 
 type Day = { date: string; count: number; level: number };
 type Contributions = { total: number; accounts?: string[]; updated?: string | null; days: Day[] };
@@ -36,6 +40,7 @@ export default function GithubHeatmap() {
     cells.push(...days);
     while (cells.length % 7 !== 0) cells.push(null);
     const weekCount = cells.length / 7;
+    const columns = `repeat(${weekCount}, minmax(0, 1fr))`;
 
     // A month label sits above the column where that month begins.
     const months: (string | null)[] = [];
@@ -79,9 +84,9 @@ export default function GithubHeatmap() {
                 </div>
             )}
 
-            <div className='gh-scroll overflow-x-auto pb-1'>
+            <div className='w-full'>
                 <div className='gh-cal'>
-                    <div className='gh-months' style={{ gridTemplateColumns: `repeat(${weekCount}, var(--gh-cell))` }}>
+                    <div className='gh-months' style={{ gridTemplateColumns: columns }}>
                         {months.map((m, i) => (
                             <div key={i} className='gh-month'>
                                 {m && <span>{m}</span>}
@@ -97,7 +102,7 @@ export default function GithubHeatmap() {
                         <span>Fri</span>
                         <span />
                     </div>
-                    <div className='gh-grid'>
+                    <div className='gh-grid' style={{ gridTemplateColumns: columns }}>
                         {cells.map((c, i) =>
                             c ? (
                                 <div
@@ -120,21 +125,22 @@ export default function GithubHeatmap() {
             <div className='flex items-center justify-end gap-1.5 font-mono text-[0.6rem] text-content-accent'>
                 Less
                 {LEVEL_BG.map((bg, i) => (
-                    <span key={i} className='gh-cell' style={{ background: bg }} />
+                    <span key={i} className='gh-swatch' style={{ background: bg }} />
                 ))}
                 More
             </div>
 
             <style>{`
-                .gh-cal { --gh-cell: 12px; display: inline-grid; grid-template-columns: auto 1fr; gap: 6px; min-width: min-content; }
-                .gh-months { grid-column: 2; display: grid; grid-auto-flow: column; gap: 3px; height: 13px;
+                .gh-cal { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px; width: 100%; }
+                .gh-months { grid-row: 1; grid-column: 2; display: grid; gap: 2px; height: 13px;
                     font-family: var(--font-mono, monospace); font-size: 10px; letter-spacing: 0.04em; color: var(--chart-label, #8ba7ac); }
-                .gh-month { position: relative; }
+                .gh-month { position: relative; min-width: 0; }
                 .gh-month span { position: absolute; left: 0; white-space: nowrap; }
-                .gh-dow { grid-row: 2; grid-column: 1; display: grid; grid-template-rows: repeat(7, var(--gh-cell)); gap: 3px;
+                .gh-dow { grid-row: 2; grid-column: 1; display: grid; grid-template-rows: repeat(7, 1fr); gap: 2px; height: 100%;
                     padding-right: 4px; align-items: center; font-family: var(--font-mono, monospace); font-size: 9px; color: var(--chart-label, #8ba7ac); }
-                .gh-grid { grid-row: 2; grid-column: 2; display: grid; grid-auto-flow: column; grid-template-rows: repeat(7, var(--gh-cell)); gap: 3px; }
-                .gh-cell { width: var(--gh-cell, 11px); height: var(--gh-cell, 11px); border-radius: 2.5px; }
+                .gh-grid { grid-row: 2; grid-column: 2; display: grid; grid-template-rows: repeat(7, auto); grid-auto-flow: column; gap: 2px; width: 100%; }
+                .gh-cell { width: 100%; aspect-ratio: 1 / 1; border-radius: 2px; }
+                .gh-swatch { width: 11px; height: 11px; border-radius: 2px; flex: 0 0 auto; }
             `}</style>
         </figure>
     );
