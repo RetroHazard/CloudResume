@@ -12,11 +12,11 @@ const CertificationList = () => {
                 <Reveal
                     key={item.credential_id || item.certification}
                     delay={index * 0.05}
-                    className='group relative overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-neon/40'
+                    className='group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-neon/40'
                 >
                     {/* pass stripe */}
                     <div className='h-1 w-full' style={{ background: lineColor(index) }} />
-                    <div className='flex flex-col gap-3 p-4'>
+                    <div className='flex flex-1 flex-col gap-3 p-4'>
                         <div className='flex items-start gap-3'>
                             <img
                                 className='size-12 shrink-0 rounded ring-1 ring-border'
@@ -48,7 +48,7 @@ const CertificationList = () => {
                             </div>
                         </dl>
 
-                        <div className='flex flex-wrap gap-2'>
+                        <div className='mt-auto flex flex-wrap gap-2'>
                             {item.links.map((linkGroup, linkIndex) =>
                                 Object.entries(linkGroup).map(
                                     ([key, link]) =>
