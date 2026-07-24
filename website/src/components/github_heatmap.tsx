@@ -136,8 +136,9 @@ export default function GithubHeatmap() {
                     font-family: var(--font-mono, monospace); font-size: 10px; letter-spacing: 0.04em; color: var(--chart-label, #8ba7ac); }
                 .gh-month { position: relative; min-width: 0; }
                 .gh-month span { position: absolute; left: 0; white-space: nowrap; }
-                .gh-dow { grid-row: 2; grid-column: 1; display: grid; grid-template-rows: repeat(7, 1fr); gap: 2px; height: 100%;
-                    padding-right: 4px; align-items: center; font-family: var(--font-mono, monospace); font-size: 9px; color: var(--chart-label, #8ba7ac); }
+                .gh-dow { grid-row: 2; grid-column: 1; align-self: stretch; display: grid; grid-template-rows: repeat(7, 1fr); gap: 2px;
+                    min-height: 0; overflow: hidden; padding-right: 4px; align-items: center; line-height: 1;
+                    font-family: var(--font-mono, monospace); font-size: 9px; color: var(--chart-label, #8ba7ac); }
                 .gh-grid { grid-row: 2; grid-column: 2; display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: 2px; width: 100%; }
                 .gh-cell { min-width: 0; min-height: 0; border-radius: 2px; }
                 .gh-swatch { width: 11px; height: 11px; border-radius: 2px; flex: 0 0 auto; }
