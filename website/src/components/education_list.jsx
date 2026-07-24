@@ -36,7 +36,7 @@ const EducationList = () => {
                                         <p className='card-fine'>{item.location}</p>
                                     </div>
                                 </div>
-                                <div className='flex flex-wrap gap-2 max-sm:flex-col sm:flex-col'>
+                                <div className='flex flex-wrap justify-end gap-2'>
                                     {item.links &&
                                         item.links.map((linkGroup, linkIndex) =>
                                             Object.keys(linkGroup).map((linkType) =>

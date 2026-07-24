@@ -125,7 +125,7 @@ exports[`ProjectList Component > matches snapshot 1`] = `
                   </div>
                 </div>
                 <div
-                  class="flex flex-wrap gap-2 max-sm:flex-col sm:flex-col"
+                  class="flex flex-wrap justify-end gap-2"
                 >
                   <a
                     aria-label="Generic Project demo (opens in new tab)"

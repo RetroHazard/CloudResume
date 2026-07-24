@@ -42,7 +42,7 @@ const ProjectList = () => {
                                             </p>
                                         </div>
                                     </div>
-                                    <div className='flex flex-wrap gap-2 max-sm:flex-col sm:flex-col'>
+                                    <div className='flex flex-wrap justify-end gap-2'>
                                         {project.links &&
                                             project.links.map((linkGroup, idx) =>
                                                 Object.keys(linkGroup).map((linkType) =>
