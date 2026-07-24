@@ -2,107 +2,122 @@
 
 exports[`EducationList Component > matches snapshot 1`] = `
 <div>
-  <div>
-    <div
-      class="flex flex-col gap-3"
+  <ol
+    class="relative ml-1 flex list-none flex-col gap-5 border-l border-border/70 pl-6 sm:pl-8"
+  >
+    <li
+      class="relative"
+      style="opacity: 0; transform: translateY(16px);"
     >
-      <div
-        class="flex w-full justify-between gap-2"
+      <span
+        aria-hidden="true"
+        class="absolute -left-[1.8rem] top-5 h-2.5 w-2.5 rounded-full bg-neon ring-4 ring-neon/15 sm:-left-[2.3rem]"
+      />
+      <article
+        class="group rounded-xl border border-border bg-secondary-800/40 p-4 transition-colors hover:border-neon/40 sm:p-5"
       >
         <div
-          class="flex gap-4"
+          class="flex flex-col gap-3"
         >
-          <img
-            alt=""
-            class="size-10 rounded-xl sm:size-28"
-            src="./images/placeholder.png"
-          />
           <div
-            class="flex flex-col"
+            class="flex w-full justify-between gap-2"
           >
-            <h3
-              class="card-title"
+            <div
+              class="flex gap-4"
             >
-              Sample University
-            </h3>
-            <p
-              class="card-subtitle"
+              <img
+                alt=""
+                class="size-10 rounded-xl ring-1 ring-border sm:size-20"
+                src="./images/placeholder.png"
+              />
+              <div
+                class="flex flex-col"
+              >
+                <h3
+                  class="card-title"
+                >
+                  Sample University
+                </h3>
+                <p
+                  class="card-subtitle"
+                >
+                  BSc. Sample Degree
+                </p>
+                <p
+                  class="card-accent font-mono"
+                >
+                  Sample Category
+                </p>
+                <p
+                  class="card-accent font-mono"
+                >
+                  2000
+                   — 
+                  2004
+                </p>
+                <p
+                  class="card-fine"
+                >
+                  Sample City, Country
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex flex-wrap gap-3 max-sm:flex-col sm:flex-col"
             >
-              BSc. Sample Degree
-            </p>
-            <p
-              class="card-accent"
+              <a
+                aria-label="Sample University program (opens in new tab)"
+                class="social-link"
+                href="https://sampleprogram.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <iconify-icon
+                  aria-hidden="true"
+                  height="1.25em"
+                  icon="fa6-solid:circle-info"
+                  width="1.25em"
+                />
+              </a>
+              <a
+                aria-label="Sample University school (opens in new tab)"
+                class="social-link"
+                href="https://sampleuniversity.com"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <iconify-icon
+                  aria-hidden="true"
+                  height="1.25em"
+                  icon="fa6-solid:globe"
+                  width="1.25em"
+                />
+              </a>
+            </div>
+          </div>
+          <div
+            class="font-normal leading-relaxed text-xs sm:leading-relaxed md:text-sm"
+          >
+            <ul
+              class="ml-4 list-disc space-y-1 pr-2 marker:text-neon/60"
             >
-              Sample Category
-            </p>
-            <p
-              class="card-accent"
-            >
-              2000
-               - 
-              2004
-            </p>
-            <p
-              class="card-fine"
-            >
-              Sample City, Country
-            </p>
+              <li>
+                Sample detail 1
+              </li>
+              <li>
+                Sample detail 2
+              </li>
+              <li>
+                Sample detail 3
+              </li>
+              <li>
+                Sample detail 4
+              </li>
+            </ul>
           </div>
         </div>
-        <div
-          class="flex flex-wrap gap-3 max-sm:flex-col sm:flex-col"
-        >
-          <a
-            aria-label="Sample University program (opens in new tab)"
-            class="social-link"
-            href="https://sampleprogram.com"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <iconify-icon
-              aria-hidden="true"
-              height="1.25em"
-              icon="fa6-solid:circle-info"
-              width="1.25em"
-            />
-          </a>
-          <a
-            aria-label="Sample University school (opens in new tab)"
-            class="social-link"
-            href="https://sampleuniversity.com"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <iconify-icon
-              aria-hidden="true"
-              height="1.25em"
-              icon="fa6-solid:globe"
-              width="1.25em"
-            />
-          </a>
-        </div>
-      </div>
-      <div
-        class="mb-3 font-normal leading-relaxed text-xs sm:leading-relaxed sm:text-xs md:text-sm"
-      >
-        <ul
-          class="list-disc pl-10 pr-5"
-        >
-          <li>
-            Sample detail 1
-          </li>
-          <li>
-            Sample detail 2
-          </li>
-          <li>
-            Sample detail 3
-          </li>
-          <li>
-            Sample detail 4
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
+      </article>
+    </li>
+  </ol>
 </div>
 `;

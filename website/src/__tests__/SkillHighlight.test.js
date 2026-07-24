@@ -22,6 +22,6 @@ describe('SkillHighlight', () => {
         expect(screen.getByText('Category A')).toBeInTheDocument();
         expect(screen.getByText('Skill B')).toBeInTheDocument();
         expect(screen.queryAllByRole('progressbar')).toHaveLength(2);
-        expect(screen.getByLabelText(/Skill A/i).closest('a')).toHaveAttribute('href', 'https://example.com/skillA');
+        expect(screen.getByRole('link', { name: /Skill A/i })).toHaveAttribute('href', 'https://example.com/skillA');
     });
 });

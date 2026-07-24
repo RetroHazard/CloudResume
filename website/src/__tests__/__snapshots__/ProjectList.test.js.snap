@@ -2,26 +2,33 @@
 
 exports[`ProjectList Component > matches snapshot 1`] = `
 <div>
-  <div>
-    <div
-      class="flex flex-col gap-6"
+  <ol
+    class="relative ml-1 flex list-none flex-col gap-5 border-l border-border/70 pl-6 sm:pl-8"
+  >
+    <li
+      class="relative"
+      style="opacity: 0; transform: translateY(16px);"
     >
-      <div
-        class="flex flex-col gap-4"
+      <span
+        aria-hidden="true"
+        class="absolute -left-[1.8rem] top-5 h-2.5 w-2.5 rounded-full bg-neon ring-4 ring-neon/15 sm:-left-[2.3rem]"
+      />
+      <article
+        class="group rounded-xl border border-border bg-secondary-800/40 p-4 transition-colors hover:border-neon/40 sm:p-5"
       >
         <div
-          class="flex w-full flex-col gap-4"
+          class="flex flex-col gap-4"
         >
           <div
             class="flex gap-4"
           >
             <img
               alt=""
-              class="size-10 rounded-xl sm:size-28"
+              class="size-10 rounded-xl ring-1 ring-border sm:size-20"
               src="./images/generic_logo.png"
             />
             <div
-              class="flex w-full justify-between"
+              class="flex w-full justify-between gap-2"
             >
               <div
                 class="flex flex-col"
@@ -37,15 +44,15 @@ exports[`ProjectList Component > matches snapshot 1`] = `
                   Generic Company
                 </p>
                 <p
-                  class="card-accent"
+                  class="card-accent font-mono"
                 >
                   Generic Role
                 </p>
                 <p
-                  class="card-accent"
+                  class="card-accent font-mono"
                 >
                   2020
-                   - 
+                   — 
                   2021
                 </p>
                 <p
@@ -102,79 +109,75 @@ exports[`ProjectList Component > matches snapshot 1`] = `
               </div>
             </div>
           </div>
+          <div
+            class="font-normal leading-relaxed text-xs sm:leading-relaxed md:text-sm"
+          >
+            <ul
+              class="ml-4 list-disc space-y-1 pr-2 marker:text-neon/60"
+            >
+              <li>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </li>
+              <li>
+                Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </li>
+              <li>
+                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+              </li>
+              <li>
+                Nisi ut aliquip ex ea commodo consequat.
+              </li>
+            </ul>
+          </div>
+          <div
+            class="flex flex-wrap max-sm:gap-1 sm:gap-2 md:gap-3"
+          >
+            <a
+              class="skill-block"
+              href="https://generic-skill1.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <iconify-icon
+                class="icon-box"
+                height="1.1em"
+                icon="ph:generic-icon-1"
+                width="1.1em"
+              />
+              Generic Skill 1
+            </a>
+            <a
+              class="skill-block"
+              href="https://generic-skill2.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <iconify-icon
+                class="icon-box"
+                height="1.1em"
+                icon="ph:generic-icon-2"
+                width="1.1em"
+              />
+              Generic Skill 2
+            </a>
+            <a
+              class="skill-block"
+              href="https://generic-skill3.com"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <iconify-icon
+                class="icon-box"
+                height="1.1em"
+                icon="ph:generic-icon-3"
+                width="1.1em"
+              />
+              Generic Skill 3
+            </a>
+          </div>
         </div>
-        <div
-          class="mb-3 font-normal leading-relaxed text-xs sm:leading-relaxed sm:text-xs md:text-sm"
-        >
-          <ul
-            class="list-disc pl-10 pr-5"
-          >
-            <li>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </li>
-            <li>
-              Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            </li>
-            <li>
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
-            </li>
-            <li>
-              Nisi ut aliquip ex ea commodo consequat.
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div
-        class="flex flex-col gap-1.5"
-      >
-        <div
-          class="flex flex-wrap max-sm:gap-1 sm:gap-2 md:gap-3"
-        >
-          <a
-            class="skill-block"
-            href="https://generic-skill1.com"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <iconify-icon
-              class="icon-box"
-              height="1.1em"
-              icon="ph:generic-icon-1"
-              width="1.1em"
-            />
-            Generic Skill 1
-          </a>
-          <a
-            class="skill-block"
-            href="https://generic-skill2.com"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <iconify-icon
-              class="icon-box"
-              height="1.1em"
-              icon="ph:generic-icon-2"
-              width="1.1em"
-            />
-            Generic Skill 2
-          </a>
-          <a
-            class="skill-block"
-            href="https://generic-skill3.com"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <iconify-icon
-              class="icon-box"
-              height="1.1em"
-              icon="ph:generic-icon-3"
-              width="1.1em"
-            />
-            Generic Skill 3
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+      </article>
+    </li>
+  </ol>
 </div>
 `;

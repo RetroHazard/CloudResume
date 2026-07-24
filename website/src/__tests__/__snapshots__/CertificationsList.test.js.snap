@@ -2,65 +2,66 @@
 
 exports[`CertificationList Component > matches snapshot 1`] = `
 <div>
-  <div>
+  <div
+    class="grid grid-cols-1 gap-4 sm:grid-cols-2"
+  >
     <div
-      class="flex flex-col gap-3"
+      class="group flex gap-4 rounded-xl border border-border bg-secondary-800/40 p-4 transition-all hover:-translate-y-0.5 hover:border-neon/40 hover:shadow-lg hover:shadow-neon/5"
+      style="opacity: 0; transform: translateY(16px);"
     >
+      <img
+        alt=""
+        class="size-14 shrink-0 rounded-xl ring-1 ring-border sm:size-16"
+        src="sample_logo.png"
+      />
       <div
-        class="flex w-full justify-between gap-2"
+        class="flex min-w-0 flex-1 flex-col"
       >
-        <div
-          class="flex gap-4"
+        <h3
+          class="card-title"
         >
-          <img
-            alt=""
-            class="size-12 rounded-xl sm:h-[5.7rem] sm:w-[5.7rem]"
-            src="sample_logo.png"
-          />
-          <div
-            class="flex flex-col"
+          Sample Certification
+        </h3>
+        <p
+          class="card-subtitle"
+        >
+          Sample Issuer
+        </p>
+        <p
+          class="card-meta font-mono"
+        >
+          <strong
+            class="font-semibold text-content-accent"
           >
-            <h3
-              class="card-title"
-            >
-              Sample Certification
-            </h3>
-            <p
-              class="card-subtitle"
-            >
-              Sample Issuer
-            </p>
-            <p
-              class="card-meta"
-            >
-              <strong>
-                Credential ID:
-              </strong>
-               
-              123456789
-            </p>
-            <p
-              class="card-meta"
-            >
-              <strong>
-                Issued:
-              </strong>
-               
-              2024-05-24
-            </p>
-            <p
-              class="card-meta"
-            >
-              <strong>
-                Expiry:
-              </strong>
-               
-              2027-05-24
-            </p>
-          </div>
-        </div>
+            ID:
+          </strong>
+           
+          123456789
+        </p>
+        <p
+          class="card-meta font-mono"
+        >
+          <strong
+            class="font-semibold text-content-accent"
+          >
+            Issued:
+          </strong>
+           
+          2024-05-24
+        </p>
+        <p
+          class="card-meta font-mono"
+        >
+          <strong
+            class="font-semibold text-content-accent"
+          >
+            Expiry:
+          </strong>
+           
+          2027-05-24
+        </p>
         <div
-          class="flex flex-wrap gap-3 max-sm:flex-col sm:flex-col"
+          class="mt-2 flex flex-wrap gap-2"
         >
           <a
             aria-label="Sample Certification – verification (opens in new tab)"

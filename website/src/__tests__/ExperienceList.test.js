@@ -57,7 +57,7 @@ describe('ExperienceList Component', () => {
         expect(getByText('Generic Job Title')).toBeInTheDocument();
         expect(getByText('Generic Company')).toBeInTheDocument();
         expect(getByText('Generic Type')).toBeInTheDocument();
-        expect(getByText('Generic Start - Generic End')).toBeInTheDocument();
+        expect(getByText('Generic Start — Generic End')).toBeInTheDocument();
         expect(getByText('Generic Location')).toBeInTheDocument();
         expect(container.querySelector('img[alt=""]')).toBeInTheDocument();
 

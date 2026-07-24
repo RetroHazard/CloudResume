@@ -51,7 +51,7 @@ describe('EducationList Component', () => {
         expect(getByText('Sample University')).toBeInTheDocument();
         expect(getByText('BSc. Sample Degree')).toBeInTheDocument();
         expect(getByText('Sample Category')).toBeInTheDocument();
-        expect(getByText('2000 - 2004')).toBeInTheDocument();
+        expect(getByText('2000 — 2004')).toBeInTheDocument();
         expect(getByText('Sample City, Country')).toBeInTheDocument();
         expect(container.querySelector('img[alt=""]')).toBeInTheDocument();
 

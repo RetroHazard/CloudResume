@@ -26,8 +26,8 @@ describe('Home component', () => {
         // Download CV is now a link (not button-in-anchor)
         const downloadLink = screen.getByRole('link', { name: /download cv/i });
         expect(downloadLink).toHaveAttribute('href', mockData.resumeLink);
-        // Name, title, location
-        expect(screen.getByText(mockData.fullName)).toBeInTheDocument();
+        // Name (rendered as per-character spans; assert via the heading's accessible name), title, location
+        expect(screen.getByRole('heading', { name: mockData.fullName })).toBeInTheDocument();
         expect(screen.getByText(mockData.jobTitle)).toBeInTheDocument();
         expect(screen.getByText(mockData.location)).toBeInTheDocument();
         // Availability tag from JSON (no salary)
