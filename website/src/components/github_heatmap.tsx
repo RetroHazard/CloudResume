@@ -102,7 +102,7 @@ export default function GithubHeatmap() {
                         <span>Fri</span>
                         <span />
                     </div>
-                    <div className='gh-grid' style={{ gridTemplateColumns: columns }}>
+                    <div className='gh-grid' style={{ gridTemplateColumns: columns, aspectRatio: `${weekCount} / 7` }}>
                         {cells.map((c, i) =>
                             c ? (
                                 <div
@@ -138,8 +138,8 @@ export default function GithubHeatmap() {
                 .gh-month span { position: absolute; left: 0; white-space: nowrap; }
                 .gh-dow { grid-row: 2; grid-column: 1; display: grid; grid-template-rows: repeat(7, 1fr); gap: 2px; height: 100%;
                     padding-right: 4px; align-items: center; font-family: var(--font-mono, monospace); font-size: 9px; color: var(--chart-label, #8ba7ac); }
-                .gh-grid { grid-row: 2; grid-column: 2; display: grid; grid-template-rows: repeat(7, auto); grid-auto-flow: column; gap: 2px; width: 100%; }
-                .gh-cell { width: 100%; aspect-ratio: 1 / 1; border-radius: 2px; }
+                .gh-grid { grid-row: 2; grid-column: 2; display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: 2px; width: 100%; }
+                .gh-cell { min-width: 0; min-height: 0; border-radius: 2px; }
                 .gh-swatch { width: 11px; height: 11px; border-radius: 2px; flex: 0 0 auto; }
             `}</style>
         </figure>
