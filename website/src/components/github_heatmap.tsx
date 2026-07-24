@@ -84,7 +84,7 @@ export default function GithubHeatmap() {
                 </div>
             )}
 
-            <div className='w-full'>
+            <div className='gh-wrap'>
                 <div className='gh-cal'>
                     <div className='gh-months' style={{ gridTemplateColumns: columns }}>
                         {months.map((m, i) => (
@@ -131,15 +131,16 @@ export default function GithubHeatmap() {
             </div>
 
             <style>{`
-                .gh-cal { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px; width: 100%; }
-                .gh-months { grid-row: 1; grid-column: 2; display: grid; gap: 2px; height: 13px;
-                    font-family: var(--font-mono, monospace); font-size: 10px; letter-spacing: 0.04em; color: var(--chart-label, #8ba7ac); }
+                .gh-wrap { container-type: inline-size; width: 100%; }
+                .gh-cal { --gh-gap: clamp(1px, 0.35cqw, 2px); display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px; width: 100%; }
+                .gh-months { grid-row: 1; grid-column: 2; display: grid; gap: var(--gh-gap); height: clamp(9px, 1.8cqw, 13px);
+                    font-family: var(--font-mono, monospace); font-size: clamp(5px, 1.6cqw, 10px); letter-spacing: 0.04em; color: var(--chart-label, #8ba7ac); }
                 .gh-month { position: relative; min-width: 0; }
                 .gh-month span { position: absolute; left: 0; white-space: nowrap; }
-                .gh-dow { grid-row: 2; grid-column: 1; align-self: stretch; display: grid; grid-template-rows: repeat(7, 1fr); gap: 2px;
+                .gh-dow { grid-row: 2; grid-column: 1; align-self: stretch; display: grid; grid-template-rows: repeat(7, minmax(0, 1fr)); gap: var(--gh-gap);
                     min-height: 0; overflow: hidden; padding-right: 4px; align-items: center; line-height: 1;
-                    font-family: var(--font-mono, monospace); font-size: 9px; color: var(--chart-label, #8ba7ac); }
-                .gh-grid { grid-row: 2; grid-column: 2; display: grid; grid-template-rows: repeat(7, 1fr); grid-auto-flow: column; gap: 2px; width: 100%; }
+                    font-family: var(--font-mono, monospace); font-size: clamp(4px, 1.5cqw, 9px); color: var(--chart-label, #8ba7ac); }
+                .gh-grid { grid-row: 2; grid-column: 2; display: grid; grid-template-rows: repeat(7, minmax(0, 1fr)); grid-auto-flow: column; gap: var(--gh-gap); width: 100%; }
                 .gh-cell { min-width: 0; min-height: 0; border-radius: 2px; }
                 .gh-swatch { width: 11px; height: 11px; border-radius: 2px; flex: 0 0 auto; }
             `}</style>
