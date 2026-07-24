@@ -1,5 +1,7 @@
 import PersonalSummary from '../../components/personal_summary';
 import SocialLinks from '../../components/social_links';
+import { HeroName } from '../../components/hero';
+import { SectionShell, Chip } from '../../components/ui/primitives';
 import { useJsonData, LoadingSkeleton } from '../../utils/useJsonData';
 
 function Home() {
@@ -9,66 +11,58 @@ function Home() {
     return (
         <>
             <title>Cloud Resume</title>
-            <div className='content-block' id='profile'>
+            <SectionShell id='profile' kicker='// whoami'>
                 <div className='flex flex-col gap-6 sm:flex-row sm:items-start'>
                     <div className='flex flex-col items-center gap-4'>
-                        <img
-                            className='max-w-none rounded-xl max-sm:size-40 sm:size-40 md:size-56'
-                            src={personalData.profilePicture}
-                            alt={`Photo of ${personalData.fullName}`}
-                        />
-                        <div className='flex flex-col'>
-                            <SocialLinks />
+                        <div className='relative'>
+                            <div className='absolute -inset-1 rounded-2xl bg-gradient-to-tr from-neon/40 to-glow/30 opacity-60 blur-md' />
+                            <img
+                                className='relative max-w-none rounded-2xl ring-1 ring-border max-sm:size-40 sm:size-40 md:size-52'
+                                src={personalData.profilePicture}
+                                alt={`Photo of ${personalData.fullName}`}
+                            />
                         </div>
+                        <SocialLinks />
                     </div>
+
                     <div className='flex w-full flex-col gap-5'>
-                        <div className='flex w-full flex-col justify-between gap-2 sm:flex-row'>
-                            <div className='w-full'>
-                                <h1 className='h1 mb-0 font-extrabold text-content-header text-xl sm:text-2xl md:text-3xl'>
-                                    {personalData.fullName}
-                                </h1>
-                                <h2 className='mb-0 text-base font-medium text-content-header max-sm:text-sm sm:text-sm md:text-base'>
-                                    {personalData.jobTitle}
-                                </h2>
-                            </div>
+                        <div>
+                            <HeroName
+                                text={personalData.fullName}
+                                className='mb-1 font-heading text-2xl font-extrabold text-content-header sm:text-3xl md:text-4xl'
+                            />
+                            <p className='mb-0 font-mono text-sm text-neon sm:text-base'>
+                                <span className='text-glow'>&gt;</span> {personalData.jobTitle}
+                            </p>
                         </div>
-                        <div className='flex flex-col gap-6'>
-                            <div>
-                                <span className='font-medium text-content-subtitle max-sm:text-xs sm:text-sm md:text-base'>
-                                    Location:{' '}
-                                </span>
-                                <span className='text-content-accent max-sm:text-xs sm:text-sm md:text-base'>
-                                    {personalData.location}
-                                </span>
+
+                        <p className='mb-0 font-mono text-xs text-content-accent'>
+                            <span className='text-content-subtitle'>location:</span> {personalData.location}
+                        </p>
+
+                        {personalData.availability?.length > 0 && (
+                            <div className='flex flex-wrap gap-2'>
+                                {personalData.availability.map((tag) => (
+                                    <Chip key={tag}>{tag}</Chip>
+                                ))}
                             </div>
-                            <a
-                                href={personalData.resumeLink}
-                                download
-                                className='inline-flex w-fit items-center rounded bg-primary-500 px-4 py-2 font-bold text-secondary-800 no-underline hover:bg-primary-400'
-                            >
-                                <iconify-icon
-                                    icon='fa6-solid:cloud-arrow-down'
-                                    aria-hidden='true'
-                                    class='mr-2 text-content-header'
-                                />
-                                <span className='text-sm text-content-header max-sm:text-xs max-sm:font-light'>
-                                    Download CV
-                                </span>
-                            </a>
-                        </div>
+                        )}
+
+                        <a
+                            href={personalData.resumeLink}
+                            download
+                            className='inline-flex w-fit items-center gap-2 rounded-md border border-neon/40 bg-neon/10 px-4 py-2 font-mono text-sm font-semibold text-neon no-underline transition-colors hover:bg-neon/20'
+                        >
+                            <iconify-icon icon='fa6-solid:cloud-arrow-down' aria-hidden='true' />
+                            Download CV
+                        </a>
                     </div>
                 </div>
-                <div className='flex flex-col gap-4'>
+
+                <div className='mt-6 flex flex-col gap-4 border-t border-border pt-6'>
                     <PersonalSummary />
-                    {personalData.availability && personalData.availability.length > 0 && (
-                        <div className='flex flex-wrap gap-3'>
-                            {personalData.availability.map((tag) => (
-                                <div key={tag} className='open-for-block'>{tag}</div>
-                            ))}
-                        </div>
-                    )}
                 </div>
-            </div>
+            </SectionShell>
         </>
     );
 }

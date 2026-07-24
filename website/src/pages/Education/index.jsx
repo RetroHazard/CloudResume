@@ -1,15 +1,13 @@
 import EducationList from '../../components/education_list';
+import { SectionShell } from '../../components/ui/primitives';
 
 function Education() {
     return (
         <>
             <title>Education | Cloud Resume</title>
-            <div className='content-block' id='education'>
-                <h1 className='h1 mb-0 font-heading font-bold text-content-header text-2xl sm:text-3xl'>Education</h1>
-                <div className='flex flex-col gap-8'>
-                    <EducationList />
-                </div>
-            </div>
+            <SectionShell id='education' kicker='// academics' title='Education'>
+                <EducationList />
+            </SectionShell>
         </>
     );
 }

@@ -73,6 +73,30 @@ export function SectionShell({
     );
 }
 
+// Vertical timeline rail (career, education, projects).
+export function Timeline({ children }: { children: ReactNode }) {
+    return (
+        <ol className='relative ml-1 flex list-none flex-col gap-5 border-l border-border/70 pl-6 sm:pl-8'>
+            {children}
+        </ol>
+    );
+}
+
+// One entry on the timeline: neon node dot + a hover-lit card. Animates in.
+export function TimelineItem({ children, delay = 0 }: { children: ReactNode; delay?: number }) {
+    return (
+        <Reveal as='li' delay={delay} className='relative'>
+            <span
+                aria-hidden='true'
+                className='absolute -left-[1.8rem] top-5 h-2.5 w-2.5 rounded-full bg-neon ring-4 ring-neon/15 sm:-left-[2.3rem]'
+            />
+            <article className='group rounded-xl border border-border bg-secondary-800/40 p-4 transition-colors hover:border-neon/40 sm:p-5'>
+                {children}
+            </article>
+        </Reveal>
+    );
+}
+
 // Small neon-outlined tag/chip used for tech, categories, availability.
 export function Chip({ children, className }: { children: ReactNode; className?: string }) {
     return (

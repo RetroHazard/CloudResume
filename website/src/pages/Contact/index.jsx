@@ -3,6 +3,7 @@ import { useRef, useEffect, useState, useReducer } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useVisitorId } from '../../utils/useVisitorId';
 import { apiPost } from '../../utils/apiClient';
+import { SectionShell } from '../../components/ui/primitives';
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
@@ -213,18 +214,17 @@ function Contact() {
     return (
         <>
             <title>Contact | Cloud Resume</title>
-            <div className='content-block' id='contact'>
-                <h2 className='h2 mb-0 font-extrabold text-content-header'>CONTACT ME</h2>
+            <SectionShell id='contact' kicker='// get in touch' title='Contact'>
                 <div className='mx-auto max-w-screen-md'>
-                    <p className='mb-1 font-sans text-content-accent sm:text-xl'>
-                        Questions? Comments? Have a potential opportunity or project you'd like to collaborate on?
+                    <p className='mb-1 text-content-body sm:text-lg'>
+                        Questions, comments, or a potential opportunity or project you'd like to collaborate on?
                     </p>
-                    <p className='mb-4 font-sans text-content-accent sm:text-xl'>
-                        Feel free to reach out using the contact form below.
+                    <p className='mb-6 text-content-accent'>
+                        Drop a message below — I read everything that comes through.
                     </p>
                     <ContactForm />
                 </div>
-            </div>
+            </SectionShell>
         </>
     );
 }

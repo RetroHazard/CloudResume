@@ -1,15 +1,13 @@
 import ProjectList from '../../components/project_list';
+import { SectionShell } from '../../components/ui/primitives';
 
 function Projects() {
     return (
         <>
             <title>Projects | Cloud Resume</title>
-            <div className='content-block' id='projects'>
-                <h1 className='h1 mb-0 font-heading font-bold text-content-header text-2xl sm:text-3xl'>Projects</h1>
-                <div className='flex flex-col gap-8'>
-                    <ProjectList />
-                </div>
-            </div>
+            <SectionShell id='projects' kicker='// build log' title='Projects'>
+                <ProjectList />
+            </SectionShell>
         </>
     );
 }
