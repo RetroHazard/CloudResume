@@ -29,11 +29,7 @@ const DOMAINS = ['Cloud', 'Automation', 'Security', 'Containers', 'Scripting', '
 
 const pct = (level: string) => parseInt(String(level).replace('%', ''), 10) || 0;
 
-const shortCloud = (name: string) =>
-    name
-        .replace('Amazon Web Services', 'AWS')
-        .replace('Microsoft Azure', 'Azure')
-        .replace('Google Cloud Platform', 'GCP');
+const RING_COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)'];
 
 export default function SkillsCharts() {
     const { data } = useJsonData('skill_data.json') as {
@@ -53,15 +49,15 @@ export default function SkillsCharts() {
     const metrics = DOMAINS.map((d) => ({ key: d, label: d }));
     const radarData = [{ label: 'Proficiency', values }];
 
-    // Cloud: a specialist story rather than a lopsided three-way race. The
-    // primary platform (highest proficiency — AWS) gets the hero ring; the rest
-    // are shown as "also worked with", acknowledged without competing.
+    // rings: the three public clouds
     const clouds = core
         .filter((s) => s.category === 'Cloud')
-        .map((s) => ({ label: shortCloud(s.name), value: pct(s.level) }))
-        .sort((a, b) => b.value - a.value);
-    const primary = clouds[0] ?? { label: 'AWS', value: 0 };
-    const secondary = clouds.slice(1);
+        .map((s, i) => ({
+            label: s.name.replace('Amazon Web Services', 'AWS').replace('Microsoft ', '').replace('Google Cloud Platform', 'GCP'),
+            value: pct(s.level),
+            maxValue: 100,
+            color: RING_COLORS[i % RING_COLORS.length],
+        }));
 
     return (
         <div className='grid gap-8 md:grid-cols-2'>
@@ -79,33 +75,28 @@ export default function SkillsCharts() {
 
             <figure className='flex flex-col items-center'>
                 <RingChart
-                    data={[{ label: primary.label, value: primary.value, maxValue: 100, color: 'var(--chart-1)' }]}
-                    className='mx-auto max-w-[260px]'
-                    strokeWidth={20}
-                    baseInnerRadius={56}
+                    data={clouds}
+                    className='mx-auto max-w-[300px]'
+                    strokeWidth={16}
+                    ringGap={8}
+                    baseInnerRadius={46}
                 >
-                    <Ring index={0} showGlow lineCap='round' />
-                    <RingCenter defaultLabel={primary.label} suffix='%' />
+                    {clouds.map((c, i) => (
+                        <Ring key={c.label} index={i} showGlow />
+                    ))}
+                    <RingCenter defaultLabel='Cloud' />
                 </RingChart>
-                <figcaption className='mt-3 flex flex-col items-center gap-2'>
-                    <span className='font-mono text-[0.6rem] uppercase tracking-[0.2em] text-content-accent'>
-                        Primary Cloud Platform
-                    </span>
-                    {secondary.length > 0 && (
-                        <div className='flex flex-wrap items-center justify-center gap-2'>
-                            <span className='font-mono text-[0.6rem] uppercase tracking-wide text-content-date'>
-                                also worked with
-                            </span>
-                            {secondary.map((c) => (
-                                <span
-                                    key={c.label}
-                                    className='inline-flex items-center gap-1.5 rounded-md border border-border bg-secondary-800/70 px-2 py-0.5 font-mono text-[0.62rem] text-content-subtitle'
-                                >
-                                    {c.label}
-                                </span>
-                            ))}
-                        </div>
-                    )}
+                <figcaption className='mt-2 flex flex-wrap justify-center gap-3 font-mono text-xs text-content-accent'>
+                    {clouds.map((c, i) => (
+                        <span key={c.label} className='inline-flex items-center gap-1.5'>
+                            <span
+                                aria-hidden='true'
+                                className='inline-block h-2 w-2 rounded-full'
+                                style={{ backgroundColor: RING_COLORS[i % RING_COLORS.length] }}
+                            />
+                            {c.label} {c.value}%
+                        </span>
+                    ))}
                 </figcaption>
             </figure>
         </div>
