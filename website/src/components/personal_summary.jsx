@@ -19,22 +19,21 @@ function PersonalSummary() {
         return (
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    Drawing on <strong>15 years of experience</strong> in the tech industry, I'm a versatile
-                    professional specializing in both on-prem and cloud technologies, cybersecurity, and building
-                    innovative client solutions. My expertise spans client support, systems administration,
-                    architecture, identity and access management, project management, and consulting.
+                    IT Solutions Leader with <strong>15+ years of experience</strong> building and scaling secure
+                    enterprise infrastructure across cloud, identity, and endpoint security domains. Expert in{' '}
+                    <strong>AWS, Kubernetes, Terraform</strong>, and <strong>Identity &amp; Access Management (IAM/SSO)</strong>,
+                    with hands-on experience in PKI, MDM/endpoint security, vulnerability management, and{' '}
+                    <em>AI governance</em>.
                 </p>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    I'm a self-starter, driven by a passion for learning and solving <em>complex problems</em>. My
-                    diverse background allows me to approach challenges with a <em>unique perspective</em>, designing
-                    secure and efficient technology solutions that drive business growth. I thrive when presented with
-                    challenges that require out-of-the-box thinking and enjoy finding more <strong>efficient</strong>{' '}
-                    ways to achieve goals. Keeping mentally engaged and continual learning is crucial for me.
+                    Known for automating manual security operations (<strong>Python, Go, Bash</strong>) and building
+                    internal tools that reduce risk and operational overhead. Proven ability to lead cross-functional
+                    initiatives from design through <em>fleet-wide rollout</em>, balancing technical depth with clear
+                    business impact.
                 </p>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    I constantly seek new <em>challenges and opportunities</em> to expand my skill set. My commitment to
-                    learning extends beyond the workplace, where I have spent the past few years experimenting with
-                    multiple disciplines in Game Development, from coding in <strong>C++</strong>, to 3D modeling and
+                    A committed continual learner outside the day-to-day — currently going deep on{' '}
+                    <strong>Game Development</strong>, coding in <strong>C++</strong> and exploring 3D modeling and
                     simulation.
                 </p>
             </>

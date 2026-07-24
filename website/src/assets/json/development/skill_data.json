@@ -56,6 +56,16 @@
       "website": "#"
     }
   ],
+  "industry_knowledge": [
+    { "name": "Domain Expertise" },
+    { "name": "Domain Expertise" },
+    { "name": "Domain Expertise" }
+  ],
+  "soft_skills": [
+    { "name": "Soft Skill" },
+    { "name": "Soft Skill" },
+    { "name": "Soft Skill" }
+  ],
   "language_skills": [
     {
       "language": "Language",
