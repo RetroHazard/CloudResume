@@ -47,6 +47,8 @@ export default function SkillsCharts() {
 
     return (
         <div className='flex flex-col gap-10'>
+            <GithubHeatmap />
+
             <figure className='flex flex-col items-center'>
                 <RadarChart data={radarData} metrics={metrics} className='mx-auto max-w-[380px]'>
                     <RadarGrid />
@@ -58,8 +60,6 @@ export default function SkillsCharts() {
                     // domain proficiency
                 </figcaption>
             </figure>
-
-            <GithubHeatmap />
         </div>
     );
 }
