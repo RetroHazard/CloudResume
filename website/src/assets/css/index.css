@@ -1,144 +1,151 @@
 @import 'tailwindcss';
 
-/* Dark-only, cyber/security aesthetic */
+/* ══════════════════════════════════════════════════════════════════════════
+   RAPID — a Tokyo transit / wayfinding design language.
+   Career reads as a rail line; pages are platform boards; the signature motion
+   is a split-flap departure board. Dark-only, signal-coded, ruthlessly gridded.
+   ══════════════════════════════════════════════════════════════════════════ */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ── Design tokens (Tailwind v4 CSS-first theme) ──────────────────────────── */
 @theme {
-    /* Custom breakpoints — many sm:/md:/lg: classes depend on these exact values */
+    /* Breakpoints (unchanged — layout utilities depend on these) */
     --breakpoint-sm: 740px;
     --breakpoint-md: 900px;
     --breakpoint-lg: 1200px;
     --breakpoint-xl: 1500px;
     --breakpoint-2xl: 1920px;
 
-    /* Fonts */
-    --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
-        'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    /* Fonts — condensed grotesque display (station signage) + neutral body + mono data */
+    --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     --font-sans: var(--font-body);
-    --font-heading: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-heading: 'Barlow Condensed', 'Arial Narrow', ui-sans-serif, system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
 
-    /* Brand — primary (neon cyan) */
-    --color-primary-50: #ecfeff;
-    --color-primary-100: #cffafe;
-    --color-primary-200: #a5f3fc;
-    --color-primary-300: #67e8f9;
-    --color-primary-400: #22d3ee;
-    --color-primary-500: #06b6d4;
-    --color-primary-600: #0891b2;
-    --color-primary-700: #0e7490;
-    --color-primary-800: #155e75;
-    --color-primary-900: #164e63;
+    /* Primary — signal green (on-time / go) */
+    --color-primary-50: #e6fff2;
+    --color-primary-100: #b8ffdd;
+    --color-primary-200: #86f7c3;
+    --color-primary-300: #57efab;
+    --color-primary-400: #2ee08a;
+    --color-primary-500: #16c974;
+    --color-primary-600: #0fa85f;
+    --color-primary-700: #0c8149;
+    --color-primary-800: #0a5f37;
+    --color-primary-900: #073f25;
 
-    /* Neutral — secondary (deep cyber slate; 50-400 stay light for text, 500-900 darkened) */
-    --color-secondary-50: #f8fafc;
-    --color-secondary-100: #f1f5f9;
-    --color-secondary-200: #e2e8f0;
-    --color-secondary-300: #cbd5e1;
-    --color-secondary-400: #94a3b8;
-    --color-secondary-500: #2a3547;
-    --color-secondary-600: #1b2433;
-    --color-secondary-700: #0e1420;
-    --color-secondary-800: #0a0e16;
-    --color-secondary-900: #05070c;
+    /* Neutral — transit slate (deep ink → light labels) */
+    --color-secondary-50: #f2f8f6;
+    --color-secondary-100: #dce8e8;
+    --color-secondary-200: #b7cccf;
+    --color-secondary-300: #90aab0;
+    --color-secondary-400: #6c8b91;
+    --color-secondary-500: #2a4650;
+    --color-secondary-600: #1a333c;
+    --color-secondary-700: #12262e;
+    --color-secondary-800: #0c1e26;
+    --color-secondary-900: #071319;
 
-    /* Neon accents (cyber) */
-    --color-neon: #22d3ee;
-    --color-neon-soft: #67e8f9;
-    --color-glow: #34d399;
-    --color-alert: #f472b6;
+    /* Signal accents */
+    --color-neon: #2ee08a;      /* GO / on-time / primary line */
+    --color-neon-soft: #7ff0b5;
+    --color-glow: #ffc24b;      /* board flap text / amber highlight */
+    --color-alert: #ff5a5f;     /* delayed / suspended */
+
+    /* Line colours (used for per-entry "line badges") */
+    --color-line-green: #2ee08a;
+    --color-line-amber: #ffc24b;
+    --color-line-blue: #4aa8ff;
+    --color-line-red: #ff5a5f;
+    --color-line-violet: #b48cff;
 
     /* Skill / chart accents */
-    --color-skill-0: #1c2530;
-    --color-skill-1: #22d3ee;
-    --color-skill-2: #34d399;
-    --color-skill-3: #8b5cf6;
+    --color-skill-0: #12262e;
+    --color-skill-1: #2ee08a;
+    --color-skill-2: #ffc24b;
+    --color-skill-3: #4aa8ff;
 
-    /* Semantic content tokens (used by @layer component classes) */
-    --color-content-title: #e6edf3;
-    --color-content-subtitle: #c9d3de;
-    --color-content-header: #f0f6fc;
-    --color-content-body: #a9b4c0;
-    --color-content-accent: #8b96a5;
-    --color-content-date: #6e7a89;
-    --color-content-skill: #e6edf3;
-    --color-content-outline: #22d3ee;
-    --color-content-boxbg: #131a24;
-    --color-content-boxhl: #1c2530;
-    --color-content-icons: #c9d3de;
+    /* Semantic content tokens */
+    --color-content-title: #f2f8f6;
+    --color-content-subtitle: #cfe0e0;
+    --color-content-header: #ffffff;
+    --color-content-body: #b7cccf;
+    --color-content-accent: #8ba7ac;
+    --color-content-date: #6c8b91;
+    --color-content-skill: #f2f8f6;
+    --color-content-outline: #2ee08a;
+    --color-content-boxbg: #0f2831;
+    --color-content-boxhl: #17323c;
+    --color-content-icons: #cfe0e0;
 
-    /* shadcn / Kokonut / Bklit component tokens (map to cyber palette) */
-    --color-background: #05070c;
-    --color-foreground: #e6edf3;
-    --color-card: #0b0f17;
-    --color-card-foreground: #e6edf3;
-    --color-popover: #0b0f17;
-    --color-popover-foreground: #e6edf3;
-    --color-primary: #22d3ee;
-    --color-primary-foreground: #05070c;
-    --color-secondary: #131a24;
-    --color-secondary-foreground: #e6edf3;
-    --color-muted: #131a24;
-    --color-muted-foreground: #8b96a5;
-    --color-accent: #34d399;
-    --color-accent-foreground: #05070c;
-    --color-destructive: #ef4444;
-    --color-destructive-foreground: #f0f6fc;
-    --color-border: #1c2530;
-    --color-input: #1c2530;
-    --color-ring: #22d3ee;
+    /* shadcn / component tokens */
+    --color-background: #071319;
+    --color-foreground: #f2f8f6;
+    --color-card: #0c1e26;
+    --color-card-foreground: #f2f8f6;
+    --color-popover: #0c1e26;
+    --color-popover-foreground: #f2f8f6;
+    --color-primary: #2ee08a;
+    --color-primary-foreground: #071319;
+    --color-secondary: #12262e;
+    --color-secondary-foreground: #f2f8f6;
+    --color-muted: #12262e;
+    --color-muted-foreground: #8ba7ac;
+    --color-accent: #ffc24b;
+    --color-accent-foreground: #071319;
+    --color-destructive: #ff5a5f;
+    --color-destructive-foreground: #ffffff;
+    --color-border: #17323c;
+    --color-input: #17323c;
+    --color-ring: #2ee08a;
 
-    /* Radius (preserve v3 overrides) */
+    /* Radius — signage is crisp: small radii */
     --radius-sm: 0.125rem;
     --radius: 0.25rem;
-    --radius-lg: 0.5rem;
-    --radius-xl: 1rem;
-    --radius-2xl: 2rem;
+    --radius-lg: 0.375rem;
+    --radius-xl: 0.625rem;
+    --radius-2xl: 0.875rem;
 }
 
-/* Plain CSS vars that copied shadcn/Bklit/Kokonut components reference directly
-   via var(--x) (Tailwind utilities use the --color-* tokens in @theme above). */
+/* Plain CSS vars for any copied shadcn/Bklit components */
 :root {
-    --background: #05070c;
-    --foreground: #e6edf3;
-    --card: #0b0f17;
-    --card-foreground: #e6edf3;
-    --popover: #0b0f17;
-    --popover-foreground: #e6edf3;
-    --primary: #22d3ee;
-    --primary-foreground: #05070c;
-    --secondary: #131a24;
-    --secondary-foreground: #e6edf3;
-    --muted: #131a24;
-    --muted-foreground: #8b96a5;
-    --accent: #34d399;
-    --accent-foreground: #05070c;
-    --destructive: #ef4444;
-    --border: #1c2530;
-    --input: #1c2530;
-    --ring: #22d3ee;
-    --radius: 0.5rem;
+    --background: #071319;
+    --foreground: #f2f8f6;
+    --card: #0c1e26;
+    --card-foreground: #f2f8f6;
+    --popover: #0c1e26;
+    --popover-foreground: #f2f8f6;
+    --primary: #2ee08a;
+    --primary-foreground: #071319;
+    --secondary: #12262e;
+    --secondary-foreground: #f2f8f6;
+    --muted: #12262e;
+    --muted-foreground: #8ba7ac;
+    --accent: #ffc24b;
+    --accent-foreground: #071319;
+    --destructive: #ff5a5f;
+    --border: #17323c;
+    --input: #17323c;
+    --ring: #2ee08a;
+    --radius: 0.375rem;
 
-    /* Bklit chart palette + theming */
-    --chart-1: #22d3ee;
-    --chart-2: #34d399;
-    --chart-3: #8b5cf6;
-    --chart-4: #f472b6;
-    --chart-5: #fbbf24;
-    --chart-background: #0b0f17;
-    --chart-foreground: #e6edf3;
-    --chart-foreground-muted: #8b96a5;
-    --chart-label: #8b96a5;
-    --chart-grid: #1c2530;
+    /* Bklit chart palette */
+    --chart-1: #2ee08a;
+    --chart-2: #ffc24b;
+    --chart-3: #4aa8ff;
+    --chart-4: #b48cff;
+    --chart-5: #ff5a5f;
+    --chart-background: #0c1e26;
+    --chart-foreground: #f2f8f6;
+    --chart-foreground-muted: #8ba7ac;
+    --chart-label: #8ba7ac;
+    --chart-grid: #17323c;
 }
 
-/* Scrollbar-width compensation (prevents horizontal shift) */
+/* Scrollbar-width compensation */
 html {
     overflow-x: hidden;
     margin-right: calc(-1 * (100vw - 100%));
 }
-
 html.disable-fix {
     overflow-x: initial;
     margin-right: initial;
@@ -148,76 +155,76 @@ html.disable-fix {
     html {
         color-scheme: dark;
     }
-
     a {
         @apply text-content-accent underline transition-colors hover:text-neon;
     }
-
     body {
         @apply bg-background font-body text-content-body antialiased;
+    }
+    /* Tabular figures everywhere digits line up on the boards */
+    .tabular {
+        font-variant-numeric: tabular-nums;
     }
 }
 
 @layer components {
+    /* ── Wayfinding chrome ─────────────────────────────────────────────── */
+    /* Pictogram button (socials, entry links) — square signage tile */
     .social-link {
-        @apply flex h-10 w-10 items-center justify-center rounded bg-content-boxbg text-content-icons no-underline hover:bg-content-boxhl active:translate-y-px sm:h-7 sm:w-7;
+        @apply flex h-10 w-10 items-center justify-center rounded border border-border bg-content-boxbg text-content-icons no-underline transition-colors hover:border-neon/50 hover:bg-content-boxhl hover:text-neon active:translate-y-px sm:h-9 sm:w-9;
     }
 
     .open-for-block {
-        @apply flex w-fit items-center gap-x-1.5 rounded bg-content-boxbg tracking-wide text-content-icons no-underline hover:bg-content-boxhl max-sm:h-5 max-sm:px-1.5 max-sm:text-xs max-sm:font-semibold sm:h-5 sm:px-2 sm:text-sm sm:font-semibold md:h-6 md:px-2.5 md:text-sm md:font-semibold;
+        @apply flex w-fit items-center gap-x-1.5 rounded border border-border bg-content-boxbg font-mono uppercase tracking-wider text-content-icons no-underline hover:border-neon/50 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-xs max-sm:font-semibold sm:h-6 sm:px-2 sm:text-xs sm:font-semibold md:h-6 md:px-2.5 md:text-xs md:font-semibold;
     }
 
+    /* Line-badge chip for technologies — reads like a route label */
     .skill-block {
-        @apply flex w-fit items-center gap-x-1.5 rounded-md border border-border bg-secondary-800/60 font-mono tracking-wide text-content-subtitle no-underline transition-colors hover:border-neon/50 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-xs max-sm:font-light sm:h-6 sm:px-2 sm:text-xs sm:font-normal md:h-7 md:px-2.5 md:text-sm md:font-normal;
+        @apply inline-flex w-fit items-center gap-x-1.5 rounded border border-border bg-secondary-800/70 font-mono uppercase tracking-wide text-content-subtitle no-underline transition-colors hover:border-neon/60 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-[0.6rem] sm:h-6 sm:px-2 sm:text-[0.68rem] md:h-6 md:px-2.5 md:text-xs;
     }
 
-    .skill-progress-bar {
-        @apply h-2.5 rounded-full bg-gradient-to-r from-skill-3 from-35% to-skill-1 max-sm:h-1.5;
-    }
-
-    .skill-progress-bar-outline {
-        @apply mb-4 rounded-full bg-skill-0 ring-2 ring-content-outline/35 max-sm:h-1.5 max-sm:w-12 sm:h-2 sm:w-40 md:h-2.5 md:w-44;
-    }
-
-    .text-entry {
-        @apply block w-full rounded-lg border border-secondary-600 bg-secondary-800 p-2.5 text-sm
-               text-content-body shadow-sm placeholder:text-content-accent
-               focus:border-primary-400 focus:ring-primary-400 focus:outline-none;
-    }
-
+    /* ── Nav (line map) — class names kept for tests; restyled as rail stops ── */
     .nav-block-active {
-        @apply my-1 inline-flex max-h-10 w-full items-center rounded-lg border-l-2 border-primary-400 bg-secondary-500 px-4 py-3 text-content-title no-underline max-sm:w-fit max-sm:border-0;
+        @apply relative my-0.5 inline-flex w-full items-center gap-3 rounded px-3 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-content-header no-underline transition-colors max-sm:w-fit;
     }
-
     .nav-block-inactive {
-        @apply my-1 inline-flex max-h-10 w-full items-center rounded-lg border-l-2 border-transparent bg-secondary-800 px-4 py-3 no-underline hover:bg-secondary-600 hover:text-content-title max-sm:w-fit max-sm:border-0;
+        @apply relative my-0.5 inline-flex w-full items-center gap-3 rounded px-3 py-2.5 font-mono text-xs font-medium uppercase tracking-wider text-content-accent no-underline transition-colors hover:bg-content-boxbg hover:text-content-subtitle max-sm:w-fit;
     }
 
     .icon-box {
         @apply m-0 content-center justify-center justify-items-center align-middle;
     }
 
-    .content-block {
-        @apply flex w-full flex-col justify-center gap-6 rounded-2xl bg-secondary-700 p-8 shadow-md;
+    /* Form field — inquiry counter input */
+    .text-entry {
+        @apply block w-full rounded border border-secondary-600 bg-secondary-800 p-2.5 text-sm text-content-body shadow-sm transition-colors placeholder:text-content-accent focus:border-neon focus:ring-1 focus:ring-neon focus:outline-none;
     }
 
+    /* ── Board typography (used across list rows) ──────────────────────── */
     .card-title {
-        @apply mb-0 text-xs font-extrabold text-content-title sm:text-sm md:text-base;
+        @apply mb-0 font-heading text-base font-bold uppercase leading-none tracking-wide text-content-title sm:text-lg md:text-xl;
     }
-
     .card-subtitle {
-        @apply mb-0.5 text-xs font-semibold leading-snug text-content-subtitle sm:text-sm md:text-base;
+        @apply mb-0 font-mono text-xs font-medium leading-snug text-neon sm:text-sm;
     }
-
     .card-meta {
-        @apply mb-0 text-xs font-medium leading-snug text-content-date;
+        @apply mb-0 font-mono text-[0.7rem] font-medium leading-snug text-content-date;
     }
-
     .card-accent {
-        @apply mb-0 text-xs font-medium leading-snug text-content-accent sm:text-xs md:text-sm;
+        @apply mb-0 font-mono text-[0.7rem] font-medium uppercase leading-snug tracking-wider text-content-accent;
+    }
+    .card-fine {
+        @apply mb-0 font-mono text-[0.7rem] font-light leading-snug text-content-accent;
     }
 
-    .card-fine {
-        @apply mb-0 text-xs font-light leading-snug text-content-accent;
+    .content-block {
+        @apply flex w-full flex-col justify-center gap-6 rounded-xl border border-border bg-card p-8 shadow-md;
+    }
+
+    /* Split-flap cell */
+    .flap {
+        @apply grid place-items-center overflow-hidden rounded-[3px] font-mono font-bold text-glow;
+        background: #05131a;
+        box-shadow: inset 0 0 0 1px #123842, inset 0 -6px 8px -6px #000;
     }
 }

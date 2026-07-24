@@ -1,26 +1,35 @@
 import { Link } from 'react-router-dom';
-import { SectionShell } from '../../components/ui/primitives';
+import { SectionShell, StatusPill } from '../../components/ui/primitives';
 
 function NotFound() {
+    const path = typeof window !== 'undefined' ? window.location.pathname : '/';
     return (
         <>
             <title>404 – Page Not Found | Cloud Resume</title>
-            <SectionShell id='not-found' kicker='// status: 404'>
-                <div className='flex flex-col items-center gap-4 py-10 text-center'>
-                    <p className='font-mono text-6xl font-bold text-neon sm:text-7xl'>404</p>
-                    <h1 className='mb-0 font-heading text-2xl font-bold text-content-header'>
-                        Route not found
-                    </h1>
-                    <p className='max-w-md font-mono text-sm text-content-accent'>
-                        <span className='text-glow'>$</span> curl {typeof window !== 'undefined' ? window.location.pathname : '/'} → 404
-                        <br />
-                        The resource you requested does not exist on this host.
+            <SectionShell
+                id='not-found'
+                kicker='Service Notice'
+                title='Off the Map'
+                badge='!'
+                line={4}
+                right={<StatusPill tone='alert'>Suspended</StatusPill>}
+            >
+                <div className='flex flex-col items-center gap-5 py-8 text-center'>
+                    <p className='font-heading text-7xl font-extrabold tracking-wide text-alert sm:text-8xl'>
+                        404
                     </p>
+                    <div className='w-full max-w-md rounded border border-dashed border-alert/40 bg-alert/5 px-4 py-3 font-mono text-xs text-content-accent'>
+                        <p className='mb-1 uppercase tracking-[0.18em] text-alert'>⚠ No Service</p>
+                        <p className='mb-0 tabular'>
+                            Line <span className='text-content-subtitle'>{path}</span> does not stop at this station.
+                        </p>
+                    </div>
                     <Link
                         to='/'
-                        className='mt-2 inline-flex items-center gap-2 rounded-md border border-neon/40 bg-neon/10 px-4 py-2 font-mono text-sm text-neon no-underline transition-colors hover:bg-neon/20'
+                        className='inline-flex items-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-neon no-underline transition-colors hover:bg-neon/20'
                     >
-                        cd ~/home
+                        <iconify-icon icon='fa6-solid:house' aria-hidden='true' />
+                        Return to Concourse
                     </Link>
                 </div>
             </SectionShell>

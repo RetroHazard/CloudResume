@@ -3,7 +3,7 @@ import { useRef, useEffect, useState, useReducer } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useVisitorId } from '../../utils/useVisitorId';
 import { apiPost } from '../../utils/apiClient';
-import { SectionShell } from '../../components/ui/primitives';
+import { SectionShell, StatusPill } from '../../components/ui/primitives';
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
@@ -188,21 +188,15 @@ const ContactForm = () => {
                     aria-label={isLoading ? 'Sending message, please wait' : 'Send message'}
                     className={
                         isLoading
-                            ? 'inline-flex w-40 cursor-not-allowed items-center rounded bg-secondary-500 px-4 py-2 font-bold text-secondary-400'
-                            : 'inline-flex w-40 items-center rounded bg-primary-500 px-4 py-2 font-bold text-secondary-800 hover:bg-primary-400'
+                            ? 'inline-flex w-48 cursor-not-allowed items-center justify-center gap-2 rounded border border-border bg-secondary-500 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-secondary-300'
+                            : 'inline-flex w-48 items-center justify-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-neon transition-colors hover:bg-neon/20'
                     }
                 >
-                    <div className='icon-box'>
-                        <i className='mr-2 h-5 w-5 text-content-icons'>
-                            <iconify-icon
-                                aria-hidden='true'
-                                icon={isLoading ? 'svg-spinners:270-ring-with-bg' : 'fa6-solid:paper-plane'}
-                            />
-                        </i>
-                    </div>
-                    <span aria-hidden='true' className='text-sm text-content-header'>
-                        {isLoading ? 'Sending...' : 'Send Message'}
-                    </span>
+                    <iconify-icon
+                        aria-hidden='true'
+                        icon={isLoading ? 'svg-spinners:270-ring-with-bg' : 'fa6-solid:paper-plane'}
+                    />
+                    <span aria-hidden='true'>{isLoading ? 'Dispatching…' : 'Dispatch Message'}</span>
                 </button>
             </div>
             <StatusAlert status={status} />
@@ -214,13 +208,19 @@ function Contact() {
     return (
         <>
             <title>Contact | Cloud Resume</title>
-            <SectionShell id='contact' kicker='// get in touch' title='Contact'>
+            <SectionShell
+                id='contact'
+                kicker='Station Office · Inquiry Counter'
+                title='Contact'
+                line={0}
+                right={<StatusPill tone='on'>Open</StatusPill>}
+            >
                 <div className='mx-auto max-w-screen-md'>
                     <p className='mb-1 text-content-body sm:text-lg'>
                         Questions, comments, or a potential opportunity or project you'd like to collaborate on?
                     </p>
-                    <p className='mb-6 text-content-accent'>
-                        Drop a message below — I read everything that comes through.
+                    <p className='mb-6 font-mono text-xs uppercase tracking-wider text-content-accent'>
+                        Leave a message at the counter — every inquiry is read.
                     </p>
                     <ContactForm />
                 </div>
