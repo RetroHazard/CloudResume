@@ -23,7 +23,9 @@ function NavItem({ to, icon, label }) {
                 <i className='icon-box mr-2.5 h-5 w-5 text-base max-sm:m-0' aria-hidden='true'>
                     <Icon icon={icon} />
                 </i>
-                <span className='max-sm:sr-only'>{label}</span>
+                <span className='font-mono text-xs uppercase tracking-wider max-sm:sr-only'>
+                    {label}
+                </span>
             </NavLink>
         </li>
     );
@@ -33,14 +35,20 @@ function Navigation() {
     return (
         <nav
             aria-label='Primary navigation'
-            className='sticky top-28 mt-28 mr-5 flex h-fit self-start rounded-xl bg-secondary-700 p-2'
+            className='sticky top-28 mt-28 mr-5 flex h-fit self-start rounded-xl border border-border bg-card/70 p-2 shadow-lg shadow-black/40 ring-1 ring-neon/10 backdrop-blur-md'
             id='navbar'
         >
             <ul className='flex flex-col space-y-1 text-sm font-medium text-content-accent'>
+                <li
+                    aria-hidden='true'
+                    className='px-3 pb-2 pt-1 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-neon/70 max-sm:hidden'
+                >
+                    ~/navigate
+                </li>
                 {NAV_ITEMS.map((item) => (
                     <NavItem key={item.to} {...item} />
                 ))}
-                <li aria-hidden='true' className='my-2 h-0.5 w-full bg-secondary-600 max-sm:hidden' />
+                <li aria-hidden='true' className='my-2 h-px w-full bg-border max-sm:hidden' />
                 <li>
                     <VisitorCount />
                 </li>
