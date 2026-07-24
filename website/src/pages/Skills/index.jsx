@@ -1,31 +1,48 @@
+import { lazy, Suspense } from 'react';
 import SkillHighlight from '../../components/skill_highlight';
 import SkillButton from '../../components/skill_button';
 import LanguageItem from '../../components/language_item';
+import { SectionShell, Reveal } from '../../components/ui/primitives';
+
+// Heavy (visx + charts) and only used here — split into its own chunk.
+const SkillsCharts = lazy(() => import('../../components/skills_charts'));
+
+function SubHeading({ children }) {
+    return (
+        <h2 className='mb-0 font-mono text-xs uppercase tracking-[0.2em] text-neon/80'>
+            {children}
+        </h2>
+    );
+}
 
 function Skills() {
     return (
         <>
             <title>Skills | Cloud Resume</title>
-            <div className='content-block' id='skills'>
-                <h1 className='h1 mb-0 font-heading font-bold text-content-header text-2xl sm:text-3xl'>Skills</h1>
-                <div className='flex flex-col gap-8'>
-                    <div className='flex flex-col gap-3'>
+            <SectionShell id='skills' kicker='// capabilities' title='Skills'>
+                <div className='flex flex-col gap-10'>
+                    <Reveal className='rounded-xl border border-border bg-background/40 p-4 sm:p-6'>
+                        <Suspense fallback={<div className='h-72 animate-pulse rounded-lg bg-secondary-700/40' />}>
+                            <SkillsCharts />
+                        </Suspense>
+                    </Reveal>
+
+                    <Reveal className='flex flex-col gap-4'>
+                        <SubHeading>Toolbox</SubHeading>
                         <SkillHighlight />
-                    </div>
-                    <div className='flex flex-col gap-3'>
-                        <h3 className='mb-0 font-extrabold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base'>
-                            Exploring
-                        </h3>
+                    </Reveal>
+
+                    <Reveal className='flex flex-col gap-3'>
+                        <SubHeading>Exploring</SubHeading>
                         <SkillButton />
-                    </div>
-                    <div className='flex flex-col gap-3'>
-                        <h3 className='mb-0 font-extrabold leading-snug text-content-subtitle max-sm:text-sm sm:text-xs md:text-base'>
-                            Languages
-                        </h3>
+                    </Reveal>
+
+                    <Reveal className='flex flex-col gap-3'>
+                        <SubHeading>Languages</SubHeading>
                         <LanguageItem />
-                    </div>
+                    </Reveal>
                 </div>
-            </div>
+            </SectionShell>
         </>
     );
 }

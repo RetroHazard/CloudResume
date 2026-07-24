@@ -97,6 +97,42 @@
     --radius-2xl: 2rem;
 }
 
+/* Plain CSS vars that copied shadcn/Bklit/Kokonut components reference directly
+   via var(--x) (Tailwind utilities use the --color-* tokens in @theme above). */
+:root {
+    --background: #05070c;
+    --foreground: #e6edf3;
+    --card: #0b0f17;
+    --card-foreground: #e6edf3;
+    --popover: #0b0f17;
+    --popover-foreground: #e6edf3;
+    --primary: #22d3ee;
+    --primary-foreground: #05070c;
+    --secondary: #131a24;
+    --secondary-foreground: #e6edf3;
+    --muted: #131a24;
+    --muted-foreground: #8b96a5;
+    --accent: #34d399;
+    --accent-foreground: #05070c;
+    --destructive: #ef4444;
+    --border: #1c2530;
+    --input: #1c2530;
+    --ring: #22d3ee;
+    --radius: 0.5rem;
+
+    /* Bklit chart palette + theming */
+    --chart-1: #22d3ee;
+    --chart-2: #34d399;
+    --chart-3: #8b5cf6;
+    --chart-4: #f472b6;
+    --chart-5: #fbbf24;
+    --chart-background: #0b0f17;
+    --chart-foreground: #e6edf3;
+    --chart-foreground-muted: #8b96a5;
+    --chart-label: #8b96a5;
+    --chart-grid: #1c2530;
+}
+
 /* Scrollbar-width compensation (prevents horizontal shift) */
 html {
     overflow-x: hidden;

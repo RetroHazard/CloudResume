@@ -1,51 +1,50 @@
-import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
+
+const pct = (level) => parseInt(String(level).replace('%', ''), 10) || 0;
 
 const SkillHighlight = () => {
     const { data, loading, error } = useJsonData('skill_data.json');
     if (loading) return <LoadingSkeleton />;
     if (error || !data) return null;
-    const skillData = data.core_skills;
+    const skills = [...data.core_skills].sort((a, b) => pct(b.level) - pct(a.level));
     return (
-        <div className='flex flex-wrap justify-evenly gap-x-8 gap-y-2'>
-            {skillData.map((skill) => (
-                <div key={skill.name} className='flex flex-col gap-2'>
-                    <div
-                        className='flex items-center justify-between max-sm:size-12 max-sm:justify-center max-sm:rounded-lg max-sm:bg-secondary-600 max-sm:align-middle max-sm:hover:bg-secondary-500'
-                        data-tooltip-id='skill-tooltip'
-                        data-tooltip-content={skill.name}
-                    >
-                        <a
-                            className='flex items-center gap-2.5 no-underline'
-                            href={skill.website}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            aria-label={`${skill.name} (opens in new tab)`}
-                        >
-                            <Icon icon={skill.logo} width='1.9em' height='1.9em' aria-hidden='true' />
-                            <div className='flex flex-col max-sm:hidden'>
-                                <span className='text-content-subtitle hover:text-secondary-100 sm:text-xs sm:font-light md:text-xs md:font-semibold'>
-                                    {skill.name}
-                                </span>
-                                <span className='font-light text-content-accent sm:text-xs md:text-xs'>
-                                    {skill.category}
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                    <div className='flex gap-1'>
-                        <div className='skill-progress-bar-outline'>
-                            <div
-                                className='skill-progress-bar'
-                                style={{ width: skill.level }}
-                                role='progressbar'
-                            />
+        <div className='grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3'>
+            {skills.map((skill) => (
+                <a
+                    key={skill.name}
+                    href={skill.website}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    aria-label={`${skill.name} (opens in new tab)`}
+                    className='group flex flex-col gap-2 rounded-lg border border-border bg-secondary-800/50 p-3 no-underline transition-colors hover:border-neon/40'
+                >
+                    <div className='flex items-center gap-2.5'>
+                        <Icon icon={skill.logo} width='1.6em' height='1.6em' aria-hidden='true' />
+                        <div className='flex min-w-0 flex-col'>
+                            <span className='truncate text-sm font-semibold text-content-subtitle group-hover:text-content-title'>
+                                {skill.name}
+                            </span>
+                            <span className='truncate font-mono text-[0.65rem] uppercase tracking-wide text-content-accent'>
+                                {skill.category}
+                            </span>
                         </div>
                     </div>
-                </div>
+                    <div
+                        className='h-1.5 w-full overflow-hidden rounded-full bg-secondary-700'
+                        role='progressbar'
+                        aria-valuenow={pct(skill.level)}
+                        aria-valuemin={0}
+                        aria-valuemax={100}
+                        aria-label={`${skill.name} proficiency`}
+                    >
+                        <div
+                            className='h-full rounded-full bg-gradient-to-r from-primary-500 to-glow'
+                            style={{ width: skill.level }}
+                        />
+                    </div>
+                </a>
             ))}
-            <ReactTooltip className='hidden max-sm:block' id='skill-tooltip' />
         </div>
     );
 };
