@@ -81,7 +81,13 @@ export function SplitFlap({
                             <span
                                 // eslint-disable-next-line react/no-array-index-key
                                 key={i}
-                                className={cellClassName}
+                                // Fixed-width, centred cell: the glyph reel cycles through
+                                // characters of differing widths, so without a locked cell
+                                // width the board's total width would change every tick and
+                                // jitter the surrounding layout. overflow-hidden clips the
+                                // rare wide transient glyph (M/W) without affecting layout.
+                                className={`inline-block overflow-hidden text-center align-baseline ${cellClassName ?? ''}`}
+                                style={{ width: '0.72em' }}
                             >
                                 {ch}
                             </span>
