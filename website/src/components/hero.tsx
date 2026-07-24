@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { animate, stagger } from 'animejs';
 
-const NBSP = ' ';
-
 // anime.js showpiece: per-character blur/rise reveal of the name on mount.
+// Characters are grouped into words (whitespace-nowrap) so the name only ever
+// wraps at spaces between words — never mid-word, letter by letter.
 // Honors prefers-reduced-motion by rendering the final state with no motion.
 export function HeroName({ text, className }: { text: string; className?: string }) {
     const ref = useRef<HTMLHeadingElement>(null);
@@ -38,19 +38,29 @@ export function HeroName({ text, className }: { text: string; className?: string
         };
     }, [text]);
 
+    const words = text.split(' ');
+
     return (
         <h1 ref={ref} className={className} aria-label={text}>
-            {text.split('').map((ch, i) => (
-                <span
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={i}
-                    data-char
-                    aria-hidden='true'
-                    className='inline-block'
-                    style={{ opacity: 0, willChange: 'transform, filter, opacity' }}
-                >
-                    {ch === ' ' ? NBSP : ch}
-                </span>
+            {words.map((word, wi) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Fragment key={wi}>
+                    <span className='inline-block whitespace-nowrap'>
+                        {[...word].map((ch, ci) => (
+                            <span
+                                // eslint-disable-next-line react/no-array-index-key
+                                key={ci}
+                                data-char
+                                aria-hidden='true'
+                                className='inline-block'
+                                style={{ opacity: 0, willChange: 'transform, filter, opacity' }}
+                            >
+                                {ch}
+                            </span>
+                        ))}
+                    </span>
+                    {wi < words.length - 1 ? ' ' : null}
+                </Fragment>
             ))}
         </h1>
     );
