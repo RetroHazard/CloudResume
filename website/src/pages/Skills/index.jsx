@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import SkillHighlight from '../../components/skill_highlight';
 import SkillButton from '../../components/skill_button';
+import SkillTags from '../../components/skill_tags';
 import LanguageItem from '../../components/language_item';
 import { SectionShell, Reveal } from '../../components/ui/primitives';
 
@@ -33,8 +34,18 @@ function Skills() {
                     </Reveal>
 
                     <Reveal className='flex flex-col gap-3'>
+                        <SubHeading>Industry Knowledge</SubHeading>
+                        <SkillTags dataKey='industry_knowledge' />
+                    </Reveal>
+
+                    <Reveal className='flex flex-col gap-3'>
                         <SubHeading>Exploring</SubHeading>
                         <SkillButton />
+                    </Reveal>
+
+                    <Reveal className='flex flex-col gap-3'>
+                        <SubHeading>Soft Skills</SubHeading>
+                        <SkillTags dataKey='soft_skills' />
                     </Reveal>
 
                     <Reveal className='flex flex-col gap-3'>

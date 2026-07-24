@@ -24,30 +24,121 @@
     {
       "name": "Terraform",
       "category": "Automation",
-      "level": "65%",
+      "level": "75%",
       "logo": "skill-icons:terraform-light",
       "website": "https://www.terraform.io/"
     },
     {
       "name": "Docker",
       "category": "Containerization",
-      "level": "37%",
+      "level": "45%",
       "logo": "skill-icons:docker",
       "website": "https://www.docker.com/"
     },
     {
       "name": "Kubernetes",
       "category": "Orchestration",
-      "level": "30%",
+      "level": "60%",
       "logo": "skill-icons:kubernetes",
       "website": "https://kubernetes.io/"
     },
     {
       "name": "Okta",
       "category": "Security",
-      "level": "35%",
+      "level": "80%",
       "logo": "devicon-plain:okta",
       "website": "https://www.okta.com/"
+    },
+    {
+      "name": "Go",
+      "category": "Programming Language",
+      "level": "55%",
+      "logo": "skill-icons:golang",
+      "website": "https://go.dev/"
+    },
+    {
+      "name": "OpenTofu",
+      "category": "Automation",
+      "level": "55%",
+      "logo": "simple-icons:opentofu",
+      "website": "https://opentofu.org/"
+    },
+    {
+      "name": "GitHub Actions",
+      "category": "CI/CD",
+      "level": "70%",
+      "logo": "simple-icons:githubactions",
+      "website": "https://github.com/features/actions"
+    },
+    {
+      "name": "Helm",
+      "category": "Orchestration",
+      "level": "45%",
+      "logo": "simple-icons:helm",
+      "website": "https://helm.sh/"
+    },
+    {
+      "name": "CrowdStrike Falcon",
+      "category": "Security",
+      "level": "55%",
+      "logo": "simple-icons:crowdstrike",
+      "website": "https://www.crowdstrike.com/"
+    },
+    {
+      "name": "Zscaler",
+      "category": "Security",
+      "level": "50%",
+      "logo": "simple-icons:zscaler",
+      "website": "https://www.zscaler.com/"
+    },
+    {
+      "name": "Qualys",
+      "category": "Security",
+      "level": "50%",
+      "logo": "ph:shield-check-fill",
+      "website": "https://www.qualys.com/"
+    },
+    {
+      "name": "Tailscale",
+      "category": "Networking",
+      "level": "55%",
+      "logo": "simple-icons:tailscale",
+      "website": "https://tailscale.com/"
+    },
+    {
+      "name": "Kandji",
+      "category": "Endpoint (MDM)",
+      "level": "60%",
+      "logo": "ph:devices-fill",
+      "website": "https://www.kandji.io/"
+    },
+    {
+      "name": "Grafana",
+      "category": "Observability",
+      "level": "50%",
+      "logo": "simple-icons:grafana",
+      "website": "https://grafana.com/"
+    },
+    {
+      "name": "LiteLLM",
+      "category": "AI Gateway",
+      "level": "50%",
+      "logo": "ph:robot-fill",
+      "website": "https://www.litellm.ai/"
+    },
+    {
+      "name": "Slack",
+      "category": "Collaboration",
+      "level": "75%",
+      "logo": "simple-icons:slack",
+      "website": "https://slack.com/"
+    },
+    {
+      "name": "Atlassian",
+      "category": "Collaboration",
+      "level": "75%",
+      "logo": "simple-icons:atlassian",
+      "website": "https://www.atlassian.com/"
     },
     {
       "name": "Unreal Engine",
@@ -80,7 +171,7 @@
     {
       "name": "Python",
       "category": "Scripting Language",
-      "level": "30%",
+      "level": "45%",
       "logo": "skill-icons:python-light",
       "website": "https://www.python.org"
     },
@@ -178,16 +269,6 @@
   ],
   "target_skills": [
     {
-      "name": "Go",
-      "logo": "simple-icons:go",
-      "website": "https://go.dev/"
-    },
-    {
-      "name": "Grafana",
-      "logo": "simple-icons:grafana",
-      "website": "https://grafana.com/"
-    },
-    {
       "name": "GraphQL",
       "logo": "simple-icons:graphql",
       "website": "https://graphql.org/"
@@ -202,6 +283,32 @@
       "logo": "simple-icons:ansible",
       "website": "https://www.ansible.com/"
     }
+  ],
+  "industry_knowledge": [
+    { "name": "Identity & Access Management (IAM)" },
+    { "name": "Zero Trust Security Architecture" },
+    { "name": "PKI / Certificate Lifecycle Management" },
+    { "name": "Endpoint Security & Mobile Device Management (MDM)" },
+    { "name": "Cloud Security (AWS)" },
+    { "name": "Vulnerability Management" },
+    { "name": "Access Governance & Certification (Least-Privilege Audits)" },
+    { "name": "Application Allow-Listing / Binary Authorization" },
+    { "name": "DevSecOps & Software Supply-Chain Security" },
+    { "name": "Security Incident Response" },
+    { "name": "Kubernetes Access Control & RBAC" },
+    { "name": "Enterprise AI Governance & AI Tooling Security" },
+    { "name": "Identity Federation (SAML, OAuth 2.0, OIDC, SCIM)" },
+    { "name": "Compliance-Driven Security Controls (NIST-Aligned Hardening)" }
+  ],
+  "soft_skills": [
+    { "name": "Cross-Functional Stakeholder Communication" },
+    { "name": "Incident Response & Crisis Management" },
+    { "name": "Technical Writing & Knowledge Transfer" },
+    { "name": "Change Management & Org-Wide Rollout Communication" },
+    { "name": "Vendor Evaluation & Build-vs-Buy Decisions" },
+    { "name": "Automation-First Problem Solving" },
+    { "name": "Ownership of Ambiguous, Cross-Team Initiatives" },
+    { "name": "Mentoring" }
   ],
   "language_skills": [
     {
