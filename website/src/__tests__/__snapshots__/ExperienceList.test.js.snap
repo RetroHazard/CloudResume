@@ -198,6 +198,7 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     class="icon-box"
                     height="1.1em"
                     icon="ph:placeholder-fill"
@@ -212,6 +213,7 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     class="icon-box"
                     height="1.1em"
                     icon="ph:placeholder-fill"
@@ -226,6 +228,7 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     class="icon-box"
                     height="1.1em"
                     icon="ph:placeholder-fill"
@@ -240,6 +243,7 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     class="icon-box"
                     height="1.1em"
                     icon="ph:placeholder-fill"

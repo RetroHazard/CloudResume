@@ -1,29 +1,34 @@
 import { useEffect, useState } from 'react';
+import { formatJstTime, getServiceLevel } from '../utils/serviceStatus';
 
 // Slim wayfinding bar pinned to the top of every page — like the sign above a
-// platform: line roundel + network name on the left, a live Tokyo clock and an
-// in-service indicator on the right.
-function useTokyoClock() {
+// platform: line roundel + network name on the left, a live Tokyo clock and a
+// service indicator on the right. Both right-hand readouts are pinned to JST
+// regardless of where the viewer is, and the badge follows the Tokyo timetable.
+
+// Signal colours per service level: green go, amber off-peak, red late, and a
+// dead grey dot (no pulse) once the line is shut for the night.
+const LEVEL_STYLES = {
+    full: { text: 'text-neon', dot: 'bg-neon animate-pulse' },
+    reduced: { text: 'text-glow', dot: 'bg-glow animate-pulse' },
+    last: { text: 'text-alert', dot: 'bg-alert animate-pulse' },
+    closed: { text: 'text-content-accent', dot: 'bg-content-accent' },
+};
+
+function useTokyoNow() {
     const [now, setNow] = useState(() => new Date());
     useEffect(() => {
         const id = setInterval(() => setNow(new Date()), 1000);
         return () => clearInterval(id);
     }, []);
-    try {
-        return new Intl.DateTimeFormat('en-GB', {
-            timeZone: 'Asia/Tokyo',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-        }).format(now);
-    } catch {
-        return '--:--:--';
-    }
+    return now;
 }
 
 export default function StationHeader() {
-    const time = useTokyoClock();
+    const now = useTokyoNow();
+    const time = formatJstTime(now);
+    const level = getServiceLevel(now);
+    const styles = LEVEL_STYLES[level.key] ?? LEVEL_STYLES.full;
     return (
         <header
             id="station-header"
@@ -44,13 +49,18 @@ export default function StationHeader() {
                 <div className="flex items-center gap-4">
                     <span
                         className="tabular font-mono text-xs font-medium text-content-subtitle"
-                        aria-label={`Tokyo time ${time}`}
+                        aria-label={`Tokyo time (JST) ${time}`}
                     >
                         <span className="text-content-accent">JST</span> {time}
                     </span>
-                    <span className="flex items-center gap-1.5 font-mono text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-neon max-sm:hidden">
-                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-neon" />
-                        In Service
+                    <span
+                        role="status"
+                        title={level.detail}
+                        aria-label={level.detail}
+                        className={`flex items-center gap-1.5 font-mono text-[0.6rem] font-semibold uppercase tracking-[0.14em] max-sm:hidden ${styles.text}`}
+                    >
+                        <span className={`h-1.5 w-1.5 rounded-full ${styles.dot}`} />
+                        {level.label}
                     </span>
                 </div>
             </div>

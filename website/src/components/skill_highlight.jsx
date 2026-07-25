@@ -1,6 +1,6 @@
-import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
 import { groupSkills, pct, rampColor } from '../utils/skillTaxonomy';
+import { BrandIcon } from './ui/brand_icon';
 
 // The bar is a proficiency reading, so its colour has to mean proficiency.
 // Cycling the line-badge palette instead painted Terraform in `--color-alert`
@@ -22,7 +22,7 @@ function SkillCard({ skill }) {
             aria-label={`${skill.name} (opens in new tab)`}
             className='group flex items-center gap-3 rounded border border-border bg-secondary-800/50 px-3 py-2 no-underline transition-colors hover:border-neon/40'
         >
-            <Icon icon={skill.logo} width='1.5em' height='1.5em' aria-hidden='true' />
+            <BrandIcon icon={skill.logo} name={skill.name} monogram={skill.monogram} size='1.5em' className='shrink-0' />
             <div className='flex min-w-0 flex-1 flex-col gap-1'>
                 <div className='flex items-baseline justify-between gap-2'>
                     <span
@@ -31,6 +31,8 @@ function SkillCard({ skill }) {
                     >
                         {skill.name}
                     </span>
+                    {/* The category used to sit here; the drawer above says it now,
+                        so the slot carries the tool's own reading instead. */}
                     <span className='tabular shrink-0 font-mono text-[0.6rem] uppercase tracking-wide text-content-accent'>
                         {skill.level}
                     </span>
@@ -85,10 +87,7 @@ const SkillHighlight = () => {
                                 {group.count} {group.count === 1 ? 'tool' : 'tools'} · avg {group.avg}%
                             </span>
                         </span>
-                        <span
-                            aria-hidden='true'
-                            className='text-content-accent transition-transform group-open:rotate-90'
-                        >
+                        <span aria-hidden='true' className='text-content-accent transition-transform group-open:rotate-90'>
                             <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='3'>
                                 <path d='M9 6l6 6-6 6' />
                             </svg>
