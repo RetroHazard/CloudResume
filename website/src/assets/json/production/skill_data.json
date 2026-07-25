@@ -190,13 +190,6 @@
       "website": "https://slack.com/"
     },
     {
-      "name": "Atlassian",
-      "category": "Workplace",
-      "level": "75%",
-      "logo": "simple-icons:atlassian",
-      "website": "https://www.atlassian.com/"
-    },
-    {
       "name": "Google Workspace",
       "category": "Workplace",
       "level": "70%",
