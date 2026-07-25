@@ -42,8 +42,10 @@ const CertificationList = () => {
                                 </span>
                             </div>
 
-                            {/* validity ticket strip */}
-                            <dl className='grid grid-cols-3 gap-2 rounded border border-dashed border-border bg-background/50 px-3 py-2 font-mono text-[0.62rem]'>
+                            {/* Validity ticket strip. `mt-auto` pins it to the bottom of the
+                                card body — same trick as the link row below — so the strip and
+                                the links line up across cards whose titles wrap differently. */}
+                            <dl className='mt-auto grid grid-cols-3 gap-2 rounded border border-dashed border-border bg-background/50 px-3 py-2 font-mono text-[0.62rem]'>
                                 <div className='flex flex-col'>
                                     <dt className='uppercase tracking-wider text-content-date'>ID:</dt>
                                     <dd className='tabular truncate text-content-subtitle'>
@@ -62,7 +64,7 @@ const CertificationList = () => {
                                 </div>
                             </dl>
 
-                            <div className='mt-auto flex flex-wrap gap-2'>
+                            <div className='flex flex-wrap gap-2'>
                                 {item.links.map((linkGroup, linkIndex) =>
                                     Object.entries(linkGroup).map(
                                         ([key, link]) =>
