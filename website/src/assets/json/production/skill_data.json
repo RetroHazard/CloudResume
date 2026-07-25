@@ -64,6 +64,13 @@
       "website": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id"
     },
     {
+      "name": "Push Security",
+      "category": "Security",
+      "level": "45%",
+      "logo": null,
+      "website": "https://pushsecurity.com/"
+    },
+    {
       "name": "Go",
       "category": "Development",
       "level": "55%",
