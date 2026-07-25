@@ -127,6 +127,20 @@
       "website": "https://www.jupiterone.com/"
     },
     {
+      "name": "Cyberhaven",
+      "category": "Security",
+      "level": "50%",
+      "logo": null,
+      "website": "https://www.cyberhaven.com/"
+    },
+    {
+      "name": "dope.security",
+      "category": "Security",
+      "level": "50%",
+      "logo": null,
+      "website": "https://dope.security/"
+    },
+    {
       "name": "Grafana",
       "category": "Platform",
       "level": "50%",
