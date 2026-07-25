@@ -1,6 +1,7 @@
 import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
 import { Board, DepartureRow } from './ui/primitives';
+import { formatDate, formatRange } from '../utils/dates';
 
 const EducationList = () => {
     const { data, loading, error } = useJsonData('education_data.json');
@@ -15,7 +16,7 @@ const EducationList = () => {
                         letter={item.school.charAt(0)}
                         destination={item.school}
                         operator={item.degree}
-                        since={item.start}
+                        since={formatDate(item.start)}
                         status='past'
                         statusLabel='Completed'
                         defaultOpen={index === 0}
@@ -32,7 +33,7 @@ const EducationList = () => {
                                     <div className='flex flex-col'>
                                         <p className='card-accent'>{item.category}</p>
                                         <p className='card-accent tabular'>
-                                            {item.start} — {item.end}
+                                            {formatRange(item.start, item.end)}
                                         </p>
                                         <p className='card-fine'>{item.location}</p>
                                     </div>

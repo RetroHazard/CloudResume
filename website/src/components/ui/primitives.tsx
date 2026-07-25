@@ -73,6 +73,9 @@ export function StatusPill({
 }
 
 // Scroll-triggered reveal (respects reduced motion via app MotionConfig).
+// Until the block scrolls into view it sits at opacity 0, which is invisible to
+// print as well as to the eye — `data-reveal` gives the print stylesheet a hook
+// to force every block visible so a printed résumé is never missing a section.
 export function Reveal({
     children,
     className,
@@ -89,6 +92,7 @@ export function Reveal({
     const MotionTag = motion[as];
     return (
         <MotionTag
+            data-reveal=""
             className={className}
             initial={{ opacity: 0, y }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -107,6 +111,10 @@ export function SectionShell({
     id,
     kicker,
     title,
+    // The board title is the page's `h1` by default. A page that carries a more
+    // meaningful top-level heading of its own (Home, whose `h1` is the name)
+    // passes `titleAs="p"` so the document keeps exactly one `h1`.
+    titleAs: TitleTag = 'h1',
     line = 0,
     badge,
     right,
@@ -116,6 +124,7 @@ export function SectionShell({
     id?: string;
     kicker?: string;
     title?: string;
+    titleAs?: 'h1' | 'h2' | 'p';
     line?: number;
     badge?: string;
     right?: ReactNode;
@@ -134,21 +143,23 @@ export function SectionShell({
             {/* signal stripe */}
             <div className="h-1 w-full" style={{ background: c }} />
             {(kicker || title) && (
-                <header className="flex items-center justify-between gap-3 border-b border-border bg-secondary-800/60 px-5 py-3 sm:px-7">
-                    <div className="flex items-center gap-3">
+                // The section clips its own overflow, so the header has to wrap
+                // rather than push the status pill past the edge on narrow screens.
+                <header className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 border-b border-border bg-secondary-800/60 px-5 py-3 sm:px-7">
+                    <div className="flex min-w-0 items-center gap-3">
                         {(badge || title) && (
                             <LineBadge letter={badge ?? title!.charAt(0)} color={c} />
                         )}
-                        <div className="flex flex-col">
+                        <div className="flex min-w-0 flex-col">
                             {kicker && (
                                 <span className="font-mono text-[0.6rem] font-semibold uppercase tracking-[0.24em] text-content-accent">
                                     {kicker}
                                 </span>
                             )}
                             {title && (
-                                <h1 className="mb-0 font-heading text-2xl font-extrabold uppercase leading-none tracking-wide text-content-header sm:text-3xl">
+                                <TitleTag className="mb-0 break-words font-heading text-xl font-extrabold uppercase leading-none tracking-wide text-content-header sm:text-3xl">
                                     {title}
-                                </h1>
+                                </TitleTag>
                             )}
                         </div>
                     </div>
@@ -218,11 +229,18 @@ export function DepartureRow({
         >
             <summary className="grid cursor-pointer list-none items-center gap-3 px-3 py-3 transition-colors hover:bg-secondary-800/50 sm:px-4 [grid-template-columns:auto_1fr_auto]">
                 <LineBadge letter={letter} index={index} />
+                {/* Board rows truncate by design, so the untruncated text has to
+                    stay reachable — otherwise a long project name is simply lost. */}
                 <span className="flex min-w-0 flex-col">
-                    <span className="truncate font-heading text-base font-bold uppercase leading-tight tracking-wide text-content-title sm:text-lg">
+                    <span
+                        title={destination}
+                        className="truncate font-heading text-base font-bold uppercase leading-tight tracking-wide text-content-title sm:text-lg"
+                    >
                         {destination}
                     </span>
-                    <span className="truncate font-mono text-[0.7rem] text-neon">{operator}</span>
+                    <span title={operator} className="truncate font-mono text-[0.7rem] text-neon">
+                        {operator}
+                    </span>
                 </span>
                 <span className="flex items-center gap-3">
                     <span className="flex flex-col items-end max-sm:hidden">

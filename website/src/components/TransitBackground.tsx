@@ -123,6 +123,7 @@ export default function TransitBackground() {
 
     return (
         <div
+            id="transit-background"
             aria-hidden="true"
             className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background"
         >

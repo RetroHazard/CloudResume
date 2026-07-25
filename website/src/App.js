@@ -61,9 +61,11 @@ export default function App() {
             </a>
             <BrowserRouter>
                 <NoticeBanner />
-                <div className='mx-auto flex max-w-6xl justify-center'>
+                {/* Below `sm` the rail map collapses to a horizontal strip above the
+                    board; from `sm` up it returns to the left-hand line map. */}
+                <div className='mx-auto flex max-w-6xl flex-col items-stretch px-3 max-sm:pt-16 sm:flex-row sm:items-start sm:justify-center sm:px-0'>
                     <Navigation />
-                    <div className='sm:min-w-102 w-3/5 max-w-2xl space-y-8 px-2 py-20'>
+                    <div className='sm:min-w-102 w-full max-w-2xl space-y-8 max-sm:mx-auto max-sm:pb-12 max-sm:pt-6 sm:w-3/5 sm:px-2 sm:py-20'>
                         <ErrorBoundary>
                             <Suspense fallback={<LoadingSkeleton />}>
                                 <main id='content' tabIndex={-1} className='outline-none'>

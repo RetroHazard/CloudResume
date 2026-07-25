@@ -40,13 +40,17 @@ export function SplitFlap({
         }
         const chars = [...target];
         // Each cell resolves after a staggered number of ticks (left → right).
-        const settleAt = chars.map((_, i) => 8 + i * 2 + Math.floor(Math.random() * 6));
+        // The stagger and tick length are tuned so a long name still settles in
+        // well under two seconds — this text is the page's headline, and leaving
+        // it as unreadable glyphs for several seconds costs more than the effect
+        // is worth.
+        const settleAt = chars.map((_, i) => 6 + Math.round(i * 1.2) + Math.floor(Math.random() * 4));
         const maxTick = Math.max(1, ...settleAt);
         holder.current.t = 0;
 
         const animation = animate(holder.current, {
             t: maxTick,
-            duration: 90 * maxTick,
+            duration: 55 * maxTick,
             ease: 'linear',
             onUpdate: () => {
                 const tick = holder.current.t;
@@ -72,7 +76,11 @@ export function SplitFlap({
     });
 
     return (
-        <span className={className} aria-label={ariaLabel ?? text} role="text">
+        // Every cell is aria-hidden because the reel glyphs are noise; the settled
+        // text is exposed once, off-screen. (`role="text"` is not a real ARIA role,
+        // so an aria-label here would simply be dropped by most screen readers.)
+        <span className={className}>
+            <span className="sr-only">{ariaLabel ?? text}</span>
             {words.map((word, wi) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <span key={wi} aria-hidden="true">

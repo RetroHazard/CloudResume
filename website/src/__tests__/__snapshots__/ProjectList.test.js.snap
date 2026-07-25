@@ -41,11 +41,13 @@ exports[`ProjectList Component > matches snapshot 1`] = `
             >
               <span
                 class="truncate font-heading text-base font-bold uppercase leading-tight tracking-wide text-content-title sm:text-lg"
+                title="Generic Project"
               >
                 Generic Project
               </span>
               <span
                 class="truncate font-mono text-[0.7rem] text-neon"
+                title="Generic Company"
               >
                 Generic Company
               </span>
@@ -119,9 +121,7 @@ exports[`ProjectList Component > matches snapshot 1`] = `
                     <p
                       class="card-accent tabular"
                     >
-                      2020
-                       — 
-                      2021
+                      2020 — 2021
                     </p>
                   </div>
                 </div>

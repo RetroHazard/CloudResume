@@ -41,11 +41,13 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
             >
               <span
                 class="truncate font-heading text-base font-bold uppercase leading-tight tracking-wide text-content-title sm:text-lg"
+                title="Generic Job Title"
               >
                 Generic Job Title
               </span>
               <span
                 class="truncate font-mono text-[0.7rem] text-neon"
+                title="Generic Company"
               >
                 Generic Company
               </span>
@@ -114,9 +116,7 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
                     <p
                       class="card-accent tabular"
                     >
-                      Generic Start
-                       — 
-                      Generic End
+                      Generic Start — Generic End
                     </p>
                     <p
                       class="card-fine"

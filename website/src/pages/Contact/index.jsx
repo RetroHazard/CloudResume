@@ -103,7 +103,9 @@ const ContactForm = () => {
         <form onSubmit={handleSubmit} className='space-y-4'>
             <fieldset>
                 <legend className='mb-2 block text-sm font-medium text-content-subtitle'>Name</legend>
-                <div className='flex flex-row gap-6'>
+                {/* Side by side these two fields are ~76px wide on a phone, which
+                    truncates both the placeholder and anything typed into them. */}
+                <div className='flex flex-col gap-4 sm:flex-row sm:gap-6'>
                     <label htmlFor='firstName' className='sr-only'>First name</label>
                     <input
                         type='text'
@@ -188,8 +190,8 @@ const ContactForm = () => {
                     aria-label={isLoading ? 'Sending message, please wait' : 'Send message'}
                     className={
                         isLoading
-                            ? 'inline-flex w-48 cursor-not-allowed items-center justify-center gap-2 rounded border border-border bg-secondary-500 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-secondary-300'
-                            : 'inline-flex w-48 items-center justify-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-neon transition-colors hover:bg-neon/20'
+                            ? 'inline-flex w-48 cursor-not-allowed items-center justify-center gap-2 rounded border border-border bg-secondary-500 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-secondary-300 max-sm:min-h-11 max-sm:w-full'
+                            : 'ticket-button w-48 max-sm:w-full'
                     }
                 >
                     <iconify-icon

@@ -19,8 +19,13 @@ describe('SplitFlap', () => {
         });
     });
 
+    // The reel glyphs are noise, so every cell is aria-hidden and the settled
+    // text is exposed once via an off-screen span. It must not rely on an
+    // aria-label on a generic element, which assistive tech is free to ignore.
     test('exposes the full name to assistive tech', () => {
-        const { getByLabelText } = render(<SplitFlap text='Alexander Bracken' ariaLabel='Alexander Bracken' />);
-        expect(getByLabelText('Alexander Bracken')).toBeInTheDocument();
+        const { getByText } = render(<SplitFlap text='Alexander Bracken' ariaLabel='Alexander Bracken' />);
+        const label = getByText('Alexander Bracken');
+        expect(label).toBeInTheDocument();
+        expect(label).toHaveClass('sr-only');
     });
 });
