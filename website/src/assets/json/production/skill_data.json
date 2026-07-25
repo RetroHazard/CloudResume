@@ -3,21 +3,21 @@
     {
       "name": "Amazon Web Services",
       "category": "Cloud",
-      "level": "80%",
+      "level": "70%",
       "logo": "skill-icons:aws-light",
       "website": "https://aws.amazon.com/"
     },
     {
       "name": "Microsoft Azure",
       "category": "Cloud",
-      "level": "14%",
+      "level": "20%",
       "logo": "skill-icons:azure-light",
       "website": "https://azure.microsoft.com/"
     },
     {
       "name": "Google Cloud Platform",
       "category": "Cloud",
-      "level": "12%",
+      "level": "25%",
       "logo": "skill-icons:gcp-light",
       "website": "https://cloud.google.com/"
     },
@@ -45,7 +45,7 @@
     {
       "name": "Okta",
       "category": "Security",
-      "level": "85%",
+      "level": "80%",
       "logo": "devicon-plain:okta",
       "website": "https://www.okta.com/"
     },
@@ -85,7 +85,14 @@
       "website": "https://helm.sh/"
     },
     {
-      "name": "CrowdStrike Falcon",
+      "name": "ArgoCD",
+      "category": "Platform",
+      "level": "35%",
+      "logo": "simple-icons:argo",
+      "website": "https://argo-cd.readthedocs.io/"
+    },
+    {
+      "name": "CrowdStrike",
       "category": "Security",
       "level": "65%",
       "logo": null,
@@ -108,21 +115,21 @@
     {
       "name": "Tailscale",
       "category": "Security",
-      "level": "55%",
+      "level": "60%",
       "logo": "simple-icons:tailscale",
       "website": "https://tailscale.com/"
     },
     {
       "name": "Iru",
       "category": "Security",
-      "level": "75%",
+      "level": "85%",
       "logo": null,
       "website": "https://www.iru.com/"
     },
     {
       "name": "JupiterOne",
       "category": "Security",
-      "level": "50%",
+      "level": "40%",
       "logo": null,
       "website": "https://www.jupiterone.com/"
     },
@@ -150,7 +157,7 @@
     {
       "name": "LiteLLM",
       "category": "AI",
-      "level": "65%",
+      "level": "70%",
       "logo": "selfhst:litellm",
       "website": "https://www.litellm.ai/"
     },
@@ -190,6 +197,27 @@
       "website": "https://www.atlassian.com/"
     },
     {
+      "name": "Google Workspace",
+      "category": "Workplace",
+      "level": "70%",
+      "logo": "logos:google-workspace",
+      "website": "https://workspace.google.com/"
+    },
+    {
+      "name": "Confluence",
+      "category": "Workplace",
+      "level": "60%",
+      "logo": "simple-icons:confluence",
+      "website": "https://www.atlassian.com/software/confluence"
+    },
+    {
+      "name": "Jira",
+      "category": "Workplace",
+      "level": "60%",
+      "logo": "simple-icons:jira",
+      "website": "https://www.atlassian.com/software/jira"
+    },
+    {
       "name": "Unreal Engine",
       "category": "Creative",
       "level": "60%",
@@ -220,14 +248,14 @@
     {
       "name": "C++",
       "category": "Development",
-      "level": "30%",
+      "level": "35%",
       "logo": "skill-icons:cpp",
       "website": "https://cplusplus.com/"
     },
     {
       "name": "Python",
       "category": "Development",
-      "level": "45%",
+      "level": "60%",
       "logo": "skill-icons:python-light",
       "website": "https://www.python.org"
     },
@@ -248,7 +276,7 @@
     {
       "name": "TypeScript",
       "category": "Development",
-      "level": "30%",
+      "level": "40%",
       "logo": "skill-icons:typescript",
       "website": "https://www.typescriptlang.org"
     },
@@ -262,7 +290,7 @@
     {
       "name": "Next.js",
       "category": "Development",
-      "level": "35%",
+      "level": "45%",
       "logo": "skill-icons:nextjs-light",
       "website": "https://nextjs.org/"
     },
@@ -304,7 +332,7 @@
     {
       "name": "Windows",
       "category": "Workplace",
-      "level": "100%",
+      "level": "95%",
       "logo": "skill-icons:windows-light",
       "website": "https://www.microsoft.com/en-us/windows"
     },
