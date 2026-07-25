@@ -510,7 +510,8 @@
     { "name": "Vulnerability Management" },
     { "name": "Access Governance & Certification (Least-Privilege Audits)" },
     { "name": "Application Allow-Listing / Binary Authorization" },
-    { "name": "DevSecOps & Software Supply-Chain Security" },
+    { "name": "DevSecOps" },
+    { "name": "Software Supply-Chain Security" },
     { "name": "Security Incident Response" },
     { "name": "Kubernetes Access Control & RBAC" },
     { "name": "Enterprise AI Governance & AI Tooling Security" },
@@ -518,7 +519,7 @@
     { "name": "Threat Mitigation" },
     { "name": "Risk Management" },
     { "name": "Agile & DevOps" },
-    { "name": "Regulatory & Compliance Controls (NIST-Aligned Hardening, CIS Benchmarks, ISO 27001, GDPR)" }
+    { "name": "Regulatory & Compliance Controls" }
   ],
   "soft_skills": [
     { "name": "Cross-Functional Stakeholder Communication" },
