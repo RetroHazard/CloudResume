@@ -139,6 +139,19 @@
     --chart-foreground-muted: #8ba7ac;
     --chart-label: #8ba7ac;
     --chart-grid: #17323c;
+
+    /* Ring ramp — a one-hue sequential scale in signal green, brightest step
+       first. The rings encode magnitude (how many tools sit in a category), so
+       lightness carries the value and hue stays out of it; the categorical
+       --chart-1..5 slots are for charts where colour means identity. Steps are
+       ~0.07 apart in OKLCH lightness, so each reads as its own step against the
+       dark surface, and the darkest still clears 3:1 against it. */
+    --chart-ramp-1: #6effad;
+    --chart-ramp-2: #0fec8e;
+    --chart-ramp-3: #1bd27e;
+    --chart-ramp-4: #10b86e;
+    --chart-ramp-5: #04a05e;
+    --chart-ramp-6: #0e8750;
 }
 
 /* Scrollbar-width compensation */
