@@ -8,65 +8,23 @@ import { RingChart } from './charts/ring-chart';
 import { Ring } from './charts/ring';
 import { RingCenter } from './charts/ring-center';
 import GithubHeatmap from './github_heatmap';
+import { byTaxonomyOrder, groupSkills, rampColor } from '../utils/skillTaxonomy';
 
 type CoreSkill = { name: string; category: string; level: string };
 
 /**
- * One taxonomy, six buckets. Every tool in the Rolling Stock list carries
- * exactly one of these as its `category` in skill_data.json, and everything on
- * this page — the badges on each tool, the radar, the rings — reads that one
- * field. The old data had twenty categories, half of them a single tool deep
- * ("AI Gateway", "Endpoint (MDM)", "Game Development"), which is why the radar
- * needed a private lookup table and why scoring anything was meaningless.
- *
- *   Cloud        the public clouds themselves
- *   Platform     what runs on them — IaC, CI/CD, containers, observability, repos
- *   Security     identity, endpoint posture, network, vulnerability, offensive
- *   Development  languages and the web stack
- *   Workplace    the endpoints and the tools the company works in
- *   Creative     the pre-engineering craft — real-time, 3D, VFX, design
- *
- * A tool whose category is off-list lands in `Other` rather than disappearing,
- * so the number in the middle of the rings always equals the number of tools in
- * the list.
- *
- * The two charts split the work: the radar carries depth (both the ceiling and
- * the average of a category, so the gap between them is visible), the rings
- * carry breadth (how much of the toolbox sits in each). Neither repeats the
- * other, and the table under the rings spells out all three numbers.
+ * Both charts read the categories the Rolling Stock list is grouped by — see
+ * utils/skillTaxonomy for the taxonomy itself — and split the work between
+ * them. The radar carries depth: a category's ceiling and its average, so the
+ * gap between the two is visible. The rings carry breadth: how much of the
+ * toolbox each category accounts for. Neither repeats the other, and the table
+ * under the rings spells out all three numbers.
  */
-const CATEGORIES = ['Cloud', 'Platform', 'Security', 'Development', 'Workplace', 'Creative'];
-const OTHER = 'Other';
-
-// Sequential ramp, brightest = largest bucket. See --chart-ramp-* in index.css.
-const RAMP_STEPS = 6;
 
 // Peak is the outer envelope, average the solid core it sits on — amber reads as
 // headroom against the signal green the rest of the page uses for what is real.
 const PEAK_COLOR = 'var(--chart-2)';
 const AVG_COLOR = 'var(--chart-1)';
-
-const pct = (level: string) => parseInt(String(level).replace('%', ''), 10) || 0;
-
-type Bucket = { name: string; count: number; peak: number; avg: number };
-
-function bucketize(core: CoreSkill[]): Bucket[] {
-    const known = new Set(CATEGORIES);
-    return [...CATEGORIES, OTHER]
-        .map((name) => {
-            const levels = core
-                .filter((s) => (known.has(s.category) ? s.category === name : name === OTHER))
-                .map((s) => pct(s.level));
-            const sum = levels.reduce((a, b) => a + b, 0);
-            return {
-                name,
-                count: levels.length,
-                peak: levels.reduce((max, v) => Math.max(max, v), 0),
-                avg: levels.length ? Math.round(sum / levels.length) : 0,
-            };
-        })
-        .filter((b) => b.count > 0);
-}
 
 function SeriesKey({ color, filled, children }: { color: string; filled: boolean; children: string }) {
     return (
@@ -91,19 +49,22 @@ export default function SkillsCharts() {
     const core: CoreSkill[] = data?.core_skills ?? [];
     if (core.length === 0) return null;
 
-    const buckets = bucketize(core);
+    // Grouped biggest-first, the same order the toolbox drawers use below.
+    const groups = groupSkills(core);
 
-    // Radar — two readings of the same six axes. Peak is what a category can
-    // reach, average is how deep it runs, and every category's average sits
-    // inside its peak, so the band between them is headroom: Cloud peaks at 80
-    // on AWS and averages 35 once Azure and GCP are counted.
+    // Radar — two readings of the same axes. Peak is what a category can reach,
+    // average is how deep it runs, and every category's average sits inside its
+    // peak, so the band between them is headroom: Cloud peaks at 80 on AWS and
+    // averages 35 once Azure and GCP are counted. Axes stay in taxonomy order so
+    // the shape means the same thing from one visit to the next.
+    const axes = [...groups].sort(byTaxonomyOrder);
     const peaks: Record<string, number> = {};
     const averages: Record<string, number> = {};
-    for (const bucket of buckets) {
-        peaks[bucket.name] = bucket.peak;
-        averages[bucket.name] = bucket.avg;
+    for (const group of axes) {
+        peaks[group.name] = group.peak;
+        averages[group.name] = group.avg;
     }
-    const metrics = buckets.map((b) => ({ key: b.name, label: b.name }));
+    const metrics = axes.map((g) => ({ key: g.name, label: g.name }));
     const radarData = [
         { label: 'Peak', values: peaks, color: PEAK_COLOR },
         { label: 'Average', values: averages, color: AVG_COLOR },
@@ -112,15 +73,14 @@ export default function SkillsCharts() {
     // Rings — how much of the toolbox each category accounts for. The widest
     // category fills its ring, so the rest read as shares of it; the exact
     // counts are in the table and the centre carries the total.
-    const ranked = [...buckets].sort((a, b) => b.count - a.count || b.avg - a.avg);
-    const widest = ranked[0].count;
-    const rings = ranked.map((b, i) => ({
-        label: b.name,
-        value: b.count,
+    const widest = groups[0].count;
+    const rings = groups.map((g, i) => ({
+        label: g.name,
+        value: g.count,
         maxValue: widest,
-        avg: b.avg,
-        peak: b.peak,
-        color: `var(--chart-ramp-${Math.min(i + 1, RAMP_STEPS)})`,
+        avg: g.avg,
+        peak: g.peak,
+        color: rampColor(i),
     }));
 
     return (
