@@ -230,6 +230,7 @@ exports[`ProjectList Component > matches snapshot 1`] = `
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     class="icon-box"
                     height="1.1em"
                     icon="ph:generic-icon-1"
@@ -244,6 +245,7 @@ exports[`ProjectList Component > matches snapshot 1`] = `
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     class="icon-box"
                     height="1.1em"
                     icon="ph:generic-icon-2"
@@ -258,6 +260,7 @@ exports[`ProjectList Component > matches snapshot 1`] = `
                   target="_blank"
                 >
                   <iconify-icon
+                    aria-hidden="true"
                     class="icon-box"
                     height="1.1em"
                     icon="ph:generic-icon-3"

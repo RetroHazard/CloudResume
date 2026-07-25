@@ -1,5 +1,5 @@
-import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
+import { BrandIcon } from './ui/brand_icon';
 
 const SkillButtonList = ({ skills }) => (
     <div className='flex flex-wrap max-sm:gap-1 sm:gap-2 md:gap-3'>
@@ -11,7 +11,13 @@ const SkillButtonList = ({ skills }) => (
                 target='_blank'
                 rel='noopener noreferrer'
             >
-                <Icon className='icon-box' icon={skill.logo} width='1.1em' height='1.1em' />
+                <BrandIcon
+                    className='icon-box'
+                    icon={skill.logo}
+                    name={skill.name}
+                    monogram={skill.monogram}
+                    size='1.1em'
+                />
                 {skill.name}
             </a>
         ))}
