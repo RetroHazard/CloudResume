@@ -23,21 +23,21 @@
     },
     {
       "name": "Terraform",
-      "category": "Automation",
+      "category": "Platform",
       "level": "75%",
       "logo": "skill-icons:terraform-light",
       "website": "https://www.terraform.io/"
     },
     {
       "name": "Docker",
-      "category": "Containerization",
+      "category": "Platform",
       "level": "45%",
       "logo": "skill-icons:docker",
       "website": "https://www.docker.com/"
     },
     {
       "name": "Kubernetes",
-      "category": "Orchestration",
+      "category": "Platform",
       "level": "60%",
       "logo": "skill-icons:kubernetes",
       "website": "https://kubernetes.io/"
@@ -51,28 +51,28 @@
     },
     {
       "name": "Go",
-      "category": "Programming Language",
+      "category": "Development",
       "level": "55%",
       "logo": "skill-icons:golang",
       "website": "https://go.dev/"
     },
     {
       "name": "OpenTofu",
-      "category": "Automation",
+      "category": "Platform",
       "level": "55%",
       "logo": "simple-icons:opentofu",
       "website": "https://opentofu.org/"
     },
     {
       "name": "GitHub Actions",
-      "category": "CI/CD",
+      "category": "Platform",
       "level": "70%",
       "logo": "simple-icons:githubactions",
       "website": "https://github.com/features/actions"
     },
     {
       "name": "Helm",
-      "category": "Orchestration",
+      "category": "Platform",
       "level": "45%",
       "logo": "simple-icons:helm",
       "website": "https://helm.sh/"
@@ -100,168 +100,168 @@
     },
     {
       "name": "Tailscale",
-      "category": "Networking",
+      "category": "Security",
       "level": "55%",
       "logo": "simple-icons:tailscale",
       "website": "https://tailscale.com/"
     },
     {
       "name": "Kandji",
-      "category": "Endpoint (MDM)",
+      "category": "Security",
       "level": "60%",
       "logo": null,
       "website": "https://www.kandji.io/"
     },
     {
       "name": "Grafana",
-      "category": "Observability",
+      "category": "Platform",
       "level": "50%",
       "logo": "simple-icons:grafana",
       "website": "https://grafana.com/"
     },
     {
       "name": "LiteLLM",
-      "category": "AI Gateway",
+      "category": "Platform",
       "level": "50%",
       "logo": "selfhst:litellm",
       "website": "https://www.litellm.ai/"
     },
     {
       "name": "Slack",
-      "category": "Collaboration",
+      "category": "Workplace",
       "level": "75%",
       "logo": "simple-icons:slack",
       "website": "https://slack.com/"
     },
     {
       "name": "Atlassian",
-      "category": "Collaboration",
+      "category": "Workplace",
       "level": "75%",
       "logo": "simple-icons:atlassian",
       "website": "https://www.atlassian.com/"
     },
     {
       "name": "Unreal Engine",
-      "category": "Game Development",
+      "category": "Creative",
       "level": "60%",
       "logo": "skill-icons:unrealengine",
       "website": "https://www.unrealengine.com/"
     },
     {
       "name": "Github",
-      "category": "Source Control",
+      "category": "Platform",
       "level": "65%",
       "logo": "skill-icons:github-light",
       "website": "https://github.com/"
     },
     {
       "name": "Perforce",
-      "category": "Source Control",
+      "category": "Platform",
       "level": "50%",
       "logo": "simple-icons:perforce",
       "website": "https://www.perforce.com/"
     },
     {
       "name": "C++",
-      "category": "Programming Language",
+      "category": "Development",
       "level": "30%",
       "logo": "skill-icons:cpp",
       "website": "https://cplusplus.com/"
     },
     {
       "name": "Python",
-      "category": "Scripting Language",
+      "category": "Development",
       "level": "45%",
       "logo": "skill-icons:python-light",
       "website": "https://www.python.org"
     },
     {
       "name": "BASh",
-      "category": "Command Language",
+      "category": "Development",
       "level": "70%",
       "logo": "skill-icons:bash-light",
       "website": "https://www.gnu.org/software/bash/"
     },
     {
       "name": "JavaScript",
-      "category": "Scripting Language",
+      "category": "Development",
       "level": "35%",
       "logo": "skill-icons:javascript",
       "website": "https://developer.oracle.com/languages/javascript.html"
     },
     {
       "name": "TypeScript",
-      "category": "Scripting Language",
+      "category": "Development",
       "level": "30%",
       "logo": "skill-icons:typescript",
       "website": "https://www.typescriptlang.org"
     },
     {
       "name": "Node.js",
-      "category": "Software",
+      "category": "Development",
       "level": "30%",
       "logo": "skill-icons:nodejs-light",
       "website": "https://nodejs.org"
     },
     {
       "name": "Next.js",
-      "category": "Framework",
+      "category": "Development",
       "level": "35%",
       "logo": "skill-icons:nextjs-light",
       "website": "https://nextjs.org/"
     },
     {
       "name": "React",
-      "category": "Library",
+      "category": "Development",
       "level": "45%",
       "logo": "skill-icons:react-dark",
       "website": "https://react.dev/"
     },
     {
       "name": "tailwindCSS",
-      "category": "Framework",
+      "category": "Development",
       "level": "50%",
       "logo": "skill-icons:tailwindcss-dark",
       "website": "https://tailwindcss.com"
     },
     {
       "name": "SideFX Houdini",
-      "category": "Software",
+      "category": "Creative",
       "level": "30%",
       "logo": "simple-icons:houdini",
       "website": "https://www.sidefx.com/"
     },
     {
       "name": "Blender",
-      "category": "Software",
+      "category": "Creative",
       "level": "55%",
       "logo": "skill-icons:blender-dark",
       "website": "https://www.blender.org/"
     },
     {
       "name": "Creative Cloud",
-      "category": "Software",
+      "category": "Creative",
       "level": "80%",
       "logo": "simple-icons:adobecreativecloud",
       "website": "https://www.adobe.com/creativecloud.html"
     },
     {
       "name": "Windows",
-      "category": "Operating System",
+      "category": "Workplace",
       "level": "100%",
       "logo": "skill-icons:windows-light",
       "website": "https://www.microsoft.com/en-us/windows"
     },
     {
       "name": "Kali Linux",
-      "category": "Operating System",
+      "category": "Security",
       "level": "40%",
       "logo": "skill-icons:kali-light",
       "website": "https://www.kali.org/"
     },
     {
       "name": "macOS",
-      "category": "Operating System",
+      "category": "Workplace",
       "level": "70%",
       "logo": "skill-icons:apple-light",
       "website": "https://www.apple.com"
