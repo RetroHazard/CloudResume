@@ -135,17 +135,31 @@
     },
     {
       "name": "LiteLLM",
-      "category": "Platform",
+      "category": "AI",
       "level": "65%",
       "logo": "selfhst:litellm",
       "website": "https://www.litellm.ai/"
     },
     {
       "name": "AWS Bedrock",
-      "category": "Platform",
+      "category": "AI",
       "level": "50%",
       "logo": "simple-icons:amazonwebservices",
       "website": "https://aws.amazon.com/bedrock/"
+    },
+    {
+      "name": "Claude",
+      "category": "AI",
+      "level": "75%",
+      "logo": "simple-icons:claude",
+      "website": "https://claude.com/"
+    },
+    {
+      "name": "Codex",
+      "category": "AI",
+      "level": "45%",
+      "logo": "simple-icons:openai",
+      "website": "https://openai.com/codex/"
     },
     {
       "name": "Slack",

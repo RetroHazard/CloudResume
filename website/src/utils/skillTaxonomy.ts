@@ -9,22 +9,28 @@
  *
  *   Cloud        the public clouds themselves
  *   Platform     what runs on them — IaC, CI/CD, containers, observability, repos
+ *   AI           the gateway, the model platforms, and the coding agents
  *   Security     identity, endpoint posture, network, vulnerability, offensive
  *   Development  languages and the web stack
  *   Workplace    the endpoints and the tools the company works in
  *   Creative     the pre-engineering craft — real-time, 3D, VFX, design
  *
+ * AI is the one category that came back. It was cut in the collapse above as
+ * "AI Gateway", a single tool deep and therefore arbitrary; it now carries four
+ * and names a distinct pillar of the work, which is the bar the rest of this
+ * list is held to.
+ *
  * Grouping still reads whatever category a tool actually carries, so a new one
  * shows up as its own group instead of vanishing — the list above is the
  * intent, not a filter.
  */
-export const CATEGORIES = ['Cloud', 'Platform', 'Security', 'Development', 'Workplace', 'Creative'];
+export const CATEGORIES = ['Cloud', 'Platform', 'AI', 'Security', 'Development', 'Workplace', 'Creative'];
 
 /** Where a tool with no category at all ends up. */
 export const UNCATEGORISED = 'Other';
 
 /** Sequential ramp steps available for group colours. See --chart-ramp-* in index.css. */
-const RAMP_STEPS = 6;
+const RAMP_STEPS = 7;
 
 export type SkillLike = { name: string; category?: string; level?: string };
 
