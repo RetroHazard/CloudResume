@@ -86,9 +86,14 @@
           "website": "https://www.terraform.io/"
         },
         {
-          "name": "Atlassian Suite",
-          "logo": "simple-icons:atlassian",
-          "website": "https://www.atlassian.com"
+          "name": "Jira",
+          "logo": "simple-icons:jira",
+          "website": "https://www.atlassian.com/software/jira"
+        },
+        {
+          "name": "Confluence",
+          "logo": "simple-icons:confluence",
+          "website": "https://www.atlassian.com/software/confluence"
         },
         {
           "name": "CloudFlare",
