@@ -127,6 +127,13 @@
       "website": "https://tailscale.com/"
     },
     {
+      "name": "UniFi",
+      "category": "Security",
+      "level": "50%",
+      "logo": "selfhst:ubiquiti-unifi",
+      "website": "https://ui.com/"
+    },
+    {
       "name": "Iru",
       "category": "Security",
       "level": "85%",
