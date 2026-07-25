@@ -386,6 +386,13 @@
       "website": "https://tailwindcss.com"
     },
     {
+      "name": "Xcode",
+      "category": "Development",
+      "level": "35%",
+      "logo": "logos:xcode",
+      "website": "https://developer.apple.com/xcode/"
+    },
+    {
       "name": "IntelliJ IDEA",
       "category": "Development",
       "level": "45%",
