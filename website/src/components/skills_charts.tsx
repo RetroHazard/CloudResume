@@ -27,13 +27,24 @@ type CoreSkill = { name: string; category: string; level: string };
  *   Creative     the pre-engineering craft — real-time, 3D, VFX, design
  *
  * A tool whose category is off-list lands in `Other` rather than disappearing,
- * so no part of the toolbox is left out of the scoring.
+ * so the number in the middle of the rings always equals the number of tools in
+ * the list.
+ *
+ * The two charts split the work: the radar carries depth (both the ceiling and
+ * the average of a category, so the gap between them is visible), the rings
+ * carry breadth (how much of the toolbox sits in each). Neither repeats the
+ * other, and the table under the rings spells out all three numbers.
  */
 const CATEGORIES = ['Cloud', 'Platform', 'Security', 'Development', 'Workplace', 'Creative'];
 const OTHER = 'Other';
 
-// Sequential ramp, brightest = highest-scoring bucket. See --chart-ramp-* in index.css.
+// Sequential ramp, brightest = largest bucket. See --chart-ramp-* in index.css.
 const RAMP_STEPS = 6;
+
+// Peak is the outer envelope, average the solid core it sits on — amber reads as
+// headroom against the signal green the rest of the page uses for what is real.
+const PEAK_COLOR = 'var(--chart-2)';
+const AVG_COLOR = 'var(--chart-1)';
 
 const pct = (level: string) => parseInt(String(level).replace('%', ''), 10) || 0;
 
@@ -57,6 +68,22 @@ function bucketize(core: CoreSkill[]): Bucket[] {
         .filter((b) => b.count > 0);
 }
 
+function SeriesKey({ color, filled, children }: { color: string; filled: boolean; children: string }) {
+    return (
+        <span className='inline-flex items-center gap-1.5'>
+            <span
+                aria-hidden='true'
+                className='inline-block h-2.5 w-2.5 rounded-full'
+                style={{
+                    border: `2px solid ${color}`,
+                    backgroundColor: filled ? color : 'transparent',
+                }}
+            />
+            {children}
+        </span>
+    );
+}
+
 export default function SkillsCharts() {
     const { data } = useJsonData('skill_data.json') as {
         data: { core_skills?: CoreSkill[] } | null;
@@ -66,25 +93,33 @@ export default function SkillsCharts() {
 
     const buckets = bucketize(core);
 
-    // Radar — the ceiling of each category, axes kept in taxonomy order so the
-    // shape means the same thing from one visit to the next.
-    const values: Record<string, number> = {};
-    for (const bucket of buckets) values[bucket.name] = bucket.peak;
+    // Radar — two readings of the same six axes. Peak is what a category can
+    // reach, average is how deep it runs, and every category's average sits
+    // inside its peak, so the band between them is headroom: Cloud peaks at 80
+    // on AWS and averages 35 once Azure and GCP are counted.
+    const peaks: Record<string, number> = {};
+    const averages: Record<string, number> = {};
+    for (const bucket of buckets) {
+        peaks[bucket.name] = bucket.peak;
+        averages[bucket.name] = bucket.avg;
+    }
     const metrics = buckets.map((b) => ({ key: b.name, label: b.name }));
-    const radarData = [{ label: 'Peak proficiency', values }];
+    const radarData = [
+        { label: 'Peak', values: peaks, color: PEAK_COLOR },
+        { label: 'Average', values: averages, color: AVG_COLOR },
+    ];
 
-    // Rings — the same categories scored on how deep they run rather than how
-    // high they reach: the mean proficiency of every tool in the bucket, out of
-    // 100. Read against the radar, the gap is the interesting part — a category
-    // can peak at 80 and still average 35 when it is one strong tool and two
-    // passing acquaintances.
-    const ranked = [...buckets].sort((a, b) => b.avg - a.avg || b.count - a.count);
-    const overallAvg = Math.round(core.reduce((sum, s) => sum + pct(s.level), 0) / core.length);
+    // Rings — how much of the toolbox each category accounts for. The widest
+    // category fills its ring, so the rest read as shares of it; the exact
+    // counts are in the table and the centre carries the total.
+    const ranked = [...buckets].sort((a, b) => b.count - a.count || b.avg - a.avg);
+    const widest = ranked[0].count;
     const rings = ranked.map((b, i) => ({
         label: b.name,
-        value: b.avg,
-        maxValue: 100,
-        count: b.count,
+        value: b.count,
+        maxValue: widest,
+        avg: b.avg,
+        peak: b.peak,
         color: `var(--chart-ramp-${Math.min(i + 1, RAMP_STEPS)})`,
     }));
 
@@ -97,12 +132,20 @@ export default function SkillsCharts() {
                     <RadarChart data={radarData} metrics={metrics} className='mx-auto max-w-[380px]'>
                         <RadarGrid />
                         <RadarAxis />
-                        <RadarArea index={0} showGlow />
+                        <RadarArea index={0} showPoints={false} showGlow />
+                        <RadarArea index={1} showGlow />
                         <RadarLabels />
                     </RadarChart>
-                    <figcaption className='flex flex-col items-center gap-1 font-mono text-xs uppercase tracking-wider text-content-accent'>
-                        // peak proficiency by category
-                        <span className='sr-only'>{buckets.map((b) => `${b.name}: ${b.peak}%`).join(', ')}</span>
+                    <figcaption className='flex flex-col items-center gap-2 font-mono text-xs uppercase tracking-wider text-content-accent'>
+                        // proficiency by category
+                        <span className='flex flex-wrap justify-center gap-x-4 gap-y-1 text-[0.68rem] normal-case tracking-normal text-content-subtitle'>
+                            <SeriesKey color={PEAK_COLOR} filled={false}>
+                                peak
+                            </SeriesKey>
+                            <SeriesKey color={AVG_COLOR} filled>
+                                average
+                            </SeriesKey>
+                        </span>
                     </figcaption>
                 </figure>
 
@@ -117,27 +160,50 @@ export default function SkillsCharts() {
                         {rings.map((r, i) => (
                             <Ring key={r.label} index={i} showGlow />
                         ))}
-                        <RingCenter defaultLabel='Avg' defaultValue={overallAvg} suffix='%' />
+                        <RingCenter defaultLabel='Tools' />
                     </RingChart>
                     <figcaption className='flex w-full flex-col items-center gap-2 font-mono text-xs uppercase tracking-wider text-content-accent'>
-                        // average score by category
-                        <ul className='m-0 flex w-full max-w-[300px] list-none flex-col gap-1 p-0 normal-case tracking-normal'>
-                            {rings.map((r) => (
-                                <li key={r.label} className='flex items-baseline justify-between gap-3 text-[0.68rem]'>
-                                    <span className='flex items-center gap-1.5 text-content-subtitle'>
-                                        <span
-                                            aria-hidden='true'
-                                            className='inline-block h-2 w-2 shrink-0 rounded-full'
-                                            style={{ backgroundColor: r.color }}
-                                        />
-                                        {r.label}
-                                    </span>
-                                    <span className='tabular whitespace-nowrap'>
-                                        {r.value}% · {r.count} tools
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
+                        // toolbox by category
+                        <table className='w-full max-w-[320px] border-collapse text-[0.68rem] normal-case tracking-normal'>
+                            <caption className='sr-only'>
+                                Tools, average proficiency and peak proficiency in each category
+                            </caption>
+                            <thead>
+                                <tr className='text-content-date'>
+                                    <th scope='col' className='text-left font-normal'>
+                                        <span className='sr-only'>Category</span>
+                                    </th>
+                                    <th scope='col' className='pl-2 text-right font-normal'>
+                                        tools
+                                    </th>
+                                    <th scope='col' className='pl-3 text-right font-normal'>
+                                        avg
+                                    </th>
+                                    <th scope='col' className='pl-3 text-right font-normal'>
+                                        peak
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {rings.map((r) => (
+                                    <tr key={r.label}>
+                                        <th scope='row' className='py-px text-left font-normal text-content-subtitle'>
+                                            <span className='flex items-center gap-1.5'>
+                                                <span
+                                                    aria-hidden='true'
+                                                    className='inline-block h-2 w-2 shrink-0 rounded-full'
+                                                    style={{ backgroundColor: r.color }}
+                                                />
+                                                {r.label}
+                                            </span>
+                                        </th>
+                                        <td className='tabular py-px pl-2 text-right'>{r.value}</td>
+                                        <td className='tabular py-px pl-3 text-right'>{r.avg}%</td>
+                                        <td className='tabular py-px pl-3 text-right'>{r.peak}%</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </figcaption>
                 </figure>
             </div>

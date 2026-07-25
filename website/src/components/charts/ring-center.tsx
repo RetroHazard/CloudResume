@@ -17,12 +17,6 @@ import { useRingHover, useRingStable } from "./ring-context";
 export interface RingCenterProps {
   /** Label shown below the value. Default: "Total" when not hovering */
   defaultLabel?: string;
-  /**
-   * Value shown when not hovering. Default: the sum of every ring's value —
-   * which only means something when the rings are parts of a whole. Rings
-   * carrying a rate or a score should pass their own headline number here.
-   */
-  defaultValue?: number;
   /** Format options for NumberFlow. Default: standard notation */
   formatOptions?: ChartStatFlowFormat;
   /** Custom render function for complete control over center content */
@@ -56,7 +50,6 @@ export interface RingCenterProps {
  */
 export function RingCenter({
   defaultLabel = "Total",
-  defaultValue,
   formatOptions = defaultChartStatFlowFormat,
   children,
   className = "",
@@ -69,9 +62,7 @@ export function RingCenter({
   const { hoveredIndex } = useRingHover();
 
   const hoveredData = hoveredIndex === null ? null : data[hoveredIndex];
-  const displayValue = hoveredData
-    ? hoveredData.value
-    : (defaultValue ?? totalValue);
+  const displayValue = hoveredData ? hoveredData.value : totalValue;
   const displayLabel = hoveredData ? hoveredData.label : defaultLabel;
 
   // Calculate center area size based on scaled baseInnerRadius
