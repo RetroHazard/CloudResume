@@ -148,6 +148,13 @@
       "website": "https://dope.security/"
     },
     {
+      "name": "Santa",
+      "category": "Security",
+      "level": "60%",
+      "logo": null,
+      "website": "https://northpole.security/santa"
+    },
+    {
       "name": "Grafana",
       "category": "Platform",
       "level": "50%",
