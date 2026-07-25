@@ -15,6 +15,8 @@ function Home() {
                 id='profile'
                 kicker='Terminus · Line Origin'
                 title='Concourse'
+                // The concourse label is board chrome; the page's h1 is the name below.
+                titleAs='p'
                 line={0}
                 right={<StatusPill tone='on'>All Lines Running</StatusPill>}
             >
@@ -88,7 +90,7 @@ function Home() {
                         <a
                             href={personalData.resumeLink}
                             download
-                            className='inline-flex w-fit items-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-neon no-underline transition-colors hover:bg-neon/20'
+                            className='ticket-button w-fit'
                         >
                             <iconify-icon icon='fa6-solid:ticket' aria-hidden='true' />
                             Download CV — Ticket

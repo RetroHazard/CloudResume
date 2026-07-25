@@ -41,11 +41,13 @@ exports[`EducationList Component > matches snapshot 1`] = `
             >
               <span
                 class="truncate font-heading text-base font-bold uppercase leading-tight tracking-wide text-content-title sm:text-lg"
+                title="Sample University"
               >
                 Sample University
               </span>
               <span
                 class="truncate font-mono text-[0.7rem] text-neon"
+                title="BSc. Sample Degree"
               >
                 BSc. Sample Degree
               </span>
@@ -114,9 +116,7 @@ exports[`EducationList Component > matches snapshot 1`] = `
                     <p
                       class="card-accent tabular"
                     >
-                      2000
-                       — 
-                      2004
+                      2000 — 2004
                     </p>
                     <p
                       class="card-fine"

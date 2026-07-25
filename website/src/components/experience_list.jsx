@@ -2,9 +2,7 @@ import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
 import SkillButton from './skill_button';
 import { Board, DepartureRow } from './ui/primitives';
-
-const ONGOING = new Set(['---', 'now', 'present', '']);
-const isOngoing = (end) => ONGOING.has(String(end).trim().toLowerCase());
+import { formatDate, formatRange, isOngoing } from '../utils/dates';
 
 const ExperienceList = () => {
     const { data, loading, error } = useJsonData('career_data.json');
@@ -21,7 +19,7 @@ const ExperienceList = () => {
                             letter={experience.company.charAt(0)}
                             destination={experience.job_title}
                             operator={experience.company}
-                            since={experience.start}
+                            since={formatDate(experience.start)}
                             status={ongoing ? 'on' : 'past'}
                             statusLabel={ongoing ? 'On Time' : 'Departed'}
                             defaultOpen={index === 0}
@@ -38,7 +36,7 @@ const ExperienceList = () => {
                                         <div className='flex flex-col'>
                                             <p className='card-accent'>{experience.type}</p>
                                             <p className='card-accent tabular'>
-                                                {experience.start} — {experience.end}
+                                                {formatRange(experience.start, experience.end)}
                                             </p>
                                             <p className='card-fine'>{experience.location}</p>
                                         </div>

@@ -7,6 +7,7 @@ exports[`CertificationList Component > matches snapshot 1`] = `
   >
     <div
       class="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-neon/40"
+      data-reveal=""
       style="opacity: 0; transform: translateY(14px);"
     >
       <div
@@ -25,18 +26,26 @@ exports[`CertificationList Component > matches snapshot 1`] = `
             src="sample_logo.png"
           />
           <div
-            class="flex min-w-0 flex-col"
+            class="flex min-w-0 flex-col gap-0.5"
           >
-            <h3
+            <h2
               class="card-title"
             >
               Sample Certification
-            </h3>
+            </h2>
             <p
               class="card-subtitle"
             >
               Sample Issuer
             </p>
+            <span
+              class="inline-flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-neon"
+            >
+              <span
+                class="h-1.5 w-1.5 animate-pulse rounded-full bg-neon"
+              />
+              Valid
+            </span>
           </div>
           <span
             class="ml-auto"

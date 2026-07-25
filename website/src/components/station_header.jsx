@@ -25,7 +25,10 @@ function useTokyoClock() {
 export default function StationHeader() {
     const time = useTokyoClock();
     return (
-        <header className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md">
+        <header
+            id="station-header"
+            className="fixed inset-x-0 top-0 z-40 border-b border-border bg-background/85 backdrop-blur-md"
+        >
             <div className="mx-auto flex h-12 max-w-6xl items-center justify-between px-4">
                 <div className="flex items-center gap-2.5">
                     <span className="grid h-6 w-6 place-items-center rounded-full bg-neon font-heading text-xs font-extrabold text-background">

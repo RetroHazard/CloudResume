@@ -20,7 +20,7 @@ describe('Contact form', () => {
     cy.get('#email').should('be.visible');
     cy.get('#subject').should('be.visible');
     cy.get('#message').should('be.visible');
-    cy.get('button[type="submit"]').should('contain', 'Send Message');
+    cy.get('button[type="submit"]').should('contain', 'Dispatch Message');
   });
 
   it('prevents submission when required fields are empty', () => {
@@ -61,7 +61,8 @@ describe('Contact form', () => {
 
     cy.get('button[type="submit"]').click();
     cy.get('button[type="submit"]').should('be.disabled');
-    cy.get('button[type="submit"]').should('contain', 'Sending...');
+    // Matches the stem only — the rendered label ends in a U+2026 ellipsis.
+    cy.get('button[type="submit"]').should('contain', 'Dispatching');
 
     cy.wait('@contactSubmit');
   });

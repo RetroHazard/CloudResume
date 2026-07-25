@@ -165,6 +165,13 @@ html.disable-fix {
     .tabular {
         font-variant-numeric: tabular-nums;
     }
+    /* Keyboard focus is signal green, matching --color-ring. The UA default is a
+       hairline that all but disappears against this palette. */
+    :where(a, button, summary, input, textarea, select, [tabindex]):focus-visible {
+        outline: 2px solid var(--color-ring);
+        outline-offset: 2px;
+        border-radius: 2px;
+    }
 }
 
 @layer components {
@@ -183,21 +190,31 @@ html.disable-fix {
         @apply inline-flex w-fit items-center gap-x-1.5 rounded border border-border bg-secondary-800/70 font-mono uppercase tracking-wide text-content-subtitle no-underline transition-colors hover:border-neon/60 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-[0.6rem] sm:h-6 sm:px-2 sm:text-[0.68rem] md:h-6 md:px-2.5 md:text-xs;
     }
 
-    /* ── Nav (line map) — class names kept for tests; restyled as rail stops ── */
+    /* ── Nav (line map) — class names kept for tests; restyled as rail stops ──
+       Below `sm` the stops wrap into chip rows, so they shrink to their content
+       and take a 44px minimum height to stay comfortably tappable. */
     .nav-block-active {
-        @apply relative my-0.5 inline-flex w-full items-center gap-3 rounded px-3 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-content-header no-underline transition-colors max-sm:w-fit;
+        @apply relative my-0.5 inline-flex w-full items-center gap-3 whitespace-nowrap rounded px-3 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-content-header no-underline transition-colors max-sm:min-h-11 max-sm:w-fit max-sm:gap-2 max-sm:bg-content-boxbg;
     }
     .nav-block-inactive {
-        @apply relative my-0.5 inline-flex w-full items-center gap-3 rounded px-3 py-2.5 font-mono text-xs font-medium uppercase tracking-wider text-content-accent no-underline transition-colors hover:bg-content-boxbg hover:text-content-subtitle max-sm:w-fit;
+        @apply relative my-0.5 inline-flex w-full items-center gap-3 whitespace-nowrap rounded px-3 py-2.5 font-mono text-xs font-medium uppercase tracking-wider text-content-accent no-underline transition-colors hover:bg-content-boxbg hover:text-content-subtitle max-sm:min-h-11 max-sm:w-fit max-sm:gap-2;
+    }
+
+    /* Primary action — a ticket-gate button. The CV download, the 404 return
+       link and the contact submit were three copies of the same class list. */
+    .ticket-button {
+        @apply inline-flex items-center justify-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-neon no-underline transition-colors hover:bg-neon/20 max-sm:min-h-11;
     }
 
     .icon-box {
         @apply m-0 content-center justify-center justify-items-center align-middle;
     }
 
-    /* Form field — inquiry counter input */
+    /* Form field — inquiry counter input.
+       16px on small screens is deliberate: iOS Safari zooms the viewport on focus
+       for anything smaller, which strands the user mid-form. */
     .text-entry {
-        @apply block w-full rounded border border-secondary-600 bg-secondary-800 p-2.5 text-sm text-content-body shadow-sm transition-colors placeholder:text-content-accent focus:border-neon focus:ring-1 focus:ring-neon focus:outline-none;
+        @apply block w-full rounded border border-secondary-600 bg-secondary-800 p-2.5 text-base text-content-body shadow-sm transition-colors placeholder:text-content-accent focus:border-neon focus:ring-1 focus:ring-neon focus:outline-none sm:text-sm;
     }
 
     /* ── Board typography (used across list rows) ──────────────────────── */
@@ -226,5 +243,57 @@ html.disable-fix {
         @apply grid place-items-center overflow-hidden rounded-[3px] font-mono font-bold text-glow;
         background: #05131a;
         box-shadow: inset 0 0 0 1px #123842, inset 0 -6px 8px -6px #000;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Print — this is a résumé, so "save as PDF" is a first-class path.
+   Three things break it without help: scroll-reveal blocks are still at
+   opacity 0 when the print snapshot is taken, collapsed departure rows hide
+   every job but the first, and a dark-on-dark palette prints as white-on-white
+   whenever the reader leaves "background graphics" off.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media print {
+    /* Never let an un-scrolled reveal print blank. */
+    [data-reveal] {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* Expand every departure row so the whole history prints. */
+    details > *:not(summary) {
+        display: block !important;
+    }
+    details::details-content {
+        content-visibility: visible !important;
+        block-size: auto !important;
+    }
+    /* Ambient chrome carries no information on paper. */
+    #navbar,
+    #station-header,
+    #transit-background {
+        display: none !important;
+    }
+
+    html {
+        color-scheme: light;
+    }
+    body {
+        background: #fff !important;
+    }
+    #content,
+    #content * {
+        color: #111 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        border-color: #bbb !important;
+        text-shadow: none !important;
+    }
+    #content section {
+        border: 0 !important;
+    }
+    #content a {
+        text-decoration: underline;
     }
 }

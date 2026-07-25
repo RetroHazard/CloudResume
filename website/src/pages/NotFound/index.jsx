@@ -26,7 +26,7 @@ function NotFound() {
                     </div>
                     <Link
                         to='/'
-                        className='inline-flex items-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-neon no-underline transition-colors hover:bg-neon/20'
+                        className='ticket-button'
                     >
                         <iconify-icon icon='fa6-solid:house' aria-hidden='true' />
                         Return to Concourse

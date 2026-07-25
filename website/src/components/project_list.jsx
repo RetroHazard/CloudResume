@@ -2,9 +2,7 @@ import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
 import SkillButton from './skill_button';
 import { Board, DepartureRow } from './ui/primitives';
-
-const ONGOING = new Set(['---', 'now', 'present', '']);
-const isOngoing = (end) => ONGOING.has(String(end).trim().toLowerCase());
+import { formatDate, formatRange, isOngoing } from '../utils/dates';
 
 const ProjectList = () => {
     const { data, loading, error } = useJsonData('project_data.json');
@@ -21,7 +19,7 @@ const ProjectList = () => {
                             letter={project.name.charAt(0)}
                             destination={project.name}
                             operator={project.company}
-                            since={project.start}
+                            since={formatDate(project.start)}
                             status={ongoing ? 'on' : 'past'}
                             statusLabel={ongoing ? 'Running' : 'Completed'}
                             defaultOpen={index === 0}
@@ -39,7 +37,7 @@ const ProjectList = () => {
                                             <p className='card-accent'>{project.category}</p>
                                             <p className='card-accent'>{project.role}</p>
                                             <p className='card-accent tabular'>
-                                                {project.start} — {project.end}
+                                                {formatRange(project.start, project.end)}
                                             </p>
                                         </div>
                                     </div>
