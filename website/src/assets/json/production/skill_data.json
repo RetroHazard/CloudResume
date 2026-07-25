@@ -155,6 +155,34 @@
       "website": "https://northpole.security/santa"
     },
     {
+      "name": "Okta Identity Governance",
+      "category": "Security",
+      "level": "65%",
+      "logo": "devicon-plain:okta",
+      "website": "https://www.okta.com/products/identity-governance/"
+    },
+    {
+      "name": "Dependabot",
+      "category": "Security",
+      "level": "50%",
+      "logo": "simple-icons:dependabot",
+      "website": "https://docs.github.com/en/code-security/dependabot"
+    },
+    {
+      "name": "AWS Certificate Manager",
+      "category": "Security",
+      "level": "40%",
+      "logo": "logos:aws-certificate-manager",
+      "website": "https://aws.amazon.com/certificate-manager/"
+    },
+    {
+      "name": "Trivy",
+      "category": "Security",
+      "level": "30%",
+      "logo": "simple-icons:trivy",
+      "website": "https://trivy.dev/"
+    },
+    {
       "name": "Grafana",
       "category": "Platform",
       "level": "50%",
