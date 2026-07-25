@@ -162,6 +162,20 @@
       "website": "https://workbrew.com/"
     },
     {
+      "name": "Splunk",
+      "category": "Security",
+      "level": "45%",
+      "logo": "simple-icons:splunk",
+      "website": "https://www.splunk.com/"
+    },
+    {
+      "name": "FleetDM",
+      "category": "Security",
+      "level": "35%",
+      "logo": "selfhst:fleet-dm",
+      "website": "https://fleetdm.com/"
+    },
+    {
       "name": "Okta Identity Governance",
       "category": "Security",
       "level": "65%",
