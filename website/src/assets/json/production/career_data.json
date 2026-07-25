@@ -53,9 +53,9 @@
           "website": "https://www.python.org"
         },
         {
-          "name": "Google Suite",
+          "name": "Google Workspace",
           "logo": "simple-icons:google",
-          "website": "https://www.google.com"
+          "website": "https://workspace.google.com/"
         }
       ]
     },
@@ -101,9 +101,9 @@
           "website": "https://www.cloudflare.com"
         },
         {
-          "name": "Google Suite",
+          "name": "Google Workspace",
           "logo": "simple-icons:google",
-          "website": "https://www.google.com"
+          "website": "https://workspace.google.com/"
         },
         {
           "name": "GitLab",
