@@ -4,9 +4,7 @@ import { RadarGrid } from './charts/radar-grid';
 import { RadarAxis } from './charts/radar-axis';
 import { RadarArea } from './charts/radar-area';
 import { RadarLabels } from './charts/radar-labels';
-import { RingChart } from './charts/ring-chart';
-import { Ring } from './charts/ring';
-import { RingCenter } from './charts/ring-center';
+import GithubHeatmap from './github_heatmap';
 
 type CoreSkill = { name: string; category: string; level: string };
 
@@ -29,8 +27,6 @@ const DOMAINS = ['Cloud', 'Automation', 'Security', 'Containers', 'Scripting', '
 
 const pct = (level: string) => parseInt(String(level).replace('%', ''), 10) || 0;
 
-const RING_COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)'];
-
 export default function SkillsCharts() {
     const { data } = useJsonData('skill_data.json') as {
         data: { core_skills?: CoreSkill[] } | null;
@@ -49,18 +45,10 @@ export default function SkillsCharts() {
     const metrics = DOMAINS.map((d) => ({ key: d, label: d }));
     const radarData = [{ label: 'Proficiency', values }];
 
-    // rings: the three public clouds
-    const clouds = core
-        .filter((s) => s.category === 'Cloud')
-        .map((s, i) => ({
-            label: s.name.replace('Amazon Web Services', 'AWS').replace('Microsoft ', '').replace('Google Cloud Platform', 'GCP'),
-            value: pct(s.level),
-            maxValue: 100,
-            color: RING_COLORS[i % RING_COLORS.length],
-        }));
-
     return (
-        <div className='grid gap-8 md:grid-cols-2'>
+        <div className='flex flex-col gap-10'>
+            <GithubHeatmap />
+
             <figure className='flex flex-col items-center'>
                 <RadarChart data={radarData} metrics={metrics} className='mx-auto max-w-[380px]'>
                     <RadarGrid />
@@ -70,33 +58,6 @@ export default function SkillsCharts() {
                 </RadarChart>
                 <figcaption className='mt-2 font-mono text-xs uppercase tracking-wider text-content-accent'>
                     // domain proficiency
-                </figcaption>
-            </figure>
-
-            <figure className='flex flex-col items-center'>
-                <RingChart
-                    data={clouds}
-                    className='mx-auto max-w-[300px]'
-                    strokeWidth={16}
-                    ringGap={8}
-                    baseInnerRadius={46}
-                >
-                    {clouds.map((c, i) => (
-                        <Ring key={c.label} index={i} showGlow />
-                    ))}
-                    <RingCenter defaultLabel='Cloud' />
-                </RingChart>
-                <figcaption className='mt-2 flex flex-wrap justify-center gap-3 font-mono text-xs text-content-accent'>
-                    {clouds.map((c, i) => (
-                        <span key={c.label} className='inline-flex items-center gap-1.5'>
-                            <span
-                                aria-hidden='true'
-                                className='inline-block h-2 w-2 rounded-full'
-                                style={{ backgroundColor: RING_COLORS[i % RING_COLORS.length] }}
-                            />
-                            {c.label} {c.value}%
-                        </span>
-                    ))}
                 </figcaption>
             </figure>
         </div>

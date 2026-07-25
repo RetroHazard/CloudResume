@@ -6,62 +6,98 @@ exports[`CertificationList Component > matches snapshot 1`] = `
     class="grid grid-cols-1 gap-4 sm:grid-cols-2"
   >
     <div
-      class="group flex gap-4 rounded-xl border border-border bg-secondary-800/40 p-4 transition-all hover:-translate-y-0.5 hover:border-neon/40 hover:shadow-lg hover:shadow-neon/5"
-      style="opacity: 0; transform: translateY(16px);"
+      class="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-neon/40"
+      style="opacity: 0; transform: translateY(14px);"
     >
-      <img
-        alt=""
-        class="size-14 shrink-0 rounded-xl ring-1 ring-border sm:size-16"
-        src="sample_logo.png"
+      <div
+        class="h-1 w-full"
+        style="background: rgb(46, 224, 138);"
       />
       <div
-        class="flex min-w-0 flex-1 flex-col"
+        class="flex flex-1 flex-col gap-3 p-4"
       >
-        <h3
-          class="card-title"
-        >
-          Sample Certification
-        </h3>
-        <p
-          class="card-subtitle"
-        >
-          Sample Issuer
-        </p>
-        <p
-          class="card-meta font-mono"
-        >
-          <strong
-            class="font-semibold text-content-accent"
-          >
-            ID:
-          </strong>
-           
-          123456789
-        </p>
-        <p
-          class="card-meta font-mono"
-        >
-          <strong
-            class="font-semibold text-content-accent"
-          >
-            Issued:
-          </strong>
-           
-          2024-05-24
-        </p>
-        <p
-          class="card-meta font-mono"
-        >
-          <strong
-            class="font-semibold text-content-accent"
-          >
-            Expiry:
-          </strong>
-           
-          2027-05-24
-        </p>
         <div
-          class="mt-2 flex flex-wrap gap-2"
+          class="flex items-start gap-3"
+        >
+          <img
+            alt=""
+            class="size-12 shrink-0 rounded ring-1 ring-border"
+            src="sample_logo.png"
+          />
+          <div
+            class="flex min-w-0 flex-col"
+          >
+            <h3
+              class="card-title"
+            >
+              Sample Certification
+            </h3>
+            <p
+              class="card-subtitle"
+            >
+              Sample Issuer
+            </p>
+          </div>
+          <span
+            class="ml-auto"
+          >
+            <span
+              aria-hidden="true"
+              class="inline-grid shrink-0 place-items-center rounded-full font-heading font-extrabold"
+              style="width: 1.4rem; height: 1.4rem; font-size: 0.68rem; color: rgb(7, 19, 25); background: rgb(46, 224, 138); box-shadow: 0 0 0 3px #2ee08a22;"
+            >
+              S
+            </span>
+          </span>
+        </div>
+        <dl
+          class="grid grid-cols-3 gap-2 rounded border border-dashed border-border bg-background/50 px-3 py-2 font-mono text-[0.62rem]"
+        >
+          <div
+            class="flex flex-col"
+          >
+            <dt
+              class="uppercase tracking-wider text-content-date"
+            >
+              ID:
+            </dt>
+            <dd
+              class="tabular truncate text-content-subtitle"
+            >
+              123456789
+            </dd>
+          </div>
+          <div
+            class="flex flex-col"
+          >
+            <dt
+              class="uppercase tracking-wider text-content-date"
+            >
+              Issued:
+            </dt>
+            <dd
+              class="tabular text-neon"
+            >
+              2024-05-24
+            </dd>
+          </div>
+          <div
+            class="flex flex-col"
+          >
+            <dt
+              class="uppercase tracking-wider text-content-date"
+            >
+              Expiry:
+            </dt>
+            <dd
+              class="tabular text-content-subtitle"
+            >
+              2027-05-24
+            </dd>
+          </div>
+        </dl>
+        <div
+          class="mt-auto flex flex-wrap gap-2"
         >
           <a
             aria-label="Sample Certification – verification (opens in new tab)"
@@ -72,9 +108,9 @@ exports[`CertificationList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               aria-hidden="true"
-              height="1.25em"
+              height="1.1em"
               icon="sample-icon"
-              width="1.25em"
+              width="1.1em"
             />
           </a>
           <a
@@ -86,9 +122,9 @@ exports[`CertificationList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               aria-hidden="true"
-              height="1.25em"
+              height="1.1em"
               icon="sample-icon"
-              width="1.25em"
+              width="1.1em"
             />
           </a>
         </div>

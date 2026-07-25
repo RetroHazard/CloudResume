@@ -10,7 +10,8 @@ const SkillsCharts = lazy(() => import('../../components/skills_charts'));
 
 function SubHeading({ children }) {
     return (
-        <h2 className='mb-0 font-mono text-xs uppercase tracking-[0.2em] text-neon/80'>
+        <h2 className='mb-0 flex items-center gap-2 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-glow'>
+            <span aria-hidden='true' className='h-1.5 w-1.5 rounded-full bg-glow' />
             {children}
         </h2>
     );
@@ -20,36 +21,36 @@ function Skills() {
     return (
         <>
             <title>Skills | Cloud Resume</title>
-            <SectionShell id='skills' kicker='// capabilities' title='Skills'>
+            <SectionShell id='skills' kicker='Network Map · Capabilities' title='Skills' line={4}>
                 <div className='flex flex-col gap-10'>
-                    <Reveal className='rounded-xl border border-border bg-background/40 p-4 sm:p-6'>
-                        <Suspense fallback={<div className='h-72 animate-pulse rounded-lg bg-secondary-700/40' />}>
+                    <Reveal className='rounded-lg border border-border bg-background/40 p-4 sm:p-6'>
+                        <Suspense fallback={<div className='h-72 animate-pulse rounded bg-secondary-700/40' />}>
                             <SkillsCharts />
                         </Suspense>
                     </Reveal>
 
                     <Reveal className='flex flex-col gap-4'>
-                        <SubHeading>Toolbox</SubHeading>
+                        <SubHeading>Rolling Stock — Toolbox</SubHeading>
                         <SkillHighlight />
                     </Reveal>
 
                     <Reveal className='flex flex-col gap-3'>
-                        <SubHeading>Industry Knowledge</SubHeading>
+                        <SubHeading>Route Map — Industry Knowledge</SubHeading>
                         <SkillTags dataKey='industry_knowledge' />
                     </Reveal>
 
                     <Reveal className='flex flex-col gap-3'>
-                        <SubHeading>Exploring</SubHeading>
+                        <SubHeading>Under Construction — Exploring</SubHeading>
                         <SkillButton />
                     </Reveal>
 
                     <Reveal className='flex flex-col gap-3'>
-                        <SubHeading>Soft Skills</SubHeading>
+                        <SubHeading>Crew — Soft Skills</SubHeading>
                         <SkillTags dataKey='soft_skills' />
                     </Reveal>
 
                     <Reveal className='flex flex-col gap-3'>
-                        <SubHeading>Languages</SubHeading>
+                        <SubHeading>Announcements — Languages</SubHeading>
                         <LanguageItem />
                     </Reveal>
                 </div>

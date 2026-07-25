@@ -5,7 +5,12 @@ function Certifications() {
     return (
         <>
             <title>Certifications | Cloud Resume</title>
-            <SectionShell id='certifications' kicker='// credentials' title='Certifications'>
+            <SectionShell
+                id='certifications'
+                kicker='Fare Gate · Valid Passes'
+                title='Certifications'
+                line={3}
+            >
                 <CertificationList />
             </SectionShell>
         </>

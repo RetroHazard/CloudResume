@@ -2,182 +2,275 @@
 
 exports[`ProjectList Component > matches snapshot 1`] = `
 <div>
-  <ol
-    class="relative ml-1 flex list-none flex-col gap-5 border-l border-border/70 pl-6 sm:pl-8"
+  <div
+    class="overflow-hidden rounded-lg border border-border"
   >
-    <li
-      class="relative"
-      style="opacity: 0; transform: translateY(16px);"
+    <div
+      class="flex items-center justify-between gap-3 border-b border-border bg-secondary-800/70 px-3 py-2 font-mono text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-content-accent sm:px-4"
     >
+      <span>
+        Line  ·  Service — Project / Studio
+      </span>
       <span
-        aria-hidden="true"
-        class="absolute -left-[1.8rem] top-5 h-2.5 w-2.5 rounded-full bg-neon ring-4 ring-neon/15 sm:-left-[2.3rem]"
-      />
-      <article
-        class="group rounded-xl border border-border bg-secondary-800/40 p-4 transition-colors hover:border-neon/40 sm:p-5"
+        class="max-sm:hidden"
       >
-        <div
-          class="flex flex-col gap-4"
+        Since / Status
+      </span>
+    </div>
+    <ol
+      class="flex list-none flex-col"
+    >
+      <li>
+        <details
+          class="group border-b border-border last:border-b-0 [&_summary::-webkit-details-marker]:hidden"
+          name="projects"
+          open=""
         >
-          <div
-            class="flex gap-4"
+          <summary
+            class="grid cursor-pointer list-none items-center gap-3 px-3 py-3 transition-colors hover:bg-secondary-800/50 sm:px-4 [grid-template-columns:auto_1fr_auto]"
           >
-            <img
-              alt=""
-              class="size-10 rounded-xl ring-1 ring-border sm:size-20"
-              src="./images/generic_logo.png"
-            />
-            <div
-              class="flex w-full justify-between gap-2"
+            <span
+              aria-hidden="true"
+              class="inline-grid shrink-0 place-items-center rounded-full font-heading font-extrabold"
+              style="width: 1.9rem; height: 1.9rem; font-size: 0.9rem; color: rgb(7, 19, 25); background: rgb(46, 224, 138); box-shadow: 0 0 0 3px #2ee08a22;"
             >
-              <div
-                class="flex flex-col"
+              G
+            </span>
+            <span
+              class="flex min-w-0 flex-col"
+            >
+              <span
+                class="truncate font-heading text-base font-bold uppercase leading-tight tracking-wide text-content-title sm:text-lg"
               >
-                <h3
-                  class="card-title"
-                >
-                  Generic Project
-                </h3>
-                <p
-                  class="card-subtitle"
-                >
-                  Generic Company
-                </p>
-                <p
-                  class="card-accent font-mono"
-                >
-                  Generic Role
-                </p>
-                <p
-                  class="card-accent font-mono"
+                Generic Project
+              </span>
+              <span
+                class="truncate font-mono text-[0.7rem] text-neon"
+              >
+                Generic Company
+              </span>
+            </span>
+            <span
+              class="flex items-center gap-3"
+            >
+              <span
+                class="flex flex-col items-end max-sm:hidden"
+              >
+                <span
+                  class="tabular font-mono text-xs font-semibold text-content-subtitle"
                 >
                   2020
-                   — 
-                  2021
-                </p>
-                <p
-                  class="card-fine"
+                </span>
+                <span
+                  class="inline-flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-content-date"
                 >
-                  Generic Category
-                </p>
-              </div>
+                  Completed
+                </span>
+              </span>
+              <span
+                aria-hidden="true"
+                class="text-content-accent transition-transform group-open:rotate-90"
+              >
+                <svg
+                  fill="none"
+                  height="14"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  viewBox="0 0 24 24"
+                  width="14"
+                >
+                  <path
+                    d="M9 6l6 6-6 6"
+                  />
+                </svg>
+              </span>
+            </span>
+          </summary>
+          <div
+            class="border-t border-border/60 bg-background/40 px-3 pb-4 pt-3 sm:px-4"
+          >
+            <div
+              class="flex flex-col gap-3"
+            >
               <div
-                class="flex flex-wrap gap-3 max-sm:flex-col sm:flex-col"
+                class="flex items-start justify-between gap-3"
+              >
+                <div
+                  class="flex gap-3"
+                >
+                  <img
+                    alt=""
+                    class="size-12 rounded ring-1 ring-border sm:size-14"
+                    src="./images/generic_logo.png"
+                  />
+                  <div
+                    class="flex flex-col"
+                  >
+                    <p
+                      class="card-accent"
+                    >
+                      Generic Category
+                    </p>
+                    <p
+                      class="card-accent"
+                    >
+                      Generic Role
+                    </p>
+                    <p
+                      class="card-accent tabular"
+                    >
+                      2020
+                       — 
+                      2021
+                    </p>
+                  </div>
+                </div>
+                <div
+                  class="flex flex-wrap justify-end gap-2"
+                >
+                  <a
+                    aria-label="Generic Project demo (opens in new tab)"
+                    class="social-link"
+                    href="https://generic-demo.com"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <iconify-icon
+                      aria-hidden="true"
+                      height="1.1em"
+                      icon="fa-solid:external-link-alt"
+                      width="1.1em"
+                    />
+                  </a>
+                  <a
+                    aria-label="Generic Project repo (opens in new tab)"
+                    class="social-link"
+                    href="https://generic-repo.com"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <iconify-icon
+                      aria-hidden="true"
+                      height="1.1em"
+                      icon="simple-icons:git"
+                      width="1.1em"
+                    />
+                  </a>
+                  <a
+                    aria-label="Generic Project spec (opens in new tab)"
+                    class="social-link"
+                    href="https://generic-spec.com"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <iconify-icon
+                      aria-hidden="true"
+                      height="1.1em"
+                      icon="fa6-solid:info"
+                      width="1.1em"
+                    />
+                  </a>
+                </div>
+              </div>
+              <ul
+                class="ml-1 flex list-none flex-col gap-1.5 text-xs leading-relaxed text-content-body md:text-sm"
+              >
+                <li
+                  class="flex gap-2"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-neon/70"
+                  />
+                  <span>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  </span>
+                </li>
+                <li
+                  class="flex gap-2"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-neon/70"
+                  />
+                  <span>
+                    Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  </span>
+                </li>
+                <li
+                  class="flex gap-2"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-neon/70"
+                  />
+                  <span>
+                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+                  </span>
+                </li>
+                <li
+                  class="flex gap-2"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-neon/70"
+                  />
+                  <span>
+                    Nisi ut aliquip ex ea commodo consequat.
+                  </span>
+                </li>
+              </ul>
+              <div
+                class="flex flex-wrap max-sm:gap-1 sm:gap-2 md:gap-3"
               >
                 <a
-                  aria-label="Generic Project demo (opens in new tab)"
-                  class="social-link"
-                  href="https://generic-demo.com"
+                  class="skill-block"
+                  href="https://generic-skill1.com"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   <iconify-icon
-                    aria-hidden="true"
-                    height="1.25em"
-                    icon="fa-solid:external-link-alt"
-                    width="1.25em"
+                    class="icon-box"
+                    height="1.1em"
+                    icon="ph:generic-icon-1"
+                    width="1.1em"
                   />
+                  Generic Skill 1
                 </a>
                 <a
-                  aria-label="Generic Project repo (opens in new tab)"
-                  class="social-link"
-                  href="https://generic-repo.com"
+                  class="skill-block"
+                  href="https://generic-skill2.com"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   <iconify-icon
-                    aria-hidden="true"
-                    height="1.25em"
-                    icon="simple-icons:git"
-                    width="1.25em"
+                    class="icon-box"
+                    height="1.1em"
+                    icon="ph:generic-icon-2"
+                    width="1.1em"
                   />
+                  Generic Skill 2
                 </a>
                 <a
-                  aria-label="Generic Project spec (opens in new tab)"
-                  class="social-link"
-                  href="https://generic-spec.com"
+                  class="skill-block"
+                  href="https://generic-skill3.com"
                   rel="noopener noreferrer"
                   target="_blank"
                 >
                   <iconify-icon
-                    aria-hidden="true"
-                    height="1.25em"
-                    icon="fa6-solid:info"
-                    width="1.25em"
+                    class="icon-box"
+                    height="1.1em"
+                    icon="ph:generic-icon-3"
+                    width="1.1em"
                   />
+                  Generic Skill 3
                 </a>
               </div>
             </div>
           </div>
-          <div
-            class="font-normal leading-relaxed text-xs sm:leading-relaxed md:text-sm"
-          >
-            <ul
-              class="ml-4 list-disc space-y-1 pr-2 marker:text-neon/60"
-            >
-              <li>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </li>
-              <li>
-                Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </li>
-              <li>
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
-              </li>
-              <li>
-                Nisi ut aliquip ex ea commodo consequat.
-              </li>
-            </ul>
-          </div>
-          <div
-            class="flex flex-wrap max-sm:gap-1 sm:gap-2 md:gap-3"
-          >
-            <a
-              class="skill-block"
-              href="https://generic-skill1.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <iconify-icon
-                class="icon-box"
-                height="1.1em"
-                icon="ph:generic-icon-1"
-                width="1.1em"
-              />
-              Generic Skill 1
-            </a>
-            <a
-              class="skill-block"
-              href="https://generic-skill2.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <iconify-icon
-                class="icon-box"
-                height="1.1em"
-                icon="ph:generic-icon-2"
-                width="1.1em"
-              />
-              Generic Skill 2
-            </a>
-            <a
-              class="skill-block"
-              href="https://generic-skill3.com"
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              <iconify-icon
-                class="icon-box"
-                height="1.1em"
-                icon="ph:generic-icon-3"
-                width="1.1em"
-              />
-              Generic Skill 3
-            </a>
-          </div>
-        </div>
-      </article>
-    </li>
-  </ol>
+        </details>
+      </li>
+    </ol>
+  </div>
 </div>
 `;

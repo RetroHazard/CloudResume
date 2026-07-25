@@ -5,7 +5,7 @@ function Education() {
     return (
         <>
             <title>Education | Cloud Resume</title>
-            <SectionShell id='education' kicker='// academics' title='Education'>
+            <SectionShell id='education' kicker='Platform 01 · Academic Line' title='Education' line={1}>
                 <EducationList />
             </SectionShell>
         </>

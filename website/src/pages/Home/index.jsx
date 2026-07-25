@@ -1,7 +1,7 @@
 import PersonalSummary from '../../components/personal_summary';
 import SocialLinks from '../../components/social_links';
-import { HeroName } from '../../components/hero';
-import { SectionShell, Chip } from '../../components/ui/primitives';
+import SplitFlap from '../../components/split_flap';
+import { SectionShell, Chip, StatusPill } from '../../components/ui/primitives';
 import { useJsonData, LoadingSkeleton } from '../../utils/useJsonData';
 
 function Home() {
@@ -11,55 +11,96 @@ function Home() {
     return (
         <>
             <title>Cloud Resume</title>
-            <SectionShell id='profile' kicker='// whoami'>
+            <SectionShell
+                id='profile'
+                kicker='Terminus · Line Origin'
+                title='Concourse'
+                line={0}
+                right={<StatusPill tone='on'>All Lines Running</StatusPill>}
+            >
                 <div className='flex flex-col gap-6 sm:flex-row sm:items-start'>
+                    {/* ID pass card */}
                     <div className='flex flex-col items-center gap-4'>
-                        <div className='relative'>
-                            <div className='absolute -inset-1 rounded-2xl bg-gradient-to-tr from-neon/40 to-glow/30 opacity-60 blur-md' />
+                        <div className='relative rounded-lg border border-border bg-secondary-800/60 p-2'>
+                            <div className='absolute -right-2 -top-2 grid h-7 w-7 place-items-center rounded-full bg-neon font-heading text-xs font-extrabold text-background shadow-lg'>
+                                AB
+                            </div>
                             <img
-                                className='relative max-w-none rounded-2xl ring-1 ring-border max-sm:size-40 sm:size-40 md:size-52'
+                                className='max-w-none rounded-md ring-1 ring-border max-sm:size-36 sm:size-40 md:size-48'
                                 src={personalData.profilePicture}
                                 alt={`Photo of ${personalData.fullName}`}
                             />
+                            <p className='mt-2 text-center font-mono text-[0.58rem] uppercase tracking-[0.2em] text-content-accent'>
+                                Commuter Pass · Valid
+                            </p>
                         </div>
                         <SocialLinks />
                     </div>
 
+                    {/* Board readout */}
                     <div className='flex w-full flex-col gap-5'>
-                        <div>
-                            <HeroName
-                                text={personalData.fullName}
-                                className='mb-1 font-heading text-2xl font-extrabold text-content-header sm:text-3xl md:text-4xl'
-                            />
-                            <p className='mb-0 font-mono text-sm text-neon sm:text-base'>
-                                <span className='text-glow'>&gt;</span> {personalData.jobTitle}
+                        <div className='flex flex-col gap-1'>
+                            <span className='font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-glow'>
+                                ● Now Arriving
+                            </span>
+                            <h1
+                                aria-label={personalData.fullName}
+                                className='mb-0 font-heading text-[2rem] font-extrabold uppercase leading-[0.95] tracking-wide text-content-header sm:text-4xl md:text-5xl'
+                            >
+                                <SplitFlap
+                                    text={personalData.fullName}
+                                    ariaLabel={personalData.fullName}
+                                    cellClassName='inline-block'
+                                />
+                            </h1>
+                        </div>
+
+                        {/* Now boarding — role */}
+                        <div className='flex flex-wrap items-center gap-2 rounded border border-border bg-background/60 px-3 py-2'>
+                            <span className='font-mono text-[0.6rem] font-semibold uppercase tracking-[0.16em] text-glow'>
+                                Now Boarding →
+                            </span>
+                            <p className='mb-0 font-heading text-lg font-bold uppercase tracking-wide text-neon sm:text-xl'>
+                                {personalData.jobTitle}
                             </p>
                         </div>
 
                         <p className='mb-0 font-mono text-xs text-content-accent'>
-                            <span className='text-content-subtitle'>location:</span> {personalData.location}
+                            <span className='text-content-subtitle'>terminal:</span> {personalData.location}
                         </p>
 
                         {personalData.availability?.length > 0 && (
-                            <div className='flex flex-wrap gap-2'>
-                                {personalData.availability.map((tag) => (
-                                    <Chip key={tag}>{tag}</Chip>
-                                ))}
+                            <div className='flex flex-col gap-1.5'>
+                                <span className='font-mono text-[0.58rem] uppercase tracking-[0.18em] text-content-date'>
+                                    Service Notices
+                                </span>
+                                <div className='flex flex-wrap gap-2'>
+                                    {personalData.availability.map((tag) => (
+                                        <Chip key={tag}>
+                                            <span className='h-1.5 w-1.5 rounded-full bg-neon' />
+                                            {tag}
+                                        </Chip>
+                                    ))}
+                                </div>
                             </div>
                         )}
 
                         <a
                             href={personalData.resumeLink}
                             download
-                            className='inline-flex w-fit items-center gap-2 rounded-md border border-neon/40 bg-neon/10 px-4 py-2 font-mono text-sm font-semibold text-neon no-underline transition-colors hover:bg-neon/20'
+                            className='inline-flex w-fit items-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-neon no-underline transition-colors hover:bg-neon/20'
                         >
-                            <iconify-icon icon='fa6-solid:cloud-arrow-down' aria-hidden='true' />
-                            Download CV
+                            <iconify-icon icon='fa6-solid:ticket' aria-hidden='true' />
+                            Download CV — Ticket
                         </a>
                     </div>
                 </div>
 
-                <div className='mt-6 flex flex-col gap-4 border-t border-border pt-6'>
+                {/* Passenger notice / summary */}
+                <div className='mt-6 flex flex-col gap-3 border-t border-border pt-6'>
+                    <span className='font-mono text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-content-accent'>
+                        ⓘ Passenger Information
+                    </span>
                     <PersonalSummary />
                 </div>
             </SectionShell>

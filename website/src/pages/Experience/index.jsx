@@ -1,11 +1,17 @@
 import ExperienceList from '../../components/experience_list';
-import { SectionShell } from '../../components/ui/primitives';
+import { SectionShell, StatusPill } from '../../components/ui/primitives';
 
 function Experience() {
     return (
         <>
             <title>Experience | Cloud Resume</title>
-            <SectionShell id='experience' kicker='// career' title='Experience'>
+            <SectionShell
+                id='experience'
+                kicker='Platform 02 · Career Line'
+                title='Experience'
+                line={2}
+                right={<StatusPill tone='on'>Departures</StatusPill>}
+            >
                 <ExperienceList />
             </SectionShell>
         </>
