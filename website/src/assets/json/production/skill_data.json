@@ -45,9 +45,16 @@
     {
       "name": "Okta",
       "category": "Security",
-      "level": "80%",
+      "level": "85%",
       "logo": "devicon-plain:okta",
       "website": "https://www.okta.com/"
+    },
+    {
+      "name": "Entra ID",
+      "category": "Security",
+      "level": "45%",
+      "logo": null,
+      "website": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id"
     },
     {
       "name": "Go",
@@ -80,21 +87,21 @@
     {
       "name": "CrowdStrike Falcon",
       "category": "Security",
-      "level": "55%",
+      "level": "65%",
       "logo": null,
       "website": "https://www.crowdstrike.com/"
     },
     {
       "name": "Zscaler",
       "category": "Security",
-      "level": "50%",
+      "level": "55%",
       "logo": null,
       "website": "https://www.zscaler.com/"
     },
     {
       "name": "Qualys",
       "category": "Security",
-      "level": "50%",
+      "level": "60%",
       "logo": "simple-icons:qualys",
       "website": "https://www.qualys.com/"
     },
@@ -106,11 +113,18 @@
       "website": "https://tailscale.com/"
     },
     {
-      "name": "Kandji",
+      "name": "Iru",
       "category": "Security",
-      "level": "60%",
+      "level": "75%",
       "logo": null,
-      "website": "https://www.kandji.io/"
+      "website": "https://www.iru.com/"
+    },
+    {
+      "name": "JupiterOne",
+      "category": "Security",
+      "level": "50%",
+      "logo": null,
+      "website": "https://www.jupiterone.com/"
     },
     {
       "name": "Grafana",
@@ -122,9 +136,16 @@
     {
       "name": "LiteLLM",
       "category": "Platform",
-      "level": "50%",
+      "level": "65%",
       "logo": "selfhst:litellm",
       "website": "https://www.litellm.ai/"
+    },
+    {
+      "name": "AWS Bedrock",
+      "category": "Platform",
+      "level": "50%",
+      "logo": "simple-icons:amazonwebservices",
+      "website": "https://aws.amazon.com/bedrock/"
     },
     {
       "name": "Slack",
@@ -160,6 +181,13 @@
       "level": "50%",
       "logo": "simple-icons:perforce",
       "website": "https://www.perforce.com/"
+    },
+    {
+      "name": "Swift",
+      "category": "Development",
+      "level": "55%",
+      "logo": "skill-icons:swift",
+      "website": "https://www.swift.org/"
     },
     {
       "name": "C++",
@@ -253,6 +281,20 @@
       "website": "https://www.microsoft.com/en-us/windows"
     },
     {
+      "name": "Linux",
+      "category": "Workplace",
+      "level": "70%",
+      "logo": "skill-icons:linux-light",
+      "website": "https://www.kernel.org/"
+    },
+    {
+      "name": "Microsoft 365",
+      "category": "Workplace",
+      "level": "65%",
+      "logo": "selfhst:microsoft-365",
+      "website": "https://www.microsoft.com/en-us/microsoft-365"
+    },
+    {
       "name": "Kali Linux",
       "category": "Security",
       "level": "40%",
@@ -262,7 +304,7 @@
     {
       "name": "macOS",
       "category": "Workplace",
-      "level": "70%",
+      "level": "75%",
       "logo": "skill-icons:apple-light",
       "website": "https://www.apple.com"
     }
@@ -298,7 +340,10 @@
     { "name": "Kubernetes Access Control & RBAC" },
     { "name": "Enterprise AI Governance & AI Tooling Security" },
     { "name": "Identity Federation (SAML, OAuth 2.0, OIDC, SCIM)" },
-    { "name": "Compliance-Driven Security Controls (NIST-Aligned Hardening)" }
+    { "name": "Threat Mitigation" },
+    { "name": "Risk Management" },
+    { "name": "Agile & DevOps" },
+    { "name": "Regulatory & Compliance Controls (NIST-Aligned Hardening, CIS Benchmarks, ISO 27001, GDPR)" }
   ],
   "soft_skills": [
     { "name": "Cross-Functional Stakeholder Communication" },
