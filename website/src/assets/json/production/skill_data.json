@@ -253,6 +253,13 @@
       "website": "https://claude.com/"
     },
     {
+      "name": "Gemini",
+      "category": "AI",
+      "level": "60%",
+      "logo": "simple-icons:googlegemini",
+      "website": "https://gemini.google.com/"
+    },
+    {
       "name": "Codex",
       "category": "AI",
       "level": "45%",
