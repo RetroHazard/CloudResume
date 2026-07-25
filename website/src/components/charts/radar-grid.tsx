@@ -107,10 +107,17 @@ export function RadarGrid({
                 : undefined
             }
           >
+            {/* The scale runs up the inside of the plot, so every tick sits on
+                top of whatever the series have drawn there. Knock the label out
+                of the background first — otherwise a filled area swallows it. */}
             <text
               dominantBaseline="middle"
               fill={radarCssVars.foregroundMuted}
               fontSize={9}
+              paintOrder="stroke"
+              stroke={radarCssVars.background}
+              strokeWidth={3}
+              strokeLinejoin="round"
               textAnchor="start"
               x={4}
               y={-((i + 1) * radius) / levels}
