@@ -379,6 +379,41 @@
       "website": "https://tailwindcss.com"
     },
     {
+      "name": "IntelliJ IDEA",
+      "category": "Development",
+      "level": "45%",
+      "logo": "logos:intellij-idea",
+      "website": "https://www.jetbrains.com/idea/"
+    },
+    {
+      "name": "PyCharm",
+      "category": "Development",
+      "level": "60%",
+      "logo": "skill-icons:pycharm-light",
+      "website": "https://www.jetbrains.com/pycharm/"
+    },
+    {
+      "name": "Rider",
+      "category": "Development",
+      "level": "45%",
+      "logo": "skill-icons:rider-light",
+      "website": "https://www.jetbrains.com/rider/"
+    },
+    {
+      "name": "CLion",
+      "category": "Development",
+      "level": "35%",
+      "logo": "skill-icons:clion-light",
+      "website": "https://www.jetbrains.com/clion/"
+    },
+    {
+      "name": "JetBrains Air",
+      "category": "Development",
+      "level": "25%",
+      "logo": "simple-icons:jetbrains",
+      "website": "https://www.jetbrains.com/air/"
+    },
+    {
       "name": "SideFX Houdini",
       "category": "Creative",
       "level": "30%",
