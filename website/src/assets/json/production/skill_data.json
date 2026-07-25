@@ -155,6 +155,13 @@
       "website": "https://northpole.security/santa"
     },
     {
+      "name": "Workbrew",
+      "category": "Security",
+      "level": "70%",
+      "logo": null,
+      "website": "https://workbrew.com/"
+    },
+    {
       "name": "Okta Identity Governance",
       "category": "Security",
       "level": "65%",
