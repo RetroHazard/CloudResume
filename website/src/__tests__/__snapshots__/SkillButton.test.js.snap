@@ -12,6 +12,7 @@ exports[`SkillButton > matches snapshot with skills prop 1`] = `
       target="_blank"
     >
       <iconify-icon
+        aria-hidden="true"
         class="icon-box"
         height="1.1em"
         icon="skill1-icon"
@@ -26,6 +27,7 @@ exports[`SkillButton > matches snapshot with skills prop 1`] = `
       target="_blank"
     >
       <iconify-icon
+        aria-hidden="true"
         class="icon-box"
         height="1.1em"
         icon="skill2-icon"

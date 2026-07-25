@@ -81,21 +81,21 @@
       "name": "CrowdStrike Falcon",
       "category": "Security",
       "level": "55%",
-      "logo": "simple-icons:crowdstrike",
+      "logo": null,
       "website": "https://www.crowdstrike.com/"
     },
     {
       "name": "Zscaler",
       "category": "Security",
       "level": "50%",
-      "logo": "simple-icons:zscaler",
+      "logo": null,
       "website": "https://www.zscaler.com/"
     },
     {
       "name": "Qualys",
       "category": "Security",
       "level": "50%",
-      "logo": "ph:shield-check-fill",
+      "logo": "simple-icons:qualys",
       "website": "https://www.qualys.com/"
     },
     {
@@ -109,7 +109,7 @@
       "name": "Kandji",
       "category": "Endpoint (MDM)",
       "level": "60%",
-      "logo": "ph:devices-fill",
+      "logo": null,
       "website": "https://www.kandji.io/"
     },
     {
@@ -123,7 +123,7 @@
       "name": "LiteLLM",
       "category": "AI Gateway",
       "level": "50%",
-      "logo": "ph:robot-fill",
+      "logo": "selfhst:litellm",
       "website": "https://www.litellm.ai/"
     },
     {

@@ -169,6 +169,31 @@ list, now a single `.ticket-button`).
 "Japan Immigration Statistics Das…" had no way to reveal the rest. Added `title`
 attributes to the destination and operator.
 
+### 16. Skills toolbox had blank and mismatched icons — **fixed**
+
+Two entries pointed at Iconify names that do not exist in any of the 236 published
+sets, so they rendered as empty space: `simple-icons:crowdstrike` and
+`simple-icons:zscaler`. Simple Icons removes marks when a vendor's trademark policy
+requires it, and both were dropped after the names were written here — a silent
+break, because Iconify resolves at runtime and a miss renders nothing.
+
+Three more entries had a *valid* icon that was not the brand: `ph:shield-check-fill`
+for Qualys, `ph:devices-fill` for Kandji, `ph:robot-fill` for LiteLLM. Those read as
+category symbols in a row of brand marks, and they put a third icon language
+(Phosphor duotone) next to the full-colour `skill-icons` tiles and the flat
+`simple-icons` silhouettes.
+
+Iconify stays the primary source. Two of the five turned out to have real marks
+that were simply never found — `simple-icons:qualys` and `selfhst:litellm`. The
+remaining three are published nowhere, so they now resolve to a monogram plate:
+a signage tile in the same footprint as the icon it stands in for (`BrandIcon` in
+`components/ui/brand_icon.jsx`). It reads as a deliberate "no mark published"
+state rather than a wrong one, and redrawing the logos locally is exactly what
+the vendors' trademark policies got them pulled from Simple Icons for.
+
+The plate is driven by a runtime resolve rather than a hardcoded list, so it also
+covers the next mark that gets pulled from a set — and the CDN case below.
+
 ---
 
 ## Recorded, not changed
@@ -188,7 +213,10 @@ These are judgement calls or larger pieces of work; flagging rather than acting.
   every social link, nav icon and technology chip renders as an empty tile — which
   is exactly what happened in this review environment. Predates the redesign, but
   the redesign leans on icons more heavily. Bundling the ~30 icons actually used
-  would make the UI self-contained.
+  would make the UI self-contained. *Partly mitigated by #16*: the skills toolbox
+  now degrades to a readable monogram board instead of blank tiles when the API is
+  unreachable. Social links, nav and the chip lists still go blank — extending
+  `BrandIcon` to them, or bundling, is the remaining work.
 - **The desktop content column is 672px inside a 1152px container.** Fine for
   prose, tight for the Skills page, where the contribution heatmap and radar chart
   both have to compress into it. Consider letting `/skills` break out wider.
@@ -218,8 +246,10 @@ These are judgement calls or larger pieces of work; flagging rather than acting.
 
 ## Verification
 
-- `vitest run` — 17 files, 41 tests passing (4 snapshots updated, 7 new tests for
-  the date helpers).
+- `vitest run` — 18 files, 56 tests passing (7 snapshots updated, 7 new tests for
+  the date helpers, 13 for `BrandIcon`).
+- Every `logo` / `flag` / `icon` name in `assets/json` checked against all 236
+  published Iconify sets — all resolve.
 - `tsc --noEmit` — clean.
 - `axe-core` — zero violations across all 8 routes at 1280px and 390px.
 - Rendered sweep at 1440 / 820 / 390 / 320px — no horizontal overflow, no clipped

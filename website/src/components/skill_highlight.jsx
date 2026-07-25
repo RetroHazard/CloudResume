@@ -1,5 +1,5 @@
-import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
+import { BrandIcon } from './ui/brand_icon';
 
 const pct = (level) => parseInt(String(level).replace('%', ''), 10) || 0;
 
@@ -31,7 +31,13 @@ const SkillHighlight = () => {
                         aria-label={`${skill.name} (opens in new tab)`}
                         className='group flex items-center gap-3 rounded border border-border bg-secondary-800/50 px-3 py-2 no-underline transition-colors hover:border-neon/40'
                     >
-                        <Icon icon={skill.logo} width='1.5em' height='1.5em' aria-hidden='true' />
+                        <BrandIcon
+                            icon={skill.logo}
+                            name={skill.name}
+                            monogram={skill.monogram}
+                            size='1.5em'
+                            className='shrink-0'
+                        />
                         <div className='flex min-w-0 flex-1 flex-col gap-1'>
                             <div className='flex items-baseline justify-between gap-2'>
                                 <span
