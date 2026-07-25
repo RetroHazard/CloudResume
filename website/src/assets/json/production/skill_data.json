@@ -50,6 +50,13 @@
       "website": "https://www.okta.com/"
     },
     {
+      "name": "1Password",
+      "category": "Security",
+      "level": "90%",
+      "logo": "simple-icons:1password",
+      "website": "https://1password.com/"
+    },
+    {
       "name": "Entra ID",
       "category": "Security",
       "level": "45%",
