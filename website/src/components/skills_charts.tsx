@@ -17,7 +17,7 @@ type CoreSkill = { name: string; category: string; level: string };
  * this page — the badges on each tool, the radar, the rings — reads that one
  * field. The old data had twenty categories, half of them a single tool deep
  * ("AI Gateway", "Endpoint (MDM)", "Game Development"), which is why the radar
- * needed a private lookup table and why counting anything was meaningless.
+ * needed a private lookup table and why scoring anything was meaningless.
  *
  *   Cloud        the public clouds themselves
  *   Platform     what runs on them — IaC, CI/CD, containers, observability, repos
@@ -27,18 +27,17 @@ type CoreSkill = { name: string; category: string; level: string };
  *   Creative     the pre-engineering craft — real-time, 3D, VFX, design
  *
  * A tool whose category is off-list lands in `Other` rather than disappearing,
- * so the number in the middle of the rings always equals the number of tools in
- * the list below them.
+ * so no part of the toolbox is left out of the scoring.
  */
 const CATEGORIES = ['Cloud', 'Platform', 'Security', 'Development', 'Workplace', 'Creative'];
 const OTHER = 'Other';
 
-// Sequential ramp, brightest = biggest bucket. See --chart-ramp-* in index.css.
+// Sequential ramp, brightest = highest-scoring bucket. See --chart-ramp-* in index.css.
 const RAMP_STEPS = 6;
 
 const pct = (level: string) => parseInt(String(level).replace('%', ''), 10) || 0;
 
-type Bucket = { name: string; count: number; peak: number };
+type Bucket = { name: string; count: number; peak: number; avg: number };
 
 function bucketize(core: CoreSkill[]): Bucket[] {
     const known = new Set(CATEGORIES);
@@ -47,10 +46,12 @@ function bucketize(core: CoreSkill[]): Bucket[] {
             const levels = core
                 .filter((s) => (known.has(s.category) ? s.category === name : name === OTHER))
                 .map((s) => pct(s.level));
+            const sum = levels.reduce((a, b) => a + b, 0);
             return {
                 name,
                 count: levels.length,
                 peak: levels.reduce((max, v) => Math.max(max, v), 0),
+                avg: levels.length ? Math.round(sum / levels.length) : 0,
             };
         })
         .filter((b) => b.count > 0);
@@ -72,16 +73,18 @@ export default function SkillsCharts() {
     const metrics = buckets.map((b) => ({ key: b.name, label: b.name }));
     const radarData = [{ label: 'Peak proficiency', values }];
 
-    // Rings — how much of the toolbox each category accounts for. The widest
-    // category fills its ring, so the rest read as shares of it; the exact
-    // counts are in the legend and the centre carries the total.
-    const ranked = [...buckets].sort((a, b) => b.count - a.count || b.peak - a.peak);
-    const widest = ranked[0].count;
+    // Rings — the same categories scored on how deep they run rather than how
+    // high they reach: the mean proficiency of every tool in the bucket, out of
+    // 100. Read against the radar, the gap is the interesting part — a category
+    // can peak at 80 and still average 35 when it is one strong tool and two
+    // passing acquaintances.
+    const ranked = [...buckets].sort((a, b) => b.avg - a.avg || b.count - a.count);
+    const overallAvg = Math.round(core.reduce((sum, s) => sum + pct(s.level), 0) / core.length);
     const rings = ranked.map((b, i) => ({
         label: b.name,
-        value: b.count,
-        maxValue: widest,
-        peak: b.peak,
+        value: b.avg,
+        maxValue: 100,
+        count: b.count,
         color: `var(--chart-ramp-${Math.min(i + 1, RAMP_STEPS)})`,
     }));
 
@@ -99,9 +102,7 @@ export default function SkillsCharts() {
                     </RadarChart>
                     <figcaption className='flex flex-col items-center gap-1 font-mono text-xs uppercase tracking-wider text-content-accent'>
                         // peak proficiency by category
-                        <span className='sr-only'>
-                            {buckets.map((b) => `${b.name}: ${b.peak}%`).join(', ')}
-                        </span>
+                        <span className='sr-only'>{buckets.map((b) => `${b.name}: ${b.peak}%`).join(', ')}</span>
                     </figcaption>
                 </figure>
 
@@ -116,10 +117,10 @@ export default function SkillsCharts() {
                         {rings.map((r, i) => (
                             <Ring key={r.label} index={i} showGlow />
                         ))}
-                        <RingCenter defaultLabel='Tools' />
+                        <RingCenter defaultLabel='Avg' defaultValue={overallAvg} suffix='%' />
                     </RingChart>
                     <figcaption className='flex w-full flex-col items-center gap-2 font-mono text-xs uppercase tracking-wider text-content-accent'>
-                        // toolbox by category
+                        // average score by category
                         <ul className='m-0 flex w-full max-w-[300px] list-none flex-col gap-1 p-0 normal-case tracking-normal'>
                             {rings.map((r) => (
                                 <li key={r.label} className='flex items-baseline justify-between gap-3 text-[0.68rem]'>
@@ -132,7 +133,7 @@ export default function SkillsCharts() {
                                         {r.label}
                                     </span>
                                     <span className='tabular whitespace-nowrap'>
-                                        {r.value} · peak {r.peak}%
+                                        {r.value}% · {r.count} tools
                                     </span>
                                 </li>
                             ))}
