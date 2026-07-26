@@ -1,6 +1,6 @@
 // website/src/__tests__/NavBar.test.js
 import { render, screen } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import Navigation from '../components/navbar';
 
 vi.mock('../components/visitor_count', () => ({ default: () => null }));
