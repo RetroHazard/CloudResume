@@ -210,7 +210,8 @@ const zones = [
 
 const legendItems = Object.values(cat);
 
-const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, -apple-system, Segoe UI, Roboto, sans-serif">
+const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, -apple-system, Segoe UI, Roboto, sans-serif">
 <style>
   :root {
     --bg: #F6F7F9; --panel: #FFFFFF; --zone-border: #D7DCE3; --zone-label: #8891A0;
@@ -253,7 +254,7 @@ const svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" fon
 <text x="30" y="34" class="title">CloudResume — Serverless Architecture</text>
 <text x="30" y="56" class="subtitle">v8 · single AWS account · ap-northeast-1 · fully serverless, no idle compute</text>
 
-${zones.map(z => `<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="14" class="zone-rect"/><text x="${z.x + 14}" y="${z.y + 20}" class="zone-label">${z.label}</text>`).join('\n')}
+${zones.map(z => `<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="14" class="zone-rect"/><text x="${z.x + 14}" y="${z.y + 20}" class="zone-label">${esc(z.label)}</text>`).join('\n')}
 
 ${E.map(edgeSvg).join('\n')}
 ${logSources.map(logLine).join('\n')}

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="0 0 1320 1000" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, -apple-system, Segoe UI, Roboto, sans-serif">
 <style>
   :root {
@@ -43,7 +44,7 @@
 
 <rect x="20" y="90" width="1280" height="430" rx="14" class="zone-rect"/><text x="34" y="110" class="zone-label">REQUEST PATH</text>
 <rect x="20" y="550" width="1280" height="200" rx="14" class="zone-rect"/><text x="34" y="570" class="zone-label">EVENT-DRIVEN AUTOMATION</text>
-<rect x="20" y="770" width="1280" height="160" rx="14" class="zone-rect"/><text x="34" y="790" class="zone-label">OBSERVABILITY & DEPLOYMENT</text>
+<rect x="20" y="770" width="1280" height="160" rx="14" class="zone-rect"/><text x="34" y="790" class="zone-label">OBSERVABILITY &amp; DEPLOYMENT</text>
 
 <path d="M 115 260 L 232 260" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/>
 <path d="M 288 260 L 442 260" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
