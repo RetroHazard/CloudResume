@@ -38,3 +38,21 @@ variable "waf_enabled" {
   type    = bool
   default = false
 }
+
+variable "contribution_accounts" {
+  description = "GitHub Accounts merged into the Contribution Heatmap"
+  type        = list(string)
+  default     = ["RetroHazard", "BitMEX-abracken"]
+}
+
+variable "contribution_object_key" {
+  description = "S3 Object Key the Contribution Data is Published to"
+  type        = string
+  default     = "data/contributions.json"
+}
+
+variable "contribution_refresh_schedule" {
+  description = "EventBridge Schedule Expression for Refreshing Contribution Data"
+  type        = string
+  default     = "rate(6 hours)"
+}

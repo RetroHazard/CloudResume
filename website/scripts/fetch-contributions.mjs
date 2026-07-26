@@ -1,10 +1,16 @@
-// Generates src/assets/json/production/contributions.json by merging the public
-// GitHub contribution graphs of the accounts listed below into a single dataset.
+// Generates public/data/contributions.json by merging the public GitHub
+// contribution graphs of the accounts listed below into a single dataset.
 //
 // No token required: the contribution graphs are public. Private commit counts
 // are included automatically for any account that has enabled
 // "Settings → Contributions → Include private contributions on my profile"
 // (the counts are anonymised — no repo names are exposed).
+//
+// Between deploys the data is kept live by the scheduled updateContributions
+// Lambda (infrastructure/codebase/updateContributions.py), which rewrites the
+// same object in S3. This script only seeds the deploy: the site is synced to
+// S3 with --delete, so the build output must contain data/contributions.json
+// or a deploy would remove the Lambda-maintained object.
 //
 // Runs in CI immediately before the production build. On any network/API error
 // it leaves the committed file in place, so a GitHub/API hiccup never breaks a
@@ -18,7 +24,7 @@ const ACCOUNTS = ['RetroHazard', 'BitMEX-abracken'];
 
 const OUT = resolve(
     dirname(fileURLToPath(import.meta.url)),
-    '../src/assets/json/production/contributions.json',
+    '../public/data/contributions.json',
 );
 
 // Public, no-auth contributions API. It scrapes the public profile graph, so it
