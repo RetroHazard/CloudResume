@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { HelmetProvider } from 'react-helmet-async';
 import Home from '../pages/Home/index';
 
 const mockData = {
@@ -21,14 +20,14 @@ vi.mock('../components/personal_summary', () => ({ default: () => null }));
 
 describe('Home component', () => {
     it('renders profile data correctly', () => {
-        render(<Home />, { wrapper: HelmetProvider });
+        render(<Home />);
         // Profile photo with descriptive alt
         expect(screen.getByAltText('Photo of John Doe')).toHaveAttribute('src', mockData.profilePicture);
         // Download CV is now a link (not button-in-anchor)
         const downloadLink = screen.getByRole('link', { name: /download cv/i });
         expect(downloadLink).toHaveAttribute('href', mockData.resumeLink);
-        // Name, title, location
-        expect(screen.getByText(mockData.fullName)).toBeInTheDocument();
+        // Name (rendered as per-character spans; assert via the heading's accessible name), title, location
+        expect(screen.getByRole('heading', { name: mockData.fullName })).toBeInTheDocument();
         expect(screen.getByText(mockData.jobTitle)).toBeInTheDocument();
         expect(screen.getByText(mockData.location)).toBeInTheDocument();
         // Availability tag from JSON (no salary)

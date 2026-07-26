@@ -1,9 +1,9 @@
 // website/src/pages/Contact/index.jsx
 import { useRef, useEffect, useState, useReducer } from 'react';
-import { Helmet } from 'react-helmet-async';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useVisitorId } from '../../utils/useVisitorId';
 import { apiPost } from '../../utils/apiClient';
+import { SectionShell, StatusPill } from '../../components/ui/primitives';
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
@@ -103,7 +103,9 @@ const ContactForm = () => {
         <form onSubmit={handleSubmit} className='space-y-4'>
             <fieldset>
                 <legend className='mb-2 block text-sm font-medium text-content-subtitle'>Name</legend>
-                <div className='flex flex-row gap-6'>
+                {/* Side by side these two fields are ~76px wide on a phone, which
+                    truncates both the placeholder and anything typed into them. */}
+                <div className='flex flex-col gap-4 sm:flex-row sm:gap-6'>
                     <label htmlFor='firstName' className='sr-only'>First name</label>
                     <input
                         type='text'
@@ -188,21 +190,15 @@ const ContactForm = () => {
                     aria-label={isLoading ? 'Sending message, please wait' : 'Send message'}
                     className={
                         isLoading
-                            ? 'inline-flex w-40 cursor-not-allowed items-center rounded bg-secondary-500 px-4 py-2 font-bold text-secondary-400'
-                            : 'inline-flex w-40 items-center rounded bg-primary-500 px-4 py-2 font-bold text-secondary-800 hover:bg-primary-400'
+                            ? 'inline-flex w-48 cursor-not-allowed items-center justify-center gap-2 rounded border border-border bg-secondary-500 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-secondary-300 max-sm:min-h-11 max-sm:w-full'
+                            : 'ticket-button w-48 max-sm:w-full'
                     }
                 >
-                    <div className='icon-box'>
-                        <i className='mr-2 h-5 w-5 text-content-icons'>
-                            <iconify-icon
-                                aria-hidden='true'
-                                icon={isLoading ? 'svg-spinners:270-ring-with-bg' : 'fa6-solid:paper-plane'}
-                            />
-                        </i>
-                    </div>
-                    <span aria-hidden='true' className='text-sm text-content-header'>
-                        {isLoading ? 'Sending...' : 'Send Message'}
-                    </span>
+                    <iconify-icon
+                        aria-hidden='true'
+                        icon={isLoading ? 'svg-spinners:270-ring-with-bg' : 'fa6-solid:paper-plane'}
+                    />
+                    <span aria-hidden='true'>{isLoading ? 'Dispatching…' : 'Dispatch Message'}</span>
                 </button>
             </div>
             <StatusAlert status={status} />
@@ -213,21 +209,24 @@ const ContactForm = () => {
 function Contact() {
     return (
         <>
-            <Helmet>
-                <title>Contact | Cloud Resume</title>
-            </Helmet>
-            <div className='content-block' id='contact'>
-                <h2 className='h2 mb-0 font-extrabold text-content-header'>CONTACT ME</h2>
+            <title>Contact | Cloud Resume</title>
+            <SectionShell
+                id='contact'
+                kicker='Station Office · Inquiry Counter'
+                title='Contact'
+                line={0}
+                right={<StatusPill tone='on'>Open</StatusPill>}
+            >
                 <div className='mx-auto max-w-screen-md'>
-                    <p className='mb-1 font-sans text-content-accent sm:text-xl'>
-                        Questions? Comments? Have a potential opportunity or project you'd like to collaborate on?
+                    <p className='mb-1 text-content-body sm:text-lg'>
+                        Questions, comments, or a potential opportunity or project you'd like to collaborate on?
                     </p>
-                    <p className='mb-4 font-sans text-content-accent sm:text-xl'>
-                        Feel free to reach out using the contact form below.
+                    <p className='mb-6 font-mono text-xs uppercase tracking-wider text-content-accent'>
+                        Leave a message at the counter — every inquiry is read.
                     </p>
                     <ContactForm />
                 </div>
-            </div>
+            </SectionShell>
         </>
     );
 }

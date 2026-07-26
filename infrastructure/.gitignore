@@ -1,5 +1,6 @@
 **/.idea
 **/.terraform
 **/.DS_Store
-**/.terraform.lock.hcl
+**/tfplan
+**/*.tfplan
 /codepacks/

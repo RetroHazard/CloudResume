@@ -1,5 +1,4 @@
 import { render, screen } from '@testing-library/react';
-import { HelmetProvider } from 'react-helmet-async';
 import Certifications from '../pages/Certifications';
 import Education from '../pages/Education';
 import Experience from '../pages/Experience';
@@ -11,6 +10,7 @@ import ExperienceList from '../components/experience_list';
 import ProjectList from '../components/project_list';
 import SkillHighlight from '../components/skill_highlight';
 import SkillButton from '../components/skill_button';
+import SkillTags from '../components/skill_tags';
 import LanguageItem from '../components/language_item';
 
 vi.mock('../components/certification_list', () => ({ default: vi.fn(() => null) }));
@@ -19,9 +19,10 @@ vi.mock('../components/experience_list', () => ({ default: vi.fn(() => null) }))
 vi.mock('../components/project_list', () => ({ default: vi.fn(() => null) }));
 vi.mock('../components/skill_highlight', () => ({ default: vi.fn(() => null) }));
 vi.mock('../components/skill_button', () => ({ default: vi.fn(() => null) }));
+vi.mock('../components/skill_tags', () => ({ default: vi.fn(() => null) }));
 vi.mock('../components/language_item', () => ({ default: vi.fn(() => null) }));
 
-const renderPage = (ui) => render(ui, { wrapper: HelmetProvider });
+const renderPage = (ui) => render(ui);
 
 describe('Content Pages', () => {
     test('Certifications page renders correctly and calls CertificationList', () => {
@@ -53,6 +54,7 @@ describe('Content Pages', () => {
         expect(screen.getByText('Skills')).toBeInTheDocument();
         expect(SkillHighlight).toHaveBeenCalled();
         expect(SkillButton).toHaveBeenCalled();
+        expect(SkillTags).toHaveBeenCalled();
         expect(LanguageItem).toHaveBeenCalled();
     });
 });

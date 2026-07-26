@@ -399,6 +399,70 @@ resource "aws_lambda_function" "crc-trackVisitors" {
   ]
 }
 
+resource "aws_cloudwatch_log_group" "crc-updateContributions-log-group" {
+  name              = "/aws/lambda/updateContributions"
+  retention_in_days = 14
+}
+
+resource "aws_lambda_function" "crc-updateContributions" {
+  architectures = ["x86_64"]
+
+  environment {
+    variables = {
+      prod_bucket = var.s3-bucket-production-name
+      object_key  = var.contribution-object-key
+      accounts    = join(",", var.contribution-accounts)
+    }
+  }
+
+  ephemeral_storage {
+    size = "512"
+  }
+
+  function_name = "updateContributions"
+  handler       = "updateContributions.lambda_handler"
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = aws_cloudwatch_log_group.crc-updateContributions-log-group.name
+    system_log_level      = "INFO"
+  }
+
+  memory_size                    = "128"
+  package_type                   = "Zip"
+  filename                       = data.archive_file.updateContributions_lambda_function_code.output_path
+  source_code_hash               = data.archive_file.updateContributions_lambda_function_code.output_base64sha256
+  reserved_concurrent_executions = "-1"
+  role                           = var.iam-role-contribution-tracker-arn
+  runtime                        = "python3.12"
+  skip_destroy                   = "false"
+  timeout                        = "60"
+
+  depends_on = [
+    aws_cloudwatch_log_group.crc-updateContributions-log-group
+  ]
+}
+
+resource "aws_cloudwatch_event_rule" "crc-updateContributions-schedule" {
+  name                = "updateContributions-schedule"
+  description         = "Periodically refreshes the GitHub contribution data published to S3"
+  schedule_expression = var.contribution-refresh-schedule
+}
+
+resource "aws_cloudwatch_event_target" "crc-updateContributions-schedule-target" {
+  rule = aws_cloudwatch_event_rule.crc-updateContributions-schedule.name
+  arn  = aws_lambda_function.crc-updateContributions.arn
+}
+
+resource "aws_lambda_permission" "crc-event-permissions-schedule-contributions" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.crc-updateContributions.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.crc-updateContributions-schedule.arn
+  statement_id  = "AllowEventBridgeInvokeContributions"
+}
+
 resource "aws_lambda_permission" "crc-event-permissions-api-visitors" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.crc-trackVisitors.function_name

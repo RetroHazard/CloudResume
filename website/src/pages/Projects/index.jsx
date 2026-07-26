@@ -1,16 +1,19 @@
-import { Helmet } from 'react-helmet-async';
 import ProjectList from '../../components/project_list';
+import { SectionShell, StatusPill } from '../../components/ui/primitives';
 
 function Projects() {
     return (
         <>
-            <Helmet><title>Projects | Cloud Resume</title></Helmet>
-            <div className='content-block' id='projects'>
-                <h1 className='h1 mb-0 font-heading font-bold text-content-header text-2xl sm:text-3xl'>Projects</h1>
-                <div className='flex flex-col gap-8'>
-                    <ProjectList />
-                </div>
-            </div>
+            <title>Projects | Cloud Resume</title>
+            <SectionShell
+                id='projects'
+                kicker='Special Services · Build Log'
+                title='Projects'
+                line={4}
+                right={<StatusPill tone='on'>Live</StatusPill>}
+            >
+                <ProjectList />
+            </SectionShell>
         </>
     );
 }

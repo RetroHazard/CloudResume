@@ -42,7 +42,7 @@ describe('CertificationList Component', () => {
         const { getByText } = render(<CertificationList />);
         expect(getByText('Sample Certification')).toBeInTheDocument();
         expect(getByText('Sample Issuer')).toBeInTheDocument();
-        expect(getByText(/Credential ID:/)).toBeInTheDocument(); // Using a regular expression
+        expect(getByText(/ID:/)).toBeInTheDocument(); // Using a regular expression
         expect(getByText(/Issued:/)).toBeInTheDocument(); // Using a regular expression
         expect(getByText(/Expiry:/)).toBeInTheDocument(); // Using a regular expression
     });

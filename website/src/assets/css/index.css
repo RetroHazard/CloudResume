@@ -1,87 +1,317 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
+/* ══════════════════════════════════════════════════════════════════════════
+   RAPID — a Tokyo transit / wayfinding design language.
+   Career reads as a rail line; pages are platform boards; the signature motion
+   is a split-flap departure board. Dark-only, signal-coded, ruthlessly gridded.
+   ══════════════════════════════════════════════════════════════════════════ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    /* Breakpoints (unchanged — layout utilities depend on these) */
+    --breakpoint-sm: 740px;
+    --breakpoint-md: 900px;
+    --breakpoint-lg: 1200px;
+    --breakpoint-xl: 1500px;
+    --breakpoint-2xl: 1920px;
+
+    /* Fonts — condensed grotesque display (station signage) + neutral body + mono data */
+    --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-sans: var(--font-body);
+    --font-heading: 'Barlow Condensed', 'Arial Narrow', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', 'Menlo', monospace;
+
+    /* Primary — signal green (on-time / go) */
+    --color-primary-50: #e6fff2;
+    --color-primary-100: #b8ffdd;
+    --color-primary-200: #86f7c3;
+    --color-primary-300: #57efab;
+    --color-primary-400: #2ee08a;
+    --color-primary-500: #16c974;
+    --color-primary-600: #0fa85f;
+    --color-primary-700: #0c8149;
+    --color-primary-800: #0a5f37;
+    --color-primary-900: #073f25;
+
+    /* Neutral — transit slate (deep ink → light labels) */
+    --color-secondary-50: #f2f8f6;
+    --color-secondary-100: #dce8e8;
+    --color-secondary-200: #b7cccf;
+    --color-secondary-300: #90aab0;
+    --color-secondary-400: #6c8b91;
+    --color-secondary-500: #2a4650;
+    --color-secondary-600: #1a333c;
+    --color-secondary-700: #12262e;
+    --color-secondary-800: #0c1e26;
+    --color-secondary-900: #071319;
+
+    /* Signal accents */
+    --color-neon: #2ee08a;      /* GO / on-time / primary line */
+    --color-neon-soft: #7ff0b5;
+    --color-glow: #ffc24b;      /* board flap text / amber highlight */
+    --color-alert: #ff5a5f;     /* delayed / suspended */
+
+    /* Line colours (used for per-entry "line badges") */
+    --color-line-green: #2ee08a;
+    --color-line-amber: #ffc24b;
+    --color-line-blue: #4aa8ff;
+    --color-line-red: #ff5a5f;
+    --color-line-violet: #b48cff;
+
+    /* Skill / chart accents */
+    --color-skill-0: #12262e;
+    --color-skill-1: #2ee08a;
+    --color-skill-2: #ffc24b;
+    --color-skill-3: #4aa8ff;
+
+    /* Semantic content tokens */
+    --color-content-title: #f2f8f6;
+    --color-content-subtitle: #cfe0e0;
+    --color-content-header: #ffffff;
+    --color-content-body: #b7cccf;
+    --color-content-accent: #8ba7ac;
+    --color-content-date: #6c8b91;
+    --color-content-skill: #f2f8f6;
+    --color-content-outline: #2ee08a;
+    --color-content-boxbg: #0f2831;
+    --color-content-boxhl: #17323c;
+    --color-content-icons: #cfe0e0;
+
+    /* shadcn / component tokens */
+    --color-background: #071319;
+    --color-foreground: #f2f8f6;
+    --color-card: #0c1e26;
+    --color-card-foreground: #f2f8f6;
+    --color-popover: #0c1e26;
+    --color-popover-foreground: #f2f8f6;
+    --color-primary: #2ee08a;
+    --color-primary-foreground: #071319;
+    --color-secondary: #12262e;
+    --color-secondary-foreground: #f2f8f6;
+    --color-muted: #12262e;
+    --color-muted-foreground: #8ba7ac;
+    --color-accent: #ffc24b;
+    --color-accent-foreground: #071319;
+    --color-destructive: #ff5a5f;
+    --color-destructive-foreground: #ffffff;
+    --color-border: #17323c;
+    --color-input: #17323c;
+    --color-ring: #2ee08a;
+
+    /* Radius — signage is crisp: small radii */
+    --radius-sm: 0.125rem;
+    --radius: 0.25rem;
+    --radius-lg: 0.375rem;
+    --radius-xl: 0.625rem;
+    --radius-2xl: 0.875rem;
+}
+
+/* Plain CSS vars for any copied shadcn/Bklit components */
+:root {
+    --background: #071319;
+    --foreground: #f2f8f6;
+    --card: #0c1e26;
+    --card-foreground: #f2f8f6;
+    --popover: #0c1e26;
+    --popover-foreground: #f2f8f6;
+    --primary: #2ee08a;
+    --primary-foreground: #071319;
+    --secondary: #12262e;
+    --secondary-foreground: #f2f8f6;
+    --muted: #12262e;
+    --muted-foreground: #8ba7ac;
+    --accent: #ffc24b;
+    --accent-foreground: #071319;
+    --destructive: #ff5a5f;
+    --border: #17323c;
+    --input: #17323c;
+    --ring: #2ee08a;
+    --radius: 0.375rem;
+
+    /* Bklit chart palette */
+    --chart-1: #2ee08a;
+    --chart-2: #ffc24b;
+    --chart-3: #4aa8ff;
+    --chart-4: #b48cff;
+    --chart-5: #ff5a5f;
+    --chart-background: #0c1e26;
+    --chart-foreground: #f2f8f6;
+    --chart-foreground-muted: #8ba7ac;
+    --chart-label: #8ba7ac;
+    --chart-grid: #17323c;
+
+    /* Ring ramp — a one-hue sequential scale in signal green, brightest step
+       first. The rings encode magnitude (how many tools sit in a category), so
+       lightness carries the value and hue stays out of it; the categorical
+       --chart-1..5 slots are for charts where colour means identity.
+       The seventh category (AI) needed a seventh step, and the ramp had no room
+       below it: continuing at the old ~0.07 spacing landed at 2.83:1, under the
+       3:1 floor. So the range is unchanged at both ends and the steps are
+       redistributed — ~0.058 apart in OKLCH lightness rather than ~0.07. Each
+       still reads as its own step against the dark surface, and the darkest
+       still clears 3:1 against it (3.74:1). */
+    --chart-ramp-1: #6effad;
+    --chart-ramp-2: #2eef93;
+    --chart-ramp-3: #18da83;
+    --chart-ramp-4: #16c576;
+    --chart-ramp-5: #0cb069;
+    --chart-ramp-6: #069b5b;
+    --chart-ramp-7: #0e8750;
+}
+
+/* Scrollbar-width compensation */
 html {
     overflow-x: hidden;
     margin-right: calc(-1 * (100vw - 100%));
 }
-
 html.disable-fix {
     overflow-x: initial;
     margin-right: initial;
 }
 
 @layer base {
-    a {
-        @apply text-content-accent underline hover:text-content-body;
+    html {
+        color-scheme: dark;
     }
-
+    a {
+        @apply text-content-accent underline transition-colors hover:text-neon;
+    }
     body {
-        @apply bg-secondary-900 text-content-body;
+        @apply bg-background font-body text-content-body antialiased;
+    }
+    /* Tabular figures everywhere digits line up on the boards */
+    .tabular {
+        font-variant-numeric: tabular-nums;
+    }
+    /* Keyboard focus is signal green, matching --color-ring. The UA default is a
+       hairline that all but disappears against this palette. */
+    :where(a, button, summary, input, textarea, select, [tabindex]):focus-visible {
+        outline: 2px solid var(--color-ring);
+        outline-offset: 2px;
+        border-radius: 2px;
     }
 }
 
 @layer components {
+    /* ── Wayfinding chrome ─────────────────────────────────────────────── */
+    /* Pictogram button (socials, entry links) — square signage tile */
     .social-link {
-        @apply flex h-10 w-10 items-center justify-center rounded bg-content-boxbg text-content-icons no-underline hover:bg-content-boxhl active:translate-y-px sm:h-7 sm:w-7;
+        @apply flex h-10 w-10 items-center justify-center rounded border border-border bg-content-boxbg text-content-icons no-underline transition-colors hover:border-neon/50 hover:bg-content-boxhl hover:text-neon active:translate-y-px sm:h-9 sm:w-9;
     }
 
     .open-for-block {
-        @apply flex w-fit items-center gap-x-1.5 rounded bg-content-boxbg tracking-wide text-content-icons no-underline hover:bg-content-boxhl max-sm:h-5 max-sm:px-1.5 max-sm:text-xs max-sm:font-semibold sm:h-5 sm:px-2 sm:text-sm sm:font-semibold md:h-6 md:px-2.5 md:text-sm md:font-semibold;
+        @apply flex w-fit items-center gap-x-1.5 rounded border border-border bg-content-boxbg font-mono uppercase tracking-wider text-content-icons no-underline hover:border-neon/50 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-xs max-sm:font-semibold sm:h-6 sm:px-2 sm:text-xs sm:font-semibold md:h-6 md:px-2.5 md:text-xs md:font-semibold;
     }
 
+    /* Line-badge chip for technologies — reads like a route label */
     .skill-block {
-        @apply flex w-fit items-center gap-x-1.5 rounded bg-content-boxbg tracking-wide text-content-icons no-underline hover:bg-content-boxhl hover:text-content-icons max-sm:h-4 max-sm:px-1.5 max-sm:text-xs max-sm:font-light sm:h-5 sm:px-2 sm:text-sm sm:font-normal md:h-6 md:px-2.5 md:text-sm md:font-medium;
+        @apply inline-flex w-fit items-center gap-x-1.5 rounded border border-border bg-secondary-800/70 font-mono uppercase tracking-wide text-content-subtitle no-underline transition-colors hover:border-neon/60 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-[0.6rem] sm:h-6 sm:px-2 sm:text-[0.68rem] md:h-6 md:px-2.5 md:text-xs;
     }
 
-    .skill-progress-bar {
-        @apply h-2.5 rounded-full bg-gradient-to-r from-skill-3 from-35% to-skill-1 max-sm:h-1.5;
-    }
-
-    .skill-progress-bar-outline {
-        @apply mb-4 rounded-full bg-skill-0 ring-2 ring-content-outline/35 max-sm:h-1.5 max-sm:w-12 sm:h-2 sm:w-40 md:h-2.5 md:w-44;
-    }
-
-    .text-entry {
-        @apply block w-full rounded-lg border border-secondary-600 bg-secondary-800 p-2.5 text-sm
-               text-content-body placeholder:text-content-accent shadow-sm
-               focus:border-primary-400 focus:ring-primary-400 focus:outline-none;
-    }
-
+    /* ── Nav (line map) — class names kept for tests; restyled as rail stops ──
+       Below `sm` the stops wrap into chip rows, so they shrink to their content
+       and take a 44px minimum height to stay comfortably tappable. */
     .nav-block-active {
-        @apply my-1 inline-flex max-h-10 w-full items-center rounded-lg border-l-2 border-primary-400 bg-secondary-500 px-4 py-3 text-content-title no-underline max-sm:w-fit max-sm:border-0;
+        @apply relative my-0.5 inline-flex w-full items-center gap-3 whitespace-nowrap rounded px-3 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-content-header no-underline transition-colors max-sm:min-h-11 max-sm:w-fit max-sm:gap-2 max-sm:bg-content-boxbg;
+    }
+    .nav-block-inactive {
+        @apply relative my-0.5 inline-flex w-full items-center gap-3 whitespace-nowrap rounded px-3 py-2.5 font-mono text-xs font-medium uppercase tracking-wider text-content-accent no-underline transition-colors hover:bg-content-boxbg hover:text-content-subtitle max-sm:min-h-11 max-sm:w-fit max-sm:gap-2;
     }
 
-    .nav-block-inactive {
-        @apply my-1 inline-flex max-h-10 w-full items-center rounded-lg border-l-2 border-transparent bg-secondary-800 px-4 py-3 no-underline hover:bg-secondary-600 hover:text-content-title max-sm:w-fit max-sm:border-0;
+    /* Primary action — a ticket-gate button. The CV download, the 404 return
+       link and the contact submit were three copies of the same class list. */
+    .ticket-button {
+        @apply inline-flex items-center justify-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-neon no-underline transition-colors hover:bg-neon/20 max-sm:min-h-11;
     }
 
     .icon-box {
         @apply m-0 content-center justify-center justify-items-center align-middle;
     }
 
-    .content-block {
-        @apply flex w-full flex-col justify-center gap-6 rounded-2xl bg-secondary-700 p-8 shadow-md;
+    /* Form field — inquiry counter input.
+       16px on small screens is deliberate: iOS Safari zooms the viewport on focus
+       for anything smaller, which strands the user mid-form. */
+    .text-entry {
+        @apply block w-full rounded border border-secondary-600 bg-secondary-800 p-2.5 text-base text-content-body shadow-sm transition-colors placeholder:text-content-accent focus:border-neon focus:ring-1 focus:ring-neon focus:outline-none sm:text-sm;
     }
 
+    /* ── Board typography (used across list rows) ──────────────────────── */
     .card-title {
-        @apply mb-0 font-extrabold text-content-title text-xs sm:text-sm md:text-base;
+        @apply mb-0 font-heading text-base font-bold uppercase leading-none tracking-wide text-content-title sm:text-lg md:text-xl;
     }
-
     .card-subtitle {
-        @apply mb-0.5 font-semibold leading-snug text-content-subtitle text-xs sm:text-sm md:text-base;
+        @apply mb-0 font-mono text-xs font-medium leading-snug text-neon sm:text-sm;
     }
-
     .card-meta {
-        @apply mb-0 font-medium leading-snug text-content-date text-xs;
+        @apply mb-0 font-mono text-[0.7rem] font-medium leading-snug text-content-date;
     }
-
     .card-accent {
-        @apply mb-0 font-medium leading-snug text-content-accent text-xs sm:text-xs md:text-sm;
+        @apply mb-0 font-mono text-[0.7rem] font-medium uppercase leading-snug tracking-wider text-content-accent;
+    }
+    .card-fine {
+        @apply mb-0 font-mono text-[0.7rem] font-light leading-snug text-content-accent;
     }
 
-    .card-fine {
-        @apply mb-0 font-light leading-snug text-content-accent text-xs;
+    .content-block {
+        @apply flex w-full flex-col justify-center gap-6 rounded-xl border border-border bg-card p-8 shadow-md;
+    }
+
+    /* Split-flap cell */
+    .flap {
+        @apply grid place-items-center overflow-hidden rounded-[3px] font-mono font-bold text-glow;
+        background: #05131a;
+        box-shadow: inset 0 0 0 1px #123842, inset 0 -6px 8px -6px #000;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Print — this is a résumé, so "save as PDF" is a first-class path.
+   Three things break it without help: scroll-reveal blocks are still at
+   opacity 0 when the print snapshot is taken, collapsed departure rows hide
+   every job but the first, and a dark-on-dark palette prints as white-on-white
+   whenever the reader leaves "background graphics" off.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media print {
+    /* Never let an un-scrolled reveal print blank. */
+    [data-reveal] {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    /* Expand every departure row so the whole history prints. */
+    details > *:not(summary) {
+        display: block !important;
+    }
+    details::details-content {
+        content-visibility: visible !important;
+        block-size: auto !important;
+    }
+    /* Ambient chrome carries no information on paper. */
+    #navbar,
+    #station-header,
+    #transit-background {
+        display: none !important;
+    }
+
+    html {
+        color-scheme: light;
+    }
+    body {
+        background: #fff !important;
+    }
+    #content,
+    #content * {
+        color: #111 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+        border-color: #bbb !important;
+        text-shadow: none !important;
+    }
+    #content section {
+        border: 0 !important;
+    }
+    #content a {
+        text-decoration: underline;
     }
 }

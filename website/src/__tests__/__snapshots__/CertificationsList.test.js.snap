@@ -2,65 +2,111 @@
 
 exports[`CertificationList Component > matches snapshot 1`] = `
 <div>
-  <div>
+  <div
+    class="grid grid-cols-1 gap-4 sm:grid-cols-2"
+  >
     <div
-      class="flex flex-col gap-3"
+      class="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-neon/40"
+      data-reveal=""
+      style="opacity: 0; transform: translateY(14px);"
     >
       <div
-        class="flex w-full justify-between gap-2"
+        class="h-1 w-full"
+        style="background: rgb(46, 224, 138);"
+      />
+      <div
+        class="flex flex-1 flex-col gap-3 p-4"
       >
         <div
-          class="flex gap-4"
+          class="flex items-start gap-3"
         >
           <img
             alt=""
-            class="size-12 rounded-xl sm:h-[5.7rem] sm:w-[5.7rem]"
+            class="size-12 shrink-0 rounded ring-1 ring-border"
             src="sample_logo.png"
           />
           <div
-            class="flex flex-col"
+            class="flex min-w-0 flex-col gap-0.5"
           >
-            <h3
+            <h2
               class="card-title"
             >
               Sample Certification
-            </h3>
+            </h2>
             <p
               class="card-subtitle"
             >
               Sample Issuer
             </p>
-            <p
-              class="card-meta"
+            <span
+              class="inline-flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-neon"
             >
-              <strong>
-                Credential ID:
-              </strong>
-               
-              123456789
-            </p>
-            <p
-              class="card-meta"
-            >
-              <strong>
-                Issued:
-              </strong>
-               
-              2024-05-24
-            </p>
-            <p
-              class="card-meta"
-            >
-              <strong>
-                Expiry:
-              </strong>
-               
-              2027-05-24
-            </p>
+              <span
+                class="h-1.5 w-1.5 animate-pulse rounded-full bg-neon"
+              />
+              Valid
+            </span>
           </div>
+          <span
+            class="ml-auto"
+          >
+            <span
+              aria-hidden="true"
+              class="inline-grid shrink-0 place-items-center rounded-full font-heading font-extrabold"
+              style="width: 1.4rem; height: 1.4rem; font-size: 0.68rem; color: rgb(7, 19, 25); background: rgb(46, 224, 138); box-shadow: 0 0 0 3px #2ee08a22;"
+            >
+              S
+            </span>
+          </span>
         </div>
+        <dl
+          class="mt-auto grid grid-cols-3 gap-2 rounded border border-dashed border-border bg-background/50 px-3 py-2 font-mono text-[0.62rem]"
+        >
+          <div
+            class="flex flex-col"
+          >
+            <dt
+              class="uppercase tracking-wider text-content-date"
+            >
+              ID:
+            </dt>
+            <dd
+              class="tabular truncate text-content-subtitle"
+            >
+              123456789
+            </dd>
+          </div>
+          <div
+            class="flex flex-col"
+          >
+            <dt
+              class="uppercase tracking-wider text-content-date"
+            >
+              Issued:
+            </dt>
+            <dd
+              class="tabular text-neon"
+            >
+              2024-05-24
+            </dd>
+          </div>
+          <div
+            class="flex flex-col"
+          >
+            <dt
+              class="uppercase tracking-wider text-content-date"
+            >
+              Expiry:
+            </dt>
+            <dd
+              class="tabular text-content-subtitle"
+            >
+              2027-05-24
+            </dd>
+          </div>
+        </dl>
         <div
-          class="flex flex-wrap gap-3 max-sm:flex-col sm:flex-col"
+          class="flex flex-wrap gap-2"
         >
           <a
             aria-label="Sample Certification – verification (opens in new tab)"
@@ -71,9 +117,9 @@ exports[`CertificationList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               aria-hidden="true"
-              height="1.25em"
+              height="1.1em"
               icon="sample-icon"
-              width="1.25em"
+              width="1.1em"
             />
           </a>
           <a
@@ -85,9 +131,9 @@ exports[`CertificationList Component > matches snapshot 1`] = `
           >
             <iconify-icon
               aria-hidden="true"
-              height="1.25em"
+              height="1.1em"
               icon="sample-icon"
-              width="1.25em"
+              width="1.1em"
             />
           </a>
         </div>

@@ -18,6 +18,10 @@ output "aws_iam_role_crc-VisitorTracker_arn" {
   value = aws_iam_role.crc-VisitorTracker.arn
 }
 
+output "aws_iam_role_crc-ContributionTracker_arn" {
+  value = aws_iam_role.crc-ContributionTracker.arn
+}
+
 // IAM Policy Documents
 output "aws_iam_policy_document_crc-github-s3-actions_arn" {
   value = aws_iam_policy.crc-GitHub-S3Actions.arn

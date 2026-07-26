@@ -27,9 +27,18 @@ My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/t
 
 
 ## Architectural Overview
-**Architectural revisions can be found within the published article, linked above.**
+**Earlier architectural revisions can be found within the published article, linked above.**
+The diagram below tracks the current infrastructure and is maintained in this repo as
+[`docs/architecture.svg`](docs/architecture.svg), generated from
+[`docs/architecture.gen.mjs`](docs/architecture.gen.mjs) (`node docs/architecture.gen.mjs > docs/architecture.svg`,
+no dependencies) so it stays in sync with Terraform instead of a separate design file. It's embedded below as PNG
+renders of that SVG, since GitHub serves raw `.svg` files as `text/plain` with `nosniff` set, which keeps browsers
+from displaying them through a plain `<img>` reference.
 
-![Current Architectural Version](https://img.retrohazard.jp/i/crc-arch-7.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/architecture-dark.png">
+  <img alt="Current Architectural Version" src="docs/architecture-light.png">
+</picture>
 
 
 ## Technologies Leveraged
@@ -46,6 +55,7 @@ My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/t
    + S3
    + DynamoDB
    + Lambda
+   + EventBridge
    + Simple Queue Service
    + Simple Email Service
    + CloudWatch
@@ -58,15 +68,23 @@ My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/t
    + Random
    + Archive
  + Website
-   + Node.js
+   + Node.js (pnpm)
+   + Vite
+   + TypeScript
    + React
+   + React Router
    + Tailwind CSS
+   + Motion / anime.js
+   + visx
    + Google reCAPTCHA
+ + Testing
+   + Vitest / React Testing Library
+   + Cypress
  + Language and Syntax
    + HTML
    + CSS
    + Python
-   + JavaScript
+   + JavaScript / TypeScript
    + YAML
    + JSON
    + HCL

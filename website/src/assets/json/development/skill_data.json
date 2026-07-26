@@ -2,28 +2,28 @@
   "core_skills": [
     {
       "name": "Placeholder",
-      "category": "Category",
+      "category": "Cloud",
       "level": "50%",
       "logo": "ph:placeholder-fill",
       "website": ""
     },
     {
       "name": "Placeholder",
-      "category": "Category",
+      "category": "Platform",
       "level": "25%",
       "logo": "ph:placeholder-fill",
       "website": "#"
     },
     {
       "name": "Placeholder",
-      "category": "Category",
+      "category": "Security",
       "level": "60%",
       "logo": "ph:placeholder-fill",
       "website": "#"
     },
     {
       "name": "Placeholder",
-      "category": "Category",
+      "category": "Development",
       "level": "50%",
       "logo": "ph:placeholder-fill",
       "website": "#"
@@ -55,6 +55,16 @@
       "logo": "ph:placeholder-fill",
       "website": "#"
     }
+  ],
+  "industry_knowledge": [
+    { "name": "Domain Expertise" },
+    { "name": "Domain Expertise" },
+    { "name": "Domain Expertise" }
+  ],
+  "soft_skills": [
+    { "name": "Soft Skill" },
+    { "name": "Soft Skill" },
+    { "name": "Soft Skill" }
   ],
   "language_skills": [
     {

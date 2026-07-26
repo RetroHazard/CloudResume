@@ -10,6 +10,11 @@
       "logo": "./images/logos/companies/bitmex.png",
       "website": "https://bitmex.com/",
       "details": [
+        "Designed and implemented an internal fleet security management platform (Go, React, Kubernetes/EKS), achieving 25x growth in device coverage to over 250 endpoints within three months of general availability and establishing scalable device-management infrastructure supporting enterprise-wide security governance.",
+        "Authored 90+ merged pull requests and conducted 100+ code reviews across identity, endpoint-management, and PKI systems over 10 months, maintaining zero-downtime delivery on Terraform-managed Okta infrastructure serving 250+ engineers.",
+        "Led a company-wide Mobile Device Management (MDM) platform re-architecture, migrating the entire device fleet to a new management model with zero business disruption, followed by an organization-wide platform rebrand and communication rollout.",
+        "Established a fleet-wide governance framework for AI developer tooling — covering configuration management, credential lifecycle, and security guardrails — resolving critical connectivity and supply-chain security incidents same-day to achieve 100% developer uptime and secure organization-wide adoption.",
+        "Managed quarterly identity access-certification campaigns across cloud and Kubernetes environments, auditing and reconciling access for dozens of engineering teams to strengthen least-privilege compliance and organizational security posture."
       ],
       "technologies": [
         {
@@ -23,19 +28,34 @@
           "website": "https://www.terraform.io/"
         },
         {
-          "name": "Google Suite",
-          "logo": "simple-icons:google",
-          "website": "https://www.google.com"
-        },
-        {
           "name": "Okta",
           "logo": "simple-icons:okta",
           "website": "https://www.okta.com/"
         },
         {
+          "name": "Kubernetes",
+          "logo": "simple-icons:kubernetes",
+          "website": "https://kubernetes.io/"
+        },
+        {
+          "name": "Go",
+          "logo": "simple-icons:go",
+          "website": "https://go.dev/"
+        },
+        {
+          "name": "React",
+          "logo": "simple-icons:react",
+          "website": "https://react.dev/"
+        },
+        {
           "name": "Python",
           "logo": "simple-icons:python",
           "website": "https://www.python.org"
+        },
+        {
+          "name": "Google Workspace",
+          "logo": "simple-icons:google",
+          "website": "https://workspace.google.com/"
         }
       ]
     },
@@ -66,9 +86,14 @@
           "website": "https://www.terraform.io/"
         },
         {
-          "name": "Atlassian Suite",
-          "logo": "simple-icons:atlassian",
-          "website": "https://www.atlassian.com"
+          "name": "Jira",
+          "logo": "simple-icons:jira",
+          "website": "https://www.atlassian.com/software/jira"
+        },
+        {
+          "name": "Confluence",
+          "logo": "simple-icons:confluence",
+          "website": "https://www.atlassian.com/software/confluence"
         },
         {
           "name": "CloudFlare",
@@ -76,9 +101,9 @@
           "website": "https://www.cloudflare.com"
         },
         {
-          "name": "Google Suite",
+          "name": "Google Workspace",
           "logo": "simple-icons:google",
-          "website": "https://www.google.com"
+          "website": "https://workspace.google.com/"
         },
         {
           "name": "GitLab",

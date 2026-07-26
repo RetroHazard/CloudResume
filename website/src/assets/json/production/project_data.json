@@ -1,13 +1,68 @@
 {
   "Projects": [
     {
+      "name": "SwiftX",
+      "company": "Hollow Souls",
+      "category": "macOS Application",
+      "role": "Solo Dev",
+      "size": "1",
+      "start": "2026",
+      "end": "NOW",
+      "logo": "./images/logos/companies/hollowsouls.png",
+      "details": [
+        "Ported a comprehensive screenshot and file-sharing application from C# to native Swift, achieving full feature parity with upstream releases while leveraging macOS APIs (AppKit, CoreGraphics, AVFoundation) for optimal performance and system integration.",
+        "Implemented 50+ automation features including custom hotkeys, drag-and-drop upload, cloud service integrations, and post-capture tasks (annotation, compression, URL shortening), enabling power users to streamline content-sharing workflows and reduce manual steps by up to 80%.",
+        "Engineered robust screen capture and video recording systems supporting multiple output formats, real-time frame capture via Metal rendering, and configurable quality settings, enabling creators to rapidly produce and share multimedia content.",
+        "Integrated 20+ cloud storage and sharing services (AWS S3, Google Drive, Imgur, and more) with credential management and OAuth authentication, providing flexible deployment options and reducing lock-in to proprietary solutions.",
+        "Designed a modular Swift codebase with clear separation of concerns, async/await patterns, and type-safe APIs, reducing maintenance burden while improving reliability and enabling rapid iteration on new features."
+      ],
+      "links": [
+        {
+          "link": [
+            {
+              "website": "https://retrohazard.github.io/SwiftX/",
+              "icon": "fa6-solid:globe"
+            }
+          ],
+          "repo": [
+            {
+              "website": "https://github.com/RetroHazard/SwiftX",
+              "icon": "simple-icons:git"
+            }
+          ]
+        }
+      ],
+      "technologies": [
+        {
+          "name": "Swift",
+          "logo": "simple-icons:swift",
+          "website": "https://www.swift.org/"
+        },
+        {
+          "name": "macOS",
+          "logo": "simple-icons:apple",
+          "website": "https://www.apple.com/macos/"
+        },
+        {
+          "name": "AWS",
+          "logo": "simple-icons:amazonaws",
+          "website": "https://aws.amazon.com/s3/"
+        },
+        {
+          "name": "GitHub",
+          "logo": "simple-icons:github",
+          "website": "https://github.com"
+        }
+      ]
+    },
+    {
       "name": "Japan Immigration Statistics Dashboard",
       "company": "Hollow Souls",
       "category": "Frontend",
       "role": "Solo Dev",
       "size": "1",
       "start": "2025",
-      "end": "NOW",
+      "end": "2026",
       "logo": "./images/logos/companies/hollowsouls.png",
       "details": [
         "Designed and launched a React-based immigration statistics dashboard, attracting over 2,000 unique users in the first 30 days of availability.",
@@ -163,8 +218,7 @@
         "Developing and implementing a marketing strategy tailored for social media and funding platforms, effectively promoting the project and engaging target audiences.",
         "Generating various methodologies for application construction and testing, and providing comprehensive documentation, ensuring a structured and efficient development process."
       ],
-      "links": [
-      ],
+      "links": [],
       "technologies": [
         {
           "name": "Unreal Engine",
@@ -196,7 +250,6 @@
           "logo": "simple-icons:adobecreativecloud",
           "website": "https://www.adobe.com/creativecloud.html"
         }
-
       ]
     },
     {
@@ -262,7 +315,6 @@
           "logo": "simple-icons:adobecreativecloud",
           "website": "https://www.adobe.com/creativecloud.html"
         }
-
       ]
     }
   ]

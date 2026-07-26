@@ -111,6 +111,35 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy"
   }
 }
 
+data "aws_iam_policy_document" "crc-lambda-UpdateContributions-logging-policy" {
+  statement {
+    sid    = "AllowFunctionToWriteToCloudwatch"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "${var.crc-cw-lambda-log-group-updateContributions}:*"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "crc-lambda-UpdateContributions-access-policy" {
+  statement {
+    sid    = "AllowFunctionToPublishContributionData"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject"
+    ]
+    resources = [
+      "${var.crc-s3-production-arn}/${var.crc-contribution-object-key}"
+    ]
+  }
+}
+
 // Role Policy Documents
 data "aws_iam_policy_document" "crc-function-assume-role-policy" {
   statement {

@@ -74,7 +74,7 @@ describe('ProjectList Component', () => {
         expect(getByText('Generic Company')).toBeInTheDocument();
         expect(getByText('Generic Category')).toBeInTheDocument();
         expect(getByText('Generic Role')).toBeInTheDocument();
-        expect(getByText('2020 - 2021')).toBeInTheDocument();
+        expect(getByText('2020 — 2021')).toBeInTheDocument();
         expect(container.querySelector('img[alt=""]')).toBeInTheDocument();
 
         sampleData.Projects[0].details.forEach((detail) => {
