@@ -26,6 +26,22 @@ variable "iam-role-message-sender-arn" {
   type = string
 }
 
+variable "iam-role-contribution-tracker-arn" {
+  type = string
+}
+
+variable "contribution-accounts" {
+  type = list(string)
+}
+
+variable "contribution-object-key" {
+  type = string
+}
+
+variable "contribution-refresh-schedule" {
+  type = string
+}
+
 # Inputs from Frontend Module
 
 variable "s3-bucket-production-arn" {

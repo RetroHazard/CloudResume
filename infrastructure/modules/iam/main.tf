@@ -68,6 +68,28 @@ resource "aws_iam_policy" "crc-Lambda-SendMessage-Logging" {
   }
 }
 
+resource "aws_iam_policy" "crc-Lambda-UpdateContributions-AccessPolicy" {
+  name = "crc-Lambda-UpdateContributions-AccessPolicy"
+  path = "/CloudResume/"
+
+  policy = data.aws_iam_policy_document.crc-lambda-UpdateContributions-access-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
+resource "aws_iam_policy" "crc-Lambda-UpdateContributions-Logging" {
+  name = "crc-Lambda-UpdateContributions-Logging"
+  path = "/CloudResume/"
+
+  policy = data.aws_iam_policy_document.crc-lambda-UpdateContributions-logging-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
 resource "aws_iam_policy" "crc-GitHub-S3Actions" {
   name = "crc-s3-github-actions"
   path = "/CloudResume/"
@@ -176,4 +198,27 @@ resource "aws_iam_role_policy_attachment" "crc-VisitorTracker-access-policy" {
 resource "aws_iam_role_policy_attachment" "crc-VisitorTracker-logging-policy" {
   role       = aws_iam_role.crc-VisitorTracker.name
   policy_arn = aws_iam_policy.crc-Lambda-TrackVisitors-Logging.arn
+}
+
+resource "aws_iam_role" "crc-ContributionTracker" {
+  description          = "Allows Lambda to Publish Contribution Data to S3 and Publish to CloudWatch"
+  force_detach_policies = true
+  assume_role_policy   = data.aws_iam_policy_document.crc-function-assume-role-policy.json
+  max_session_duration = 3600
+  name                 = "crc-ContributionTracker"
+  path                 = "/CloudResume/"
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "crc-ContributionTracker-access-policy" {
+  role       = aws_iam_role.crc-ContributionTracker.name
+  policy_arn = aws_iam_policy.crc-Lambda-UpdateContributions-AccessPolicy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "crc-ContributionTracker-logging-policy" {
+  role       = aws_iam_role.crc-ContributionTracker.name
+  policy_arn = aws_iam_policy.crc-Lambda-UpdateContributions-Logging.arn
 }

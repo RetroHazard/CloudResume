@@ -22,6 +22,13 @@ data "archive_file" "sendMessage_lambda_function_code" {
   output_file_mode = "0666"
 }
 
+data "archive_file" "updateContributions_lambda_function_code" {
+  type             = "zip"
+  source_file      = "${path.root}/codebase/updateContributions.py"
+  output_path      = "${path.root}/codepacks/updateContributions.zip"
+  output_file_mode = "0666"
+}
+
 ###################
 # Begin SQS Block #
 

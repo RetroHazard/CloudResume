@@ -130,9 +130,11 @@ jobs:
           echo VITE_RECAPTCHA_SITE_KEY=${{ secrets.RECAPTCHA_SITE_KEY }} >> .env
           echo VITE_AWS_API_ENDPOINT=${{ secrets.AWS_API_ENDPOINT }} >> .env
 
-      # Merge the public GitHub contribution graphs into contributions.json before
-      # building. No token required. Non-fatal: on any hiccup the committed
-      # last-known-good data is used so a deploy never breaks on this.
+      # Seed public/data/contributions.json with fresh data before building.
+      # Between deploys the scheduled updateContributions Lambda keeps the same
+      # object live in S3; the deploy syncs with --delete, so the build output
+      # must contain the file. No token required. Non-fatal: on any hiccup the
+      # committed last-known-good data is used so a deploy never breaks on this.
       - name: Refresh contribution heatmap data
         continue-on-error: true
         run: node scripts/fetch-contributions.mjs

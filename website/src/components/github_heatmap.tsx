@@ -1,8 +1,12 @@
-import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
+import { useEffect, useState } from 'react';
+import { LoadingSkeleton } from '../utils/useJsonData';
 
-// GitHub-style contribution calendar, merged across the accounts baked into
-// contributions.json (see scripts/fetch-contributions.mjs). Reads the data the
-// same way every other panel does — a static JSON asset via useJsonData.
+// GitHub-style contribution calendar, merged across two accounts. Unlike the
+// other panels this data is fetched at runtime rather than bundled: the
+// scheduled updateContributions Lambda rewrites data/contributions.json in S3
+// on an interval, so the heatmap stays current without redeploying the site.
+// Deploys seed the same path from public/data/contributions.json (refreshed in
+// CI by scripts/fetch-contributions.mjs).
 //
 // The calendar is fluid: the 53 week-columns share the container width equally
 // and cells stay square via aspect-ratio, so a full year always fits the element
@@ -10,6 +14,36 @@ import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
 
 type Day = { date: string; count: number; level: number };
 type Contributions = { total: number; accounts?: string[]; updated?: string | null; days: Day[] };
+
+const DATA_URL = '/data/contributions.json';
+
+function useContributions() {
+    const [state, setState] = useState<{ data: Contributions | null; loading: boolean; error: unknown }>({
+        data: null,
+        loading: true,
+        error: null,
+    });
+
+    useEffect(() => {
+        let cancelled = false;
+        fetch(DATA_URL, { headers: { Accept: 'application/json' } })
+            .then((res) => {
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return res.json() as Promise<Contributions>;
+            })
+            .then((data) => {
+                if (!cancelled) setState({ data, loading: false, error: null });
+            })
+            .catch((error) => {
+                if (!cancelled) setState({ data: null, loading: false, error });
+            });
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    return state;
+}
 
 const LEVEL_BG = ['#0e2129', 'rgba(46,224,138,0.22)', 'rgba(46,224,138,0.44)', 'rgba(46,224,138,0.70)', '#2ee08a'];
 const ACCOUNT_SWATCH = ['var(--color-neon)', 'var(--color-glow)'];
@@ -23,11 +57,7 @@ const label = (iso: string) => {
 };
 
 export default function GithubHeatmap() {
-    const { data, loading, error } = useJsonData('contributions.json') as {
-        data: Contributions | null;
-        loading: boolean;
-        error: unknown;
-    };
+    const { data, loading, error } = useContributions();
     if (loading) return <LoadingSkeleton />;
     if (error || !data || !data.days?.length) return null;
 

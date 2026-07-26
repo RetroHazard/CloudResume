@@ -37,6 +37,8 @@ module "iam" {
   crc-cw-lambda-log-group-cloudfrontInvalidation = module.backend.aws_cloudwatch_log_group_crc-cloudfrontInvalidation_arn
   crc-cw-lambda-log-group-sendMessage            = module.backend.aws_cloudwatch_log_group_crc-sendMessage_arn
   crc-cw-lambda-log-group-trackVisitors          = module.backend.aws_cloudwatch_log_group_crc-trackVisitors_arn
+  crc-cw-lambda-log-group-updateContributions    = module.backend.aws_cloudwatch_log_group_crc-updateContributions_arn
+  crc-contribution-object-key                    = var.contribution_object_key
   crc-ses-configuration-set                      = module.backend.aws_ses_configuration_set_crc-contact-mail_arn
   crc-ses-mail-destination                       = module.backend.aws_ses_email_identity_crc-mail-destination_arn
   crc-ses-mail-domain                            = module.backend.aws_ses_domain_identity_crc-mail-domain_arn
@@ -69,9 +71,14 @@ module "backend" {
   domain-name = var.domain_name
   waf-enabled = var.waf_enabled
 
-  iam-role-cloudfront-manager-arn = module.iam.aws_iam_role_crc-CloudFrontManager_arn
-  iam-role-message-sender-arn     = module.iam.aws_iam_role_crc-MessageSender_arn
-  iam-role-visitor-tracker-arn    = module.iam.aws_iam_role_crc-VisitorTracker_arn
+  iam-role-cloudfront-manager-arn    = module.iam.aws_iam_role_crc-CloudFrontManager_arn
+  iam-role-message-sender-arn        = module.iam.aws_iam_role_crc-MessageSender_arn
+  iam-role-visitor-tracker-arn       = module.iam.aws_iam_role_crc-VisitorTracker_arn
+  iam-role-contribution-tracker-arn  = module.iam.aws_iam_role_crc-ContributionTracker_arn
+
+  contribution-accounts         = var.contribution_accounts
+  contribution-object-key       = var.contribution_object_key
+  contribution-refresh-schedule = var.contribution_refresh_schedule
 
   acm-certificate-validation  = module.frontend.aws_acm_certificate_validation_crc-website-certificate-validation
   api-execution-arn           = module.frontend.aws_api_gateway_rest_api_crc-rest-api_exec-arn

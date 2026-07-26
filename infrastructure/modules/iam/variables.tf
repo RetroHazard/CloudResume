@@ -26,6 +26,14 @@ variable "crc-cw-lambda-log-group-trackVisitors" {
   type = string
 }
 
+variable "crc-cw-lambda-log-group-updateContributions" {
+  type = string
+}
+
+variable "crc-contribution-object-key" {
+  type = string
+}
+
 variable "crc-ses-configuration-set" {
   type = string
 }

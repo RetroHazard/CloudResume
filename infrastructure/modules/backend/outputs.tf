@@ -82,6 +82,10 @@ output "aws_lambda_function_crc-trackVisitors_uri" {
   value = aws_lambda_function.crc-trackVisitors.invoke_arn
 }
 
+output "aws_cloudwatch_log_group_crc-updateContributions_arn" {
+  value = aws_cloudwatch_log_group.crc-updateContributions-log-group.arn
+}
+
 #  End Lambda Block  #
 ######################
 
