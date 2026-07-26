@@ -1,5 +1,4 @@
 **/.idea
 **/.terraform
 **/.DS_Store
-**/.terraform.lock.hcl
 /codepacks/
