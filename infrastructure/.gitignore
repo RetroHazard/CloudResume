@@ -1,4 +1,6 @@
 **/.idea
 **/.terraform
 **/.DS_Store
+**/tfplan
+**/*.tfplan
 /codepacks/
