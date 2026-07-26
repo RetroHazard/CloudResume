@@ -229,7 +229,12 @@ data "aws_iam_policy_document" "crc-github-terraform-limited-iam" {
       "iam:CreateUser",
       "iam:DeleteUser",
       "iam:DeleteAccessKey",
-      "iam:CreateAccessKey"
+      "iam:CreateAccessKey",
+      "iam:CreateOpenIDConnectProvider",
+      "iam:DeleteOpenIDConnectProvider",
+      "iam:UpdateOpenIDConnectProviderThumbprint",
+      "iam:AddClientIDToOpenIDConnectProvider",
+      "iam:RemoveClientIDFromOpenIDConnectProvider"
     ]
     resources = ["*"]
   }
