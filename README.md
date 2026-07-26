@@ -28,12 +28,17 @@ My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/t
 
 ## Architectural Overview
 **Earlier architectural revisions can be found within the published article, linked above.**
-The diagram below tracks the current infrastructure and is maintained in this repo at
+The diagram below tracks the current infrastructure and is maintained in this repo as
 [`docs/architecture.svg`](docs/architecture.svg), generated from
 [`docs/architecture.gen.mjs`](docs/architecture.gen.mjs) (`node docs/architecture.gen.mjs > docs/architecture.svg`,
-no dependencies) so it stays in sync with Terraform instead of a separate design file.
+no dependencies) so it stays in sync with Terraform instead of a separate design file. It's embedded below as PNG
+renders of that SVG, since GitHub serves raw `.svg` files as `text/plain` with `nosniff` set, which keeps browsers
+from displaying them through a plain `<img>` reference.
 
-![Current Architectural Version](docs/architecture.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/architecture-dark.png">
+  <img alt="Current Architectural Version" src="docs/architecture-light.png">
+</picture>
 
 
 ## Technologies Leveraged
