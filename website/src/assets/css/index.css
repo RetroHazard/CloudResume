@@ -159,14 +159,12 @@
     --chart-ramp-7: #0e8750;
 }
 
-/* Scrollbar-width compensation */
+/* Reserve space for the vertical scrollbar on every page, whether or not
+   that page is tall enough to need one. Without this, navigating between a
+   short page (no scrollbar) and a long one (scrollbar) changes the
+   available content width and visibly shifts everything sideways. */
 html {
-    overflow-x: hidden;
-    margin-right: calc(-1 * (100vw - 100%));
-}
-html.disable-fix {
-    overflow-x: initial;
-    margin-right: initial;
+    scrollbar-gutter: stable;
 }
 
 @layer base {
