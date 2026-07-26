@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router';
 import { Icon } from '@iconify-icon/react';
 import VisitorCount from './visitor_count';
 import { lineColor } from './ui/primitives';

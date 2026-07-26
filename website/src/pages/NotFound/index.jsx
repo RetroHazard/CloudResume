@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { SectionShell, StatusPill } from '../../components/ui/primitives';
 
 function NotFound() {

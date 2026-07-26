@@ -1,6 +1,6 @@
 // website/src/App.js
 import { lazy, Suspense } from 'react';
-import { Route, Routes, BrowserRouter, useLocation } from 'react-router-dom';
+import { Route, Routes, BrowserRouter, useLocation } from 'react-router';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 
 import Navigation from './components/navbar';
