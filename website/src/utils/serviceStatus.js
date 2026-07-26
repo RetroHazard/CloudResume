@@ -39,26 +39,36 @@ export function formatJstTime(date = new Date()) {
 // Service bands read as a rail timetable: full daytime service, reduced service
 // on the shoulders either side of it, last trains late on, then the overnight
 // shutdown. `key` drives the badge styling in the header.
+//
+// `traffic` is the same timetable expressed for the background transit map, so
+// the badge and the trains behind it can never tell different stories:
+//   trains  — how many lines run a train (clamped to the lines actually drawn)
+//   speed   — multiplier on each line's own base duration; lower is slower
+//   stabled — draw the idle trains parked at a station instead of running
 export const SERVICE_LEVELS = {
     full: {
         key: 'full',
         label: 'In Service',
         detail: 'In service — full service 09:00–18:00 JST',
+        traffic: { trains: 4, speed: 1, stabled: false },
     },
     reduced: {
         key: 'reduced',
         label: 'Reduced Service',
         detail: 'Reduced service — off-peak hours in Tokyo',
+        traffic: { trains: 2, speed: 0.7, stabled: false },
     },
     last: {
         key: 'last',
         label: 'Last Train',
         detail: 'Last train — service winding down for the night in Tokyo',
+        traffic: { trains: 1, speed: 0.45, stabled: false },
     },
     closed: {
         key: 'closed',
         label: 'Out of Service',
         detail: 'Out of service — overnight shutdown, 00:00–06:00 JST',
+        traffic: { trains: 0, speed: 0, stabled: true },
     },
 };
 
@@ -70,4 +80,8 @@ export function getServiceLevel(date = new Date()) {
     if (hour < 18) return SERVICE_LEVELS.full; // 09:00–17:59
     if (hour < 22) return SERVICE_LEVELS.reduced; // 18:00–21:59
     return SERVICE_LEVELS.last; // 22:00–23:59
+}
+
+export function getServiceTraffic(date = new Date()) {
+    return getServiceLevel(date).traffic;
 }

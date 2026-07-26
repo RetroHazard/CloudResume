@@ -1,11 +1,16 @@
 import { useMemo } from 'react';
 import { useReducedMotion } from 'motion/react';
+import useServiceLevel from '../utils/useServiceLevel';
 
 // Ambient wayfinding backdrop: a procedurally-generated transit diagram drawn
 // fresh on every page load. Coloured metro lines cross the viewport with the
 // clean 45°/90° bends of a real station map, interchange stops sit at the turns,
 // and (motion permitting) a train of light glides along each line. The whole map
 // drifts slowly. Calm on purpose — the split-flap board owns the motion budget.
+//
+// The trains run to the same Tokyo timetable as the header badge: every line is
+// worked during full service, only a couple off-peak, one on the last-train
+// band, and overnight the whole fleet is stabled at a platform until 06:00 JST.
 
 const VW = 1440;
 const VH = 900;
@@ -13,7 +18,16 @@ const GRID = 60; // lines snap to this grid, giving the map its tidy geometry
 const LINE_COLORS = ['#2ee08a', '#4aa8ff', '#ffc24b', '#b48cff']; // neon / blue / amber / purple
 
 type Pt = [number, number];
-type Line = { id: string; color: string; d: string; stations: Pt[]; dur: string; begin: string };
+type Line = {
+    id: string;
+    color: string;
+    d: string;
+    stations: Pt[];
+    dur: string;
+    begin: string;
+    depot: Pt; // where this line's train sits when it isn't running
+    rank: number; // 0 = first line to be worked, 3 = first to be taken out of service
+};
 
 const rand = (a: number, b: number) => a + Math.random() * (b - a);
 const snap = (v: number) => Math.round(v / GRID) * GRID;
@@ -85,6 +99,17 @@ function pickStations(pts: Pt[]): Pt[] {
     return out;
 }
 
+// Where an idle train waits. An interchange stop if the line has one — a stabled
+// train should read as standing at a platform — otherwise any on-screen vertex,
+// picked at random so the sleeping fleet isn't all bunched in the same place.
+function pickDepot(pts: Pt[], stations: Pt[]): Pt {
+    const pool = stations.length
+        ? stations
+        : pts.filter(([x, y]) => x > 40 && x < VW - 40 && y > 40 && y < VH - 40);
+    if (!pool.length) return pts[Math.floor(pts.length / 2)];
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
 function shuffle<T>(arr: T[]): T[] {
     const a = arr.slice();
     for (let i = a.length - 1; i > 0; i--) {
@@ -96,6 +121,8 @@ function shuffle<T>(arr: T[]): T[] {
 
 function buildMap(): Line[] {
     const orientations = shuffle(['x', 'x', 'y', 'y']);
+    // Off-peak, which lines keep their train is drawn fresh each load too.
+    const ranks = shuffle([0, 1, 2, 3]);
     let xi = 0;
     let yi = 0;
     return orientations.map((o, i) => {
@@ -105,21 +132,32 @@ function buildMap(): Line[] {
         } else {
             pts = yi++ % 2 === 0 ? buildLineY(VW * 0.12, VW * 0.44) : buildLineY(VW * 0.56, VW * 0.88);
         }
+        const stations = pickStations(pts);
         return {
             id: `tl${i}`,
             color: LINE_COLORS[i],
             d: toPath(pts),
-            stations: pickStations(pts),
+            stations,
             dur: (10 + Math.random() * 7).toFixed(2),
             begin: (-(Math.random() * 14)).toFixed(2),
+            depot: pickDepot(pts, stations),
+            rank: ranks[i],
         };
     });
 }
 
 export default function TransitBackground() {
     const prefersReduced = useReducedMotion();
-    // Generated once per mount → a different network on every page load.
+    // Generated once per mount → a different network on every page load. The
+    // timetable below only changes which trains run on it, never the map itself.
     const lines = useMemo(buildMap, []);
+    const level = useServiceLevel();
+    const { trains, speed, stabled } = level.traffic;
+
+    // Reduced-motion viewers get the same map with the fleet stood still.
+    const grounded = prefersReduced || stabled;
+    const running = grounded ? [] : lines.filter((l) => l.rank < trains);
+    const parked = grounded ? lines : [];
 
     return (
         <div
@@ -148,7 +186,7 @@ export default function TransitBackground() {
                             strokeWidth={3}
                             strokeLinejoin="round"
                             strokeLinecap="round"
-                            opacity={0.5}
+                            opacity={stabled ? 0.32 : 0.5}
                             style={{ filter: `drop-shadow(0 0 5px ${l.color})` }}
                         />
                     ))}
@@ -166,14 +204,36 @@ export default function TransitBackground() {
                             />
                         )),
                     )}
-                    {!prefersReduced &&
-                        lines.map((l) => (
-                            <circle key={`${l.id}-train`} r={4.5} fill="#ffffff" style={{ filter: `drop-shadow(0 0 6px ${l.color})` }}>
-                                <animateMotion dur={`${l.dur}s`} begin={`${l.begin}s`} repeatCount="indefinite" rotate="auto">
-                                    <mpath href={`#${l.id}`} />
-                                </animateMotion>
-                            </circle>
-                        ))}
+                    {running.map((l) => (
+                        // Keyed on the band so SMIL picks up the new duration when
+                        // the timetable changes under a long-lived tab.
+                        <circle
+                            key={`${l.id}-train-${level.key}`}
+                            r={4.5}
+                            fill="#ffffff"
+                            style={{ filter: `drop-shadow(0 0 6px ${l.color})` }}
+                        >
+                            <animateMotion
+                                dur={`${(Number(l.dur) / (speed || 1)).toFixed(2)}s`}
+                                begin={`${l.begin}s`}
+                                repeatCount="indefinite"
+                                rotate="auto"
+                            >
+                                <mpath href={`#${l.id}`} />
+                            </animateMotion>
+                        </circle>
+                    ))}
+                    {parked.map((l) => (
+                        <circle
+                            key={`${l.id}-stabled`}
+                            cx={l.depot[0]}
+                            cy={l.depot[1]}
+                            r={4}
+                            fill="#ffffff"
+                            opacity={0.4}
+                            style={{ filter: `drop-shadow(0 0 4px ${l.color})` }}
+                        />
+                    ))}
                 </g>
             </svg>
 

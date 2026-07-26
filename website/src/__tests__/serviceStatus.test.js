@@ -2,6 +2,7 @@ import {
     formatJstTime,
     getJstHour,
     getServiceLevel,
+    getServiceTraffic,
     JST_TIME_PLACEHOLDER,
     SERVICE_LEVELS,
 } from '../utils/serviceStatus';
@@ -56,5 +57,33 @@ describe('service level bands', () => {
 
     test('treats an unusable clock as out of service instead of claiming to be open', () => {
         expect(getServiceLevel(new Date('nonsense'))).toBe(SERVICE_LEVELS.closed);
+    });
+});
+
+// The background map reads its train count and speed off the same bands, so the
+// profiles have to thin out monotonically as the timetable winds down.
+describe('background traffic profiles', () => {
+    const order = ['full', 'reduced', 'last', 'closed'];
+
+    test('fewer and slower trains as service winds down', () => {
+        const trains = order.map((key) => SERVICE_LEVELS[key].traffic.trains);
+        const speeds = order.map((key) => SERVICE_LEVELS[key].traffic.speed);
+        expect(trains).toEqual([...trains].sort((a, b) => b - a));
+        expect(speeds).toEqual([...speeds].sort((a, b) => b - a));
+    });
+
+    test('only the overnight shutdown stables the fleet', () => {
+        expect(SERVICE_LEVELS.closed.traffic).toMatchObject({ trains: 0, stabled: true });
+        for (const key of ['full', 'reduced', 'last']) {
+            expect(SERVICE_LEVELS[key].traffic.stabled).toBe(false);
+            expect(SERVICE_LEVELS[key].traffic.trains).toBeGreaterThan(0);
+        }
+    });
+
+    test('reads the profile straight off the clock', () => {
+        // 13:20 JST is full service; 03:00 JST is the shutdown.
+        expect(getServiceTraffic(new Date('2026-07-25T04:20:00Z'))).toBe(SERVICE_LEVELS.full.traffic);
+        expect(getServiceTraffic(new Date('2026-07-24T18:00:00Z'))).toBe(SERVICE_LEVELS.closed.traffic);
+        expect(getServiceTraffic(new Date('nonsense'))).toBe(SERVICE_LEVELS.closed.traffic);
     });
 });
