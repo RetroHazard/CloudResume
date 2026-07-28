@@ -184,11 +184,47 @@ jobs:
           role-to-assume: ${{ secrets.AWS_S3_OIDC_ROLE }}
           role-session-name: GitHubWebsiteDeploy
 
+      # The build has two kinds of object and they want opposite caching.
+      #
+      # `assets/` is content-hashed by Vite: a given URL's bytes never change,
+      # so it can be cached forever. Everything else — above all `index.html`,
+      # which is the map from those hashes to the live build — has a stable URL
+      # and changing contents, so it has to be revalidated.
+      #
+      # Uploading with no Cache-Control at all (the previous behaviour) left
+      # browsers to guess a freshness lifetime from Last-Modified. Safari guesses
+      # generously, so it went on serving an `index.html` from before a deploy;
+      # `--delete` had already removed the hashed bundles that copy pointed at,
+      # those requests fell through to the SPA fallback and came back as HTML,
+      # and a module script served as text/html is refused outright. The result
+      # was a blank page — on whichever browser happened to be holding the stale
+      # copy, and only until its cache aged out, which is why it looked like a
+      # Safari bug. `no-cache` does not mean "don't store": the file still lives
+      # in the browser cache, it just has to be revalidated first, which is a
+      # bodyless 304 whenever nothing has changed.
       - name: Upload to S3
         env:
           AWS_S3_BUCKET: ${{ needs.build_prod.outputs.status == 'true' && secrets.AWS_S3_BUCKET_PROD }}
         run: |
-          aws s3 sync build/prod/ s3://${{ env.AWS_S3_BUCKET }}/ --delete
+          set -euo pipefail
+          BUCKET="s3://${{ env.AWS_S3_BUCKET }}/"
+
+          # Bundles first, so nothing is ever referenced before it exists.
+          aws s3 sync build/prod/ "$BUCKET" \
+            --exclude '*' --include 'assets/*' \
+            --cache-control 'public, max-age=31536000, immutable'
+
+          # Then the documents that point at them, pruning anything the build
+          # no longer produces.
+          aws s3 sync build/prod/ "$BUCKET" --delete \
+            --exclude 'assets/*' \
+            --cache-control 'no-cache'
+
+          # Finally drop the bundles this build superseded. Last, so they stay
+          # reachable for the whole window in which the old index.html was live.
+          aws s3 sync build/prod/ "$BUCKET" --delete \
+            --exclude '*' --include 'assets/*' \
+            --cache-control 'public, max-age=31536000, immutable'
 
   cypress_e2e:
     name: Cypress E2E Tests
