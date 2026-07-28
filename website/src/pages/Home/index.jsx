@@ -1,7 +1,8 @@
 import PersonalSummary from '../../components/personal_summary';
+import ServiceStatusPill from '../../components/service_status_pill';
 import SocialLinks from '../../components/social_links';
 import SplitFlap from '../../components/split_flap';
-import { SectionShell, Chip, StatusPill } from '../../components/ui/primitives';
+import { SectionShell, Chip } from '../../components/ui/primitives';
 import { useJsonData, LoadingSkeleton } from '../../utils/useJsonData';
 
 function Home() {
@@ -18,7 +19,9 @@ function Home() {
                 // The concourse label is board chrome; the page's h1 is the name below.
                 titleAs='p'
                 line={0}
-                right={<StatusPill tone='on'>All Lines Running</StatusPill>}
+                // The board status follows the Tokyo timetable, same as the
+                // header badge and the trains on the background map.
+                right={<ServiceStatusPill />}
             >
                 <div className='flex flex-col gap-6 sm:flex-row sm:items-start'>
                     {/* ID pass card */}
