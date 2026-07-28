@@ -120,11 +120,19 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   aliases    = [var.domain-name]
   comment    = "Production Distribution for Cloud Resume"
 
+  # Client-side routing fallback. The bucket is private behind OAC without
+  # s3:ListBucket, so a key that isn't there comes back 403 rather than 404 —
+  # that 403 is what every deep link (`/skills`, `/projects`) hits, and it has
+  # to resolve to the app shell for the router to take over.
+  #
+  # It resolves as 200: these are real pages, and answering them 400 told
+  # crawlers, link previewers and anything else reading the status line that
+  # the site was rejecting its own URLs.
   custom_error_response {
     error_caching_min_ttl = "10"
     error_code            = "403"
-    response_code         = "400"
-    response_page_path    = "/"
+    response_code         = "200"
+    response_page_path    = "/index.html"
   }
 
   default_cache_behavior {
