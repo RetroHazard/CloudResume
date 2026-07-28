@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import CertificationList from '../components/certification_list';
 
 const sampleData = {
@@ -50,5 +50,23 @@ describe('CertificationList Component', () => {
     it('matches snapshot', () => {
         const { container } = render(<CertificationList />);
         expect(container).toMatchSnapshot();
+    });
+
+    // A pass ages by the day, so a tab left open overnight has to notice — the
+    // list reads the shared clock's day stamp rather than a render-time `new
+    // Date()` that never changes again.
+    it('marks a pass expired when the day turns over under an open tab', () => {
+        vi.useFakeTimers();
+        vi.setSystemTime(new Date('2027-05-23T23:59:59Z'));
+        const { getByText, queryByText } = render(<CertificationList />);
+        expect(getByText('Valid')).toBeInTheDocument();
+
+        // Jump the wall clock past the expiry date rather than ticking a whole
+        // day one second at a time, then let the clock's next tick land.
+        vi.setSystemTime(new Date('2027-05-24T00:00:01Z'));
+        act(() => vi.advanceTimersByTime(1000));
+        expect(getByText('Expired')).toBeInTheDocument();
+        expect(queryByText('Valid')).not.toBeInTheDocument();
+        vi.useRealTimers();
     });
 });

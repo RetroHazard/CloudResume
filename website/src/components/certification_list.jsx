@@ -2,15 +2,20 @@ import { Icon } from '@iconify-icon/react';
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
 import { Reveal, LineBadge, StatusPill, lineColor } from './ui/primitives';
 import { formatDate, isExpired, isUnknown } from '../utils/dates';
+import { useToday } from '../utils/siteClock';
 
 const CertificationList = () => {
     const { data, loading, error } = useJsonData('certification_data.json');
+    // A pass expiring tonight has to start reading Expired at midnight, not on
+    // the next reload. `useToday` only changes when the calendar day does, so
+    // this costs one re-render a day rather than one a second.
+    const today = useToday();
     if (loading) return <LoadingSkeleton />;
     if (error || !data) return null;
     return (
         <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
             {data.Certifications.map((item, index) => {
-                const expired = isExpired(item.expiry_date);
+                const expired = isExpired(item.expiry_date, today);
                 return (
                     <Reveal
                         // Three AWS certs carry `credential_id: "N/A"`, so keying on

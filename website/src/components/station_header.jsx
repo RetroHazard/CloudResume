@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react';
-import { formatJstTime, getServiceLevel } from '../utils/serviceStatus';
+import { formatJstTime } from '../utils/serviceStatus';
+import { useNow, useServiceLevel } from '../utils/siteClock';
 
 // Slim wayfinding bar pinned to the top of every page — like the sign above a
 // platform: line roundel + network name on the left, a live Tokyo clock and a
 // service indicator on the right. Both right-hand readouts are pinned to JST
 // regardless of where the viewer is, and the badge follows the Tokyo timetable.
+//
+// The clock and the badge come off the shared site clock rather than an
+// interval of their own, so the badge here, the concourse board's pill and the
+// trains on the background map all change over on the same tick.
 
 // Signal colours per service level: green go, amber off-peak, red late, and a
 // dead grey dot (no pulse) once the line is shut for the night.
@@ -15,19 +19,9 @@ const LEVEL_STYLES = {
     closed: { text: 'text-content-accent', dot: 'bg-content-accent' },
 };
 
-function useTokyoNow() {
-    const [now, setNow] = useState(() => new Date());
-    useEffect(() => {
-        const id = setInterval(() => setNow(new Date()), 1000);
-        return () => clearInterval(id);
-    }, []);
-    return now;
-}
-
 export default function StationHeader() {
-    const now = useTokyoNow();
-    const time = formatJstTime(now);
-    const level = getServiceLevel(now);
+    const time = formatJstTime(useNow());
+    const level = useServiceLevel();
     const styles = LEVEL_STYLES[level.key] ?? LEVEL_STYLES.full;
     return (
         <header
