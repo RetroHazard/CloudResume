@@ -34,6 +34,16 @@ def lambda_handler(event, context):
             # Determine the distribution ID based on the bucket name
             if bucket_name == prodBucket:
                 invalidation_paths[prodDistribution].append(path)
+                # CloudFront caches by request URI, and visitors request "/",
+                # not "/index.html" — default_root_object rewrites the origin
+                # fetch but not the cache key. Invalidating only the object key
+                # leaves the copy cached under the bare URL untouched, so it
+                # kept serving a pre-deploy document (pointing at deleted
+                # bundles) until its TTL ran out. Same for any nested index.
+                if object_key == "index.html" or object_key.endswith("/index.html"):
+                    invalidation_paths[prodDistribution].append(
+                        path[: -len("index.html")]
+                    )
             else:
                 print(f"Bucket {bucket_name} is not configured for cache invalidation.")
                 continue
@@ -49,6 +59,7 @@ def lambda_handler(event, context):
 
     # Create invalidations in batches
     for distribution_id, paths in invalidation_paths.items():
+        paths = list(dict.fromkeys(paths))  # dedupe, keep order
         if paths:
             try:
                 invalidation = client.create_invalidation(
