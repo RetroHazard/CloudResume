@@ -1,10 +1,11 @@
 import { StatusPill } from './ui/primitives';
-import useServiceLevel from '../utils/useServiceLevel';
+import { useServiceLevel } from '../utils/siteClock';
 
 // The concourse board's status pill. It used to be hard-coded to "All Lines
 // Running", which contradicted the header badge and the stabled trains on the
 // background map whenever Tokyo was off-peak or shut for the night. It now reads
-// off the same JST timetable as both, so the whole page tells one story.
+// the band off the shared site clock, the same tick the header and the map read,
+// so the whole page changes over together.
 
 // Signal colour per band, matching the header badge.
 const LEVEL_TONES = {

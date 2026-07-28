@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useReducedMotion } from 'motion/react';
-import useServiceLevel from '../utils/useServiceLevel';
+import { useServiceLevel } from '../utils/siteClock';
 
 // Ambient wayfinding backdrop: a procedurally-generated transit diagram drawn
 // fresh on every page load. Coloured metro lines cross the viewport with the

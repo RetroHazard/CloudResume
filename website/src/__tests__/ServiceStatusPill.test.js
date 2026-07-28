@@ -48,11 +48,10 @@ describe('ServiceStatusPill', () => {
         );
     });
 
-    test('flips when the clock crosses a band boundary under a long-lived tab', () => {
-        renderAt('2026-07-25T08:59:00Z'); // 17:59 JST
+    test('flips within a second of a band boundary under a long-lived tab', () => {
+        renderAt('2026-07-25T08:59:59Z'); // 17:59:59 JST
         expect(screen.getByText('All Lines Running')).toBeInTheDocument();
-        vi.setSystemTime(new Date('2026-07-25T09:00:30Z')); // 18:00 JST
-        act(() => vi.advanceTimersByTime(30000)); // one poll of useServiceLevel
+        act(() => vi.advanceTimersByTime(1000)); // 18:00:00 JST
         expect(screen.getByText('Reduced Service')).toBeInTheDocument();
     });
 });
