@@ -58,6 +58,15 @@ describe('service level bands', () => {
     test('treats an unusable clock as out of service instead of claiming to be open', () => {
         expect(getServiceLevel(new Date('nonsense'))).toBe(SERVICE_LEVELS.closed);
     });
+
+    // Every band needs its own board wording — a shared string would let the
+    // concourse pill keep reading "All Lines Running" after the last train.
+    test('gives every band its own board wording', () => {
+        const boards = Object.values(SERVICE_LEVELS).map((level) => level.board);
+        expect(boards.every(Boolean)).toBe(true);
+        expect(new Set(boards).size).toBe(boards.length);
+        expect(SERVICE_LEVELS.full.board).toBe('All Lines Running');
+    });
 });
 
 // The background map reads its train count and speed off the same bands, so the

@@ -50,23 +50,32 @@ export function LineBadge({
     );
 }
 
-// Status pill — service state (on-time / departed / suspended).
+// Status pill — service state (on-time / reduced / departed / suspended). The
+// signal colours match the header badge: green go, amber off-peak, red late,
+// grey and unlit once nothing is running.
+const PILL_TONES = {
+    on: { text: 'text-neon', dot: 'h-1.5 w-1.5 animate-pulse rounded-full bg-neon' },
+    reduced: { text: 'text-glow', dot: 'h-1.5 w-1.5 animate-pulse rounded-full bg-glow' },
+    past: { text: 'text-content-date', dot: null },
+    alert: { text: 'text-alert', dot: 'h-1.5 w-1.5 rounded-full bg-alert' },
+} as const;
+
 export function StatusPill({
     tone = 'on',
+    title,
     children,
 }: {
-    tone?: 'on' | 'past' | 'alert';
+    tone?: keyof typeof PILL_TONES;
+    title?: string;
     children: ReactNode;
 }) {
-    const styles = {
-        on: 'text-neon',
-        past: 'text-content-date',
-        alert: 'text-alert',
-    }[tone];
+    const { text, dot } = PILL_TONES[tone] ?? PILL_TONES.on;
     return (
-        <span className={cn('inline-flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.14em]', styles)}>
-            {tone === 'on' && <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-neon" />}
-            {tone === 'alert' && <span className="h-1.5 w-1.5 rounded-full bg-alert" />}
+        <span
+            title={title}
+            className={cn('inline-flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.14em]', text)}
+        >
+            {dot && <span className={dot} />}
             {children}
         </span>
     );
