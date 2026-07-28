@@ -10,6 +10,10 @@ on:
       - 'main'
     paths:
       - 'website/**'
+  # A deploy re-uploads index.html, which is what kicks the invalidation
+  # Lambda; without this there is no way to refresh the CDN's cached
+  # document short of committing a website change.
+  workflow_dispatch:
 
 permissions: {}
 
@@ -220,11 +224,33 @@ jobs:
             --exclude 'assets/*' \
             --cache-control 'no-cache'
 
-          # Finally drop the bundles this build superseded. Last, so they stay
-          # reachable for the whole window in which the old index.html was live.
-          aws s3 sync build/prod/ "$BUCKET" --delete \
-            --exclude '*' --include 'assets/*' \
-            --cache-control 'public, max-age=31536000, immutable'
+          # Superseded bundles are NOT deleted in the same run. A cached copy
+          # of index.html keeps pointing at the bundles of its own build for
+          # as long as any cache holds it — CloudFront held the document under
+          # "/" for up to a day, and browser copies from before Cache-Control
+          # was sent age out on heuristic lifetimes measured in days — so
+          # bundles have to outlive documents by that margin, not by the
+          # seconds a same-run delete gave them. Every sync above refreshes
+          # LastModified on the objects the current build ships (fresh CI
+          # mtimes force re-upload), so anything under assets/ still carrying
+          # a 60-day-old timestamp has been out of every deployed index.html
+          # for two months. Prune those; visitors on documents older than that
+          # are caught by the boot recovery net in index.html.
+          CUTOFF=$(date -u -d '60 days ago' +%s)
+          aws s3api list-objects-v2 \
+            --bucket "$AWS_S3_BUCKET" --prefix 'assets/' --output json |
+            jq -r --argjson cutoff "$CUTOFF" '
+              .Contents // [] | .[]
+              | select((.LastModified
+                  | sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z")
+                  | fromdate) < $cutoff)
+              | .Key' |
+            while IFS= read -r key; do
+              # Belt to the timestamp braces: never drop a file the current
+              # build actually shipped.
+              [ -e "build/prod/$key" ] && continue
+              aws s3 rm "${BUCKET}${key}"
+            done
 
   cypress_e2e:
     name: Cypress E2E Tests
