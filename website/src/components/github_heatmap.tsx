@@ -92,14 +92,16 @@ export default function GithubHeatmap() {
 
     return (
         <figure className='flex w-full flex-col gap-3'>
-            <figcaption className='font-mono text-[0.62rem] uppercase tracking-[0.2em] text-neon'>
+            <figcaption className='font-mono text-[0.62rem] tracking-[0.2em] text-neon uppercase'>
                 // contribution activity
             </figcaption>
             <div className='flex flex-wrap items-baseline gap-x-3 gap-y-1'>
-                <span className='font-heading text-2xl font-extrabold uppercase tracking-wide text-content-header'>
+                <span className='font-heading text-2xl font-extrabold tracking-wide text-content-header uppercase'>
                     <span className='text-neon'>{data.total.toLocaleString()}</span> contributions
                 </span>
-                <span className='font-mono text-[0.68rem] text-content-accent'>last year · personal + work, combined</span>
+                <span className='font-mono text-[0.68rem] text-content-accent'>
+                    last year · personal + work, combined
+                </span>
             </div>
             {accounts.length > 0 && (
                 <div className='flex flex-wrap gap-2'>
@@ -108,7 +110,11 @@ export default function GithubHeatmap() {
                             key={a}
                             className='inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary-800/60 px-2.5 py-1 font-mono text-[0.62rem] text-content-accent'
                         >
-                            <span className='h-2 w-2 rounded-[2px]' style={{ background: ACCOUNT_SWATCH[i % ACCOUNT_SWATCH.length] }} />@{a}
+                            <span
+                                className='h-2 w-2 rounded-[2px]'
+                                style={{ background: ACCOUNT_SWATCH[i % ACCOUNT_SWATCH.length] }}
+                            />
+                            @{a}
                         </span>
                     ))}
                 </div>

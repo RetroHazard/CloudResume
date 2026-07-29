@@ -39,7 +39,7 @@ exports[`CertificationList Component > matches snapshot 1`] = `
               Sample Issuer
             </p>
             <span
-              class="inline-flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-neon"
+              class="inline-flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold tracking-[0.14em] uppercase text-neon"
             >
               <span
                 class="h-1.5 w-1.5 animate-pulse rounded-full bg-neon"
@@ -66,7 +66,7 @@ exports[`CertificationList Component > matches snapshot 1`] = `
             class="flex flex-col"
           >
             <dt
-              class="uppercase tracking-wider text-content-date"
+              class="tracking-wider text-content-date uppercase"
             >
               ID:
             </dt>
@@ -80,7 +80,7 @@ exports[`CertificationList Component > matches snapshot 1`] = `
             class="flex flex-col"
           >
             <dt
-              class="uppercase tracking-wider text-content-date"
+              class="tracking-wider text-content-date uppercase"
             >
               Issued:
             </dt>
@@ -94,7 +94,7 @@ exports[`CertificationList Component > matches snapshot 1`] = `
             class="flex flex-col"
           >
             <dt
-              class="uppercase tracking-wider text-content-date"
+              class="tracking-wider text-content-date uppercase"
             >
               Expiry:
             </dt>

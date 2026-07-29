@@ -54,7 +54,12 @@ const ProjectList = () => {
                                                             aria-label={`${project.name} ${linkType} (opens in new tab)`}
                                                             rel='noopener noreferrer'
                                                         >
-                                                            <Icon icon={link.icon} height='1.1em' width='1.1em' aria-hidden='true' />
+                                                            <Icon
+                                                                icon={link.icon}
+                                                                height='1.1em'
+                                                                width='1.1em'
+                                                                aria-hidden='true'
+                                                            />
                                                         </a>
                                                     )),
                                                 ),
@@ -65,7 +70,10 @@ const ProjectList = () => {
                                     <ul className='ml-1 flex list-none flex-col gap-1.5 text-xs leading-relaxed text-content-body md:text-sm'>
                                         {project.details.map((detail, detailIndex) => (
                                             <li key={`${index}-${detailIndex}`} className='flex gap-2'>
-                                                <span aria-hidden='true' className='mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-neon/70' />
+                                                <span
+                                                    aria-hidden='true'
+                                                    className='mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-neon/70'
+                                                />
                                                 <span>{detail}</span>
                                             </li>
                                         ))}

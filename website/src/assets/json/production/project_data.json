@@ -1,321 +1,321 @@
 {
-  "Projects": [
-    {
-      "name": "SwiftX",
-      "company": "Hollow Souls",
-      "category": "macOS Application",
-      "role": "Solo Dev",
-      "size": "1",
-      "start": "2026",
-      "end": "NOW",
-      "logo": "./images/logos/companies/hollowsouls.png",
-      "details": [
-        "Ported a comprehensive screenshot and file-sharing application from C# to native Swift, achieving full feature parity with upstream releases while leveraging macOS APIs (AppKit, CoreGraphics, AVFoundation) for optimal performance and system integration.",
-        "Implemented 50+ automation features including custom hotkeys, drag-and-drop upload, cloud service integrations, and post-capture tasks (annotation, compression, URL shortening), enabling power users to streamline content-sharing workflows and reduce manual steps by up to 80%.",
-        "Engineered robust screen capture and video recording systems supporting multiple output formats, real-time frame capture via Metal rendering, and configurable quality settings, enabling creators to rapidly produce and share multimedia content.",
-        "Integrated 20+ cloud storage and sharing services (AWS S3, Google Drive, Imgur, and more) with credential management and OAuth authentication, providing flexible deployment options and reducing lock-in to proprietary solutions.",
-        "Designed a modular Swift codebase with clear separation of concerns, async/await patterns, and type-safe APIs, reducing maintenance burden while improving reliability and enabling rapid iteration on new features."
-      ],
-      "links": [
+    "Projects": [
         {
-          "link": [
-            {
-              "website": "https://retrohazard.github.io/SwiftX/",
-              "icon": "fa6-solid:globe"
-            }
-          ],
-          "repo": [
-            {
-              "website": "https://github.com/RetroHazard/SwiftX",
-              "icon": "simple-icons:git"
-            }
-          ]
+            "name": "SwiftX",
+            "company": "Hollow Souls",
+            "category": "macOS Application",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2026",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Ported a comprehensive screenshot and file-sharing application from C# to native Swift, achieving full feature parity with upstream releases while leveraging macOS APIs (AppKit, CoreGraphics, AVFoundation) for optimal performance and system integration.",
+                "Implemented 50+ automation features including custom hotkeys, drag-and-drop upload, cloud service integrations, and post-capture tasks (annotation, compression, URL shortening), enabling power users to streamline content-sharing workflows and reduce manual steps by up to 80%.",
+                "Engineered robust screen capture and video recording systems supporting multiple output formats, real-time frame capture via Metal rendering, and configurable quality settings, enabling creators to rapidly produce and share multimedia content.",
+                "Integrated 20+ cloud storage and sharing services (AWS S3, Google Drive, Imgur, and more) with credential management and OAuth authentication, providing flexible deployment options and reducing lock-in to proprietary solutions.",
+                "Designed a modular Swift codebase with clear separation of concerns, async/await patterns, and type-safe APIs, reducing maintenance burden while improving reliability and enabling rapid iteration on new features."
+            ],
+            "links": [
+                {
+                    "link": [
+                        {
+                            "website": "https://retrohazard.github.io/SwiftX/",
+                            "icon": "fa6-solid:globe"
+                        }
+                    ],
+                    "repo": [
+                        {
+                            "website": "https://github.com/RetroHazard/SwiftX",
+                            "icon": "simple-icons:git"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Swift",
+                    "logo": "simple-icons:swift",
+                    "website": "https://www.swift.org/"
+                },
+                {
+                    "name": "macOS",
+                    "logo": "simple-icons:apple",
+                    "website": "https://www.apple.com/macos/"
+                },
+                {
+                    "name": "AWS",
+                    "logo": "simple-icons:amazonaws",
+                    "website": "https://aws.amazon.com/s3/"
+                },
+                {
+                    "name": "GitHub",
+                    "logo": "simple-icons:github",
+                    "website": "https://github.com"
+                }
+            ]
+        },
+        {
+            "name": "Japan Immigration Statistics Dashboard",
+            "company": "Hollow Souls",
+            "category": "Frontend",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2025",
+            "end": "2026",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Designed and launched a React-based immigration statistics dashboard, attracting over 2,000 unique users in the first 30 days of availability.",
+                "Developed customizable charts (stacked bar, radar, bubble) with dynamic filtering to analyze application trends and processing efficiency.",
+                "Built a processing time estimator using historical trends and 3-month rolling averages to forecast queue positions and completion dates.",
+                "Utilized React, Chart.js, and Tailwind CSS to deliver a mobile-friendly, visually appealing interface with theme support.",
+                "Connected to Japan’s e-Stat API for accurate immigration statistics, ensuring reliability and up-to-date insights for users."
+            ],
+            "links": [
+                {
+                    "link": [
+                        {
+                            "website": "https://dashboard.retrohazard.jp/",
+                            "icon": "fa6-solid:globe"
+                        }
+                    ],
+                    "repo": [
+                        {
+                            "website": "https://github.com/RetroHazard/JP_Immigration_Dashboard",
+                            "icon": "simple-icons:git"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Next.js",
+                    "logo": "simple-icons:nextdotjs",
+                    "website": "https://nextjs.org/"
+                },
+                {
+                    "name": "React",
+                    "logo": "simple-icons:react",
+                    "website": "https://react.dev/"
+                },
+                {
+                    "name": "Node.js",
+                    "logo": "simple-icons:nodedotjs",
+                    "website": "https://nodejs.org/en"
+                },
+                {
+                    "name": "TypeScript",
+                    "logo": "simple-icons:typescript",
+                    "website": "https://www.typescriptlang.org/"
+                },
+                {
+                    "name": "tailwindCSS",
+                    "logo": "simple-icons:tailwindcss",
+                    "website": "https://tailwindcss.com"
+                },
+                {
+                    "name": "chartJS",
+                    "logo": "file-icons:chartjs",
+                    "website": "https://www.chartjs.org"
+                },
+                {
+                    "name": "KaTeX",
+                    "logo": "file-icons:latex",
+                    "website": "https://katex.org"
+                },
+                {
+                    "name": "GitHub",
+                    "logo": "simple-icons:github",
+                    "website": "https://github.com"
+                }
+            ]
+        },
+        {
+            "name": "Cloud Resume Challenge",
+            "company": "Hollow Souls",
+            "category": "Full Stack",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2024",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Completed the Cloud Resume Challenge, gaining practical experience in deploying a full-stack cloud project, including frontend, backend, and database components on AWS.",
+                "Implemented Continuous Integration and Continuous Deployment (CI/CD) pipelines, automating the deployment process and ensuring seamless updates and maintenance.",
+                "Utilized Infrastructure as Code (IaC) tools like AWS CloudFormation or Terraform to define and manage cloud infrastructure, demonstrating advanced cloud engineering skills.",
+                "Integrated various AWS services such as S3, Lambda, API Gateway, and DynamoDB, showcasing the ability to design and implement scalable and efficient cloud solutions.",
+                "Documented project processes and maintained version control using Git and GitHub."
+            ],
+            "links": [
+                {
+                    "spec": [
+                        {
+                            "website": "https://cloudresumechallenge.dev/",
+                            "icon": "fa6-solid:info"
+                        }
+                    ],
+                    "blog": [
+                        {
+                            "website": "https://www.linkedin.com/pulse/taking-cloud-resume-challenge-alexander-bracken-gm0wc/",
+                            "icon": "fa6-solid:blog"
+                        }
+                    ],
+                    "repo": [
+                        {
+                            "website": "https://github.com/RetroHazard/CloudResume",
+                            "icon": "simple-icons:git"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "AWS",
+                    "logo": "simple-icons:amazonaws",
+                    "website": "https://aws.amazon.com/"
+                },
+                {
+                    "name": "Terraform",
+                    "logo": "simple-icons:terraform",
+                    "website": "https://www.terraform.io/"
+                },
+                {
+                    "name": "React",
+                    "logo": "simple-icons:react",
+                    "website": "https://react.dev/"
+                },
+                {
+                    "name": "Node.js",
+                    "logo": "simple-icons:nodedotjs",
+                    "website": "https://nodejs.org/en"
+                },
+                {
+                    "name": "tailwindCSS",
+                    "logo": "simple-icons:tailwindcss",
+                    "website": "https://tailwindcss.com"
+                },
+                {
+                    "name": "Python",
+                    "logo": "simple-icons:python",
+                    "website": "https://www.python.org"
+                }
+            ]
+        },
+        {
+            "name": "Untitled Project",
+            "company": "Hollow Souls",
+            "category": "Commercial Game Component",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2022",
+            "end": "2023",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Independently creating, designing, and coding a comprehensive game prototype, demonstrating expertise in end-to-end game development.",
+                "Defining core gameplay mechanics and determining their interaction with players, ensuring an engaging and intuitive user experience.",
+                "Building a detailed library of reference imagery to guide the artistic style and environmental design, ensuring visual coherence and aesthetic quality.",
+                "Producing a range of high-quality digital assets for use in current and future projects, showcasing versatility and creativity in asset development.",
+                "Developing and implementing a marketing strategy tailored for social media and funding platforms, effectively promoting the project and engaging target audiences.",
+                "Generating various methodologies for application construction and testing, and providing comprehensive documentation, ensuring a structured and efficient development process."
+            ],
+            "links": [],
+            "technologies": [
+                {
+                    "name": "Unreal Engine",
+                    "logo": "simple-icons:unrealengine",
+                    "website": "https://www.unrealengine.com/"
+                },
+                {
+                    "name": "Blender",
+                    "logo": "simple-icons:blender",
+                    "website": "https://www.blender.org/"
+                },
+                {
+                    "name": "C++",
+                    "logo": "ph:file-cpp-fill",
+                    "website": "https://cplusplus.com/"
+                },
+                {
+                    "name": "Perforce",
+                    "logo": "simple-icons:perforce",
+                    "website": "https://www.perforce.com/"
+                },
+                {
+                    "name": "Jetbrains Rider",
+                    "logo": "simple-icons:rider",
+                    "website": "https://www.jetbrains.com/rider/"
+                },
+                {
+                    "name": "Creative Cloud",
+                    "logo": "simple-icons:adobecreativecloud",
+                    "website": "https://www.adobe.com/creativecloud.html"
+                }
+            ]
+        },
+        {
+            "name": "Interactive Switches",
+            "company": "Hollow Souls",
+            "category": "Commercial Game Component",
+            "role": "Project Lead",
+            "size": "1",
+            "start": "2022",
+            "end": "2023",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Designed and developed a comprehensive set of interactive switches for Unreal Engine, enhancing user engagement and interactivity within virtual environments.",
+                "Created a highly customizable switch framework that allows developers to easily integrate a variety of switch types and configurations, improving versatility and adaptability in project applications.",
+                "Utilized Unreal Engine’s Blueprint system to streamline the implementation process, ensuring high efficiency and ease of use for developers, which minimizes development time and resources.",
+                "Delivered high-quality, fully functional switch assets with detailed visual fidelity, ensuring a professional and polished look for any game or simulation project.",
+                "Ensured cross-compatibility and optimization for various Unreal Engine versions, providing a reliable and stable solution for a wide range of development environments and platforms."
+            ],
+            "links": [
+                {
+                    "product": [
+                        {
+                            "website": "https://www.unrealengine.com/marketplace/en-US/product/interactive-switches",
+                            "icon": "material-symbols:package-2-sharp"
+                        }
+                    ],
+                    "repo": [
+                        {
+                            "website": "https://github.com/Hollow-Soul-Studios/InteractiveSwitches",
+                            "icon": "simple-icons:git"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Unreal Engine",
+                    "logo": "simple-icons:unrealengine",
+                    "website": "https://www.unrealengine.com/"
+                },
+                {
+                    "name": "Blender",
+                    "logo": "simple-icons:blender",
+                    "website": "https://www.blender.org/"
+                },
+                {
+                    "name": "C++",
+                    "logo": "ph:file-cpp-fill",
+                    "website": "https://cplusplus.com/"
+                },
+                {
+                    "name": "Perforce",
+                    "logo": "simple-icons:perforce",
+                    "website": "https://www.perforce.com/"
+                },
+                {
+                    "name": "Jetbrains Rider",
+                    "logo": "simple-icons:rider",
+                    "website": "https://www.jetbrains.com/rider/"
+                },
+                {
+                    "name": "Creative Cloud",
+                    "logo": "simple-icons:adobecreativecloud",
+                    "website": "https://www.adobe.com/creativecloud.html"
+                }
+            ]
         }
-      ],
-      "technologies": [
-        {
-          "name": "Swift",
-          "logo": "simple-icons:swift",
-          "website": "https://www.swift.org/"
-        },
-        {
-          "name": "macOS",
-          "logo": "simple-icons:apple",
-          "website": "https://www.apple.com/macos/"
-        },
-        {
-          "name": "AWS",
-          "logo": "simple-icons:amazonaws",
-          "website": "https://aws.amazon.com/s3/"
-        },
-        {
-          "name": "GitHub",
-          "logo": "simple-icons:github",
-          "website": "https://github.com"
-        }
-      ]
-    },
-    {
-      "name": "Japan Immigration Statistics Dashboard",
-      "company": "Hollow Souls",
-      "category": "Frontend",
-      "role": "Solo Dev",
-      "size": "1",
-      "start": "2025",
-      "end": "2026",
-      "logo": "./images/logos/companies/hollowsouls.png",
-      "details": [
-        "Designed and launched a React-based immigration statistics dashboard, attracting over 2,000 unique users in the first 30 days of availability.",
-        "Developed customizable charts (stacked bar, radar, bubble) with dynamic filtering to analyze application trends and processing efficiency.",
-        "Built a processing time estimator using historical trends and 3-month rolling averages to forecast queue positions and completion dates.",
-        "Utilized React, Chart.js, and Tailwind CSS to deliver a mobile-friendly, visually appealing interface with theme support.",
-        "Connected to Japan’s e-Stat API for accurate immigration statistics, ensuring reliability and up-to-date insights for users."
-      ],
-      "links": [
-        {
-          "link": [
-            {
-              "website": "https://dashboard.retrohazard.jp/",
-              "icon": "fa6-solid:globe"
-            }
-          ],
-          "repo": [
-            {
-              "website": "https://github.com/RetroHazard/JP_Immigration_Dashboard",
-              "icon": "simple-icons:git"
-            }
-          ]
-        }
-      ],
-      "technologies": [
-        {
-          "name": "Next.js",
-          "logo": "simple-icons:nextdotjs",
-          "website": "https://nextjs.org/"
-        },
-        {
-          "name": "React",
-          "logo": "simple-icons:react",
-          "website": "https://react.dev/"
-        },
-        {
-          "name": "Node.js",
-          "logo": "simple-icons:nodedotjs",
-          "website": "https://nodejs.org/en"
-        },
-        {
-          "name": "TypeScript",
-          "logo": "simple-icons:typescript",
-          "website": "https://www.typescriptlang.org/"
-        },
-        {
-          "name": "tailwindCSS",
-          "logo": "simple-icons:tailwindcss",
-          "website": "https://tailwindcss.com"
-        },
-        {
-          "name": "chartJS",
-          "logo": "file-icons:chartjs",
-          "website": "https://www.chartjs.org"
-        },
-        {
-          "name": "KaTeX",
-          "logo": "file-icons:latex",
-          "website": "https://katex.org"
-        },
-        {
-          "name": "GitHub",
-          "logo": "simple-icons:github",
-          "website": "https://github.com"
-        }
-      ]
-    },
-    {
-      "name": "Cloud Resume Challenge",
-      "company": "Hollow Souls",
-      "category": "Full Stack",
-      "role": "Solo Dev",
-      "size": "1",
-      "start": "2024",
-      "end": "NOW",
-      "logo": "./images/logos/companies/hollowsouls.png",
-      "details": [
-        "Completed the Cloud Resume Challenge, gaining practical experience in deploying a full-stack cloud project, including frontend, backend, and database components on AWS.",
-        "Implemented Continuous Integration and Continuous Deployment (CI/CD) pipelines, automating the deployment process and ensuring seamless updates and maintenance.",
-        "Utilized Infrastructure as Code (IaC) tools like AWS CloudFormation or Terraform to define and manage cloud infrastructure, demonstrating advanced cloud engineering skills.",
-        "Integrated various AWS services such as S3, Lambda, API Gateway, and DynamoDB, showcasing the ability to design and implement scalable and efficient cloud solutions.",
-        "Documented project processes and maintained version control using Git and GitHub."
-      ],
-      "links": [
-        {
-          "spec": [
-            {
-              "website": "https://cloudresumechallenge.dev/",
-              "icon": "fa6-solid:info"
-            }
-          ],
-          "blog": [
-            {
-              "website": "https://www.linkedin.com/pulse/taking-cloud-resume-challenge-alexander-bracken-gm0wc/",
-              "icon": "fa6-solid:blog"
-            }
-          ],
-          "repo": [
-            {
-              "website": "https://github.com/RetroHazard/CloudResume",
-              "icon": "simple-icons:git"
-            }
-          ]
-        }
-      ],
-      "technologies": [
-        {
-          "name": "AWS",
-          "logo": "simple-icons:amazonaws",
-          "website": "https://aws.amazon.com/"
-        },
-        {
-          "name": "Terraform",
-          "logo": "simple-icons:terraform",
-          "website": "https://www.terraform.io/"
-        },
-        {
-          "name": "React",
-          "logo": "simple-icons:react",
-          "website": "https://react.dev/"
-        },
-        {
-          "name": "Node.js",
-          "logo": "simple-icons:nodedotjs",
-          "website": "https://nodejs.org/en"
-        },
-        {
-          "name": "tailwindCSS",
-          "logo": "simple-icons:tailwindcss",
-          "website": "https://tailwindcss.com"
-        },
-        {
-          "name": "Python",
-          "logo": "simple-icons:python",
-          "website": "https://www.python.org"
-        }
-      ]
-    },
-    {
-      "name": "Untitled Project",
-      "company": "Hollow Souls",
-      "category": "Commercial Game Component",
-      "role": "Solo Dev",
-      "size": "1",
-      "start": "2022",
-      "end": "2023",
-      "logo": "./images/logos/companies/hollowsouls.png",
-      "details": [
-        "Independently creating, designing, and coding a comprehensive game prototype, demonstrating expertise in end-to-end game development.",
-        "Defining core gameplay mechanics and determining their interaction with players, ensuring an engaging and intuitive user experience.",
-        "Building a detailed library of reference imagery to guide the artistic style and environmental design, ensuring visual coherence and aesthetic quality.",
-        "Producing a range of high-quality digital assets for use in current and future projects, showcasing versatility and creativity in asset development.",
-        "Developing and implementing a marketing strategy tailored for social media and funding platforms, effectively promoting the project and engaging target audiences.",
-        "Generating various methodologies for application construction and testing, and providing comprehensive documentation, ensuring a structured and efficient development process."
-      ],
-      "links": [],
-      "technologies": [
-        {
-          "name": "Unreal Engine",
-          "logo": "simple-icons:unrealengine",
-          "website": "https://www.unrealengine.com/"
-        },
-        {
-          "name": "Blender",
-          "logo": "simple-icons:blender",
-          "website": "https://www.blender.org/"
-        },
-        {
-          "name": "C++",
-          "logo": "ph:file-cpp-fill",
-          "website": "https://cplusplus.com/"
-        },
-        {
-          "name": "Perforce",
-          "logo": "simple-icons:perforce",
-          "website": "https://www.perforce.com/"
-        },
-        {
-          "name": "Jetbrains Rider",
-          "logo": "simple-icons:rider",
-          "website": "https://www.jetbrains.com/rider/"
-        },
-        {
-          "name": "Creative Cloud",
-          "logo": "simple-icons:adobecreativecloud",
-          "website": "https://www.adobe.com/creativecloud.html"
-        }
-      ]
-    },
-    {
-      "name": "Interactive Switches",
-      "company": "Hollow Souls",
-      "category": "Commercial Game Component",
-      "role": "Project Lead",
-      "size": "1",
-      "start": "2022",
-      "end": "2023",
-      "logo": "./images/logos/companies/hollowsouls.png",
-      "details": [
-        "Designed and developed a comprehensive set of interactive switches for Unreal Engine, enhancing user engagement and interactivity within virtual environments.",
-        "Created a highly customizable switch framework that allows developers to easily integrate a variety of switch types and configurations, improving versatility and adaptability in project applications.",
-        "Utilized Unreal Engine’s Blueprint system to streamline the implementation process, ensuring high efficiency and ease of use for developers, which minimizes development time and resources.",
-        "Delivered high-quality, fully functional switch assets with detailed visual fidelity, ensuring a professional and polished look for any game or simulation project.",
-        "Ensured cross-compatibility and optimization for various Unreal Engine versions, providing a reliable and stable solution for a wide range of development environments and platforms."
-      ],
-      "links": [
-        {
-          "product": [
-            {
-              "website": "https://www.unrealengine.com/marketplace/en-US/product/interactive-switches",
-              "icon": "material-symbols:package-2-sharp"
-            }
-          ],
-          "repo": [
-            {
-              "website": "https://github.com/Hollow-Soul-Studios/InteractiveSwitches",
-              "icon": "simple-icons:git"
-            }
-          ]
-        }
-      ],
-      "technologies": [
-        {
-          "name": "Unreal Engine",
-          "logo": "simple-icons:unrealengine",
-          "website": "https://www.unrealengine.com/"
-        },
-        {
-          "name": "Blender",
-          "logo": "simple-icons:blender",
-          "website": "https://www.blender.org/"
-        },
-        {
-          "name": "C++",
-          "logo": "ph:file-cpp-fill",
-          "website": "https://cplusplus.com/"
-        },
-        {
-          "name": "Perforce",
-          "logo": "simple-icons:perforce",
-          "website": "https://www.perforce.com/"
-        },
-        {
-          "name": "Jetbrains Rider",
-          "logo": "simple-icons:rider",
-          "website": "https://www.jetbrains.com/rider/"
-        },
-        {
-          "name": "Creative Cloud",
-          "logo": "simple-icons:adobecreativecloud",
-          "website": "https://www.adobe.com/creativecloud.html"
-        }
-      ]
-    }
-  ]
+    ]
 }

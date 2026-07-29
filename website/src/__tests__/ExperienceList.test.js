@@ -5,44 +5,39 @@ import ExperienceList from '../components/experience_list';
 const sampleData = {
     Experience: [
         {
-            company: "Generic Company",
-            job_title: "Generic Job Title",
-            location: "Generic Location",
-            type: "Generic Type",
-            start: "Generic Start",
-            end: "Generic End",
-            logo: "./images/placeholder.png",
-            website: "https://genericwebsite.com",
-            details: [
-                "Generic detail 1",
-                "Generic detail 2",
-                "Generic detail 3",
-                "Generic detail 4"
-            ],
+            company: 'Generic Company',
+            job_title: 'Generic Job Title',
+            location: 'Generic Location',
+            type: 'Generic Type',
+            start: 'Generic Start',
+            end: 'Generic End',
+            logo: './images/placeholder.png',
+            website: 'https://genericwebsite.com',
+            details: ['Generic detail 1', 'Generic detail 2', 'Generic detail 3', 'Generic detail 4'],
             technologies: [
                 {
-                    name: "Generic Skill 1",
-                    logo: "ph:placeholder-fill",
-                    website: "https://genericskill1.com"
+                    name: 'Generic Skill 1',
+                    logo: 'ph:placeholder-fill',
+                    website: 'https://genericskill1.com',
                 },
                 {
-                    name: "Generic Skill 2",
-                    logo: "ph:placeholder-fill",
-                    website: "https://genericskill2.com"
+                    name: 'Generic Skill 2',
+                    logo: 'ph:placeholder-fill',
+                    website: 'https://genericskill2.com',
                 },
                 {
-                    name: "Generic Skill 3",
-                    logo: "ph:placeholder-fill",
-                    website: "https://genericskill3.com"
+                    name: 'Generic Skill 3',
+                    logo: 'ph:placeholder-fill',
+                    website: 'https://genericskill3.com',
                 },
                 {
-                    name: "Generic Skill 4",
-                    logo: "ph:placeholder-fill",
-                    website: "https://genericskill4.com"
-                }
-            ]
-        }
-    ]
+                    name: 'Generic Skill 4',
+                    logo: 'ph:placeholder-fill',
+                    website: 'https://genericskill4.com',
+                },
+            ],
+        },
+    ],
 };
 
 vi.mock('../utils/useJsonData', () => ({
@@ -61,11 +56,11 @@ describe('ExperienceList Component', () => {
         expect(getByText('Generic Location')).toBeInTheDocument();
         expect(container.querySelector('img[alt=""]')).toBeInTheDocument();
 
-        sampleData.Experience[0].details.forEach(detail => {
+        sampleData.Experience[0].details.forEach((detail) => {
             expect(getByText(detail)).toBeInTheDocument();
         });
 
-        sampleData.Experience[0].technologies.forEach(skill => {
+        sampleData.Experience[0].technologies.forEach((skill) => {
             expect(getByText(skill.name)).toBeInTheDocument();
         });
     });

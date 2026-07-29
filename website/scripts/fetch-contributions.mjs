@@ -22,10 +22,7 @@ import { dirname, resolve } from 'node:path';
 
 const ACCOUNTS = ['RetroHazard', 'BitMEX-abracken'];
 
-const OUT = resolve(
-    dirname(fileURLToPath(import.meta.url)),
-    '../public/data/contributions.json',
-);
+const OUT = resolve(dirname(fileURLToPath(import.meta.url)), '../public/data/contributions.json');
 
 // Public, no-auth contributions API. It scrapes the public profile graph, so it
 // reflects the same totals GitHub shows there — including private-with-toggle.
@@ -60,7 +57,9 @@ try {
     const payload = { total, accounts: ACCOUNTS, updated: new Date().toISOString(), days };
 
     await writeFile(OUT, JSON.stringify(payload, null, 2) + '\n');
-    console.log(`contributions.json — ${total.toLocaleString()} contributions over ${days.length} days (${ACCOUNTS.join(' + ')})`);
+    console.log(
+        `contributions.json — ${total.toLocaleString()} contributions over ${days.length} days (${ACCOUNTS.join(' + ')})`,
+    );
 } catch (err) {
     console.warn(`fetch-contributions: keeping existing file (${err.message})`);
     // Guarantee the file exists so the build never fails on a missing import.

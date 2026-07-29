@@ -1,76 +1,72 @@
 {
-  "core_skills": [
-    {
-      "name": "Placeholder",
-      "category": "Cloud",
-      "level": "50%",
-      "logo": "ph:placeholder-fill",
-      "website": ""
-    },
-    {
-      "name": "Placeholder",
-      "category": "Platform",
-      "level": "25%",
-      "logo": "ph:placeholder-fill",
-      "website": "#"
-    },
-    {
-      "name": "Placeholder",
-      "category": "Security",
-      "level": "60%",
-      "logo": "ph:placeholder-fill",
-      "website": "#"
-    },
-    {
-      "name": "Placeholder",
-      "category": "Development",
-      "level": "50%",
-      "logo": "ph:placeholder-fill",
-      "website": "#"
-    }
-  ],
-  "target_skills": [
-    {
-      "name": "Skill",
-      "logo": "ph:placeholder-fill",
-      "website": "#"
-    },
-    {
-      "name": "Skill",
-      "logo": "ph:placeholder-fill",
-      "website": "#"
-    },
-    {
-      "name": "Skill",
-      "logo": "ph:placeholder-fill",
-      "website": "#"
-    },
-    {
-      "name": "Skill",
-      "logo": "ph:placeholder-fill",
-      "website": "#"
-    },
-    {
-      "name": "Skill",
-      "logo": "ph:placeholder-fill",
-      "website": "#"
-    }
-  ],
-  "industry_knowledge": [
-    { "name": "Domain Expertise" },
-    { "name": "Domain Expertise" },
-    { "name": "Domain Expertise" }
-  ],
-  "soft_skills": [
-    { "name": "Soft Skill" },
-    { "name": "Soft Skill" },
-    { "name": "Soft Skill" }
-  ],
-  "language_skills": [
-    {
-      "language": "Language",
-      "level": "Fluency",
-      "flag": "ph:placeholder-fill"
-    }
-  ]
+    "core_skills": [
+        {
+            "name": "Placeholder",
+            "category": "Cloud",
+            "level": "50%",
+            "logo": "ph:placeholder-fill",
+            "website": ""
+        },
+        {
+            "name": "Placeholder",
+            "category": "Platform",
+            "level": "25%",
+            "logo": "ph:placeholder-fill",
+            "website": "#"
+        },
+        {
+            "name": "Placeholder",
+            "category": "Security",
+            "level": "60%",
+            "logo": "ph:placeholder-fill",
+            "website": "#"
+        },
+        {
+            "name": "Placeholder",
+            "category": "Development",
+            "level": "50%",
+            "logo": "ph:placeholder-fill",
+            "website": "#"
+        }
+    ],
+    "target_skills": [
+        {
+            "name": "Skill",
+            "logo": "ph:placeholder-fill",
+            "website": "#"
+        },
+        {
+            "name": "Skill",
+            "logo": "ph:placeholder-fill",
+            "website": "#"
+        },
+        {
+            "name": "Skill",
+            "logo": "ph:placeholder-fill",
+            "website": "#"
+        },
+        {
+            "name": "Skill",
+            "logo": "ph:placeholder-fill",
+            "website": "#"
+        },
+        {
+            "name": "Skill",
+            "logo": "ph:placeholder-fill",
+            "website": "#"
+        }
+    ],
+    "industry_knowledge": [
+        { "name": "Domain Expertise" },
+        { "name": "Domain Expertise" },
+        { "name": "Domain Expertise" }
+    ],
+    "soft_skills": [{ "name": "Soft Skill" }, { "name": "Soft Skill" }, { "name": "Soft Skill" }],
+    "language_skills": [
+        {
+            "language": "Language",
+            "level": "Fluency",
+            "flag": "ph:placeholder-fill"
+        }
+    ]
 }

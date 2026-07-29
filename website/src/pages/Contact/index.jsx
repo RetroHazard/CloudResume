@@ -21,7 +21,12 @@ function useContactSubmit(captchaRef) {
     const visitorId = useVisitorId();
     const timeoutRef = useRef(null);
 
-    useEffect(() => () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); }, []);
+    useEffect(
+        () => () => {
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        },
+        [],
+    );
 
     const setField = (field) => (e) => dispatch({ field, value: e.target.value });
 
@@ -106,7 +111,9 @@ const ContactForm = () => {
                 {/* Side by side these two fields are ~76px wide on a phone, which
                     truncates both the placeholder and anything typed into them. */}
                 <div className='flex flex-col gap-4 sm:flex-row sm:gap-6'>
-                    <label htmlFor='firstName' className='sr-only'>First name</label>
+                    <label htmlFor='firstName' className='sr-only'>
+                        First name
+                    </label>
                     <input
                         type='text'
                         id='firstName'
@@ -118,7 +125,9 @@ const ContactForm = () => {
                         aria-required='true'
                         maxLength={100}
                     />
-                    <label htmlFor='lastName' className='sr-only'>Last name</label>
+                    <label htmlFor='lastName' className='sr-only'>
+                        Last name
+                    </label>
                     <input
                         type='text'
                         id='lastName'
@@ -133,7 +142,9 @@ const ContactForm = () => {
                 </div>
             </fieldset>
             <div>
-                <label htmlFor='email' className='mb-2 block text-sm font-medium text-content-subtitle'>Email</label>
+                <label htmlFor='email' className='mb-2 block text-sm font-medium text-content-subtitle'>
+                    Email
+                </label>
                 <input
                     type='email'
                     id='email'
@@ -147,7 +158,9 @@ const ContactForm = () => {
                 />
             </div>
             <div>
-                <label htmlFor='subject' className='mb-2 block text-sm font-medium text-content-subtitle'>Subject</label>
+                <label htmlFor='subject' className='mb-2 block text-sm font-medium text-content-subtitle'>
+                    Subject
+                </label>
                 <input
                     type='text'
                     id='subject'
@@ -161,7 +174,9 @@ const ContactForm = () => {
                 />
             </div>
             <div className='sm:col-span-2'>
-                <label htmlFor='message' className='mb-2 block text-sm font-medium text-content-subtitle'>Your Message</label>
+                <label htmlFor='message' className='mb-2 block text-sm font-medium text-content-subtitle'>
+                    Your Message
+                </label>
                 <textarea
                     id='message'
                     rows='5'
@@ -176,13 +191,7 @@ const ContactForm = () => {
                 />
             </div>
             <div className='flex flex-col gap-y-3'>
-                {RECAPTCHA_SITE_KEY && (
-                    <ReCAPTCHA
-                        sitekey={RECAPTCHA_SITE_KEY}
-                        ref={captchaRef}
-                        theme='dark'
-                    />
-                )}
+                {RECAPTCHA_SITE_KEY && <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} ref={captchaRef} theme='dark' />}
                 <button
                     type='submit'
                     disabled={isLoading}
@@ -190,7 +199,7 @@ const ContactForm = () => {
                     aria-label={isLoading ? 'Sending message, please wait' : 'Send message'}
                     className={
                         isLoading
-                            ? 'inline-flex w-48 cursor-not-allowed items-center justify-center gap-2 rounded border border-border bg-secondary-500 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-secondary-300 max-sm:min-h-11 max-sm:w-full'
+                            ? 'inline-flex w-48 cursor-not-allowed items-center justify-center gap-2 rounded border border-border bg-secondary-500 px-4 py-2 font-mono text-xs font-semibold tracking-wider text-secondary-300 uppercase max-sm:min-h-11 max-sm:w-full'
                             : 'ticket-button w-48 max-sm:w-full'
                     }
                 >
@@ -221,7 +230,7 @@ function Contact() {
                     <p className='mb-1 text-content-body sm:text-lg'>
                         Questions, comments, or a potential opportunity or project you'd like to collaborate on?
                     </p>
-                    <p className='mb-6 font-mono text-xs uppercase tracking-wider text-content-accent'>
+                    <p className='mb-6 font-mono text-xs tracking-wider text-content-accent uppercase'>
                         Leave a message at the counter — every inquiry is read.
                     </p>
                     <ContactForm />

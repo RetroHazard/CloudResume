@@ -4,13 +4,7 @@ import { BrandIcon } from './ui/brand_icon';
 const SkillButtonList = ({ skills }) => (
     <div className='flex flex-wrap max-sm:gap-1 sm:gap-2 md:gap-3'>
         {skills.map((skill, index) => (
-            <a
-                key={index}
-                className='skill-block'
-                href={skill.website}
-                target='_blank'
-                rel='noopener noreferrer'
-            >
+            <a key={index} className='skill-block' href={skill.website} target='_blank' rel='noopener noreferrer'>
                 <BrandIcon
                     className='icon-box'
                     icon={skill.logo}
