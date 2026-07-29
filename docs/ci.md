@@ -97,7 +97,9 @@ cd infrastructure && terraform fmt -check -recursive && terraform validate
 
 `ci.yml` currently triggers on `pull_request` and `workflow_dispatch` only. `main` is still served by
 `website.yml` and `infrastructure.yml`, and `infrastructure-test.yml` still runs its own plan on
-PRs, so PRs get one cycle of duplicate checks. That is deliberate — required status checks are
+PRs, so PRs get one cycle of duplicate checks. Both Terraform jobs plan the same remote state, and
+whichever reaches it second is refused the S3 state lock, so every plan and apply in both workflows
+passes `-lock-timeout=5m` to wait rather than fail. That is deliberate — required status checks are
 matched by **job display name**, and deleting the old workflows before deregistering their names
 deadlocks the repo: every PR would wait on a check nothing can produce, including the PR that fixes
 it. GitHub's branch-protection UI also only offers names it has seen in the last ~7 days, so the new
