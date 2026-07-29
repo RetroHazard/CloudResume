@@ -60,8 +60,13 @@ jobs:
       web_verified: ${{ steps.verified.outputs.web }}
 
     steps:
-      # fetch-depth: 2 is exactly enough for the HEAD^ diff below, and the
-      # digest only needs the tree objects at HEAD.
+      # The HEAD^ diff below would fit in `fetch-depth: 2`, but the
+      # `github.event.before` fallback would not: on a multi-commit push that
+      # commit sits deeper than the shallow clone, so `git cat-file -e` fails
+      # the guard and the code falls back to HEAD^ — missing every commit in
+      # the push but the last, which is the exact case the fallback exists to
+      # cover. A full clone is what makes it work, and this repo is small
+      # enough that it costs nothing.
       #
       # Do NOT add `ref: github.event.pull_request.head.sha`. On a pull_request
       # event checkout resolves refs/pull/N/merge, so HEAD is already the merge
@@ -71,7 +76,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
       - name: Work out which stacks changed
         id: filter
@@ -105,7 +110,14 @@ jobs:
           # github.event.before covers a direct multi-commit push, where HEAD^
           # would miss everything but the last commit. It is all-zeros on a
           # force-push or a branch's first push, hence the guard.
-          base=$(git rev-parse HEAD^ 2>/dev/null || true)
+          #
+          # --verify --quiet, not a bare `rev-parse ... 2>/dev/null`: on an
+          # unresolvable revision rev-parse still echoes the argument back on
+          # stdout, so the bare form sets base to the literal string "HEAD^",
+          # sails past the emptiness test below and dies in `git diff`. This
+          # form prints nothing and exits non-zero, which is what makes the
+          # fallback reachable at all.
+          base=$(git rev-parse --verify --quiet 'HEAD^' || true)
           if [ "$EVENT" = "push" ] && [ -n "${BEFORE:-}" ] \
              && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
              && git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
@@ -114,7 +126,11 @@ jobs:
 
           if [ -z "$base" ]; then
             echo "No usable base commit; treating everything as changed."
-            changed='website/ infrastructure/ .github/'
+            # One path per line. match() anchors every pattern with ^, so a
+            # single space-separated line would match ^website/ and nothing
+            # else — the fallback would quietly skip Terraform in the one case
+            # where it is meant to run everything.
+            changed=$(printf '%s\n' 'website/' 'infrastructure/' '.github/')
           else
             changed=$(git diff --name-only "$base" HEAD)
           fi
@@ -248,6 +264,9 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - uses: ./.github/actions/setup-web
 
+      # setup-web installs with CYPRESS_INSTALL_BINARY=0, so the binary is not
+      # on disk yet and this restore actually gets to serve it. `cypress
+      # install` below is then a no-op on a hit and the download on a miss.
       - name: Cache Cypress binary
         uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
         with:
@@ -626,6 +645,8 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
       - uses: ./.github/actions/setup-web
 
+      # As in web-e2e: setup-web skips the binary, so this restore is what
+      # keeps the download off the critical path of a production deploy.
       - name: Cache Cypress binary
         uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
         with:

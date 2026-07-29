@@ -37,4 +37,16 @@ runs:
       if: inputs.install == 'true'
       shell: bash
       working-directory: website
+      env:
+        # `cypress` is listed in pnpm.onlyBuiltDependencies, so its postinstall
+        # runs here and downloads the ~100 MB binary in every job that installs
+        # — including the three that never run Cypress.
+        #
+        # It also made the Cypress cache useless: the restore step necessarily
+        # comes after this one, so the download always won the race and the
+        # cache only ever got written, never read. Skipping it here is what
+        # lets that cache do its job — the two jobs that need the binary
+        # restore ~/.cache/Cypress and then run `pnpm exec cypress install`,
+        # which is a no-op on a hit and does the download on a miss.
+        CYPRESS_INSTALL_BINARY: '0'
       run: pnpm install --frozen-lockfile
