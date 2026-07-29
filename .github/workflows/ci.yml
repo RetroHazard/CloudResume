@@ -1,0 +1,683 @@
+name: CI
+
+# The single entrypoint for both stacks. Keeping infrastructure and website in
+# one workflow is what lets the website wait on Terraform with a plain `needs:`
+# edge instead of the `gh run list` polling loop this replaces — that loop
+# queried the *latest* Terraform run on main regardless of commit, so a failure
+# from days earlier blocked every subsequent website deploy.
+#
+# DO NOT add a workflow-level `paths:` filter. A workflow filtered out by
+# `paths` emits no check runs at all, so a required status check from it stays
+# pending forever and the PR can never merge. A job skipped by `if:` reports as
+# `skipped`, which branch protection treats as a pass. That is why the gating
+# lives in the `changes` job below.
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      force_website:
+        description: Run the website jobs regardless of what changed.
+        type: boolean
+        default: false
+      force_infrastructure:
+        description: Run the Terraform job regardless of what changed.
+        type: boolean
+        default: false
+      force_checks:
+        description: Ignore verification markers and re-run checks from scratch.
+        type: boolean
+        default: false
+      dry_run:
+        description: Exercise the deploy path without mutating anything (s3 sync --dryrun, terraform show).
+        type: boolean
+        default: true
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Superseded PR runs are pointless, so cancel them. Anything on main may be
+  # mutating production, so let it finish and queue behind it instead.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  TF_IN_AUTOMATION: 'true'
+
+jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      website: ${{ steps.filter.outputs.website }}
+      infrastructure: ${{ steps.filter.outputs.infrastructure }}
+      github: ${{ steps.filter.outputs.github }}
+      web_digest: ${{ steps.digest.outputs.web }}
+      web_verified: ${{ steps.verified.outputs.web }}
+
+    steps:
+      # fetch-depth: 2 is exactly enough for the HEAD^ diff below, and the
+      # digest only needs the tree objects at HEAD.
+      #
+      # Do NOT add `ref: github.event.pull_request.head.sha`. On a pull_request
+      # event checkout resolves refs/pull/N/merge, so HEAD is already the merge
+      # result — which is what makes the digest below match the squash commit
+      # that eventually lands on main. Pinning to the head sha silently breaks
+      # every marker hit.
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 2
+
+      - name: Work out which stacks changed
+        id: filter
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          FORCE_WEBSITE: ${{ inputs.force_website }}
+          FORCE_INFRA: ${{ inputs.force_infrastructure }}
+        run: |
+          set -euo pipefail
+
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            # Nothing to diff against — the operator says what to run. This is
+            # also the CDN-invalidation escape hatch: re-uploading index.html is
+            # what enqueues the cloudfrontInvalidation Lambda, so a manual run
+            # with force_website is the only way to refresh the cached document
+            # without committing a website change.
+            printf 'website=%s\n' "$FORCE_WEBSITE" >> "$GITHUB_OUTPUT"
+            printf 'infrastructure=%s\n' "$FORCE_INFRA" >> "$GITHUB_OUTPUT"
+            echo 'github=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # HEAD^ is the right base for both events we care about:
+          #   pull_request -> HEAD is refs/pull/N/merge, whose first parent is
+          #                   the base branch tip, so this is the PR's full diff
+          #   push to main -> merges here are squashes (linear history), so
+          #                   HEAD^ is the previous main tip
+          # github.event.before covers a direct multi-commit push, where HEAD^
+          # would miss everything but the last commit. It is all-zeros on a
+          # force-push or a branch's first push, hence the guard.
+          base=$(git rev-parse HEAD^ 2>/dev/null || true)
+          if [ "$EVENT" = "push" ] && [ -n "${BEFORE:-}" ] \
+             && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
+             && git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+            base="$BEFORE"
+          fi
+
+          if [ -z "$base" ]; then
+            echo "No usable base commit; treating everything as changed."
+            changed='website/ infrastructure/ .github/'
+          else
+            changed=$(git diff --name-only "$base" HEAD)
+          fi
+
+          echo "Changed paths:"
+          echo "$changed" | sed 's/^/  /'
+
+          match() { echo "$changed" | grep -qE "$1" && echo true || echo false; }
+          {
+            printf 'website=%s\n'        "$(match '^website/')"
+            printf 'infrastructure=%s\n' "$(match '^infrastructure/')"
+            printf 'github=%s\n'         "$(match '^\.github/')"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Compute content digests
+        id: digest
+        run: |
+          set -euo pipefail
+          # The digest is the content the checks would run against: the website
+          # tree, plus the whole .github tree so that any change to a workflow
+          # or composite action conservatively invalidates every marker.
+          web=$(printf '%s\n' "$(git rev-parse HEAD:website)" "$(git rev-parse HEAD:.github)" \
+                | sha256sum | cut -c1-32)
+          echo "web=$web" >> "$GITHUB_OUTPUT"
+          echo "Website digest: $web"
+
+      # Checks that already passed on this exact content do not need to run
+      # again. When they pass on a PR, `mark-verified` uploads a marker artifact
+      # named for the digest; this looks for one. Because the PR ran against the
+      # merge ref, the tree it proved is byte-identical to the squash commit's,
+      # so the merge to main hits the marker and skips straight to deploy. If
+      # main moved under the PR and touched website/, the digest differs and the
+      # checks correctly re-run.
+      - name: Look for an existing verification marker
+        id: verified
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DIGEST: ${{ steps.digest.outputs.web }}
+          FORCE: ${{ inputs.force_checks }}
+        run: |
+          set -uo pipefail
+
+          if [ "${FORCE:-false}" = "true" ]; then
+            echo "force_checks set; ignoring any marker."
+            echo 'web=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Two filters carry the correctness of this whole mechanism:
+          #
+          #   expired == false      expired artifacts are still listed, with a
+          #                         tombstone flag. total_count would count them.
+          #   repository_id ==      upload-artifact authenticates with
+          #   head_repository_id    ACTIONS_RUNTIME_TOKEN, which fork PRs also
+          #                         hold. Without this, a fork could upload a
+          #                         marker for content nobody checked and turn
+          #                         the gate from enforced into advisory.
+          n=$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=verified-web-${DIGEST}&per_page=100" \
+                --jq '[.artifacts[]
+                       | select(.expired == false)
+                       | select(.workflow_run.repository_id == .workflow_run.head_repository_id)]
+                      | length' 2>/dev/null) || n=""
+
+          # Fail open. A lookup that errors, times out, or returns anything
+          # non-numeric must mean "run the checks", never "skip them".
+          case "$n" in
+            ''|*[!0-9]*) n=0 ;;
+          esac
+
+          if [ "$n" -gt 0 ]; then
+            echo "Found $n marker(s) for digest ${DIGEST}; website checks already passed on this content."
+            echo 'web=true' >> "$GITHUB_OUTPUT"
+          else
+            echo "No marker for digest ${DIGEST}; website checks will run."
+            echo 'web=false' >> "$GITHUB_OUTPUT"
+          fi
+
+  web-checks:
+    name: Website checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [changes]
+    if: ${{ needs.changes.outputs.website == 'true' && needs.changes.outputs.web_verified != 'true' }}
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: website
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: ./.github/actions/setup-web
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Format check
+        run: pnpm format:check
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Coverage summary
+        if: ${{ !cancelled() }}
+        run: |
+          set -euo pipefail
+          f=coverage/coverage-summary.json
+          [ -f "$f" ] || { echo "No coverage summary produced." >> "$GITHUB_STEP_SUMMARY"; exit 0; }
+          {
+            echo '### Coverage'
+            echo
+            echo '| Metric | % | Covered / Total |'
+            echo '| --- | --- | --- |'
+            jq -r '.total | to_entries[]
+                   | "| \(.key) | \(.value.pct)% | \(.value.covered) / \(.value.total) |"' "$f"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  web-e2e:
+    name: Website E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [changes]
+    if: ${{ needs.changes.outputs.website == 'true' && needs.changes.outputs.web_verified != 'true' }}
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: website
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: ./.github/actions/setup-web
+
+      - name: Cache Cypress binary
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-cypress-${{ hashFiles('website/pnpm-lock.yaml') }}
+
+      - name: Install Cypress binary
+        run: pnpm exec cypress install
+
+      # Placeholder values only. Every network call the specs make is stubbed
+      # by cy.intercept (cy.stubVisitorApi, cy.mockRecaptcha, and the
+      # POST **/contact* intercepts in contact-form.cy.js), so no real endpoint
+      # is needed — these exist purely so the app builds well-formed URLs for
+      # those globs to match against. Deliberately not the production secrets:
+      # a PR build has no business holding them.
+      - name: Create env file
+        run: |
+          {
+            echo 'VITE_RECAPTCHA_SITE_KEY=test-recaptcha-site-key'
+            echo 'VITE_AWS_API_ENDPOINT=https://e2e.invalid/api'
+          } > .env
+
+      - name: Build
+        run: pnpm build-dev
+
+      # `pnpm preview` pins --port 5173 because vite preview defaults to 4173
+      # while cypress.config.js targets 5173.
+      - name: Run Cypress against the preview build
+        uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6
+        with:
+          working-directory: website
+          install: false
+          start: pnpm preview
+          wait-on: 'http://localhost:5173'
+          wait-on-timeout: 120
+          command: pnpm cypress:run
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: cypress-screenshots
+          path: website/cypress/screenshots
+          if-no-files-found: ignore
+
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: [changes]
+    # Fork PRs and Dependabot PRs get neither secrets.PAT nor an OIDC token, so
+    # without these guards every one of them would fail red on a job it could
+    # never have run.
+    if: >-
+      ${{ needs.changes.outputs.infrastructure == 'true'
+          && github.event.pull_request.head.repo.fork != true
+          && github.actor != 'dependabot[bot]' }}
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: infrastructure
+    concurrency:
+      # One mutation of the remote state at a time. Every main run shares the
+      # `apply` group so two applies can never overlap; PR plans get a
+      # per-branch group so they don't queue behind each other.
+      group: terraform-${{ github.ref == 'refs/heads/main' && 'apply' || github.ref }}
+      cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.PAT }}
+      TF_VAR_github_token: ${{ secrets.PAT }}
+      TF_VAR_deployment_region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
+      TF_VAR_domain_name: ${{ vars.AWS_TF_DOMAIN_NAME }}
+      TF_VAR_sanitized_domain_name: ${{ vars.AWS_TF_SANITIZED_DOMAIN_NAME }}
+      TF_VAR_api_current_stage: ${{ vars.AWS_TF_API_CURRENT_STAGE }}
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - uses: ./.github/actions/setup-terraform
+        with:
+          aws-region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
+          role-to-assume: ${{ secrets.AWS_TF_OIDC_ROLE }}
+          role-session-name: GitHubTerraform
+
+      - name: Validate
+        run: terraform validate
+
+      # -lock-timeout: plan and apply both take the S3 state lock. During the
+      # migration the old infrastructure-test.yml still runs on PRs too, so two
+      # plans can collide; waiting beats failing. Worth keeping afterwards for
+      # the same reason against any concurrent run.
+      - name: Plan
+        id: plan
+        run: terraform plan -input=false -no-color -lock-timeout=5m -out=tfplan
+
+      - name: Publish plan
+        if: ${{ !cancelled() && steps.plan.outcome != 'skipped' }}
+        run: |
+          set -euo pipefail
+          {
+            echo '### Terraform plan'
+            echo
+            echo '```terraform'
+            terraform show -no-color tfplan 2>/dev/null | head -c 60000
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Deliberately after plan: a formatting nit should not hide the plan
+      # output, which is the part worth reading on a PR.
+      - name: Format check
+        run: terraform fmt -check -recursive -diff
+
+      # Applying the saved plan rather than re-running `apply -auto-approve`
+      # means what lands is exactly what was reviewed a step earlier. The old
+      # deploy job re-planned from scratch, so it never was.
+      - name: Apply
+        if: >-
+          ${{ github.ref == 'refs/heads/main'
+              && (github.event_name == 'push'
+                  || (github.event_name == 'workflow_dispatch' && inputs.dry_run != true)) }}
+        run: terraform apply -input=false -lock-timeout=5m tfplan
+
+      - name: Apply (dry run)
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run == true }}
+        run: |
+          echo "dry_run: showing the plan instead of applying it."
+          terraform show -no-color tfplan
+
+  py-lint:
+    name: Lambda lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [changes]
+    if: ${{ needs.changes.outputs.infrastructure == 'true' }}
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      # pipx ships on the runner image; pinning the version keeps a ruff release
+      # from turning a green PR red on its own.
+      - name: Install ruff
+        run: pipx install ruff==0.15.8
+
+      - name: Lint
+        run: ruff check infrastructure/codebase/
+
+      - name: Format check
+        run: ruff format --check infrastructure/codebase/
+
+  actionlint:
+    name: Workflow lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [changes]
+    if: ${{ needs.changes.outputs.github == 'true' }}
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      # Catches `needs:` pointing at jobs that do not exist — which is exactly
+      # how verify_s3.yml stayed broken — plus bad expressions, unknown runner
+      # labels, and shellcheck over every run: block.
+      - name: Run actionlint
+        env:
+          ACTIONLINT_VERSION: 1.7.7
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz" \
+            | tar xz actionlint
+          ./actionlint -color
+
+  # Records that the website checks passed against this exact content, so the
+  # merge to main can skip them. Job-level success() is what keeps a failed run
+  # from writing a marker.
+  mark-verified:
+    name: Record verification
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: [changes, web-checks, web-e2e]
+    if: ${{ github.event_name == 'pull_request' && success() && needs.changes.outputs.website == 'true' }}
+    permissions:
+      contents: read
+
+    steps:
+      - name: Write marker
+        run: echo "ok" > marker.txt
+
+      - name: Upload marker
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: verified-web-${{ needs.changes.outputs.web_digest }}
+          path: marker.txt
+          retention-days: 30
+          overwrite: true
+
+  web-deploy:
+    name: Deploy website
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: [changes, web-checks, web-e2e, terraform]
+    # !cancelled() lifts the implicit "skip me if an upstream was skipped" rule
+    # for *every* need at once, so each one has to be re-asserted here by hand.
+    # Testing != 'failure' rather than == 'success' is what lets a deliberately
+    # skipped upstream through: terraform is skipped on a website-only change,
+    # and web-checks/web-e2e are skipped whenever the digest marker hit.
+    if: >-
+      ${{ !cancelled()
+          && github.ref == 'refs/heads/main'
+          && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+          && needs.changes.result == 'success'
+          && needs.changes.outputs.website == 'true'
+          && needs.web-checks.result != 'failure' && needs.web-checks.result != 'cancelled'
+          && needs.web-e2e.result    != 'failure' && needs.web-e2e.result    != 'cancelled'
+          && needs.terraform.result  != 'failure' && needs.terraform.result  != 'cancelled' }}
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: website
+    concurrency:
+      group: deploy-prod
+      cancel-in-progress: false
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: ./.github/actions/setup-web
+
+      # Build and upload live in one job on purpose.
+      #
+      # VITE_AWS_API_ENDPOINT is baked into the bundle at *build* time, and
+      # AWS_API_ENDPOINT is one of the four Actions secrets that Terraform
+      # writes back via github_actions_secret (modules/github/main.tf). Secrets
+      # resolve when a job starts, so the build — not merely the upload — has to
+      # sit downstream of the apply, or a run that changes the endpoint ships a
+      # bundle still pointing at the old one.
+      #
+      # It also removes the old job-to-job build handoff, which smuggled
+      # **/build through actions/cache keyed on github.sha.
+      # Secrets go through env rather than straight into the script body, so a
+      # value containing shell metacharacters is data instead of code.
+      - name: Create env file
+        env:
+          RECAPTCHA_SITE_KEY: ${{ secrets.RECAPTCHA_SITE_KEY }}
+          AWS_API_ENDPOINT: ${{ secrets.AWS_API_ENDPOINT }}
+        run: |
+          {
+            echo "VITE_RECAPTCHA_SITE_KEY=${RECAPTCHA_SITE_KEY}"
+            echo "VITE_AWS_API_ENDPOINT=${AWS_API_ENDPOINT}"
+          } > .env
+
+      # Seed public/data/contributions.json with fresh data before building.
+      # Between deploys the scheduled updateContributions Lambda keeps the same
+      # object live in S3; the deploy syncs with --delete, so the build output
+      # must contain the file. No token required. Non-fatal: on any hiccup the
+      # committed last-known-good data is used so a deploy never breaks on this.
+      - name: Refresh contribution heatmap data
+        continue-on-error: true
+        run: node scripts/fetch-contributions.mjs
+
+      - name: Build production bundle
+        run: pnpm build-prod
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5
+        with:
+          aws-region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
+          role-to-assume: ${{ secrets.AWS_S3_OIDC_ROLE }}
+          role-session-name: GitHubWebsiteDeploy
+
+      # The build has two kinds of object and they want opposite caching.
+      #
+      # `assets/` is content-hashed by Vite: a given URL's bytes never change,
+      # so it can be cached forever. Everything else — above all `index.html`,
+      # which is the map from those hashes to the live build — has a stable URL
+      # and changing contents, so it has to be revalidated.
+      #
+      # Uploading with no Cache-Control at all (the previous behaviour) left
+      # browsers to guess a freshness lifetime from Last-Modified. Safari guesses
+      # generously, so it went on serving an `index.html` from before a deploy;
+      # `--delete` had already removed the hashed bundles that copy pointed at,
+      # those requests fell through to the SPA fallback and came back as HTML,
+      # and a module script served as text/html is refused outright. The result
+      # was a blank page — on whichever browser happened to be holding the stale
+      # copy, and only until its cache aged out, which is why it looked like a
+      # Safari bug. `no-cache` does not mean "don't store": the file still lives
+      # in the browser cache, it just has to be revalidated first, which is a
+      # bodyless 304 whenever nothing has changed.
+      - name: Upload to S3
+        env:
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          BUCKET="s3://${AWS_S3_BUCKET}/"
+
+          # --dryrun is a real AWS CLI flag, so a dry run still exercises the
+          # OIDC assume, the bucket permissions and the prune logic for real.
+          DRY=''
+          if [ "${DRY_RUN:-false}" = "true" ]; then
+            echo "dry_run: no objects will be written or deleted."
+            DRY='--dryrun'
+          fi
+
+          # Bundles first, so nothing is ever referenced before it exists.
+          aws s3 sync build/prod/ "$BUCKET" $DRY \
+            --exclude '*' --include 'assets/*' \
+            --cache-control 'public, max-age=31536000, immutable'
+
+          # Then the documents that point at them, pruning anything the build
+          # no longer produces.
+          aws s3 sync build/prod/ "$BUCKET" $DRY --delete \
+            --exclude 'assets/*' \
+            --cache-control 'no-cache'
+
+          # Superseded bundles are NOT deleted in the same run. A cached copy
+          # of index.html keeps pointing at the bundles of its own build for
+          # as long as any cache holds it — CloudFront held the document under
+          # "/" for up to a day, and browser copies from before Cache-Control
+          # was sent age out on heuristic lifetimes measured in days — so
+          # bundles have to outlive documents by that margin, not by the
+          # seconds a same-run delete gave them. Every sync above refreshes
+          # LastModified on the objects the current build ships (fresh CI
+          # mtimes force re-upload), so anything under assets/ still carrying
+          # a 60-day-old timestamp has been out of every deployed index.html
+          # for two months. Prune those; visitors on documents older than that
+          # are caught by the boot recovery net in index.html.
+          CUTOFF=$(date -u -d '60 days ago' +%s)
+          aws s3api list-objects-v2 \
+            --bucket "$AWS_S3_BUCKET" --prefix 'assets/' --output json |
+            jq -r --argjson cutoff "$CUTOFF" '
+              .Contents // [] | .[]
+              | select((.LastModified
+                  | sub("\\.[0-9]+"; "") | sub("\\+00:00$"; "Z")
+                  | fromdate) < $cutoff)
+              | .Key' |
+            while IFS= read -r key; do
+              # Belt to the timestamp braces: never drop a file the current
+              # build actually shipped.
+              [ -e "build/prod/$key" ] && continue
+              if [ -n "$DRY" ]; then
+                echo "(dryrun) delete ${BUCKET}${key}"
+              else
+                aws s3 rm "${BUCKET}${key}"
+              fi
+            done
+
+  web-smoke:
+    name: Production smoke test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [web-deploy]
+    # No continue-on-error. The old post-deploy Cypress job had it, which meant
+    # it rendered as a green check whatever happened — strictly worse than not
+    # running at all. A red smoke here means production has already changed and
+    # may be broken; there is no automatic rollback, but that is worth knowing.
+    # Also runs after a manual deploy — the CDN-invalidation escape hatch is a
+    # real deploy and deserves the same check. Skipped for a dry run, which by
+    # definition changed nothing.
+    if: >-
+      ${{ needs.web-deploy.result == 'success'
+          && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: website
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: ./.github/actions/setup-web
+
+      - name: Cache Cypress binary
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-cypress-${{ hashFiles('website/pnpm-lock.yaml') }}
+
+      - name: Install Cypress binary
+        run: pnpm exec cypress install
+
+      # A subset only: enough to prove the deployed site boots, routes and
+      # renders. The full suite already gated this content on the PR.
+      - name: Smoke test production
+        uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6
+        with:
+          working-directory: website
+          install: false
+          command: pnpm cypress:smoke
+        env:
+          CYPRESS_BASE_URL: https://${{ vars.AWS_TF_DOMAIN_NAME }}
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: smoke-screenshots
+          path: website/cypress/screenshots
+          if-no-files-found: ignore
+
+  # The single required status check. Every other job's name can change without
+  # touching branch protection, and a job skipped by `if:` — which is the normal
+  # outcome for a stack that did not change, or for checks a marker already
+  # covered — still counts as a pass.
+  ci-ok:
+    name: CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: ${{ always() }}
+    needs: [changes, web-checks, web-e2e, terraform, py-lint, actionlint]
+
+    steps:
+      - name: Check results
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          set -euo pipefail
+          echo "$RESULTS" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
+
+          bad=$(echo "$RESULTS" | jq -r '
+            to_entries[]
+            | select(.value.result == "failure" or .value.result == "cancelled")
+            | .key')
+
+          if [ -n "$bad" ]; then
+            echo "::error::Failed or cancelled: $(echo "$bad" | tr '\n' ' ')"
+            exit 1
+          fi
+          echo "All checks passed or were skipped."

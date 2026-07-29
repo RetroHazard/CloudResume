@@ -1,0 +1,48 @@
+name: Setup Terraform
+description: Assume the deployment role via OIDC, install Terraform, and initialise the working directory.
+
+inputs:
+  aws-region:
+    description: Region to configure the AWS SDK for.
+    required: true
+  role-to-assume:
+    description: IAM role ARN to assume via GitHub's OIDC provider.
+    required: true
+  role-session-name:
+    description: Session name, so CloudTrail shows which job did what.
+    required: true
+  terraform-version:
+    # setup-terraform does not read .terraform-version — that is a tfenv/tfswitch
+    # convention, not a HashiCorp one. Pinning it here makes this file the single
+    # place to bump. It was `latest` in all three of the old infra workflows,
+    # which meant a Terraform release could change an apply with no repo change.
+    description: Terraform version to install.
+    required: false
+    default: '1.14.3'
+  terraform-wrapper:
+    description: Whether to wrap the terraform binary to expose stdout/stderr as step outputs.
+    required: false
+    default: 'true'
+
+runs:
+  using: composite
+  steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5
+      with:
+        aws-region: ${{ inputs.aws-region }}
+        role-to-assume: ${{ inputs.role-to-assume }}
+        role-session-name: ${{ inputs.role-session-name }}
+
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3
+      with:
+        terraform_version: ${{ inputs.terraform-version }}
+        terraform_wrapper: ${{ inputs.terraform-wrapper }}
+
+    # -lockfile=readonly: .terraform.lock.hcl is committed, and CI should fail
+    # on a provider that drifts from it rather than quietly rewriting the lock.
+    - name: Terraform init
+      shell: bash
+      working-directory: infrastructure
+      run: terraform init -input=false -lockfile=readonly
