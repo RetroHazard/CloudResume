@@ -5,3 +5,15 @@
 website/cypress/screenshots
 website/cypress/videos
 website/cypress/downloads
+
+# Python bytecode. infrastructure/codebase/ is the archive source for the Lambda
+# zips, so anything stray that lands there risks being packaged into a function.
+__pycache__/
+*.py[cod]
+.ruff_cache/
+
+# Terraform working state. tfplan is written by CI; .terraform.lock.hcl is
+# deliberately NOT ignored — it is committed and CI inits with -lockfile=readonly.
+.terraform/
+*.tfplan
+tfplan

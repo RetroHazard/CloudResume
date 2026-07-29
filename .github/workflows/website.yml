@@ -170,7 +170,7 @@ jobs:
 
       - name: Mark build as successful for deploy job
         id: mark_prod_build_success
-        run: echo "success=true" >> $GITHUB_OUTPUT
+        run: echo "success=true" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Upload to S3
