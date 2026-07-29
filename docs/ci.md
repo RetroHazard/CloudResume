@@ -15,6 +15,7 @@ web-checks  web-e2e   terraform    py-lint    actionlint
  typecheck  build +   fmt/validate   ruff      (.github
  prettier   preview   plan                      changed)
  vitest     cypress   apply ──[main only]
+    │          │      ↳ secrets_changed?
     │          │          │
     ├──────────┴──────────┴─────┬──────────────┐
     ▼                           ▼              ▼
@@ -25,6 +26,8 @@ mark-verified              web-deploy        ci-ok
                                 ▼
                             web-smoke
 ```
+
+`web-deploy` runs when `website` changed **or** the plan rewrote the Actions secrets — see below.
 
 `ci-ok` is the single required status check. Everything else can be renamed without touching branch
 protection, and a job skipped by `if:` — the normal outcome for a stack that did not change — counts
@@ -60,6 +63,25 @@ on file content, so it is not a pure function of the tree.
 in `modules/github`. Secrets resolve when a job starts, so the build — not merely the upload — has to
 run after the apply, or a run that changes the endpoint ships a bundle pointing at the old one.
 
+**An infrastructure-only change can also require a deploy.** The same fact cuts the other way: if an
+apply rewrites `AWS_API_ENDPOINT`, the bundle already in S3 is stale even though nothing under
+`website/` changed, and the site starts calling an endpoint that no longer exists. The endpoint is
+`https://<api record>/<stage>`, so it moves whenever `domain_name` or `api_current_stage` does — and
+`api_current_stage` comes from a repository *variable*, so it can move with no diff at all.
+`AWS_S3_BUCKET_PROD` has the same property, being the upload target.
+
+So `web-deploy` runs on `website == 'true' || terraform.outputs.secrets_changed == 'true'`, where
+that second output comes from reading the saved plan for `github_actions_secret` resources with a
+`create`, `update` or `delete` action. Gating on the plan rather than on `infrastructure == 'true'`
+is what keeps every Lambda edit and IAM tweak from re-uploading the whole site and paying for a
+CloudFront invalidation it does not need. The check fails safe: an unreadable plan, a `terraform
+show` that errors, anything that does not parse as a confident zero, all resolve to "assume it
+changed", because a missed rebuild breaks the site while a needless one costs a few minutes.
+
+The one case it cannot see is an apply that succeeded while the deploy after it failed — the replay
+plans clean, so nothing signals that the bundle is behind. `workflow_dispatch` with `force_website`
+is the recovery path.
+
 **`terraform apply` consumes the saved plan** rather than re-planning, so what lands is what was
 reviewed a step earlier.
 
@@ -74,7 +96,7 @@ whenever a marker hit.
 
 | Input | Purpose |
 | --- | --- |
-| `force_website` | Run and deploy the website regardless of what changed. This is the CDN-invalidation escape hatch: re-uploading `index.html` is what enqueues the `cloudfrontInvalidation` Lambda. |
+| `force_website` | Run and deploy the website regardless of what changed. This is the CDN-invalidation escape hatch: re-uploading `index.html` is what enqueues the `cloudfrontInvalidation` Lambda. It is also how you recover a bundle left stale by an apply whose deploy failed, or by an `api_current_stage` change made through the repository variable rather than a commit. |
 | `force_infrastructure` | Run Terraform regardless of what changed. |
 | `force_checks` | Ignore verification markers. |
 | `dry_run` | Exercise the deploy path without mutating anything — `aws s3 sync --dryrun` and `terraform show` in place of `apply`. `--dryrun` is a real CLI flag, so OIDC, bucket permissions and the prune logic are all still exercised for real. |

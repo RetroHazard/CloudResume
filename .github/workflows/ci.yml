@@ -327,6 +327,8 @@ jobs:
     permissions:
       id-token: write
       contents: read
+    outputs:
+      secrets_changed: ${{ steps.secrets.outputs.changed }}
     defaults:
       run:
         working-directory: infrastructure
@@ -375,6 +377,46 @@ jobs:
             terraform show -no-color tfplan 2>/dev/null | head -c 60000
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
+
+      # The four Actions secrets in modules/github are inputs to the website
+      # build, not just to Terraform: AWS_API_ENDPOINT is baked into the bundle
+      # as VITE_AWS_API_ENDPOINT, and AWS_S3_BUCKET_PROD is where the bundle is
+      # uploaded. So an infrastructure-only change that rewrites one of them
+      # leaves the live site pointing at an endpoint that no longer exists,
+      # with nothing under website/ changed to trigger a rebuild. This output
+      # is what lets web-deploy notice.
+      #
+      # Matched on the resource *type*, not on a module address: the address
+      # would silently stop matching if modules/github were ever reorganised,
+      # and that failure is invisible — it looks exactly like "no change".
+      - name: Does this plan rewrite the Actions secrets?
+        id: secrets
+        if: ${{ !cancelled() && steps.plan.outcome == 'success' }}
+        run: |
+          set -uo pipefail
+
+          # Fail safe. Every path that is not a confidently-parsed zero leaves
+          # this true, because a missed rebuild ships a broken site while a
+          # needless one costs a few minutes of runner time.
+          changed=true
+          if json=$(terraform show -json tfplan 2>/dev/null); then
+            n=$(printf '%s' "$json" | jq '
+                  [ .resource_changes[]?
+                    | select(.type == "github_actions_secret")
+                    | select(.change.actions
+                             | any(. == "create" or . == "update" or . == "delete")) ]
+                  | length' 2>/dev/null) || n=""
+            case "$n" in
+              ''|*[!0-9]*) echo "Could not read the plan; assuming the secrets changed." ;;
+              *) [ "$n" -gt 0 ] && changed=true || changed=false
+                 echo "Actions secrets changing in this plan: $n" ;;
+            esac
+          else
+            echo "terraform show failed; assuming the secrets changed."
+          fi
+
+          echo "changed=$changed" >> "$GITHUB_OUTPUT"
+          echo "Website rebuild required by this plan: $changed"
 
       # Deliberately after plan: a formatting nit should not hide the plan
       # output, which is the part worth reading on a PR.
@@ -478,12 +520,25 @@ jobs:
     # Testing != 'failure' rather than == 'success' is what lets a deliberately
     # skipped upstream through: terraform is skipped on a website-only change,
     # and web-checks/web-e2e are skipped whenever the digest marker hit.
+    #
+    # Two things can require a deploy, hence the `||`. The obvious one is a
+    # change under website/. The other is an apply that rewrites the Actions
+    # secrets, because AWS_API_ENDPOINT is compiled into the bundle and
+    # AWS_S3_BUCKET_PROD is the upload target — an infrastructure-only change
+    # can invalidate the live bundle without touching a single website file.
+    # Gating on the plan rather than on `infrastructure == 'true'` is what
+    # keeps every Lambda edit and IAM tweak from re-uploading the whole site
+    # and paying for a CloudFront invalidation it does not need.
+    #
+    # `secrets_changed` is empty when terraform was skipped, which reads as
+    # false and correctly leaves website-only runs to the first clause.
     if: >-
       ${{ !cancelled()
           && github.ref == 'refs/heads/main'
           && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
           && needs.changes.result == 'success'
-          && needs.changes.outputs.website == 'true'
+          && (needs.changes.outputs.website == 'true'
+              || needs.terraform.outputs.secrets_changed == 'true')
           && needs.web-checks.result != 'failure' && needs.web-checks.result != 'cancelled'
           && needs.web-e2e.result    != 'failure' && needs.web-e2e.result    != 'cancelled'
           && needs.terraform.result  != 'failure' && needs.terraform.result  != 'cancelled' }}
