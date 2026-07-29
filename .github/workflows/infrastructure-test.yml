@@ -8,13 +8,21 @@ on:
   pull_request:
     branches:
       - '**'
-  push:
-    branches:
-      - '!main'
+    # Without this, every website-only PR paid a full Terraform plan —
+    # checkout, OIDC assume, provider download, init — for a directory it
+    # never touched.
     paths:
       - 'infrastructure/**'
+  # The `push` trigger that used to sit here filtered on `branches: ['!main']`.
+  # An all-negative branch filter has no positive pattern to subtract from, so
+  # it matched nothing and the trigger had never once fired. Dropped rather
+  # than fixed: the pull_request leg already covers pre-merge review.
 
 permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   GITHUB_TOKEN: ${{ secrets.PAT }}
@@ -27,6 +35,7 @@ env:
 jobs:
   validation:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       id-token: write
       contents: read
@@ -55,6 +64,7 @@ jobs:
 
   planning:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: validation
     permissions:
       id-token: write

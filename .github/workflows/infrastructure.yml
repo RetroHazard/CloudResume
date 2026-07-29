@@ -13,6 +13,12 @@ on:
 
 permissions: {}
 
+# An apply must never be cancelled part-way through, and two applies must never
+# overlap on the same remote state.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 env:
   GITHUB_TOKEN: ${{ secrets.PAT }}
   TF_VAR_github_token: ${{ secrets.PAT }}
@@ -24,6 +30,7 @@ env:
 jobs:
   validation:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       id-token: write
       contents: read
@@ -52,6 +59,7 @@ jobs:
 
   planning:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: validation
     permissions:
       id-token: write
@@ -84,6 +92,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     needs: planning
     permissions:
       id-token: write
