@@ -42,7 +42,14 @@ output "aws_acm_certificate_validation_crc-website-certificate-validation" {
 ###########################
 # Begin Key Manager Block #
 
+# The Key-Pair-Id the signing Lambda has to quote in every URL it mints.
+output "aws_cloudfront_public_key_crc-cf-signing-key_id" {
+  value = aws_cloudfront_public_key.crc-cf-signing-key.id
+}
 
+output "aws_cloudfront_key_group_crc-cf-signing-key-group_id" {
+  value = aws_cloudfront_key_group.crc-cf-signing-key-group.id
+}
 
 #  End Key Manager Block  #
 ###########################
@@ -76,6 +83,10 @@ output "aws_api_gateway_resource_crc-api-resource-visitors_id" {
 
 output "aws_api_gateway_resource_crc-api-resource-contact_id" {
   value = aws_api_gateway_resource.crc-api-resource-contact.id
+}
+
+output "aws_api_gateway_resource_crc-api-resource-download_id" {
+  value = aws_api_gateway_resource.crc-api-resource-download.id
 }
 
 output "aws_api_gateway_crc-api-endpoint_fqdn" {

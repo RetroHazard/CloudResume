@@ -4,3 +4,8 @@
 **/tfplan
 **/*.tfplan
 /codepacks/
+
+# No key material belongs in this repo at all — both halves of the CloudFront signing key
+# live in Parameter Store. Belt and braces: the bootstrap in docs/signed-downloads.md
+# generates outside the working tree in the first place.
+*.pem

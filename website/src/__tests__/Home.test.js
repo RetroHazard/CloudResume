@@ -3,7 +3,6 @@ import Home from '../pages/Home/index';
 
 const mockData = {
     profilePicture: '/images/placeholder.png',
-    resumeLink: 'https://example.com/resume.pdf',
     fullName: 'John Doe',
     jobTitle: 'Software Engineer',
     location: 'New York, NY',
@@ -17,6 +16,9 @@ vi.mock('../utils/useJsonData', () => ({
 
 vi.mock('../components/social_links', () => ({ default: () => null }));
 vi.mock('../components/personal_summary', () => ({ default: () => null }));
+// Stubbed out so rendering Home does not reach the network. The button's own behaviour is
+// covered in CvDownloadButton.test.js.
+vi.mock('../components/cv_download_button', () => ({ default: () => null }));
 
 describe('Home component', () => {
     afterEach(() => {
@@ -27,9 +29,6 @@ describe('Home component', () => {
         render(<Home />);
         // Profile photo with descriptive alt
         expect(screen.getByAltText('Photo of John Doe')).toHaveAttribute('src', mockData.profilePicture);
-        // Download CV is now a link (not button-in-anchor)
-        const downloadLink = screen.getByRole('link', { name: /download cv/i });
-        expect(downloadLink).toHaveAttribute('href', mockData.resumeLink);
         // Name (rendered as per-character spans; assert via the heading's accessible name), title, location
         expect(screen.getByRole('heading', { name: mockData.fullName })).toBeInTheDocument();
         expect(screen.getByText(mockData.jobTitle)).toBeInTheDocument();

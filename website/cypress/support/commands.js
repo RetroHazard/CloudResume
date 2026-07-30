@@ -6,6 +6,21 @@ Cypress.Commands.add('stubVisitorApi', (count = 1) => {
     }).as('visitorApi');
 });
 
+// Stubs the signed-URL endpoint behind the Download CV button. The real one mints a
+// CloudFront signature; the shape is all the frontend cares about.
+Cypress.Commands.add('stubDownloadApi', (overrides = {}) => {
+    cy.intercept('GET', '**/download*', {
+        statusCode: 200,
+        body: {
+            downloadUrl: '/files/test-cv.pdf?Expires=1&Signature=stub&Key-Pair-Id=K1',
+            fileName: 'test-cv.pdf',
+            expiresAt: 1,
+            count: 1,
+            ...overrides,
+        },
+    }).as('downloadApi');
+});
+
 // Intercepts the reCAPTCHA script load and injects a controllable stub.
 // Works whether VITE_RECAPTCHA_SITE_KEY is set (production) or not (local dev).
 Cypress.Commands.add('mockRecaptcha', () => {

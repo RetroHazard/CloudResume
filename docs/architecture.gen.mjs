@@ -1,8 +1,24 @@
 // Generates the CloudResume architecture diagram (static SVG, no JS at runtime).
-// Run: node gen.mjs > architecture.svg
+// Run: node architecture.gen.mjs > architecture.svg
+//
+// The README embeds PNG renders rather than the SVG, because GitHub serves raw .svg as
+// text/plain with nosniff. Regenerate both after any change here — they are 2x renders of
+// the viewBox, and the dark one comes from emulating prefers-color-scheme rather than a
+// separate stylesheet:
+//
+//   CHROME=/path/to/chrome   # any Chromium; Playwright's is at $PLAYWRIGHT_BROWSERS_PATH
+//   $CHROME --headless --no-sandbox --hide-scrollbars --force-color-profile=srgb \
+//     --force-device-scale-factor=2 --window-size=1320,1120 \
+//     --screenshot=architecture-light.png file://$PWD/architecture.svg
+//   $CHROME --headless --no-sandbox --hide-scrollbars --force-color-profile=srgb \
+//     --force-device-scale-factor=2 --window-size=1320,1120 \
+//     --blink-settings=preferredColorScheme=0 \
+//     --screenshot=architecture-dark.png file://$PWD/architecture.svg
+//
+// --window-size must track H and W below, or the render will letterbox.
 
 const W = 1320;
-const H = 1000;
+const H = 1120;
 
 // ---- palette (AWS-style category coloring, original values) ---------------
 const cat = {
@@ -71,24 +87,26 @@ function add(...a) { const n = mknode(...a); N[n.id] = n; return n; }
 add('visitor', 90, 260, 'Visitor', 'browser', 'client', 'user', 50);
 add('r53', 260, 260, 'Route 53', 'DNS · DNSSEC', 'edge', 'globe');
 add('waf', 470, 140, 'WAF', 'managed rules', 'security', 'shield', 46);
-add('cf', 470, 260, 'CloudFront', 'OAC', 'edge', 'cloud');
+add('cf', 470, 260, 'CloudFront', 'OAC · signed /files/*', 'edge', 'cloud');
 add('apigw', 470, 400, 'API Gateway', 'EDGE · custom domain', 'edge', 'door');
 add('s3', 680, 260, 'S3', 'site + data', 'storage', 'bucket');
 add('lsend', 890, 330, 'λ sendMessage', 'POST /contact', 'compute', 'lambda', 50);
 add('ltrack', 890, 450, 'λ trackVisitors', 'GET /visitors', 'compute', 'lambda', 50);
 add('ses', 1130, 330, 'SES', 'contact mail', 'integ', 'mail');
-add('ddb', 1130, 450, 'DynamoDB', '2 tables', 'database', 'db');
+add('ddb', 1130, 450, 'DynamoDB', '3 tables', 'database', 'db');
+add('ldownload', 890, 570, 'λ downloadResume', 'GET /download', 'compute', 'lambda', 50);
+add('ssm', 1130, 570, 'SSM', 'signing key', 'mgmt', 'key', 46);
 
-// Row B (y=630): event-driven automation
-add('eventbridge', 260, 630, 'EventBridge', 'rate(6h)', 'integ', 'clock');
-add('lupdate', 470, 630, 'λ updateContributions', 'merges GH graphs', 'compute', 'lambda', 50);
-add('sqs', 650, 630, 'SQS', 'invalidation queue', 'integ', 'queue', 50);
-add('linvalidate', 890, 630, 'λ cloudfrontInvalidation', 'batch 15 / 5s window', 'compute', 'lambda', 50);
+// Row B (y=750): event-driven automation
+add('eventbridge', 260, 750, 'EventBridge', 'rate(6h)', 'integ', 'clock');
+add('lupdate', 470, 750, 'λ updateContributions', 'merges GH graphs', 'compute', 'lambda', 50);
+add('sqs', 650, 750, 'SQS', 'invalidation queue', 'integ', 'queue', 50);
+add('linvalidate', 890, 750, 'λ cloudfrontInvalidation', 'batch 15 / 5s window', 'compute', 'lambda', 50);
 
-// Row C (y=830): observability + CI/CD
-add('cw', 680, 830, 'CloudWatch', 'logs + metrics', 'mgmt', 'eye');
-add('iam', 890, 830, 'IAM', 'least-privilege roles', 'security', 'key', 46);
-add('gha', 90, 830, 'GitHub Actions', 'OIDC, no static keys', 'cicd', 'git');
+// Row C (y=950): observability + CI/CD
+add('cw', 680, 950, 'CloudWatch', 'logs + metrics', 'mgmt', 'eye');
+add('iam', 890, 950, 'IAM', 'least-privilege roles', 'security', 'key', 46);
+add('gha', 90, 950, 'GitHub Actions', 'OIDC, no static keys', 'cicd', 'git');
 
 // ---- edges ------------------------------------------------------------------
 const E = [];
@@ -105,17 +123,20 @@ edge('apigw', 'lsend', 'sync', null);
 edge('apigw', 'ltrack', 'sync', null);
 edge('lsend', 'ses', 'sync', 'send email', { x: 1010, y: 314 });
 edge('ltrack', 'ddb', 'sync', 'put / get item', { x: 1010, y: 434 });
+edge('apigw', 'ldownload', 'sync', null);
+edge('ldownload', 'ssm', 'sync', 'GetParameter', { x: 1010, y: 554 });
+edge('ldownload', 'ddb', 'sync', 'record download', { x: 1000, y: 516 }, { path: 'download-ddb' });
 
-edge('eventbridge', 'lupdate', 'event', 'invoke', { x: 365, y: 614 });
+edge('eventbridge', 'lupdate', 'event', 'invoke', { x: 365, y: 734 });
 edge('s3', 'sqs', 'event', 'ObjectCreated', { x: 730, y: 445 }, { path: 'straight' });
-edge('sqs', 'linvalidate', 'event', 'event source map', { x: 770, y: 614 });
+edge('sqs', 'linvalidate', 'event', 'event source map', { x: 770, y: 734 });
 edge('lupdate', 's3', 'sync', 'PutObject contributions.json', { x: 900, y: 414 }, { path: 'return-right' });
 edge('linvalidate', 'cf', 'event', 'CreateInvalidation (async)', { x: 145, y: 405 }, { path: 'return-left' });
 
 edge('gha', 's3', 'sync', 'sync build --delete', { x: 300, y: 340 }, { path: 'cicd-deploy' });
 edge('gha', null, 'sync', 'terraform apply → AWS', { x: 130, y: 700 }, { path: 'cicd-boundary' });
 
-const logSources = ['lsend', 'ltrack', 'lupdate', 'linvalidate', 'waf'];
+const logSources = ['lsend', 'ltrack', 'ldownload', 'lupdate', 'linvalidate', 'waf'];
 
 // ---- helpers ------------------------------------------------------------------
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
@@ -146,18 +167,22 @@ function edgePath(e) {
     case 'return-right':
       // lupdate -> s3: dip below the automation row, rise in a clear side channel, step
       // left into S3's bottom-right corner.
-      return `M ${a.cx} ${a.cy + ah} L ${a.cx} 700 L 760 700 L 760 344 L ${b.cx + 16} 344 L ${b.cx + 16} ${b.cy + bh}`;
+      return `M ${a.cx} ${a.cy + ah} L ${a.cx} 820 L 760 820 L 760 344 L ${b.cx + 16} 344 L ${b.cx + 16} ${b.cy + bh}`;
     case 'return-left':
       // linvalidate -> cf: dip below the automation row, run to the far-left margin
       // (clear of every node), rise, then in to CloudFront's bottom-left.
-      return `M ${a.cx} ${a.cy + ah} L ${a.cx} 735 L 30 735 L 30 344 L ${b.cx - 16} 344 L ${b.cx - 16} ${b.cy + bh}`;
+      return `M ${a.cx} ${a.cy + ah} L ${a.cx} 855 L 30 855 L 30 344 L ${b.cx - 16} 344 L ${b.cx - 16} ${b.cy + bh}`;
+    case 'download-ddb':
+      // ldownload -> ddb: leave from the top, run under trackVisitors' caption, and enter
+      // DynamoDB's left edge below the trackVisitors arrow so the two do not stack.
+      return `M ${a.cx} ${a.cy - ah} L ${a.cx} 520 L 1040 520 L 1040 465 L ${b.cx - bh} 465`;
     case 'cicd-deploy':
       // gha -> s3: right, up a clear column (between Visitor and Route53), then right
       // into S3's bottom-left corner — clear of Route53's caption and the WAF column.
       return `M ${a.cx + ah} ${a.cy} L 180 ${a.cy} L 180 350 L ${b.cx - 16} 350 L ${b.cx - 16} ${b.cy + bh}`;
     case 'cicd-boundary':
       // gha -> the AWS request-flow boundary (represents "provisions everything above")
-      return `M ${a.cx} ${a.cy - ah} L ${a.cx} 520`;
+      return `M ${a.cx} ${a.cy - ah} L ${a.cx} 640`;
     default: {
       if (Math.abs(a.cy - b.cy) < 2) return `M ${a.cx + ah} ${a.cy} L ${b.cx - bh} ${b.cy}`;
       const midX = (a.cx + b.cx) / 2;
@@ -192,6 +217,7 @@ function logLine(fromId) {
     waf:         `M ${a.cx + a.size/2} ${a.cy} L 558 ${a.cy} L 558 ${busY} L ${cwNode.cx} ${busY}`,
     lsend:       `M ${a.cx + a.size/2} ${a.cy} L 980 ${a.cy} L 980 ${busY} L ${cwNode.cx} ${busY}`,
     ltrack:      `M ${a.cx + a.size/2} ${a.cy} L 1000 ${a.cy} L 1000 ${busY} L ${cwNode.cx} ${busY}`,
+    ldownload:   `M ${a.cx + a.size/2} ${a.cy} L 1020 ${a.cy} L 1020 ${busY} L ${cwNode.cx} ${busY}`,
     lupdate:     `M ${a.cx + a.size/2} ${a.cy} L 562 ${a.cy} L 562 ${busY} L ${cwNode.cx} ${busY}`,
     linvalidate: `M ${a.cx} ${a.cy + a.size/2} L ${a.cx} ${busY} L ${cwNode.cx} ${busY}`,
   };
@@ -203,9 +229,9 @@ function logTrunk() {
 }
 
 const zones = [
-  { x: 20, y: 90, w: 1280, h: 430, label: 'REQUEST PATH' },
-  { x: 20, y: 550, w: 1280, h: 200, label: 'EVENT-DRIVEN AUTOMATION' },
-  { x: 20, y: 770, w: 1280, h: 160, label: 'OBSERVABILITY & DEPLOYMENT' },
+  { x: 20, y: 90, w: 1280, h: 550, label: 'REQUEST PATH' },
+  { x: 20, y: 670, w: 1280, h: 200, label: 'EVENT-DRIVEN AUTOMATION' },
+  { x: 20, y: 890, w: 1280, h: 160, label: 'OBSERVABILITY & DEPLOYMENT' },
 ];
 
 const legendItems = Object.values(cat);
@@ -252,7 +278,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
 </defs>
 
 <text x="30" y="34" class="title">CloudResume — Serverless Architecture</text>
-<text x="30" y="56" class="subtitle">v8 · single AWS account · ap-northeast-1 · fully serverless, no idle compute</text>
+<text x="30" y="56" class="subtitle">v9 · single AWS account · us-east-1 · fully serverless, no idle compute</text>
 
 ${zones.map(z => `<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="14" class="zone-rect"/><text x="${z.x + 14}" y="${z.y + 20}" class="zone-label">${esc(z.label)}</text>`).join('\n')}
 

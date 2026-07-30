@@ -143,6 +143,29 @@ The step deliberately drops `-e` for that one command (`… || code=$?`) because
 is `bash -e {0}`, which would otherwise treat the successful exit 2 as fatal before the exit code
 could be read.
 
+**`setup-terraform`'s wrapper has to stay off for that to work.** It is on by default, and it maps
+`terraform plan`'s exit code 2 to 0 — sensible in isolation, since 2 is not an error, and fatal here
+because 2 is the entire signal. With it on, every non-empty plan read as empty, `changes` was always
+`false`, and the `Apply` step's gate never opened: a push to `main` reported green having applied
+nothing. Nothing in this workflow reads the `stdout`/`stderr`/`exitcode` outputs the wrapper exists
+to provide, so `terraform-wrapper: 'false'` costs nothing. The Plan step now also re-reads the saved
+plan whenever the exit code claims "empty" and fails if it actually holds resource changes, so a
+regression is loud rather than invisible.
+
+The wrapper was not the only thing stopping a plan from ever being empty. The root module used
+to export `caller_arn` and `caller_user`, both derived from `aws_caller_identity`, whose
+assumed-role ARN and `user_id` embed the *session* name — `GitHubTerraform` on a plan,
+`GitHubTerraformApply` on the old deploy job, something else from a laptop. They differed on
+essentially every run, so every plan carried a `Changes to Outputs` diff and `-detailed-exitcode`
+returned 2 regardless of whether a resource moved. Both are removed
+(`infrastructure/outputs.tf`); `account_id` stays, being stable and already an input to the
+modules. Attributing a change to the job that made it is CloudTrail's job, via the
+`role-session-name` set in `.github/actions/setup-terraform` — and unlike an output, which only
+ever records the most recent apply, CloudTrail keeps the history.
+
+The apply that removes them will itself show one last `Changes to Outputs`; plans after that can
+be genuinely empty, and the skip is real for the first time.
+
 The one thing the skip gives up is that applying an empty plan is also what persists a refresh, so
 drift Terraform noticed but had nothing to change about stays in the state file until the next real
 apply. That costs nothing, since every plan refreshes from AWS again anyway.
@@ -165,7 +188,7 @@ website checks and the linters whenever a marker hit.
 | Input | Purpose |
 | --- | --- |
 | `force_website` | Run and deploy the website regardless of what changed. This is the CDN-invalidation escape hatch: re-uploading `index.html` is what enqueues the `cloudfrontInvalidation` Lambda. It is also how you recover a bundle left stale by an apply whose deploy failed, or by an `api_current_stage` change made through the repository variable rather than a commit. |
-| `force_infrastructure` | Run Terraform regardless of what changed. |
+| `force_infrastructure` | Run Terraform regardless of what changed. Also the only way to apply a change made through a repository *variable* rather than a commit — `api_current_stage` and `signed_downloads_enabled` both move with no file diff, so a push would leave the job skipped. |
 | `force_checks` | Ignore verification markers. |
 | `dry_run` | **Off by default** — a manual dispatch is a real deploy. Turn it on to rehearse instead: `aws s3 sync --dryrun` and `terraform show` in place of `apply`. `--dryrun` is a real CLI flag, so OIDC, bucket permissions and the prune logic are all still exercised for real. |
 
