@@ -923,15 +923,28 @@ jobs:
     # real deploy and deserves the same check. Skipped for a dry run, which by
     # definition changed nothing.
     #
-    # `inputs.dry_run == true`, not a bare `inputs.dry_run`. A workflow_dispatch
+    # !cancelled() for the same reason web-deploy needs it, and it is the whole
+    # reason this job ever runs. The implicit "skip me if an upstream was
+    # skipped" rule propagates *transitively*: web-deploy lifts it for itself,
+    # but a skip further up the chain still reaches here through it, even though
+    # web-deploy ran and succeeded. Something upstream is almost always skipped
+    # on a deploy — terraform on a website-only change, web-checks and web-e2e
+    # whenever the digest marker hits — so without this the job skipped on
+    # essentially every real deploy. A skipped job counts as a pass in ci-ok, so
+    # that went unnoticed: the deploys with no test between them and production
+    # were exactly the ones reporting green.
+    #
+    # The success of the one need that matters is re-asserted below, so lifting
+    # the implicit rule does not let a failed deploy through to the smoke test.
+    #
+    # `inputs.dry_run == true`, not a bare `inputs.dry_run`: a workflow_dispatch
     # input arrives as the *string* "false" when the box is left unticked, and a
-    # non-empty string is truthy in a GitHub expression — so the bare form read
-    # every manual run as a dry run and skipped this job. A skipped job counts as
-    # a pass in ci-ok, so the whole point of the job (see above) was silently
-    # lost on exactly the runs that deploy without a website commit behind them.
-    # The `== true` comparison coerces properly; lines 620 and 624 already do it.
+    # non-empty string is truthy in a GitHub expression, which would re-break the
+    # job the moment the propagation above stopped masking it. Lines 620 and 624
+    # already compare explicitly.
     if: >-
-      ${{ needs.web-deploy.result == 'success'
+      ${{ !cancelled()
+          && needs.web-deploy.result == 'success'
           && !(github.event_name == 'workflow_dispatch' && inputs.dry_run == true) }}
     permissions:
       contents: read
