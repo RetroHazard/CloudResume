@@ -143,6 +143,22 @@ The step deliberately drops `-e` for that one command (`… || code=$?`) because
 is `bash -e {0}`, which would otherwise treat the successful exit 2 as fatal before the exit code
 could be read.
 
+**`setup-terraform`'s wrapper has to stay off for that to work.** It is on by default, and it maps
+`terraform plan`'s exit code 2 to 0 — sensible in isolation, since 2 is not an error, and fatal here
+because 2 is the entire signal. With it on, every non-empty plan read as empty, `changes` was always
+`false`, and the `Apply` step's gate never opened: a push to `main` reported green having applied
+nothing. Nothing in this workflow reads the `stdout`/`stderr`/`exitcode` outputs the wrapper exists
+to provide, so `terraform-wrapper: 'false'` costs nothing. The Plan step now also re-reads the saved
+plan whenever the exit code claims "empty" and fails if it actually holds resource changes, so a
+regression is loud rather than invisible.
+
+One caveat on "empty" in practice: the root module exports `caller_arn` and `caller_user`
+(`infrastructure/outputs.tf`), both derived from `aws_caller_identity`, whose ARN embeds the
+role *session name*. That differs per job, so every plan carries a `Changes to Outputs` diff and
+`-detailed-exitcode` returns 2 even when no resource moves. The skip-on-empty optimisation
+therefore never actually fires today. Harmless — it costs one lock and one refresh on an
+infrastructure push — but worth knowing before trusting the label.
+
 The one thing the skip gives up is that applying an empty plan is also what persists a refresh, so
 drift Terraform noticed but had nothing to change about stays in the state file until the next real
 apply. That costs nothing, since every plan refreshes from AWS again anyway.
