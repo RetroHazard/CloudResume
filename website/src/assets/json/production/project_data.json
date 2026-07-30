@@ -62,14 +62,14 @@
             "role": "Solo Dev",
             "size": "1",
             "start": "2025",
-            "end": "2026",
+            "end": "NOW",
             "logo": "./images/logos/companies/hollowsouls.png",
             "details": [
-                "Designed and launched a React-based immigration statistics dashboard, attracting over 2,000 unique users in the first 30 days of availability.",
-                "Developed customizable charts (stacked bar, radar, bubble) with dynamic filtering to analyze application trends and processing efficiency.",
-                "Built a processing time estimator using historical trends and 3-month rolling averages to forecast queue positions and completion dates.",
-                "Utilized React, Chart.js, and Tailwind CSS to deliver a mobile-friendly, visually appealing interface with theme support.",
-                "Connected to Japan’s e-Stat API for accurate immigration statistics, ensuring reliability and up-to-date insights for users."
+                "Originally built the dashboard on Create React App and attracted over 2,000 unique users in its first 30 days, then migrated it to Next.js after CRA's deprecation and carried it through a ground-up 'Civic Glass' redesign onto Next.js 15, React 19, and strict TypeScript, replacing Chart.js with a vendored visx-based chart library.",
+                "Expanded the dashboard from 4 to 7 interactive chart types, including two charts hand-built without a charting library — a zoomable category-mix treemap and a ranked processing-efficiency lollipop chart — alongside a Sankey outcomes flow with an approval-rate gauge and an interactive prefectural choropleth map.",
+                "Automated data freshness with a daily GitHub Actions watcher that polls Japan's e-Stat API, diffs each release's survey date against the last run, and triggers a build only when new or corrected statistics are published, so most daily runs publish nothing.",
+                "Built a build-time data transform that deaggregates regional bureau statistics so branch offices like Narita and Kansai airports stop being double-counted in their parent bureau's totals, while shrinking the client-side data payload by roughly 10x.",
+                "Shipped a localization foundation where every string, number format, and pluralization rule is sourced from one catalogue file per language, with a build-time check that fails if a language marked complete is missing a string added since."
             ],
             "links": [
                 {
@@ -112,11 +112,6 @@
                     "name": "tailwindCSS",
                     "logo": "simple-icons:tailwindcss",
                     "website": "https://tailwindcss.com"
-                },
-                {
-                    "name": "chartJS",
-                    "logo": "file-icons:chartjs",
-                    "website": "https://www.chartjs.org"
                 },
                 {
                     "name": "KaTeX",
