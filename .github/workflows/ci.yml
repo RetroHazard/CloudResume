@@ -1011,6 +1011,7 @@ jobs:
       - name: Check results
         env:
           RESULTS: ${{ toJSON(needs) }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
         run: |
           set -euo pipefail
           echo "$RESULTS" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
@@ -1024,4 +1025,29 @@ jobs:
             echo "::error::Failed or cancelled: $(echo "$bad" | tr '\n' ' ')"
             exit 1
           fi
+
+          # Everything above treats a skip as a pass, which is correct for jobs
+          # that genuinely had nothing to do — and is exactly what hid web-smoke
+          # silently not running across four consecutive deploys. Two different
+          # bugs (a truthy "false" string, then transitive skip propagation) both
+          # landed as a skip, and a skip is indistinguishable from a pass here.
+          #
+          # So the one case where that distinction matters gets asserted
+          # positively: if the site was really deployed, it must also have been
+          # smoke tested. This cannot catch a skip in the abstract — only a skip
+          # that left production untested, which is the part worth failing over.
+          #
+          # No branch check is needed: web-deploy only runs on main, so its
+          # success already implies it. A dry run deploys nothing, so a skipped
+          # smoke test is correct there and is excluded.
+          web_deploy=$(echo "$RESULTS" | jq -r '.["web-deploy"].result')
+          web_smoke=$(echo "$RESULTS" | jq -r '.["web-smoke"].result')
+
+          if [ "$web_deploy" = "success" ] \
+             && [ "${DRY_RUN:-false}" != "true" ] \
+             && [ "$web_smoke" != "success" ]; then
+            echo "::error::web-deploy succeeded but web-smoke did not run (result: ${web_smoke}). Production was deployed with nothing verifying it. This is a bug in web-smoke's if: condition, not a pass."
+            exit 1
+          fi
+
           echo "All checks passed or were skipped."
