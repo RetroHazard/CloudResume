@@ -36,6 +36,10 @@ variable "api-lambda-contact-uri" {
   type = string
 }
 
+variable "api-lambda-download-uri" {
+  type = string
+}
+
 variable "ses-mail-from-domain" {
   type = string
 }
@@ -46,4 +50,26 @@ variable "sqs-cf-invalidation-queue" {
 
 variable "waf-enabled" {
   type = bool
+}
+
+variable "signed-downloads-enabled" {
+  type = bool
+}
+
+# API Throttling
+
+variable "api-throttle-rate-limit" {
+  type = number
+}
+
+variable "api-throttle-burst-limit" {
+  type = number
+}
+
+variable "api-throttle-download-rate-limit" {
+  type = number
+}
+
+variable "api-throttle-download-burst-limit" {
+  type = number
 }

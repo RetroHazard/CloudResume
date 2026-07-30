@@ -21,6 +21,10 @@ output "aws_dynamodb_table_crc-visitor-record_arn" {
   value = aws_dynamodb_table.crc-visitor-record.arn
 }
 
+output "aws_dynamodb_table_crc-download-record_arn" {
+  value = aws_dynamodb_table.crc-download-record.arn
+}
+
 #  End DynamoDB Block  #
 ########################
 
@@ -84,6 +88,14 @@ output "aws_lambda_function_crc-trackVisitors_uri" {
 
 output "aws_cloudwatch_log_group_crc-updateContributions_arn" {
   value = aws_cloudwatch_log_group.crc-updateContributions-log-group.arn
+}
+
+output "aws_cloudwatch_log_group_crc-downloadResume_arn" {
+  value = aws_cloudwatch_log_group.crc-downloadResume-log-group.arn
+}
+
+output "aws_lambda_function_crc-downloadResume_uri" {
+  value = aws_lambda_function.crc-downloadResume.invoke_arn
 }
 
 #  End Lambda Block  #

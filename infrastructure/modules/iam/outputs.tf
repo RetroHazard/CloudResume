@@ -22,6 +22,10 @@ output "aws_iam_role_crc-ContributionTracker_arn" {
   value = aws_iam_role.crc-ContributionTracker.arn
 }
 
+output "aws_iam_role_crc-DownloadIssuer_arn" {
+  value = aws_iam_role.crc-DownloadIssuer.arn
+}
+
 // IAM Policy Documents
 output "aws_iam_policy_document_crc-github-s3-actions_arn" {
   value = aws_iam_policy.crc-GitHub-S3Actions.arn

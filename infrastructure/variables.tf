@@ -56,3 +56,51 @@ variable "contribution_refresh_schedule" {
   type        = string
   default     = "rate(6 hours)"
 }
+
+variable "signed_downloads_enabled" {
+  description = "Whether /files/* requires a CloudFront signature. Leave false until the real signing key is in SSM and GET /download is confirmed working — see infrastructure/keys/README.md"
+  type        = bool
+  default     = false
+}
+
+variable "resume_object_key" {
+  description = "S3 Object Key of the CV served through signed URLs"
+  type        = string
+  default     = "files/BRACKEN_ALEXANDER_Resume_20260801.pdf"
+}
+
+variable "cloudfront_signing_key_parameter" {
+  description = "SSM SecureString Parameter holding the CloudFront signing private key. Populated out of band — Terraform reads the name only, never the value"
+  type        = string
+  default     = "/CloudResume/cloudfront/signing-key"
+}
+
+variable "signed_url_ttl_seconds" {
+  description = "Lifetime of a signed CV download URL. Gates only the initial request, not the transfer"
+  type        = number
+  default     = 60
+}
+
+variable "api_throttle_rate_limit" {
+  description = "Steady-state request rate ceiling applied to every API method"
+  type        = number
+  default     = 10
+}
+
+variable "api_throttle_burst_limit" {
+  description = "Burst ceiling applied to every API method"
+  type        = number
+  default     = 20
+}
+
+variable "api_throttle_download_rate_limit" {
+  description = "Steady-state request rate ceiling for GET /download, which mints signed URLs"
+  type        = number
+  default     = 2
+}
+
+variable "api_throttle_download_burst_limit" {
+  description = "Burst ceiling for GET /download"
+  type        = number
+  default     = 5
+}

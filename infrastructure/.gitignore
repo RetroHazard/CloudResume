@@ -4,3 +4,10 @@
 **/tfplan
 **/*.tfplan
 /codepacks/
+
+# Private keys must never be committed. The CloudFront signing key belongs in SSM as a
+# SecureString; only the public half under keys/ is tracked. Belt and braces — the
+# bootstrap in keys/README.md generates outside the working tree in the first place.
+*.pem
+!keys/*.pub.pem
+

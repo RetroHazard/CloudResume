@@ -24,6 +24,28 @@ resource "aws_iam_policy" "crc-Lambda-TrackVisitors-Logging" {
   }
 }
 
+resource "aws_iam_policy" "crc-Lambda-DownloadResume-AccessPolicy" {
+  name = "crc-Lambda-DownloadResume-AccessPolicy"
+  path = "/CloudResume/"
+
+  policy = data.aws_iam_policy_document.crc-lambda-DownloadResume-access-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
+resource "aws_iam_policy" "crc-Lambda-DownloadResume-Logging" {
+  name = "crc-Lambda-DownloadResume-Logging"
+  path = "/CloudResume/"
+
+  policy = data.aws_iam_policy_document.crc-lambda-DownloadResume-logging-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
 resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-AccessPolicy" {
   name = "crc-CloudFrontInvalidation-AccessPolicy"
   path = "/CloudResume/"
@@ -198,6 +220,29 @@ resource "aws_iam_role_policy_attachment" "crc-VisitorTracker-access-policy" {
 resource "aws_iam_role_policy_attachment" "crc-VisitorTracker-logging-policy" {
   role       = aws_iam_role.crc-VisitorTracker.name
   policy_arn = aws_iam_policy.crc-Lambda-TrackVisitors-Logging.arn
+}
+
+resource "aws_iam_role" "crc-DownloadIssuer" {
+  description           = "Allows Lambda to Sign CV Download URLs, Record Downloads and Publish to CloudWatch"
+  force_detach_policies = true
+  assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
+  max_session_duration  = 3600
+  name                  = "crc-DownloadIssuer"
+  path                  = "/CloudResume/"
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "crc-DownloadIssuer-access-policy" {
+  role       = aws_iam_role.crc-DownloadIssuer.name
+  policy_arn = aws_iam_policy.crc-Lambda-DownloadResume-AccessPolicy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "crc-DownloadIssuer-logging-policy" {
+  role       = aws_iam_role.crc-DownloadIssuer.name
+  policy_arn = aws_iam_policy.crc-Lambda-DownloadResume-Logging.arn
 }
 
 resource "aws_iam_role" "crc-ContributionTracker" {

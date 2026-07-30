@@ -1,3 +1,4 @@
+import CvDownloadButton from '../../components/cv_download_button';
 import PersonalSummary from '../../components/personal_summary';
 import ServiceStatusPill from '../../components/service_status_pill';
 import SocialLinks from '../../components/social_links';
@@ -90,10 +91,7 @@ function Home() {
                             </div>
                         )}
 
-                        <a href={personalData.resumeLink} download className='ticket-button w-fit'>
-                            <iconify-icon icon='fa6-solid:ticket' aria-hidden='true' />
-                            Download CV — Ticket
-                        </a>
+                        <CvDownloadButton />
                     </div>
                 </div>
 

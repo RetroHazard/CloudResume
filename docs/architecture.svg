@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 1320 1000" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, -apple-system, Segoe UI, Roboto, sans-serif">
+<svg viewBox="0 0 1320 1120" xmlns="http://www.w3.org/2000/svg" font-family="ui-sans-serif, -apple-system, Segoe UI, Roboto, sans-serif">
 <style>
   :root {
     --bg: #F6F7F9; --panel: #FFFFFF; --zone-border: #D7DCE3; --zone-label: #8891A0;
@@ -40,11 +40,11 @@
 </defs>
 
 <text x="30" y="34" class="title">CloudResume — Serverless Architecture</text>
-<text x="30" y="56" class="subtitle">v8 · single AWS account · ap-northeast-1 · fully serverless, no idle compute</text>
+<text x="30" y="56" class="subtitle">v9 · single AWS account · ap-northeast-1 · fully serverless, no idle compute</text>
 
-<rect x="20" y="90" width="1280" height="430" rx="14" class="zone-rect"/><text x="34" y="110" class="zone-label">REQUEST PATH</text>
-<rect x="20" y="550" width="1280" height="200" rx="14" class="zone-rect"/><text x="34" y="570" class="zone-label">EVENT-DRIVEN AUTOMATION</text>
-<rect x="20" y="770" width="1280" height="160" rx="14" class="zone-rect"/><text x="34" y="790" class="zone-label">OBSERVABILITY &amp; DEPLOYMENT</text>
+<rect x="20" y="90" width="1280" height="550" rx="14" class="zone-rect"/><text x="34" y="110" class="zone-label">REQUEST PATH</text>
+<rect x="20" y="670" width="1280" height="200" rx="14" class="zone-rect"/><text x="34" y="690" class="zone-label">EVENT-DRIVEN AUTOMATION</text>
+<rect x="20" y="890" width="1280" height="160" rx="14" class="zone-rect"/><text x="34" y="910" class="zone-label">OBSERVABILITY &amp; DEPLOYMENT</text>
 
 <path d="M 115 260 L 232 260" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/>
 <path d="M 288 260 L 442 260" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
@@ -70,40 +70,50 @@
       <rect x="962.3" y="424" width="95.39999999999999" height="15" class="edge-label-bg"/>
       <text x="1010" y="435" text-anchor="middle" class="edge-text">put / get item</text>
     </g>
-<path d="M 288 630 L 445 630" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
-      <rect x="341.7" y="604" width="46.599999999999994" height="15" class="edge-label-bg"/>
-      <text x="365" y="615" text-anchor="middle" class="edge-text">invoke</text>
+<path d="M 498 400 L 680 400 L 680 570 L 865 570" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/>
+<path d="M 915 570 L 1107 570" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+      <rect x="968.4" y="544" width="83.19999999999999" height="15" class="edge-label-bg"/>
+      <text x="1010" y="555" text-anchor="middle" class="edge-text">GetParameter</text>
     </g>
-<path d="M 680 288 L 650 605" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
+<path d="M 890 545 L 890 520 L 1040 520 L 1040 465 L 1102 465" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+      <rect x="949.25" y="506" width="101.5" height="15" class="edge-label-bg"/>
+      <text x="1000" y="517" text-anchor="middle" class="edge-text">record download</text>
+    </g>
+<path d="M 288 750 L 445 750" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
+      <rect x="341.7" y="724" width="46.599999999999994" height="15" class="edge-label-bg"/>
+      <text x="365" y="735" text-anchor="middle" class="edge-text">invoke</text>
+    </g>
+<path d="M 680 288 L 650 725" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
       <rect x="685.35" y="435" width="89.3" height="15" class="edge-label-bg"/>
       <text x="730" y="446" text-anchor="middle" class="edge-text">ObjectCreated</text>
     </g>
-<path d="M 675 630 L 865 630" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
-      <rect x="716.2" y="604" width="107.6" height="15" class="edge-label-bg"/>
-      <text x="770" y="615" text-anchor="middle" class="edge-text">event source map</text>
+<path d="M 675 750 L 865 750" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
+      <rect x="716.2" y="724" width="107.6" height="15" class="edge-label-bg"/>
+      <text x="770" y="735" text-anchor="middle" class="edge-text">event source map</text>
     </g>
-<path d="M 470 655 L 470 700 L 760 700 L 760 344 L 696 344 L 696 288" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+<path d="M 470 775 L 470 820 L 760 820 L 760 344 L 696 344 L 696 288" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
       <rect x="809.6" y="404" width="180.79999999999998" height="15" class="edge-label-bg"/>
       <text x="900" y="415" text-anchor="middle" class="edge-text">PutObject contributions.json</text>
     </g>
-<path d="M 890 655 L 890 735 L 30 735 L 30 344 L 454 344 L 454 288" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
+<path d="M 890 775 L 890 855 L 30 855 L 30 344 L 454 344 L 454 288" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
       <rect x="60.7" y="395" width="168.6" height="15" class="edge-label-bg"/>
       <text x="145" y="406" text-anchor="middle" class="edge-text">CreateInvalidation (async)</text>
     </g>
-<path d="M 118 830 L 180 830 L 180 350 L 664 350 L 664 288" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+<path d="M 118 950 L 180 950 L 180 350 L 664 350 L 664 288" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
       <rect x="237.05" y="330" width="125.89999999999999" height="15" class="edge-label-bg"/>
       <text x="300" y="341" text-anchor="middle" class="edge-text">sync build --delete</text>
     </g>
-<path d="M 90 802 L 90 520" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+<path d="M 90 922 L 90 640" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
       <rect x="60.95" y="690" width="138.1" height="15" class="edge-label-bg"/>
       <text x="130" y="701" text-anchor="middle" class="edge-text">terraform apply → AWS</text>
     </g>
-<path d="M 915 330 L 980 330 L 980 790 L 680 790" class="edge edge-log" fill="none"/>
-<path d="M 915 450 L 1000 450 L 1000 790 L 680 790" class="edge edge-log" fill="none"/>
-<path d="M 495 630 L 562 630 L 562 790 L 680 790" class="edge edge-log" fill="none"/>
-<path d="M 890 655 L 890 790 L 680 790" class="edge edge-log" fill="none"/>
-<path d="M 493 140 L 558 140 L 558 790 L 680 790" class="edge edge-log" fill="none"/>
-<path d="M 680 790 L 680 802" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
+<path d="M 915 330 L 980 330 L 980 910 L 680 910" class="edge edge-log" fill="none"/>
+<path d="M 915 450 L 1000 450 L 1000 910 L 680 910" class="edge edge-log" fill="none"/>
+<path d="M 915 570 L 1020 570 L 1020 910 L 680 910" class="edge edge-log" fill="none"/>
+<path d="M 495 750 L 562 750 L 562 910 L 680 910" class="edge edge-log" fill="none"/>
+<path d="M 890 775 L 890 910 L 680 910" class="edge edge-log" fill="none"/>
+<path d="M 493 140 L 558 140 L 558 910 L 680 910" class="edge edge-log" fill="none"/>
+<path d="M 680 910 L 680 922" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
 
 
   <g class="node">
@@ -136,7 +146,7 @@
     <rect x="442" y="232" width="56" height="56" rx="13" class="badge" fill="#6C4CE0"/>
     <g transform="translate(470 260)" color="#FFFFFF" class="icon"><path d="M-13 6 A7 7 0 0 1 -11 -8 A9 9 0 0 1 6 -11 A8 8 0 0 1 14 3 A6 6 0 0 1 12 15 H-9 A6 6 0 0 1 -13 6 Z" fill="none" stroke="currentColor" stroke-width="2.4"/></g>
     <text x="470" y="305" class="label" text-anchor="middle">CloudFront</text>
-    <text x="470" y="320" class="sub" text-anchor="middle">OAC</text>
+    <text x="470" y="320" class="sub" text-anchor="middle">OAC · signed /files/*</text>
   </g>
 
   <g class="node">
@@ -187,68 +197,83 @@
     <path d="M-12 -9 V9 A12 4.2 0 0 0 12 9 V-9" fill="none" stroke="currentColor" stroke-width="2.3"/>
     <path d="M-12 0 A12 4.2 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="2"/></g>
     <text x="1130" y="495" class="label" text-anchor="middle">DynamoDB</text>
-    <text x="1130" y="510" class="sub" text-anchor="middle">2 tables</text>
+    <text x="1130" y="510" class="sub" text-anchor="middle">3 tables</text>
   </g>
 
   <g class="node">
-    <rect x="232" y="602" width="56" height="56" rx="13" class="badge" fill="#C23E86"/>
-    <g transform="translate(260 630)" color="#FFFFFF" class="icon"><circle cx="0" cy="0" r="14" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <rect x="865" y="545" width="50" height="50" rx="13" class="badge" fill="#E07B29"/>
+    <g transform="translate(890 570)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <text x="890" y="612" class="label" text-anchor="middle">λ downloadResume</text>
+    <text x="890" y="627" class="sub" text-anchor="middle">GET /download</text>
+  </g>
+
+  <g class="node">
+    <rect x="1107" y="547" width="46" height="46" rx="13" class="badge" fill="#157A8C"/>
+    <g transform="translate(1130 570)" color="#FFFFFF" class="icon"><circle cx="-6" cy="-6" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <path d="M-1.5 -1 L13 13 M9 9 L13 5 M5 13 L9 9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <text x="1130" y="610" class="label" text-anchor="middle">SSM</text>
+    <text x="1130" y="625" class="sub" text-anchor="middle">signing key</text>
+  </g>
+
+  <g class="node">
+    <rect x="232" y="722" width="56" height="56" rx="13" class="badge" fill="#C23E86"/>
+    <g transform="translate(260 750)" color="#FFFFFF" class="icon"><circle cx="0" cy="0" r="14" fill="none" stroke="currentColor" stroke-width="2.3"/>
     <path d="M0 -8 V0 L6 4" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
     <path d="M11 -11 A14 14 0 0 1 13 -2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></g>
-    <text x="260" y="675" class="label" text-anchor="middle">EventBridge</text>
-    <text x="260" y="690" class="sub" text-anchor="middle">rate(6h)</text>
+    <text x="260" y="795" class="label" text-anchor="middle">EventBridge</text>
+    <text x="260" y="810" class="sub" text-anchor="middle">rate(6h)</text>
   </g>
 
   <g class="node">
-    <rect x="445" y="605" width="50" height="50" rx="13" class="badge" fill="#E07B29"/>
-    <g transform="translate(470 630)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
-    <text x="470" y="672" class="label" text-anchor="middle">λ updateContributions</text>
-    <text x="470" y="687" class="sub" text-anchor="middle">merges GH graphs</text>
+    <rect x="445" y="725" width="50" height="50" rx="13" class="badge" fill="#E07B29"/>
+    <g transform="translate(470 750)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <text x="470" y="792" class="label" text-anchor="middle">λ updateContributions</text>
+    <text x="470" y="807" class="sub" text-anchor="middle">merges GH graphs</text>
   </g>
 
   <g class="node">
-    <rect x="625" y="605" width="50" height="50" rx="13" class="badge" fill="#C23E86"/>
-    <g transform="translate(650 630)" color="#FFFFFF" class="icon"><rect x="-13" y="-6" width="9" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.1"/>
+    <rect x="625" y="725" width="50" height="50" rx="13" class="badge" fill="#C23E86"/>
+    <g transform="translate(650 750)" color="#FFFFFF" class="icon"><rect x="-13" y="-6" width="9" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.1"/>
     <rect x="-2" y="-8" width="9" height="16" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.1"/>
     <rect x="9" y="-6" width="9" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.1"/></g>
-    <text x="650" y="672" class="label" text-anchor="middle">SQS</text>
-    <text x="650" y="687" class="sub" text-anchor="middle">invalidation queue</text>
+    <text x="650" y="792" class="label" text-anchor="middle">SQS</text>
+    <text x="650" y="807" class="sub" text-anchor="middle">invalidation queue</text>
   </g>
 
   <g class="node">
-    <rect x="865" y="605" width="50" height="50" rx="13" class="badge" fill="#E07B29"/>
-    <g transform="translate(890 630)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
-    <text x="890" y="672" class="label" text-anchor="middle">λ cloudfrontInvalidation</text>
-    <text x="890" y="687" class="sub" text-anchor="middle">batch 15 / 5s window</text>
+    <rect x="865" y="725" width="50" height="50" rx="13" class="badge" fill="#E07B29"/>
+    <g transform="translate(890 750)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <text x="890" y="792" class="label" text-anchor="middle">λ cloudfrontInvalidation</text>
+    <text x="890" y="807" class="sub" text-anchor="middle">batch 15 / 5s window</text>
   </g>
 
   <g class="node">
-    <rect x="652" y="802" width="56" height="56" rx="13" class="badge" fill="#157A8C"/>
-    <g transform="translate(680 830)" color="#FFFFFF" class="icon"><path d="M-14 0 C-9 -9 9 -9 14 0 C9 9 -9 9 -14 0 Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
+    <rect x="652" y="922" width="56" height="56" rx="13" class="badge" fill="#157A8C"/>
+    <g transform="translate(680 950)" color="#FFFFFF" class="icon"><path d="M-14 0 C-9 -9 9 -9 14 0 C9 9 -9 9 -14 0 Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
     <circle cx="0" cy="0" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/></g>
-    <text x="680" y="875" class="label" text-anchor="middle">CloudWatch</text>
-    <text x="680" y="890" class="sub" text-anchor="middle">logs + metrics</text>
+    <text x="680" y="995" class="label" text-anchor="middle">CloudWatch</text>
+    <text x="680" y="1010" class="sub" text-anchor="middle">logs + metrics</text>
   </g>
 
   <g class="node">
-    <rect x="867" y="807" width="46" height="46" rx="13" class="badge" fill="#D64550"/>
-    <g transform="translate(890 830)" color="#FFFFFF" class="icon"><circle cx="-6" cy="-6" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <rect x="867" y="927" width="46" height="46" rx="13" class="badge" fill="#D64550"/>
+    <g transform="translate(890 950)" color="#FFFFFF" class="icon"><circle cx="-6" cy="-6" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
     <path d="M-1.5 -1 L13 13 M9 9 L13 5 M5 13 L9 9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g>
-    <text x="890" y="870" class="label" text-anchor="middle">IAM</text>
-    <text x="890" y="885" class="sub" text-anchor="middle">least-privilege roles</text>
+    <text x="890" y="990" class="label" text-anchor="middle">IAM</text>
+    <text x="890" y="1005" class="sub" text-anchor="middle">least-privilege roles</text>
   </g>
 
   <g class="node">
-    <rect x="62" y="802" width="56" height="56" rx="13" class="badge" fill="#3A4552"/>
-    <g transform="translate(90 830)" color="#FFFFFF" class="icon"><circle cx="0" cy="4" r="5" fill="none" stroke="currentColor" stroke-width="2.2"/>
+    <rect x="62" y="922" width="56" height="56" rx="13" class="badge" fill="#3A4552"/>
+    <g transform="translate(90 950)" color="#FFFFFF" class="icon"><circle cx="0" cy="4" r="5" fill="none" stroke="currentColor" stroke-width="2.2"/>
     <circle cx="-11" cy="-10" r="4.2" fill="none" stroke="currentColor" stroke-width="2.1"/>
     <circle cx="11" cy="-10" r="4.2" fill="none" stroke="currentColor" stroke-width="2.1"/>
     <path d="M0 -1 V-6 M0 -6 Q0 -10 -7 -10 M0 -6 Q0 -10 7 -10" fill="none" stroke="currentColor" stroke-width="2.1"/></g>
-    <text x="90" y="875" class="label" text-anchor="middle">GitHub Actions</text>
-    <text x="90" y="890" class="sub" text-anchor="middle">OIDC, no static keys</text>
+    <text x="90" y="995" class="label" text-anchor="middle">GitHub Actions</text>
+    <text x="90" y="1010" class="sub" text-anchor="middle">OIDC, no static keys</text>
   </g>
 
-<g transform="translate(30, 978)">
+<g transform="translate(30, 1098)">
   <line x1="0" y1="-4" x2="26" y2="-4" class="edge-sync" marker-end="url(#arrow-sync)"/>
   <text x="32" y="0" class="legend-text">request / response</text>
   <line x1="190" y1="-4" x2="216" y2="-4" class="edge-event" marker-end="url(#arrow-event)"/>

@@ -48,6 +48,11 @@ from displaying them through a plain `<img>` reference.
   <img alt="Current Architectural Version" src="docs/architecture-light.png">
 </picture>
 
+The CV download is the one request path that is not a plain static fetch — it goes through a signed
+CloudFront URL minted per click, which also gives it a download counter. See
+[`docs/signed-downloads.md`](docs/signed-downloads.md) for how that works and what it is and is not
+worth.
+
 
 ## Technologies Leveraged
  + Amazon Web Services
@@ -63,6 +68,7 @@ from displaying them through a plain `<img>` reference.
    + S3
    + DynamoDB
    + Lambda
+   + Systems Manager (Parameter Store)
    + EventBridge
    + Simple Queue Service
    + Simple Email Service
