@@ -476,10 +476,21 @@ resource "aws_lambda_function" "crc-downloadResume" {
 
   source_code_hash = data.archive_file.downloadResume_lambda_function_code.output_base64sha256
 
-  # Bounded rather than unreserved, unlike the other functions. This is the only endpoint
-  # that mints credentials for a paid egress path, so it is also the one worth capping at
-  # the function as well as at the stage.
-  reserved_concurrent_executions = "5"
+  # Unreserved, like every other function here. A per-function reservation was the intent —
+  # this is the only endpoint that mints credentials for a paid egress path — but it is not
+  # available on this account: PutFunctionConcurrency refuses any reservation that would
+  # drop UnreservedConcurrentExecution below 10, and the account's total concurrency limit
+  # *is* 10. So reserving anything at all is rejected until that quota is raised.
+  #
+  # Losing it costs less than it appears. A 10-execution account ceiling is itself a hard
+  # bound, and the real control was always the stage throttle in modules/frontend
+  # (2 rps / 5 burst on download/GET), which caps issuance before a request reaches Lambda.
+  #
+  # What is genuinely given up is isolation: a burst on /download can now consume the
+  # account's whole concurrency pool and starve trackVisitors and sendMessage. The stage
+  # throttle is what keeps that from happening. If the account limit is ever raised, this
+  # is worth reinstating.
+  reserved_concurrent_executions = "-1"
 
   role = var.iam-role-download-issuer-arn
 
