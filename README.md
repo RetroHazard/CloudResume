@@ -1,6 +1,5 @@
 # CloudResume
-![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure.yml/badge.svg)
-![Website](https://github.com/RetroHazard/CloudResume/actions/workflows/website.yml/badge.svg)
+![Pipeline](https://github.com/RetroHazard/CloudResume/actions/workflows/ci.yml/badge.svg?branch=main&event=push)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/L3L51987AN)
 
