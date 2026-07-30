@@ -19,6 +19,8 @@ name: Pipeline
 
 on:
   pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       force_website:
@@ -69,6 +71,10 @@ jobs:
       github: ${{ steps.filter.outputs.github }}
       web_digest: ${{ steps.digest.outputs.web }}
       web_verified: ${{ steps.verified.outputs.web }}
+      ruff_digest: ${{ steps.digest.outputs.ruff }}
+      ruff_verified: ${{ steps.verified.outputs.ruff }}
+      actionlint_digest: ${{ steps.digest.outputs.actionlint }}
+      actionlint_verified: ${{ steps.verified.outputs.actionlint }}
 
     steps:
       # The HEAD^ diff below would fit in `fetch-depth: 2`, but the
@@ -149,10 +155,14 @@ jobs:
           echo "Changed paths:"
           echo "$changed"
 
+          # ruff.toml sits at the repository root but configures the lint over
+          # infrastructure/codebase/, so it counts as an infrastructure change.
+          # Without it, changing line-length or the target version would leave
+          # py-lint unrun on code it had just changed the rules for.
           match() { echo "$changed" | grep -qE "$1" && echo true || echo false; }
           {
             printf 'website=%s\n'        "$(match '^website/')"
-            printf 'infrastructure=%s\n' "$(match '^infrastructure/')"
+            printf 'infrastructure=%s\n' "$(match '^(infrastructure/|ruff\.toml$)')"
             printf 'github=%s\n'         "$(match '^\.github/')"
           } >> "$GITHUB_OUTPUT"
 
@@ -160,36 +170,76 @@ jobs:
         id: digest
         run: |
           set -euo pipefail
-          # The digest is the content the checks would run against: the website
-          # tree, plus the whole .github tree so that any change to a workflow
-          # or composite action conservatively invalidates every marker.
-          web=$(printf '%s\n' "$(git rev-parse HEAD:website)" "$(git rev-parse HEAD:.github)" \
-                | sha256sum | cut -c1-32)
-          echo "web=$web" >> "$GITHUB_OUTPUT"
-          echo "Website digest: $web"
+          # One digest per group of checks, over exactly the content that group
+          # reads. The whole .github tree goes into all of them, so editing a
+          # workflow or bumping a pinned tool version conservatively invalidates
+          # every marker it could affect.
+          #
+          #   web         website/ + .github/       typecheck, prettier, vitest, cypress
+          #   ruff        infrastructure/           ruff over codebase/
+          #               + ruff.toml + .github/
+          #   actionlint  .github/                  actionlint
+          #
+          # The grouping is not cosmetic: a digest must cover exactly the jobs
+          # whose own `if:` gates it, because `mark-verified` may only write a
+          # marker on a run where those jobs were allowed to execute. Sharing one
+          # digest between the two linters looks tempting — they are both cheap
+          # and tree-pure — but their triggers differ, so an infrastructure-only
+          # PR (where actionlint is skipped because .github did not change) would
+          # write a marker claiming actionlint had passed. A later revert of
+          # .github back to that exact tree would then skip actionlint on content
+          # it had never checked.
+          gh=$(git rev-parse HEAD:.github)
+          web=$(printf '%s\n' "$(git rev-parse HEAD:website)" "$gh" | sha256sum | cut -c1-32)
+          ruff=$(printf '%s\n' "$(git rev-parse HEAD:infrastructure)" \
+                                "$(git rev-parse HEAD:ruff.toml)" "$gh" | sha256sum | cut -c1-32)
+          actionlint=$(printf '%s\n' "$gh" | sha256sum | cut -c1-32)
+          {
+            echo "web=$web"
+            echo "ruff=$ruff"
+            echo "actionlint=$actionlint"
+          } >> "$GITHUB_OUTPUT"
+          echo "Website digest:    $web"
+          echo "Ruff digest:       $ruff"
+          echo "actionlint digest: $actionlint"
 
       # Checks that already passed on this exact content do not need to run
       # again. When they pass on a PR, `mark-verified` uploads a marker artifact
       # named for the digest; this looks for one. Because the PR ran against the
       # merge ref, the tree it proved is byte-identical to the squash commit's,
       # so the merge to main hits the marker and skips straight to deploy. If
-      # main moved under the PR and touched website/, the digest differs and the
-      # checks correctly re-run.
-      - name: Look for an existing verification marker
+      # main moved under the PR and touched the scope, the digest differs and
+      # the checks correctly re-run.
+      #
+      # Every check gated this way has to be a pure function of the tree. The
+      # website checks and both linters are; a Terraform *plan* is not, because
+      # it reads live AWS state and drift, so it is never marker-skipped. Its
+      # `validate` and `fmt -check` steps would qualify, but they cost seconds
+      # and guard an apply, so they run every time too.
+      - name: Look for existing verification markers
         id: verified
         env:
           GH_TOKEN: ${{ github.token }}
-          DIGEST: ${{ steps.digest.outputs.web }}
+          WEB_DIGEST: ${{ steps.digest.outputs.web }}
+          RUFF_DIGEST: ${{ steps.digest.outputs.ruff }}
+          ACTIONLINT_DIGEST: ${{ steps.digest.outputs.actionlint }}
           FORCE: ${{ inputs.force_checks }}
         run: |
           set -uo pipefail
 
           if [ "${FORCE:-false}" = "true" ]; then
             echo "force_checks set; ignoring any marker."
-            echo 'web=false' >> "$GITHUB_OUTPUT"
+            {
+              echo 'web=false'
+              echo 'ruff=false'
+              echo 'actionlint=false'
+            } >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
+          # $1 = scope, $2 = digest. Echoes true or false; the human-readable
+          # line goes to stderr so it cannot end up in the captured value.
+          #
           # Two filters carry the correctness of this whole mechanism:
           #
           #   expired == false      expired artifacts are still listed, with a
@@ -199,25 +249,33 @@ jobs:
           #                         hold. Without this, a fork could upload a
           #                         marker for content nobody checked and turn
           #                         the gate from enforced into advisory.
-          n=$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=verified-web-${DIGEST}&per_page=100" \
-                --jq '[.artifacts[]
-                       | select(.expired == false)
-                       | select(.workflow_run.repository_id == .workflow_run.head_repository_id)]
-                      | length' 2>/dev/null) || n=""
+          lookup() {
+            n=$(gh api "repos/${GITHUB_REPOSITORY}/actions/artifacts?name=verified-$1-$2&per_page=100" \
+                  --jq '[.artifacts[]
+                         | select(.expired == false)
+                         | select(.workflow_run.repository_id == .workflow_run.head_repository_id)]
+                        | length' 2>/dev/null) || n=""
 
-          # Fail open. A lookup that errors, times out, or returns anything
-          # non-numeric must mean "run the checks", never "skip them".
-          case "$n" in
-            ''|*[!0-9]*) n=0 ;;
-          esac
+            # Fail open. A lookup that errors, times out, or returns anything
+            # non-numeric must mean "run the checks", never "skip them".
+            case "$n" in
+              ''|*[!0-9]*) n=0 ;;
+            esac
 
-          if [ "$n" -gt 0 ]; then
-            echo "Found $n marker(s) for digest ${DIGEST}; website checks already passed on this content."
-            echo 'web=true' >> "$GITHUB_OUTPUT"
-          else
-            echo "No marker for digest ${DIGEST}; website checks will run."
-            echo 'web=false' >> "$GITHUB_OUTPUT"
-          fi
+            if [ "$n" -gt 0 ]; then
+              echo "Found $n marker(s) for verified-$1-$2; those checks already passed on this content." >&2
+              echo true
+            else
+              echo "No marker for verified-$1-$2; those checks will run." >&2
+              echo false
+            fi
+          }
+
+          {
+            printf 'web=%s\n'        "$(lookup web        "$WEB_DIGEST")"
+            printf 'ruff=%s\n'       "$(lookup ruff       "$RUFF_DIGEST")"
+            printf 'actionlint=%s\n' "$(lookup actionlint "$ACTIONLINT_DIGEST")"
+          } >> "$GITHUB_OUTPUT"
 
   web-checks:
     name: Website checks
@@ -331,10 +389,17 @@ jobs:
     # Fork PRs and Dependabot PRs get neither secrets.PAT nor an OIDC token, so
     # without these guards every one of them would fail red on a job it could
     # never have run.
+    #
+    # Both guards are scoped to pull_request on purpose. On a push they are at
+    # best meaningless and at worst harmful: github.actor is then whoever caused
+    # the push, so a Dependabot PR that auto-merges an infrastructure/ bump
+    # arrives on main with actor == dependabot[bot], and an unscoped guard would
+    # silently skip the apply — a green run that deployed nothing.
     if: >-
       ${{ needs.changes.outputs.infrastructure == 'true'
-          && github.event.pull_request.head.repo.fork != true
-          && github.actor != 'dependabot[bot]' }}
+          && (github.event_name != 'pull_request'
+              || (github.event.pull_request.head.repo.fork != true
+                  && github.actor != 'dependabot[bot]')) }}
     permissions:
       id-token: write
       contents: read
@@ -369,13 +434,42 @@ jobs:
       - name: Validate
         run: terraform validate
 
-      # -lock-timeout: plan and apply both take the S3 state lock. During the
-      # migration the old infrastructure-test.yml still runs on PRs too, so two
-      # plans can collide; waiting beats failing. Worth keeping afterwards for
-      # the same reason against any concurrent run.
+      # -lock-timeout: plan and apply both take the S3 state lock, and the job
+      # concurrency group above only serialises runs of *this* workflow. A
+      # `terraform apply` from a laptop, or a dispatch racing a push, can still
+      # hold the lock when this arrives; waiting five minutes beats failing.
+      #
+      # -detailed-exitcode splits "succeeded, nothing to do" (0) from
+      # "succeeded, changes planned" (2), which is what lets the apply below be
+      # skipped outright on a no-op rather than re-taking the lock and
+      # re-refreshing every resource to write nothing. Errors are still 1.
+      #
+      # The one thing that skip gives up: applying an empty plan is also what
+      # persists a refresh, so drift Terraform noticed but had nothing to change
+      # about stays in the state file until the next real apply. That costs
+      # nothing — every plan refreshes from AWS again anyway — and it is not
+      # worth a state write and a lock per no-op push to avoid.
+      #
+      # `|| code=$?` rather than a bare call: the default shell here is
+      # `bash -e {0}`, so an unguarded exit 2 would kill the step before the case
+      # below could read it, and `set +e`-style juggling is easy to get wrong.
+      # A command on the left of `||` is exempt from -e outright. The
+      # setup-terraform wrapper forwards terraform's own exit code, so all three
+      # arrive intact.
       - name: Plan
         id: plan
-        run: terraform plan -input=false -no-color -lock-timeout=5m -out=tfplan
+        run: |
+          set -uo pipefail
+          code=0
+          terraform plan -input=false -no-color -lock-timeout=5m -detailed-exitcode -out=tfplan || code=$?
+          case "$code" in
+            0) echo 'changes=false' >> "$GITHUB_OUTPUT"
+               echo 'Plan is empty; the apply will be skipped.' ;;
+            2) echo 'changes=true' >> "$GITHUB_OUTPUT"
+               echo 'Plan has changes to apply.' ;;
+            *) echo "::error::terraform plan failed with exit code ${code}."
+               exit "$code" ;;
+          esac
 
       - name: Publish plan
         if: ${{ !cancelled() && steps.plan.outcome != 'skipped' }}
@@ -437,9 +531,17 @@ jobs:
       # Applying the saved plan rather than re-running `apply -auto-approve`
       # means what lands is exactly what was reviewed a step earlier. The old
       # deploy job re-planned from scratch, so it never was.
+      #
+      # A saved plan is only ever handed straight from the plan above to this
+      # step, never carried between runs. It is not a build artifact: it holds
+      # every value the plan touched in cleartext — TF_VAR_github_token among
+      # them — and this repository is public, so uploading one would publish the
+      # PAT. It is also pinned to the state's lineage and serial, so anything
+      # applied in the meantime makes it stale rather than merely out of date.
       - name: Apply
         if: >-
           ${{ github.ref == 'refs/heads/main'
+              && steps.plan.outputs.changes == 'true'
               && (github.event_name == 'push'
                   || (github.event_name == 'workflow_dispatch' && inputs.dry_run != true)) }}
         run: terraform apply -input=false -lock-timeout=5m tfplan
@@ -455,7 +557,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: [changes]
-    if: ${{ needs.changes.outputs.infrastructure == 'true' }}
+    if: ${{ needs.changes.outputs.infrastructure == 'true' && needs.changes.outputs.ruff_verified != 'true' }}
     permissions:
       contents: read
 
@@ -478,7 +580,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: [changes]
-    if: ${{ needs.changes.outputs.github == 'true' }}
+    if: ${{ needs.changes.outputs.github == 'true' && needs.changes.outputs.actionlint_verified != 'true' }}
     permissions:
       contents: read
 
@@ -497,15 +599,31 @@ jobs:
             | tar xz actionlint
           ./actionlint -color
 
-  # Records that the website checks passed against this exact content, so the
-  # merge to main can skip them. Job-level success() is what keeps a failed run
-  # from writing a marker.
+  # Records which groups of checks passed against this exact content, so the
+  # merge to main can skip them.
+  #
+  # This used to gate on job-level success(), which cannot express "the website
+  # checks passed but a linter failed" — and, more importantly, does not lift
+  # the implicit "skip me if an upstream was skipped" rule, so the job never ran
+  # at all on a PR where a marker had already hit. `!cancelled()` lifts that
+  # rule for every `needs:` at once, which is why each result is re-asserted by
+  # hand below, exactly as in web-deploy. Testing `!= 'failure'` rather than
+  # `== 'success'` is what lets a legitimately skipped upstream through: any of
+  # these four is skipped when its stack did not change, or when a marker
+  # already covered it.
+  #
+  # Re-uploading a marker that already hit is deliberate, not a wasted step:
+  # `overwrite: true` resets its 30-day retention, so content that keeps being
+  # re-pushed does not silently lose its marker to expiry mid-review.
   mark-verified:
     name: Record verification
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    needs: [changes, web-checks, web-e2e]
-    if: ${{ github.event_name == 'pull_request' && success() && needs.changes.outputs.website == 'true' }}
+    needs: [changes, web-checks, web-e2e, py-lint, actionlint]
+    if: >-
+      ${{ !cancelled()
+          && github.event_name == 'pull_request'
+          && needs.changes.result == 'success' }}
     permissions:
       contents: read
 
@@ -513,10 +631,42 @@ jobs:
       - name: Write marker
         run: echo "ok" > marker.txt
 
-      - name: Upload marker
+      - name: Record the website checks
+        if: >-
+          ${{ needs.changes.outputs.website == 'true'
+              && needs.web-checks.result != 'failure' && needs.web-checks.result != 'cancelled'
+              && needs.web-e2e.result    != 'failure' && needs.web-e2e.result    != 'cancelled' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: verified-web-${{ needs.changes.outputs.web_digest }}
+          path: marker.txt
+          retention-days: 30
+          overwrite: true
+
+      # One marker per linter, because their triggers differ — see the digest
+      # step for why sharing one would let a marker certify a job that never ran.
+      # Each condition below repeats its job's own trigger, which is what makes
+      # the marker mean "this job reached a verdict on this content": if the job
+      # was skipped despite its trigger holding, that can only be because its own
+      # marker already existed, and this re-upload just refreshes it.
+      - name: Record the Lambda lint
+        if: >-
+          ${{ needs.changes.outputs.infrastructure == 'true'
+              && needs.py-lint.result != 'failure' && needs.py-lint.result != 'cancelled' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: verified-ruff-${{ needs.changes.outputs.ruff_digest }}
+          path: marker.txt
+          retention-days: 30
+          overwrite: true
+
+      - name: Record the workflow lint
+        if: >-
+          ${{ needs.changes.outputs.github == 'true'
+              && needs.actionlint.result != 'failure' && needs.actionlint.result != 'cancelled' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: verified-actionlint-${{ needs.changes.outputs.actionlint_digest }}
           path: marker.txt
           retention-days: 30
           overwrite: true
@@ -745,12 +895,22 @@ jobs:
   # touching branch protection, and a job skipped by `if:` — which is the normal
   # outcome for a stack that did not change, or for checks a marker already
   # covered — still counts as a pass.
+  #
+  # web-deploy and web-smoke are in here so that on a push this is also the one
+  # status that says whether the deploy landed. `needs:` only orders jobs; it
+  # never runs one its own `if:` excludes, and on a pull_request both of them
+  # are skipped by that `if:`, so nothing about the required check changes on a
+  # PR. Before they were listed, a production deploy could fail and leave the
+  # commit showing green.
+  #
+  # mark-verified stays out on purpose: a marker upload is an optimisation, and
+  # a hiccup uploading one must not fail the gate.
   ci-ok:
     name: CI
     runs-on: ubuntu-latest
     timeout-minutes: 5
     if: ${{ always() }}
-    needs: [changes, web-checks, web-e2e, terraform, py-lint, actionlint]
+    needs: [changes, web-checks, web-e2e, terraform, py-lint, actionlint, web-deploy, web-smoke]
 
     steps:
       - name: Check results
