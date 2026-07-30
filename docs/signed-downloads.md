@@ -243,6 +243,23 @@ anchor is dead in that gap.
   that region. Writing the SecureString creates it, so the bootstrap covers this; but note it
   surfaces *after* the parameter read, so a region mistake produces two failures in sequence
   rather than one.
+- `InvalidParameterValueException: Specified ReservedConcurrentExecutions ... below its minimum
+  value of [10]` — this account's total Lambda concurrency limit is 10, and AWS refuses any
+  reservation that would leave less than 10 unreserved, so no per-function reservation is
+  possible at all. `downloadResume` therefore runs unreserved like every other function here.
+  The stage throttle is the real bound; see below.
+
+## Concurrency
+
+The account ceiling is 10 concurrent executions across every function, which is itself a hard
+bound on what `/download` can cost. What is missing is *isolation*: without a per-function
+reservation, a burst on `/download` can consume the whole pool and starve `trackVisitors` and
+`sendMessage`. The stage throttle (2 rps / 5 burst on `download/GET`) is what prevents that,
+by capping issuance before a request ever reaches Lambda.
+
+If the account's concurrency quota is raised, reinstating
+`reserved_concurrent_executions` on `crc-downloadResume` is worth doing — the comment on that
+resource says so.
 
 ## Operations
 
