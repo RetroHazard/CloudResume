@@ -1,4 +1,9 @@
-name: CI
+# Named "Pipeline" rather than "CI" so it does not collide with the aggregate
+# gate job below, whose display name is "CI" and is the repo's single required
+# status check. Two things called CI rendered as "CI / CI" everywhere a run is
+# listed. The workflow name is free to change; the job's is not, because branch
+# protection matches on it.
+name: Pipeline
 
 # The single entrypoint for both stacks. Keeping infrastructure and website in
 # one workflow is what lets the website wait on Terraform with a plain `needs:`
@@ -28,10 +33,16 @@ on:
         description: Ignore verification markers and re-run checks from scratch.
         type: boolean
         default: false
+      # Defaults to false: a manual dispatch is a real deploy, as it was in the
+      # old website.yml. This is the CDN-invalidation escape hatch — re-uploading
+      # index.html is what enqueues the cloudfrontInvalidation Lambda — and it is
+      # reached for while looking at a stale or blank document, so it must not
+      # quietly no-op because a second field was left at its default. The dry run
+      # is the opt-in rehearsal, not the default behaviour.
       dry_run:
-        description: Exercise the deploy path without mutating anything (s3 sync --dryrun, terraform show).
+        description: Rehearse the deploy without mutating anything (s3 sync --dryrun, terraform show instead of apply).
         type: boolean
-        default: true
+        default: false
 
 permissions: {}
 

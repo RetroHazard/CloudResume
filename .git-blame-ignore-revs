@@ -1,10 +1,11 @@
 # Revisions that are pure reformatting, listed so `git blame` skips past them.
 #
-# Enable locally with:
-#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+# GitHub reads this file from the repository root automatically — there is no
+# setting to enable. It takes effect once the file is on the default branch.
 #
-# GitHub honours this file automatically once it is set under
-# Settings -> General -> "Ignore revisions in blame view".
+# Local git does not read it by default, since config is not part of the repo,
+# so each clone needs:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
 
 # style: apply prettier across website/ (first run after the config was fixed)
 da9f4fc8db74a5edfc7e49920a9d13714f6a28ae

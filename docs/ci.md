@@ -99,7 +99,7 @@ whenever a marker hit.
 | `force_website` | Run and deploy the website regardless of what changed. This is the CDN-invalidation escape hatch: re-uploading `index.html` is what enqueues the `cloudfrontInvalidation` Lambda. It is also how you recover a bundle left stale by an apply whose deploy failed, or by an `api_current_stage` change made through the repository variable rather than a commit. |
 | `force_infrastructure` | Run Terraform regardless of what changed. |
 | `force_checks` | Ignore verification markers. |
-| `dry_run` | Exercise the deploy path without mutating anything — `aws s3 sync --dryrun` and `terraform show` in place of `apply`. `--dryrun` is a real CLI flag, so OIDC, bucket permissions and the prune logic are all still exercised for real. |
+| `dry_run` | **Off by default** — a manual dispatch is a real deploy. Turn it on to rehearse instead: `aws s3 sync --dryrun` and `terraform show` in place of `apply`. `--dryrun` is a real CLI flag, so OIDC, bucket permissions and the prune logic are all still exercised for real. |
 
 ## Local equivalents
 
@@ -118,31 +118,32 @@ cd infrastructure && terraform fmt -check -recursive && terraform validate
 ## Remaining cutover steps
 
 `ci.yml` currently triggers on `pull_request` and `workflow_dispatch` only. `main` is still served by
-`website.yml` and `infrastructure.yml`, and `infrastructure-test.yml` still runs its own plan on
-PRs, so PRs get one cycle of duplicate checks. Both Terraform jobs plan the same remote state, and
+`website.yml` and `infrastructure.yml`, and `infrastructure-test.yml` still runs its own plan on PRs,
+so PRs get one cycle of duplicate checks. Both Terraform jobs plan the same remote state, and
 whichever reaches it second is refused the S3 state lock, so every plan and apply in both workflows
-passes `-lock-timeout=5m` to wait rather than fail. That is deliberate — required status checks are
-matched by **job display name**, and deleting the old workflows before deregistering their names
-deadlocks the repo: every PR would wait on a check nothing can produce, including the PR that fixes
-it. GitHub's branch-protection UI also only offers names it has seen in the last ~7 days, so the new
-ones cannot be pre-registered.
+passes `-lock-timeout=5m` to wait rather than fail.
 
-In order:
+Branch protection is already settled: **`CI` is the sole required status check**, and "Require
+branches to be up to date before merging" is on. Because none of the legacy check names
+(`validation`, `planning`) are required, deleting their workflows cannot leave a required check
+pending — so what remains is a single commit:
 
-1. Open a PR so `ci-ok` reports at least once.
-2. Branch protection on `main`: add `ci-ok` to the required status checks. Leave `validation`,
-   `planning` and `Dependency Review` required for now — all of them still report.
-3. Remove `validation` and `planning` from the required list.
-4. Then, in one commit:
-   - add `push: { branches: [main] }` to `ci.yml`'s `on:` block;
-   - delete `website.yml`, `infrastructure.yml`, `infrastructure-test.yml`;
-   - replace the two README badges with
-     `.../actions/workflows/ci.yml/badge.svg?branch=main&event=push`. The `event=push` matters —
-     without it the badge reflects the most recent run of *any* event on the branch, so a failed PR
-     run would show the site as broken.
-5. Optionally enable "Require branches to be up to date before merging", so a PR's checks are
-   always checks of the tree that will actually land.
+- add `push: { branches: [main] }` to `ci.yml`'s `on:` block;
+- delete `website.yml`, `infrastructure.yml`, `infrastructure-test.yml`;
+- replace the two README badges with
+  `.../actions/workflows/ci.yml/badge.svg?branch=main&event=push`. The `event=push` matters — without
+  it the badge reflects the most recent run of *any* event on the branch, so a failed PR run would
+  show the site as broken. The badge label follows the workflow name, so it will read "Pipeline"
+  unless overridden with `&label=`.
 
-Also worth setting once: Settings → General → "Ignore revisions in blame view", pointed at
-[`.git-blame-ignore-revs`](../.git-blame-ignore-revs), so the prettier reformat does not dominate
-`git blame`.
+One rule to keep in mind for any future change here: required status checks are matched by **job
+display name**, and GitHub's branch-protection UI only offers names it has seen in the last ~7 days.
+So a renamed gate job cannot be pre-registered — it has to report once before it can be required,
+which means renaming `ci-ok`'s display name away from `CI` would block every PR until branch
+protection was updated to match. That is why the *workflow* is named "Pipeline" and the job is named
+"CI", rather than the other way round.
+
+`.git-blame-ignore-revs` needs no setting — GitHub reads it from the repository root automatically
+once it is on the default branch, so the prettier reformat drops out of the blame view on merge.
+Local git does not read it (config is not part of the repo), so each clone needs
+`git config blame.ignoreRevsFile .git-blame-ignore-revs`.
