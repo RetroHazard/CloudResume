@@ -922,9 +922,17 @@ jobs:
     # Also runs after a manual deploy — the CDN-invalidation escape hatch is a
     # real deploy and deserves the same check. Skipped for a dry run, which by
     # definition changed nothing.
+    #
+    # `inputs.dry_run == true`, not a bare `inputs.dry_run`. A workflow_dispatch
+    # input arrives as the *string* "false" when the box is left unticked, and a
+    # non-empty string is truthy in a GitHub expression — so the bare form read
+    # every manual run as a dry run and skipped this job. A skipped job counts as
+    # a pass in ci-ok, so the whole point of the job (see above) was silently
+    # lost on exactly the runs that deploy without a website commit behind them.
+    # The `== true` comparison coerces properly; lines 620 and 624 already do it.
     if: >-
       ${{ needs.web-deploy.result == 'success'
-          && !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+          && !(github.event_name == 'workflow_dispatch' && inputs.dry_run == true) }}
     permissions:
       contents: read
     defaults:
