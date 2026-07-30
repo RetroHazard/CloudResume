@@ -40,7 +40,7 @@
 </defs>
 
 <text x="30" y="34" class="title">CloudResume — Serverless Architecture</text>
-<text x="30" y="56" class="subtitle">v9 · single AWS account · ap-northeast-1 · fully serverless, no idle compute</text>
+<text x="30" y="56" class="subtitle">v9 · single AWS account · us-east-1 · fully serverless, no idle compute</text>
 
 <rect x="20" y="90" width="1280" height="550" rx="14" class="zone-rect"/><text x="34" y="110" class="zone-label">REQUEST PATH</text>
 <rect x="20" y="670" width="1280" height="200" rx="14" class="zone-rect"/><text x="34" y="690" class="zone-label">EVENT-DRIVEN AUTOMATION</text>

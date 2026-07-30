@@ -97,13 +97,13 @@ add('ddb', 1130, 450, 'DynamoDB', '3 tables', 'database', 'db');
 add('ldownload', 890, 570, 'λ downloadResume', 'GET /download', 'compute', 'lambda', 50);
 add('ssm', 1130, 570, 'SSM', 'signing key', 'mgmt', 'key', 46);
 
-// Row B (y=630): event-driven automation
+// Row B (y=750): event-driven automation
 add('eventbridge', 260, 750, 'EventBridge', 'rate(6h)', 'integ', 'clock');
 add('lupdate', 470, 750, 'λ updateContributions', 'merges GH graphs', 'compute', 'lambda', 50);
 add('sqs', 650, 750, 'SQS', 'invalidation queue', 'integ', 'queue', 50);
 add('linvalidate', 890, 750, 'λ cloudfrontInvalidation', 'batch 15 / 5s window', 'compute', 'lambda', 50);
 
-// Row C (y=830): observability + CI/CD
+// Row C (y=950): observability + CI/CD
 add('cw', 680, 950, 'CloudWatch', 'logs + metrics', 'mgmt', 'eye');
 add('iam', 890, 950, 'IAM', 'least-privilege roles', 'security', 'key', 46);
 add('gha', 90, 950, 'GitHub Actions', 'OIDC, no static keys', 'cicd', 'git');
@@ -278,7 +278,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
 </defs>
 
 <text x="30" y="34" class="title">CloudResume — Serverless Architecture</text>
-<text x="30" y="56" class="subtitle">v9 · single AWS account · ap-northeast-1 · fully serverless, no idle compute</text>
+<text x="30" y="56" class="subtitle">v9 · single AWS account · us-east-1 · fully serverless, no idle compute</text>
 
 ${zones.map(z => `<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="14" class="zone-rect"/><text x="${z.x + 14}" y="${z.y + 20}" class="zone-label">${esc(z.label)}</text>`).join('\n')}
 

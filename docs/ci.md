@@ -152,12 +152,19 @@ to provide, so `terraform-wrapper: 'false'` costs nothing. The Plan step now als
 plan whenever the exit code claims "empty" and fails if it actually holds resource changes, so a
 regression is loud rather than invisible.
 
-One caveat on "empty" in practice: the root module exports `caller_arn` and `caller_user`
-(`infrastructure/outputs.tf`), both derived from `aws_caller_identity`, whose ARN embeds the
-role *session name*. That differs per job, so every plan carries a `Changes to Outputs` diff and
-`-detailed-exitcode` returns 2 even when no resource moves. The skip-on-empty optimisation
-therefore never actually fires today. Harmless — it costs one lock and one refresh on an
-infrastructure push — but worth knowing before trusting the label.
+The wrapper was not the only thing stopping a plan from ever being empty. The root module used
+to export `caller_arn` and `caller_user`, both derived from `aws_caller_identity`, whose
+assumed-role ARN and `user_id` embed the *session* name — `GitHubTerraform` on a plan,
+`GitHubTerraformApply` on the old deploy job, something else from a laptop. They differed on
+essentially every run, so every plan carried a `Changes to Outputs` diff and `-detailed-exitcode`
+returned 2 regardless of whether a resource moved. Both are removed
+(`infrastructure/outputs.tf`); `account_id` stays, being stable and already an input to the
+modules. Attributing a change to the job that made it is CloudTrail's job, via the
+`role-session-name` set in `.github/actions/setup-terraform` — and unlike an output, which only
+ever records the most recent apply, CloudTrail keeps the history.
+
+The apply that removes them will itself show one last `Changes to Outputs`; plans after that can
+be genuinely empty, and the skip is real for the first time.
 
 The one thing the skip gives up is that applying an empty plan is also what persists a refresh, so
 drift Terraform noticed but had nothing to change about stays in the state file until the next real
