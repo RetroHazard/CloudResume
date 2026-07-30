@@ -17,10 +17,17 @@ on:
 
 permissions: {}
 
+# Deploys must never be cancelled mid-flight — a half-finished `s3 sync
+# --delete` is a broken site. Queue them instead.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   check_infrastructure:
     name: Check Terraform Status
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     permissions:
       actions: read
       contents: read
@@ -34,34 +41,40 @@ jobs:
       - name: Check last Terraform run status
         id: check_tf_status
         run: |
-          while :; do
-            tf_status=$(gh run list --workflow="Terraform" --branch=main --limit=1 --json status,conclusion | jq -r '.[0].status + " " + (.[0].conclusion // "")')
+          # Bounded at 20 polls x 30s. The previous `while :;` had no cap and,
+          # worse, no sleep on any status outside in_progress/queued — and when
+          # `gh run list` returned no rows at all, jq errored on `null + string`
+          # and left $status empty, so neither branch was taken and the loop
+          # span at full speed against the API until the 6h job default.
+          for _ in $(seq 1 20); do
+            tf_status=$(gh run list --workflow="Terraform" --branch=main --limit=1 \
+              --json status,conclusion --jq '.[0] | "\(.status) \(.conclusion // "")"' 2>/dev/null || true)
 
-            # Split the status and conclusion
-            status=$(echo "$tf_status" | awk '{print $1}')
-            conclusion=$(echo "$tf_status" | awk '{print $2}')
+            status=${tf_status%% *}
+            conclusion=${tf_status#* }
 
-            echo "Current Terraform status: $status, conclusion: $conclusion"
+            echo "Current Terraform status: ${status:-<none>}, conclusion: ${conclusion:-<none>}"
 
-            # If the workflow is completed, break out of the loop
             if [ "$status" = "completed" ]; then
               echo "Terraform run finished with conclusion: $conclusion"
-              echo "status=$conclusion" >> $GITHUB_OUTPUT
-              break
+              echo "status=$conclusion" >> "$GITHUB_OUTPUT"
+              exit 0
             fi
 
-            # If the workflow is still running, wait for 30 seconds before checking again
-            if [ "$status" = "in_progress" ] || [ "$status" = "queued" ]; then
-              echo "Terraform workflow is still running. Waiting for completion..."
-              sleep 30
-            fi
+            echo "Terraform workflow has not finished yet. Waiting..."
+            sleep 30
           done
+
+          echo "::error::Timed out waiting for the Terraform workflow to finish."
+          echo "status=timed_out" >> "$GITHUB_OUTPUT"
+          exit 1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   setup:
     name: Setup Node
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs:
       - check_infrastructure
     permissions:
@@ -84,6 +97,7 @@ jobs:
   website_tests:
     name: Website Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs:
       - setup
     permissions:
@@ -106,6 +120,7 @@ jobs:
   build_prod:
     name: Build Production Version
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs:
       - setup
       - website_tests
@@ -155,11 +170,12 @@ jobs:
 
       - name: Mark build as successful for deploy job
         id: mark_prod_build_success
-        run: echo "success=true" >> $GITHUB_OUTPUT
+        run: echo "success=true" >> "$GITHUB_OUTPUT"
 
   deploy:
     name: Upload to S3
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs:
       - setup
       - build_prod
@@ -177,9 +193,12 @@ jobs:
         with:
           path: |
             **/build
+          # No restore-keys. A prefix fallback would silently restore *some
+          # earlier* build on an exact-key miss (save race, or the 7-day-idle
+          # / 10 GB cache eviction), and the sync below publishes whatever it
+          # finds with --delete. Better to fail loudly than deploy a build
+          # that isn't this commit's.
           key: ${{ runner.os }}-build-prod-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-build-prod-
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5
@@ -208,7 +227,7 @@ jobs:
       # bodyless 304 whenever nothing has changed.
       - name: Upload to S3
         env:
-          AWS_S3_BUCKET: ${{ needs.build_prod.outputs.status == 'true' && secrets.AWS_S3_BUCKET_PROD }}
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
         run: |
           set -euo pipefail
           BUCKET="s3://${{ env.AWS_S3_BUCKET }}/"
@@ -256,6 +275,7 @@ jobs:
     name: Cypress E2E Tests
     needs: [deploy]
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     continue-on-error: true
     permissions:
       contents: read

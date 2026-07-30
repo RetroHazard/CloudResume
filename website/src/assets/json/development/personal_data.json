@@ -4,8 +4,5 @@
     "fullName": "Name",
     "jobTitle": "Job Title",
     "location": "Location",
-    "availability": [
-        "Available for consulting",
-        "Working on side project"
-    ]
+    "availability": ["Available for consulting", "Working on side project"]
 }

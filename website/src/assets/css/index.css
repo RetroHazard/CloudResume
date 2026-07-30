@@ -46,10 +46,10 @@
     --color-secondary-900: #071319;
 
     /* Signal accents */
-    --color-neon: #2ee08a;      /* GO / on-time / primary line */
+    --color-neon: #2ee08a; /* GO / on-time / primary line */
     --color-neon-soft: #7ff0b5;
-    --color-glow: #ffc24b;      /* board flap text / amber highlight */
-    --color-alert: #ff5a5f;     /* delayed / suspended */
+    --color-glow: #ffc24b; /* board flap text / amber highlight */
+    --color-alert: #ff5a5f; /* delayed / suspended */
 
     /* Line colours (used for per-entry "line badges") */
     --color-line-green: #2ee08a;
@@ -198,28 +198,28 @@ html {
     }
 
     .open-for-block {
-        @apply flex w-fit items-center gap-x-1.5 rounded border border-border bg-content-boxbg font-mono uppercase tracking-wider text-content-icons no-underline hover:border-neon/50 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-xs max-sm:font-semibold sm:h-6 sm:px-2 sm:text-xs sm:font-semibold md:h-6 md:px-2.5 md:text-xs md:font-semibold;
+        @apply flex w-fit items-center gap-x-1.5 rounded border border-border bg-content-boxbg font-mono tracking-wider text-content-icons uppercase no-underline hover:border-neon/50 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-xs max-sm:font-semibold sm:h-6 sm:px-2 sm:text-xs sm:font-semibold md:h-6 md:px-2.5 md:text-xs md:font-semibold;
     }
 
     /* Line-badge chip for technologies — reads like a route label */
     .skill-block {
-        @apply inline-flex w-fit items-center gap-x-1.5 rounded border border-border bg-secondary-800/70 font-mono uppercase tracking-wide text-content-subtitle no-underline transition-colors hover:border-neon/60 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-[0.6rem] sm:h-6 sm:px-2 sm:text-[0.68rem] md:h-6 md:px-2.5 md:text-xs;
+        @apply inline-flex w-fit items-center gap-x-1.5 rounded border border-border bg-secondary-800/70 font-mono tracking-wide text-content-subtitle uppercase no-underline transition-colors hover:border-neon/60 hover:text-neon max-sm:h-5 max-sm:px-1.5 max-sm:text-[0.6rem] sm:h-6 sm:px-2 sm:text-[0.68rem] md:h-6 md:px-2.5 md:text-xs;
     }
 
     /* ── Nav (line map) — class names kept for tests; restyled as rail stops ──
        Below `sm` the stops wrap into chip rows, so they shrink to their content
        and take a 44px minimum height to stay comfortably tappable. */
     .nav-block-active {
-        @apply relative my-0.5 inline-flex w-full items-center gap-3 whitespace-nowrap rounded px-3 py-2.5 font-mono text-xs font-semibold uppercase tracking-wider text-content-header no-underline transition-colors max-sm:min-h-11 max-sm:w-fit max-sm:gap-2 max-sm:bg-content-boxbg;
+        @apply relative my-0.5 inline-flex w-full items-center gap-3 rounded px-3 py-2.5 font-mono text-xs font-semibold tracking-wider whitespace-nowrap text-content-header uppercase no-underline transition-colors max-sm:min-h-11 max-sm:w-fit max-sm:gap-2 max-sm:bg-content-boxbg;
     }
     .nav-block-inactive {
-        @apply relative my-0.5 inline-flex w-full items-center gap-3 whitespace-nowrap rounded px-3 py-2.5 font-mono text-xs font-medium uppercase tracking-wider text-content-accent no-underline transition-colors hover:bg-content-boxbg hover:text-content-subtitle max-sm:min-h-11 max-sm:w-fit max-sm:gap-2;
+        @apply relative my-0.5 inline-flex w-full items-center gap-3 rounded px-3 py-2.5 font-mono text-xs font-medium tracking-wider whitespace-nowrap text-content-accent uppercase no-underline transition-colors hover:bg-content-boxbg hover:text-content-subtitle max-sm:min-h-11 max-sm:w-fit max-sm:gap-2;
     }
 
     /* Primary action — a ticket-gate button. The CV download, the 404 return
        link and the contact submit were three copies of the same class list. */
     .ticket-button {
-        @apply inline-flex items-center justify-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-wider text-neon no-underline transition-colors hover:bg-neon/20 max-sm:min-h-11;
+        @apply inline-flex items-center justify-center gap-2 rounded border border-neon/50 bg-neon/10 px-4 py-2 font-mono text-xs font-semibold tracking-wider text-neon uppercase no-underline transition-colors hover:bg-neon/20 max-sm:min-h-11;
     }
 
     .icon-box {
@@ -235,19 +235,19 @@ html {
 
     /* ── Board typography (used across list rows) ──────────────────────── */
     .card-title {
-        @apply mb-0 font-heading text-base font-bold uppercase leading-none tracking-wide text-content-title sm:text-lg md:text-xl;
+        @apply mb-0 font-heading text-base leading-none font-bold tracking-wide text-content-title uppercase sm:text-lg md:text-xl;
     }
     .card-subtitle {
-        @apply mb-0 font-mono text-xs font-medium leading-snug text-neon sm:text-sm;
+        @apply mb-0 font-mono text-xs leading-snug font-medium text-neon sm:text-sm;
     }
     .card-meta {
-        @apply mb-0 font-mono text-[0.7rem] font-medium leading-snug text-content-date;
+        @apply mb-0 font-mono text-[0.7rem] leading-snug font-medium text-content-date;
     }
     .card-accent {
-        @apply mb-0 font-mono text-[0.7rem] font-medium uppercase leading-snug tracking-wider text-content-accent;
+        @apply mb-0 font-mono text-[0.7rem] leading-snug font-medium tracking-wider text-content-accent uppercase;
     }
     .card-fine {
-        @apply mb-0 font-mono text-[0.7rem] font-light leading-snug text-content-accent;
+        @apply mb-0 font-mono text-[0.7rem] leading-snug font-light text-content-accent;
     }
 
     .content-block {
@@ -258,7 +258,9 @@ html {
     .flap {
         @apply grid place-items-center overflow-hidden rounded-[3px] font-mono font-bold text-glow;
         background: #05131a;
-        box-shadow: inset 0 0 0 1px #123842, inset 0 -6px 8px -6px #000;
+        box-shadow:
+            inset 0 0 0 1px #123842,
+            inset 0 -6px 8px -6px #000;
     }
 }
 

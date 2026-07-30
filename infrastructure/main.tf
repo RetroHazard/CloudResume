@@ -71,10 +71,10 @@ module "backend" {
   domain-name = var.domain_name
   waf-enabled = var.waf_enabled
 
-  iam-role-cloudfront-manager-arn    = module.iam.aws_iam_role_crc-CloudFrontManager_arn
-  iam-role-message-sender-arn        = module.iam.aws_iam_role_crc-MessageSender_arn
-  iam-role-visitor-tracker-arn       = module.iam.aws_iam_role_crc-VisitorTracker_arn
-  iam-role-contribution-tracker-arn  = module.iam.aws_iam_role_crc-ContributionTracker_arn
+  iam-role-cloudfront-manager-arn   = module.iam.aws_iam_role_crc-CloudFrontManager_arn
+  iam-role-message-sender-arn       = module.iam.aws_iam_role_crc-MessageSender_arn
+  iam-role-visitor-tracker-arn      = module.iam.aws_iam_role_crc-VisitorTracker_arn
+  iam-role-contribution-tracker-arn = module.iam.aws_iam_role_crc-ContributionTracker_arn
 
   contribution-accounts         = var.contribution_accounts
   contribution-object-key       = var.contribution_object_key

@@ -1,0 +1,11 @@
+# The Lambda sources under infrastructure/codebase/ are the only Python in this
+# repo. They deploy to the python3.12 runtime (see modules/backend/main.tf).
+
+target-version = "py312"
+line-length = 120
+
+[format]
+# The existing sources use single quotes throughout, and the website side sets
+# prettier's singleQuote. Keeping ruff consistent with both avoids a reformat
+# that would touch every string literal in the Lambdas to no purpose.
+quote-style = "single"

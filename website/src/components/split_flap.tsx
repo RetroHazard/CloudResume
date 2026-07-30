@@ -10,10 +10,7 @@ import { animate } from 'animejs';
 const REEL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-/ ';
 
 function reduceMotion() {
-    return (
-        typeof window !== 'undefined' &&
-        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-    );
+    return typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 }
 
 export function SplitFlap({
@@ -80,11 +77,11 @@ export function SplitFlap({
         // text is exposed once, off-screen. (`role="text"` is not a real ARIA role,
         // so an aria-label here would simply be dropped by most screen readers.)
         <span className={className}>
-            <span className="sr-only">{ariaLabel ?? text}</span>
+            <span className='sr-only'>{ariaLabel ?? text}</span>
             {words.map((word, wi) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <span key={wi} aria-hidden="true">
-                    <span className="inline-block whitespace-nowrap">
+                <span key={wi} aria-hidden='true'>
+                    <span className='inline-block whitespace-nowrap'>
                         {word.map(({ ch, i }) => (
                             <span
                                 // eslint-disable-next-line react/no-array-index-key

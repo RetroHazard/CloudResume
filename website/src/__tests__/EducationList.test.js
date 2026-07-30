@@ -5,37 +5,32 @@ import EducationList from '../components/education_list';
 const sampleData = {
     Education: [
         {
-            school: "Sample University",
-            degree: "BSc. Sample Degree",
-            location: "Sample City, Country",
-            category: "Sample Category",
-            start: "2000",
-            end: "2004",
-            logo: "./images/placeholder.png",
-            details: [
-                "Sample detail 1",
-                "Sample detail 2",
-                "Sample detail 3",
-                "Sample detail 4"
-            ],
+            school: 'Sample University',
+            degree: 'BSc. Sample Degree',
+            location: 'Sample City, Country',
+            category: 'Sample Category',
+            start: '2000',
+            end: '2004',
+            logo: './images/placeholder.png',
+            details: ['Sample detail 1', 'Sample detail 2', 'Sample detail 3', 'Sample detail 4'],
             links: [
                 {
                     program: [
                         {
-                            website: "https://sampleprogram.com",
-                            icon: "fa6-solid:circle-info"
-                        }
+                            website: 'https://sampleprogram.com',
+                            icon: 'fa6-solid:circle-info',
+                        },
                     ],
                     school: [
                         {
-                            website: "https://sampleuniversity.com",
-                            icon: "fa6-solid:globe"
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+                            website: 'https://sampleuniversity.com',
+                            icon: 'fa6-solid:globe',
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
 };
 
 vi.mock('../utils/useJsonData', () => ({
@@ -56,7 +51,7 @@ describe('EducationList Component', () => {
         expect(container.querySelector('img[alt=""]')).toBeInTheDocument();
 
         // Check for details
-        sampleData.Education[0].details.forEach(detail => {
+        sampleData.Education[0].details.forEach((detail) => {
             expect(getByText(detail)).toBeInTheDocument();
         });
 

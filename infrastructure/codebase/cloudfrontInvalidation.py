@@ -17,19 +17,17 @@ def lambda_handler(event, context):
     client = boto3.client('cloudfront')
 
     # Dictionary to hold paths for each distribution
-    invalidation_paths = {
-        prodDistribution: []
-    }
+    invalidation_paths = {prodDistribution: []}
 
     for record in event['Records']:
         try:
             message_body = record['body']
             message = json.loads(message_body)  # Parse the message body
-            s3_event = message["Records"][0]  # Extract the S3 event details
-            bucket_name = s3_event["s3"]["bucket"]["name"]
-            object_key = s3_event["s3"]["object"]["key"]
-            path = "/" + object_key
-            print(f"Bucket: {bucket_name}, Path: {path}")
+            s3_event = message['Records'][0]  # Extract the S3 event details
+            bucket_name = s3_event['s3']['bucket']['name']
+            object_key = s3_event['s3']['object']['key']
+            path = '/' + object_key
+            print(f'Bucket: {bucket_name}, Path: {path}')
 
             # Determine the distribution ID based on the bucket name
             if bucket_name == prodBucket:
@@ -40,21 +38,19 @@ def lambda_handler(event, context):
                 # leaves the copy cached under the bare URL untouched, so it
                 # kept serving a pre-deploy document (pointing at deleted
                 # bundles) until its TTL ran out. Same for any nested index.
-                if object_key == "index.html" or object_key.endswith("/index.html"):
-                    invalidation_paths[prodDistribution].append(
-                        path[: -len("index.html")]
-                    )
+                if object_key == 'index.html' or object_key.endswith('/index.html'):
+                    invalidation_paths[prodDistribution].append(path[: -len('index.html')])
             else:
-                print(f"Bucket {bucket_name} is not configured for cache invalidation.")
+                print(f'Bucket {bucket_name} is not configured for cache invalidation.')
                 continue
 
         except json.JSONDecodeError as e:
-            print(f"Error parsing message body: {str(e)}")
+            print(f'Error parsing message body: {str(e)}')
         except KeyError as e:
-            print(f"Error extracting S3 event details: {str(e)}")
+            print(f'Error extracting S3 event details: {str(e)}')
 
     # Wait for the minimum wait time before creating invalidations
-    print(f"Waiting for {min_wait_time} seconds to allow more files to accumulate...")
+    print(f'Waiting for {min_wait_time} seconds to allow more files to accumulate...')
     time.sleep(min_wait_time)
 
     # Create invalidations in batches
@@ -65,13 +61,10 @@ def lambda_handler(event, context):
                 invalidation = client.create_invalidation(
                     DistributionId=distribution_id,
                     InvalidationBatch={
-                        'Paths': {
-                            'Quantity': len(paths),
-                            'Items': paths
-                        },
-                        'CallerReference': str(time.time())
-                    }
+                        'Paths': {'Quantity': len(paths), 'Items': paths},
+                        'CallerReference': str(time.time()),
+                    },
                 )
-                print(f"Invalidation created for distribution {distribution_id}: {invalidation}")
+                print(f'Invalidation created for distribution {distribution_id}: {invalidation}')
             except Exception as e:
-                print(f"Error creating invalidation for paths in distribution {distribution_id}: {str(e)}")
+                print(f'Error creating invalidation for paths in distribution {distribution_id}: {str(e)}')

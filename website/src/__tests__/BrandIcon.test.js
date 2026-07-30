@@ -72,7 +72,11 @@ describe('BrandIcon', () => {
 
     it('does not render the icon before a slow lookup settles into failure', async () => {
         let reject;
-        loadIcon.mockReturnValue(new Promise((_, r) => { reject = r; }));
+        loadIcon.mockReturnValue(
+            new Promise((_, r) => {
+                reject = r;
+            }),
+        );
         render(<BrandIcon icon='simple-icons:zscaler' name='Zscaler' />);
         // Optimistic: iconify-icon reserves the space itself, so no monogram flash.
         expect(screen.getByTestId('iconify')).toBeInTheDocument();

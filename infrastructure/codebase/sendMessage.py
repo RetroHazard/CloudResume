@@ -16,10 +16,7 @@ def lambda_handler(event, context):
         # Verify the request origin
         origin = event['headers'].get('Origin') or event['headers'].get('origin')
         if origin != ALLOWED_ORIGIN:
-            return {
-                'statusCode': 403,
-                'body': json.dumps({'error': 'Forbidden: Invalid origin'})
-            }
+            return {'statusCode': 403, 'body': json.dumps({'error': 'Forbidden: Invalid origin'})}
 
         # Parse the JSON body of the request
         body = json.loads(event['body'])
@@ -36,7 +33,7 @@ def lambda_handler(event, context):
         uuid = query_string_parameters.get('uuid', 'UUID not provided')
 
         # Construct the email content
-        email_subject = f"New contact form submission: {subject}"
+        email_subject = f'New contact form submission: {subject}'
         email_body = f"""
         You have a new contact form submission:
 
@@ -56,17 +53,9 @@ def lambda_handler(event, context):
                 ],
             },
             Message={
-                'Subject': {
-                    'Data': email_subject,
-                    'Charset': 'UTF-8'
-                },
-                'Body': {
-                    'Text': {
-                        'Data': email_body,
-                        'Charset': 'UTF-8'
-                    }
-                }
-            }
+                'Subject': {'Data': email_subject, 'Charset': 'UTF-8'},
+                'Body': {'Text': {'Data': email_body, 'Charset': 'UTF-8'}},
+            },
         )
 
         # Construct a success response
@@ -75,16 +64,15 @@ def lambda_handler(event, context):
             'headers': {
                 'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
             },
-            'body': json.dumps({
-                'message': 'Form submitted and email sent successfully!',
-            })
+            'body': json.dumps(
+                {
+                    'message': 'Form submitted and email sent successfully!',
+                }
+            ),
         }
 
         return api_response
 
     except Exception as e:
         # Handle any errors that may occur
-        return {
-            'statusCode': 500,
-            'body': json.dumps({'error': str(e)})
-        }
+        return {'statusCode': 500, 'body': json.dumps({'error': str(e)})}

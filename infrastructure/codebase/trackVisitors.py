@@ -22,22 +22,18 @@ def lambda_handler(event, context):
 
     try:
         # Check if the visitor ID exists in the visitor-record table
-        visitor_response = record_table.get_item(
-            Key={'id': visitor_id}
-        )
+        visitor_response = record_table.get_item(Key={'id': visitor_id})
 
         if 'Item' in visitor_response:
             # Visitor exists, check the TTL (if it exists, it means it's within 24 hours)
-            visitor_count_response = count_table.get_item(
-                Key={'id': 'visitor_count'}
-            )
+            visitor_count_response = count_table.get_item(Key={'id': 'visitor_count'})
             visitor_count = visitor_count_response['Item']['visitor_count']
         else:
             # Visitor does not exist, add to visitor-record with TTL
             record_table.put_item(
                 Item={
                     'id': visitor_id,
-                    'ttl': ttl_time  # TTL attribute set to 24 hours from current time
+                    'ttl': ttl_time,  # TTL attribute set to 24 hours from current time
                 }
             )
             # Increment the visitor counter in visitor-count table
@@ -45,28 +41,24 @@ def lambda_handler(event, context):
                 Key={'id': 'visitor_count'},
                 UpdateExpression='SET visitor_count = visitor_count + :value',
                 ExpressionAttributeValues={':value': 1},
-                ReturnValues="UPDATED_NEW"
+                ReturnValues='UPDATED_NEW',
             )
             visitor_count = count_response['Attributes']['visitor_count']
     except Exception as e:
         # Handle exceptions
         print(e)
-        return {
-            "isBase64Encoded": False,
-            "statusCode": 500,
-            "body": json.dumps({"error": "Internal Server Error"})
-        }
+        return {'isBase64Encoded': False, 'statusCode': 500, 'body': json.dumps({'error': 'Internal Server Error'})}
 
     # Format dynamodb response into variable
-    response_body = json.dumps({"count": int(visitor_count)})
+    response_body = json.dumps({'count': int(visitor_count)})
 
     # Create API response object
     api_response = {
-        "statusCode": 200,
+        'statusCode': 200,
         'headers': {
             'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
         },
-        "body": response_body
+        'body': response_body,
     }
 
     # Return API response object

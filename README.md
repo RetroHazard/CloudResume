@@ -26,6 +26,15 @@ For a more detailed breakdown of my journey, please read the blog post, linked b
 My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/taking-cloud-resume-challenge-alexander-bracken-gm0wc/).
 
 
+## Continuous Integration
+Both stacks are built, tested and deployed from a single GitHub Actions pipeline. Pull requests are
+gated on unit tests, typechecking, formatting, an end-to-end Cypress run against a locally-served
+preview build, a Terraform plan, and lint over the Lambda sources; merges to `main` apply the
+reviewed plan, deploy the site, and smoke-test production. Work already proven on a pull request is
+not repeated after the merge — see [`docs/ci.md`](docs/ci.md) for how that works and why the pipeline
+is shaped the way it is.
+
+
 ## Architectural Overview
 **Earlier architectural revisions can be found within the published article, linked above.**
 The diagram below tracks the current infrastructure and is maintained in this repo as
