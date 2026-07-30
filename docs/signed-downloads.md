@@ -98,16 +98,39 @@ an edge 403 with nothing in any log. One bootstrap command now writes both.
 
 ### Bootstrap
 
-Run locally, outside the working tree. Required before the first `terraform plan` — the public
-key is read at plan time, so the plan fails until this exists. That failure is the intended
-signal: until the key is in place there is nothing to deploy.
+Required before the first `terraform plan` — the public key is read at plan time, so the plan
+fails until this exists. That failure is the intended signal: until the key is in place there
+is nothing to deploy.
+
+**Where to run it.** Either your own workstation with the AWS CLI authenticated to the
+CloudResume account, or AWS CloudShell opened in that account. **Not** in CI, and not in any
+agent or remote session — the private key exists in plaintext for the few seconds between
+`genrsa` and `put-parameter`, and it should never pass through a shared runner or a session
+transcript. The `mktemp -d` keeps it out of the repo working tree, so it cannot be committed by
+accident. You need `ssm:PutParameter` in that account; nothing else.
+
+**Which region.** The same one as the `AWS_TF_DEPLOYMENT_REGION` repository variable. There is a
+single unaliased AWS provider (`infrastructure/provider.tf:23-28`), so Terraform reads the public
+key in that region, and the Lambda's `boto3.client('ssm')` inherits its own function region,
+which is the same one. A parameter written to any other region is invisible to both, and the
+symptom is `ParameterNotFound` at runtime rather than anything at plan time.
 
 ```bash
-cd "$(mktemp -d)"
+# 1. Point at the right account and region, and confirm before writing anything.
+export AWS_PROFILE=<your CloudResume profile>
+export AWS_REGION=<AWS_TF_DEPLOYMENT_REGION>
 
+aws sts get-caller-identity        # is this the CloudResume account?
+echo "$AWS_REGION"                 # does this match the repository variable?
+
+# 2. Generate outside the repo tree.
+cd "$(mktemp -d)"
 openssl genrsa -out signing-key.pem 2048
 openssl rsa -in signing-key.pem -pubout -out signing-key.pub.pem
 
+# 3. Store both halves. Do NOT pass --key-id: the Lambda's kms:Decrypt grant is scoped to
+#    the AWS-managed alias/aws/ssm key (modules/iam/data.tf), so a customer-managed key
+#    here would deploy cleanly and then fail at runtime with AccessDenied.
 aws ssm put-parameter --name /CloudResume/cloudfront/signing-key \
   --type SecureString --value file://signing-key.pem \
   --description "CloudFront signed-URL private key for /files/*"
@@ -116,11 +139,23 @@ aws ssm put-parameter --name /CloudResume/cloudfront/signing-key.pub \
   --type String --value file://signing-key.pub.pem \
   --description "CloudFront signed-URL public key for /files/*"
 
-shred -u signing-key.pem signing-key.pub.pem
+# 4. Confirm the public half round-tripped and still parses as a 2048-bit key.
+aws ssm get-parameter --name /CloudResume/cloudfront/signing-key.pub \
+  --query Parameter.Value --output text | openssl pkey -pubin -noout -text | head -1
+
+# 5. Destroy the local copies. shred is GNU-only; macOS has no equivalent worth the trouble.
+shred -u signing-key.pem signing-key.pub.pem 2>/dev/null || rm -f signing-key.pem signing-key.pub.pem
+cd - >/dev/null
 ```
+
+Re-running any `put-parameter` against a name that already exists needs `--overwrite`; the first
+run does not.
 
 CloudFront requires RSA-2048. OpenSSL 3 writes PKCS#8 (`BEGIN PRIVATE KEY`), OpenSSL 1.x writes
 PKCS#1 (`BEGIN RSA PRIVATE KEY`); the Lambda parses both, so either is fine.
+
+You are not relying on step 4 to prove the pair works end to end — `cv-download-live.cy.js` does
+that against production on the next deploy, which is the point of it being in the smoke set.
 
 ### Rotation
 
