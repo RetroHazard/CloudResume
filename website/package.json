@@ -33,7 +33,7 @@
         "preview": "vite preview --outDir build/dev --port 5173",
         "cypress:open": "cypress open",
         "cypress:run": "cypress run",
-        "cypress:smoke": "cypress run --spec 'cypress/e2e/navigation.cy.js,cypress/e2e/visitor-counter.cy.js,cypress/e2e/files-locked.cy.js'"
+        "cypress:smoke": "cypress run --spec 'cypress/e2e/navigation.cy.js,cypress/e2e/visitor-counter.cy.js,cypress/e2e/files-locked.cy.js,cypress/e2e/cv-download-live.cy.js'"
     },
     "pnpm": {
         "onlyBuiltDependencies": [

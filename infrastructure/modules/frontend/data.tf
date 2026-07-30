@@ -14,6 +14,29 @@ data "aws_cloudfront_log_delivery_canonical_user_id" "current" {}
 
 data "aws_canonical_user_id" "current" {}
 
+###########################
+# Begin Key Manager Block #
+
+# Both halves of the signing key pair live in Parameter Store, written by the same
+# bootstrap command (see docs/signed-downloads.md). Keeping them together is the point:
+# a public key committed to the repo can drift out of sync with the private key in SSM,
+# and the symptom is every signature failing as an edge 403 with nothing in any log.
+#
+# Reading *this* half through a data source is fine — it is a public key, and a public key
+# in state is a non-issue. The private half is still never read by Terraform; the Lambda
+# fetches it at runtime, because a data source would put the signing key into state in
+# cleartext and the state bucket would then be holding it.
+#
+# This is a plan-time dependency on the parameter existing. That is deliberate: until the
+# bootstrap has been run there is nothing to deploy, and a failed plan says so.
+data "aws_ssm_parameter" "crc-cf-signing-public-key" {
+  name = var.cf-signing-public-key-parameter-name
+}
+
+#  End Key Manager Block  #
+###########################
+
+
 ##################
 # Begin S3 Block #
 

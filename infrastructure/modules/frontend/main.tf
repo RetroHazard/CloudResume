@@ -159,11 +159,11 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     target_origin_id       = aws_s3_bucket.crc-agb-s3-website-prod.id
     viewer_protocol_policy = "redirect-to-https"
 
-    # Gating is a flag rather than a code edit, because turning it on is the one step here
-    # that breaks the live site the instant it applies: the bundle in S3 still links to the
-    # plain path until web-deploy finishes behind it. Ship with this false, confirm
-    # /download mints a URL that works, then flip it. It is also the safety catch on the
-    # placeholder signing key — see keys/README.md.
+    # A kill switch for the direct object URL, and nothing more. Turning it off makes
+    # /files/…pdf fetchable by hand again, which is useful while debugging a signing
+    # problem — but it does NOT restore the Download CV button, because the button calls
+    # /download and never touches the plain path. If signing is broken, the button is
+    # broken either way; this just means you can still get at the PDF.
     trusted_key_groups = var.signed-downloads-enabled ? [aws_cloudfront_key_group.crc-cf-signing-key-group.id] : []
 
     response_headers_policy_id = aws_cloudfront_response_headers_policy.crc-cf-cv-download.id
@@ -229,16 +229,17 @@ resource "aws_cloudfront_origin_access_control" "crc-cf-production-oac" {
   signing_protocol                  = "sigv4"
 }
 
-# Only the public half lives in the repo — it is public by definition, and committing it
-# makes a rotation visible in git history. The private half is held in SSM as a
-# SecureString, put there out of band, and is never read by Terraform: a
-# `data "aws_ssm_parameter"` would write it into state in cleartext.
+# Sourced from Parameter Store rather than a committed PEM — see data.tf for why.
+#
+# nonsensitive() because the provider marks every parameter value sensitive regardless of
+# type. Left alone, a key rotation would render in the plan as "(sensitive value)", which
+# is precisely the diff worth reading. This one is a public key.
 #
 # name_prefix plus create_before_destroy is what makes rotation possible at all.
 # encoded_key forces replacement, and a fixed name would collide with itself mid-swap.
 resource "aws_cloudfront_public_key" "crc-cf-signing-key" {
   comment     = "Public half of the signed-URL key pair for /files/*"
-  encoded_key = file("${path.root}/keys/crc-cf-signing-key.pub.pem")
+  encoded_key = nonsensitive(data.aws_ssm_parameter.crc-cf-signing-public-key.value)
   name_prefix = "crc-cf-signing-key-"
 
   lifecycle {

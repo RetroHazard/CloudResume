@@ -58,9 +58,9 @@ variable "contribution_refresh_schedule" {
 }
 
 variable "signed_downloads_enabled" {
-  description = "Whether /files/* requires a CloudFront signature. Leave false until the real signing key is in SSM and GET /download is confirmed working — see infrastructure/keys/README.md"
+  description = "Whether /files/* requires a CloudFront signature. Turning this off is a kill switch for the direct object URL only — it does not restore the Download CV button, which calls /download regardless. See docs/signed-downloads.md"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "resume_object_key" {
@@ -73,6 +73,12 @@ variable "cloudfront_signing_key_parameter" {
   description = "SSM SecureString Parameter holding the CloudFront signing private key. Populated out of band — Terraform reads the name only, never the value"
   type        = string
   default     = "/CloudResume/cloudfront/signing-key"
+}
+
+variable "cloudfront_signing_public_key_parameter" {
+  description = "SSM String Parameter holding the CloudFront signing public key, written by the same bootstrap that stores the private half. Read at plan time, so it must exist before the first apply"
+  type        = string
+  default     = "/CloudResume/cloudfront/signing-key.pub"
 }
 
 variable "signed_url_ttl_seconds" {

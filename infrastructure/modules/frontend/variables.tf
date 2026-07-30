@@ -56,6 +56,10 @@ variable "signed-downloads-enabled" {
   type = bool
 }
 
+variable "cf-signing-public-key-parameter-name" {
+  type = string
+}
+
 # API Throttling
 
 variable "api-throttle-rate-limit" {

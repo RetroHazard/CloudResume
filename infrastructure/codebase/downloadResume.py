@@ -192,8 +192,10 @@ def lambda_handler(event, context):
     if not visitor_id:
         return _response(400, {'error': 'visitorId is required'})
 
-    count = _record_download(visitor_id)
-
+    # Sign before recording, and the asymmetry between the two failure modes is deliberate:
+    # a telemetry failure must never deny a download, but a download that never happened
+    # must never be counted. Recording first would inflate download_count on every failed
+    # signature and burn the visitor's 24h dedupe row for a file they never received.
     try:
         expires = int(time.time()) + URL_TTL
         url = _signed_url(f'{BASE_URL}/{OBJECT_KEY}', expires)
@@ -201,6 +203,8 @@ def lambda_handler(event, context):
         # Never echo the exception to the caller — it would describe the key material.
         logger.exception('Failed to sign a CV download URL')
         return _response(500, {'error': 'Internal Server Error'})
+
+    count = _record_download(visitor_id)
 
     return _response(
         200,

@@ -58,7 +58,7 @@ with no attacker-controlled input. `CvDownloadButton` covers the frontend; the s
 should be cross-checked against OpenSSL whenever it is touched:
 
 ```bash
-openssl dgst -sha1 -verify keys/crc-cf-signing-key.pub.pem -signature sig.bin policy.txt
+openssl dgst -sha1 -verify signing-key.pub.pem -signature sig.bin policy.txt
 ```
 
 ## Two things that had to be fixed to make this work
@@ -79,10 +79,78 @@ route would have been created but never deployed to the stage. The trigger now h
 route surface itself; **any new resource, method or integration has to be added to that list
 or it will not go live.**
 
+## Key material
+
+**Both halves live in Parameter Store. Nothing key-shaped belongs in this repo.**
+
+| Parameter | Type | Read by |
+| --- | --- | --- |
+| `/CloudResume/cloudfront/signing-key` | `SecureString` | the Lambda, at cold start |
+| `/CloudResume/cloudfront/signing-key.pub` | `String` | Terraform, at plan time |
+
+Terraform never reads the private half — a `data "aws_ssm_parameter"` would put the signing
+key into `terraform.tfstate` in cleartext, and the state bucket would then be holding it. It
+does read the public half, which is fine: a public key in state is a non-issue.
+
+Keeping them together is the point. An earlier revision committed the public PEM to the repo,
+which meant two sources of truth that had to match; when they don't, every signature fails as
+an edge 403 with nothing in any log. One bootstrap command now writes both.
+
+### Bootstrap
+
+Run locally, outside the working tree. Required before the first `terraform plan` — the public
+key is read at plan time, so the plan fails until this exists. That failure is the intended
+signal: until the key is in place there is nothing to deploy.
+
+```bash
+cd "$(mktemp -d)"
+
+openssl genrsa -out signing-key.pem 2048
+openssl rsa -in signing-key.pem -pubout -out signing-key.pub.pem
+
+aws ssm put-parameter --name /CloudResume/cloudfront/signing-key \
+  --type SecureString --value file://signing-key.pem \
+  --description "CloudFront signed-URL private key for /files/*"
+
+aws ssm put-parameter --name /CloudResume/cloudfront/signing-key.pub \
+  --type String --value file://signing-key.pub.pem \
+  --description "CloudFront signed-URL public key for /files/*"
+
+shred -u signing-key.pem signing-key.pub.pem
+```
+
+CloudFront requires RSA-2048. OpenSSL 3 writes PKCS#8 (`BEGIN PRIVATE KEY`), OpenSSL 1.x writes
+PKCS#1 (`BEGIN RSA PRIVATE KEY`); the Lambda parses both, so either is fine.
+
+### Rotation
+
+The Lambda caches the parsed key for the life of its container, so the order matters — trust
+both keys before swapping, and untrust the old one only after containers have cycled.
+
+1. Write the new public key to a second parameter, add a second `aws_cloudfront_public_key`
+   for it, and list **both** ids in `aws_cloudfront_key_group.crc-cf-signing-key-group.items`.
+   Apply. Both keys are now trusted.
+2. Overwrite the private SecureString. New containers sign with the new key; warm ones keep
+   signing with the old key, which is still trusted.
+3. Once containers have cycled, remove the old resource and parameter. Apply.
+
+`name_prefix` plus `create_before_destroy` on `aws_cloudfront_public_key` exists for this —
+`encoded_key` forces replacement, and a fixed name would collide with itself mid-swap.
+
+A rotation only takes effect on a cold start. If it is urgent, force one by redeploying the
+function rather than waiting for containers to age out.
+
 ## Operations
 
-Key generation, rotation and the staged rollout are in
-[`infrastructure/keys/README.md`](../../infrastructure/keys/README.md).
+`signed_downloads_enabled` (default `true`) is a kill switch for the **direct object URL only**.
+Turning it off makes `/files/…pdf` fetchable by hand again, which helps while debugging a
+signing problem. It does *not* restore the Download CV button — the button calls `/download`
+and never touches the plain path, so if signing is broken the button is broken either way.
+
+Two smoke specs cover this in production and are both in `pnpm cypress:smoke`:
+`cv-download-live.cy.js` clicks the real button and fetches the URL it produces, which is what
+proves the two halves of the key pair agree; `files-locked.cy.js` proves an unsigned request is
+still refused. Either passing alone can coexist with broken gating, so they run as a pair.
 
 Throttling is set by `api_throttle_*` in `infrastructure/variables.tf`: 10 rps / 20 burst
 across every method, 2 rps / 5 burst on `download/GET`. These are the only bound on what the

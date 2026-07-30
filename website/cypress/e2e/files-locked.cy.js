@@ -6,16 +6,13 @@
 // rejection and serve the app shell with a 200; dropping trusted_key_groups would serve
 // the PDF outright. Both look fine from the browser and neither would fail anything else.
 //
-// Skipped unless CYPRESS_SIGNED_DOWNLOADS=1, because signed_downloads_enabled defaults to
-// false — see infrastructure/keys/README.md. Turn both on together.
+// Pairs with cv-download-live.cy.js: that one proves a signed URL works, this one proves an
+// unsigned one does not. Either alone can pass while the gating is wrong.
 describe('Protected CV object', () => {
     it('rejects an unsigned request at the edge', function () {
         const base = Cypress.config('baseUrl') || '';
         if (base.includes('localhost') || base.includes('127.0.0.1')) {
             // vite preview serves public/ straight off disk; there is no edge to test.
-            this.skip();
-        }
-        if (!Cypress.env('SIGNED_DOWNLOADS')) {
             this.skip();
         }
 

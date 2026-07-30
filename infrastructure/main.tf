@@ -68,7 +68,8 @@ module "frontend" {
   ses-mail-from-domain      = module.backend.aws_ses_domain_mail_from_crc-mail-from-domain
   sqs-cf-invalidation-queue = module.backend.aws_sqs_queue_crc-cloudfront-invalidation-queue_arn
 
-  signed-downloads-enabled = var.signed_downloads_enabled
+  signed-downloads-enabled             = var.signed_downloads_enabled
+  cf-signing-public-key-parameter-name = var.cloudfront_signing_public_key_parameter
 
   api-throttle-rate-limit           = var.api_throttle_rate_limit
   api-throttle-burst-limit          = var.api_throttle_burst_limit
