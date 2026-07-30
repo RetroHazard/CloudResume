@@ -421,6 +421,9 @@ jobs:
       TF_VAR_domain_name: ${{ vars.AWS_TF_DOMAIN_NAME }}
       TF_VAR_sanitized_domain_name: ${{ vars.AWS_TF_SANITIZED_DOMAIN_NAME }}
       TF_VAR_api_current_stage: ${{ vars.AWS_TF_API_CURRENT_STAGE }}
+      # TF_VAR_signed_downloads_enabled is not here — it is resolved and
+      # validated by a step below, because an unset variable would interpolate
+      # to "" and Terraform rejects that for a bool.
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -430,6 +433,48 @@ jobs:
           aws-region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
           role-to-assume: ${{ secrets.AWS_TF_OIDC_ROLE }}
           role-session-name: GitHubTerraform
+
+      # Whether /files/* requires a CloudFront signature, as an Actions variable
+      # rather than only a default in variables.tf, so it can be flipped without
+      # a commit: set AWS_TF_SIGNED_DOWNLOADS to false in Settings, then
+      # workflow_dispatch with force_infrastructure. Changing a repository
+      # variable produces no file diff, so a push would not run this job at all
+      # — the dispatch is the mechanism, exactly as it is for api_current_stage.
+      #
+      # Resolved in a step rather than inline as `${{ vars.X || 'true' }}`. An
+      # unset variable interpolates to the empty string, and Terraform rejects
+      # "" for a bool rather than falling back to the declared default, so it
+      # needs handling either way — and `||` would settle the fallback by
+      # GitHub's truthiness rules, on a value whose entire purpose is to be the
+      # string "false". This repo has already been bitten once by an expression
+      # yielding a literal "false" (verify_s3.yml, deleted in #117); a switch
+      # that could silently invert itself is not worth the line it saves.
+      #
+      # Unset leaves TF_VAR unset so variables.tf stays the single source of the
+      # default, and anything that is not exactly true or false is a hard error
+      # rather than a guess.
+      - name: Resolve the signed-downloads switch
+        env:
+          RAW: ${{ vars.AWS_TF_SIGNED_DOWNLOADS }}
+        run: |
+          set -euo pipefail
+          value="${RAW:-}"
+
+          if [ -z "$value" ]; then
+            echo 'AWS_TF_SIGNED_DOWNLOADS is unset; using the default in infrastructure/variables.tf.'
+            exit 0
+          fi
+
+          case "$value" in
+            true | false) ;;
+            *)
+              echo "::error::AWS_TF_SIGNED_DOWNLOADS must be exactly 'true' or 'false' (got '${value}')."
+              exit 1
+              ;;
+          esac
+
+          echo "TF_VAR_signed_downloads_enabled=$value" >> "$GITHUB_ENV"
+          echo "signed_downloads_enabled=$value (from the repository variable)"
 
       - name: Validate
         run: terraform validate

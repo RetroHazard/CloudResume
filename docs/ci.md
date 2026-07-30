@@ -165,7 +165,7 @@ website checks and the linters whenever a marker hit.
 | Input | Purpose |
 | --- | --- |
 | `force_website` | Run and deploy the website regardless of what changed. This is the CDN-invalidation escape hatch: re-uploading `index.html` is what enqueues the `cloudfrontInvalidation` Lambda. It is also how you recover a bundle left stale by an apply whose deploy failed, or by an `api_current_stage` change made through the repository variable rather than a commit. |
-| `force_infrastructure` | Run Terraform regardless of what changed. |
+| `force_infrastructure` | Run Terraform regardless of what changed. Also the only way to apply a change made through a repository *variable* rather than a commit — `api_current_stage` and `signed_downloads_enabled` both move with no file diff, so a push would leave the job skipped. |
 | `force_checks` | Ignore verification markers. |
 | `dry_run` | **Off by default** — a manual dispatch is a real deploy. Turn it on to rehearse instead: `aws s3 sync --dryrun` and `terraform show` in place of `apply`. `--dryrun` is a real CLI flag, so OIDC, bucket permissions and the prune logic are all still exercised for real. |
 

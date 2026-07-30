@@ -58,7 +58,7 @@ variable "contribution_refresh_schedule" {
 }
 
 variable "signed_downloads_enabled" {
-  description = "Whether /files/* requires a CloudFront signature. Turning this off is a kill switch for the direct object URL only — it does not restore the Download CV button, which calls /download regardless. See docs/signed-downloads.md"
+  description = "Whether /files/* requires a CloudFront signature. Set in CI from the AWS_TF_SIGNED_DOWNLOADS repository variable so it can be flipped without a commit; this default applies to local runs and when that variable is unset. Turning it off is a kill switch for the direct object URL only — it does not restore the Download CV button, which calls /download regardless. See docs/signed-downloads.md"
   type        = bool
   default     = true
 }

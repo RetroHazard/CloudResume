@@ -246,10 +246,40 @@ anchor is dead in that gap.
 
 ## Operations
 
-`signed_downloads_enabled` (default `true`) is a kill switch for the **direct object URL only**.
-Turning it off makes `/files/…pdf` fetchable by hand again, which helps while debugging a
-signing problem. It does *not* restore the Download CV button — the button calls `/download`
-and never touches the plain path, so if signing is broken the button is broken either way.
+### Un-gating in a hurry
+
+`signed_downloads_enabled` is a kill switch for the **direct object URL only**. Turning it off
+makes `/files/…pdf` fetchable by hand again, which helps while debugging a signing problem. It
+does *not* restore the Download CV button — the button calls `/download` and never touches the
+plain path, so if signing is broken the button is broken either way. To restore the button you
+need the soft revert below.
+
+It lives in an Actions variable so it can be flipped without a commit:
+
+1. Settings → Secrets and variables → Actions → Variables → set `AWS_TF_SIGNED_DOWNLOADS`
+   to `false`.
+2. Run the Pipeline workflow via `workflow_dispatch` from `main` with `force_infrastructure`
+   checked and `dry_run` off.
+
+The dispatch is required, not optional: changing a repository variable produces no file diff, so
+a push would leave the `terraform` job skipped entirely. `api_current_stage` has the same
+property, for the same reason.
+
+The value must be exactly `true` or `false`. Anything else fails the job with an explicit error
+rather than being guessed at — a switch whose whole purpose is to carry the string `"false"` is
+the last place to rely on truthiness. Unset means "use the default in
+`infrastructure/variables.tf`", which is `true`.
+
+### Backing the whole thing out
+
+Prefer a **soft revert**: revert the website commits (which restores `resumeLink` and the direct
+anchor) and set `AWS_TF_SIGNED_DOWNLOADS=false`. That returns the site to its pre-change
+behaviour while leaving the Lambda, table and API route in place doing nothing.
+
+Do not reach for a full `git revert` of the infrastructure unless you actually want the resources
+gone: `crc-download-record` sets `deletion_protection_enabled = true`, so the destroy fails and
+needs two applies — one to disable protection, one to destroy. A revert also re-crosses the
+deep-link window described above, in the opposite direction.
 
 Two smoke specs cover this in production and are both in `pnpm cypress:smoke`:
 `cv-download-live.cy.js` clicks the real button and fetches the URL it produces, which is what
