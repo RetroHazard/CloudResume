@@ -405,6 +405,16 @@ jobs:
       contents: read
     outputs:
       secrets_changed: ${{ steps.secrets.outputs.changed }}
+      # Whether this run actually mutated production. Read off the Apply step's own
+      # outcome rather than reconstructed from the plan and the event, because the
+      # step's `if:` already encodes every condition (main, non-empty plan, not a dry
+      # run) and a second copy of that expression would be one more thing to drift.
+      # A step the `if:` excluded reports `skipped`, so the empty-plan, PR and dry-run
+      # paths all resolve to false without any extra guarding.
+      #
+      # `smoke` and `ci-ok` both consume this: an apply is the other way production
+      # changes, and until it was exposed nothing downstream could tell that it had.
+      applied: ${{ steps.apply.outcome == 'success' }}
     defaults:
       run:
         working-directory: infrastructure
@@ -613,6 +623,7 @@ jobs:
       # PAT. It is also pinned to the state's lineage and serial, so anything
       # applied in the meantime makes it stale rather than merely out of date.
       - name: Apply
+        id: apply
         if: >-
           ${{ github.ref == 'refs/heads/main'
               && steps.plan.outputs.changes == 'true'
@@ -910,11 +921,23 @@ jobs:
               fi
             done
 
-  web-smoke:
+  smoke:
     name: Production smoke test
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [web-deploy]
+    needs: [terraform, web-deploy]
+    # Runs after *either* way production can change, which is why this is one job
+    # rather than a web one and an infra one. It used to hang off web-deploy alone,
+    # and web-deploy is deliberately narrow — website/ changed, or the plan rewrote
+    # the Actions secrets — so every Lambda edit, API Gateway change, CloudFront
+    # behaviour and IAM tweak applied straight to production with nothing verifying
+    # it afterwards. That is the gap issue #44 names.
+    #
+    # Merged rather than duplicated: a run that changes both stacks would otherwise
+    # smoke test the same site twice, and the specs are the same either way. An
+    # apply can break the site (a bad cache behaviour, a detached Lambda permission)
+    # and a deploy can break the API contract, so both paths want the whole set.
+    #
     # No continue-on-error. The old post-deploy Cypress job had it, which meant
     # it rendered as a green check whatever happened — strictly worse than not
     # running at all. A red smoke here means production has already changed and
@@ -932,10 +955,15 @@ jobs:
     # whenever the digest marker hits — so without this the job skipped on
     # essentially every real deploy. A skipped job counts as a pass in ci-ok, so
     # that went unnoticed: the deploys with no test between them and production
-    # were exactly the ones reporting green.
+    # were exactly the ones reporting green. The second `needs:` edge added here
+    # makes that rule matter more, not less: on an infrastructure-only apply
+    # web-deploy is itself skipped, and that skip reaches this job too.
     #
-    # The success of the one need that matters is re-asserted below, so lifting
-    # the implicit rule does not let a failed deploy through to the smoke test.
+    # The successes that matter are re-asserted below, so lifting the implicit
+    # rule does not let a failed deploy through to the smoke test. web-deploy is
+    # tested for `!= 'failure'` rather than `== 'success'` because it is legitimately
+    # skipped on the apply-only path — the `||` above is what says production
+    # changed at all.
     #
     # `inputs.dry_run == true`, not a bare `inputs.dry_run`: a workflow_dispatch
     # input arrives as the *string* "false" when the box is left unticked, and a
@@ -944,7 +972,8 @@ jobs:
     # already compare explicitly.
     if: >-
       ${{ !cancelled()
-          && needs.web-deploy.result == 'success'
+          && (needs.web-deploy.result == 'success' || needs.terraform.outputs.applied == 'true')
+          && needs.web-deploy.result != 'failure' && needs.web-deploy.result != 'cancelled'
           && !(github.event_name == 'workflow_dispatch' && inputs.dry_run == true) }}
     permissions:
       contents: read
@@ -968,7 +997,18 @@ jobs:
         run: pnpm exec cypress install
 
       # A subset only: enough to prove the deployed site boots, routes and
-      # renders. The full suite already gated this content on the PR.
+      # renders, and that the stack behind it answers. The full suite already
+      # gated this content on the PR.
+      #
+      # Cypress exposes CYPRESS_FOO as Cypress.env('foo'), which is how the three
+      # values below reach api-live.cy.js and bucket-locked.cy.js. Every request
+      # those specs make is anonymous, so no AWS credentials are needed here — and
+      # the specs skip themselves when a value is absent, which is what keeps them
+      # inert in web-e2e, where `pnpm cypress:run` globs them against a local
+      # preview with none of this set.
+      #
+      # Both secrets are registered, so Actions masks them in the run banner
+      # Cypress prints on start.
       - name: Smoke test production
         uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6
         with:
@@ -977,6 +1017,9 @@ jobs:
           command: pnpm cypress:smoke
         env:
           CYPRESS_BASE_URL: https://${{ vars.AWS_TF_DOMAIN_NAME }}
+          CYPRESS_API_ENDPOINT: ${{ secrets.AWS_API_ENDPOINT }}
+          CYPRESS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
+          CYPRESS_AWS_REGION: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
 
       - name: Upload screenshots on failure
         if: failure()
@@ -991,7 +1034,7 @@ jobs:
   # outcome for a stack that did not change, or for checks a marker already
   # covered — still counts as a pass.
   #
-  # web-deploy and web-smoke are in here so that on a push this is also the one
+  # web-deploy and smoke are in here so that on a push this is also the one
   # status that says whether the deploy landed. `needs:` only orders jobs; it
   # never runs one its own `if:` excludes, and on a pull_request both of them
   # are skipped by that `if:`, so nothing about the required check changes on a
@@ -1005,7 +1048,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     if: ${{ always() }}
-    needs: [changes, web-checks, web-e2e, terraform, py-lint, actionlint, web-deploy, web-smoke]
+    needs: [changes, web-checks, web-e2e, terraform, py-lint, actionlint, web-deploy, smoke]
 
     steps:
       - name: Check results
@@ -1027,26 +1070,38 @@ jobs:
           fi
 
           # Everything above treats a skip as a pass, which is correct for jobs
-          # that genuinely had nothing to do — and is exactly what hid web-smoke
-          # silently not running across four consecutive deploys. Two different
-          # bugs (a truthy "false" string, then transitive skip propagation) both
-          # landed as a skip, and a skip is indistinguishable from a pass here.
+          # that genuinely had nothing to do — and is exactly what hid the smoke
+          # test silently not running across four consecutive deploys. Two
+          # different bugs (a truthy "false" string, then transitive skip
+          # propagation) both landed as a skip, and a skip is indistinguishable
+          # from a pass here.
           #
           # So the one case where that distinction matters gets asserted
-          # positively: if the site was really deployed, it must also have been
-          # smoke tested. This cannot catch a skip in the abstract — only a skip
-          # that left production untested, which is the part worth failing over.
+          # positively: if production really changed, it must also have been smoke
+          # tested. This cannot catch a skip in the abstract — only a skip that
+          # left production untested, which is the part worth failing over.
           #
-          # No branch check is needed: web-deploy only runs on main, so its
-          # success already implies it. A dry run deploys nothing, so a skipped
-          # smoke test is correct there and is excluded.
+          # There are two ways production changes and both are checked, because
+          # for most of this pipeline's life only the first one was: a Terraform
+          # apply with no website change ran with nothing behind it at all, and
+          # that reported green by the same skip-is-a-pass rule above.
+          #
+          # `applied` is a job *output*, and toJSON(needs) carries outputs as well
+          # as results, so it can be read from the same blob. It is the string
+          # "false" or absent when no apply ran, both of which fail the equality.
+          #
+          # No branch check is needed: web-deploy and the Apply step both only run
+          # on main, so either being a success already implies it. A dry run
+          # changes nothing, so a skipped smoke test is correct there and is
+          # excluded.
           web_deploy=$(echo "$RESULTS" | jq -r '.["web-deploy"].result')
-          web_smoke=$(echo "$RESULTS" | jq -r '.["web-smoke"].result')
+          applied=$(echo "$RESULTS" | jq -r '.terraform.outputs.applied // "false"')
+          smoke=$(echo "$RESULTS" | jq -r '.smoke.result')
 
-          if [ "$web_deploy" = "success" ] \
+          if { [ "$web_deploy" = "success" ] || [ "$applied" = "true" ]; } \
              && [ "${DRY_RUN:-false}" != "true" ] \
-             && [ "$web_smoke" != "success" ]; then
-            echo "::error::web-deploy succeeded but web-smoke did not run (result: ${web_smoke}). Production was deployed with nothing verifying it. This is a bug in web-smoke's if: condition, not a pass."
+             && [ "$smoke" != "success" ]; then
+            echo "::error::Production changed (web-deploy: ${web_deploy}, terraform applied: ${applied}) but smoke did not run (result: ${smoke}). Production was changed with nothing verifying it. This is a bug in smoke's if: condition, not a pass."
             exit 1
           fi
 
