@@ -208,6 +208,7 @@ export function DepartureRow({
     since,
     status = 'past',
     statusLabel,
+    tag,
     defaultOpen = false,
     name,
     children,
@@ -219,6 +220,9 @@ export function DepartureRow({
     since: string;
     status?: 'on' | 'past' | 'alert';
     statusLabel?: string;
+    // Service-pattern note beside the destination — "2 roles" on a stop the
+    // line calls at more than once. Omitted entirely when there is nothing to say.
+    tag?: ReactNode;
     defaultOpen?: boolean;
     // Shared name groups rows into a native exclusive accordion: opening one
     // closes the others. Degrades to independent toggles on older browsers.
@@ -236,11 +240,14 @@ export function DepartureRow({
                 {/* Board rows truncate by design, so the untruncated text has to
                     stay reachable — otherwise a long project name is simply lost. */}
                 <span className='flex min-w-0 flex-col'>
-                    <span
-                        title={destination}
-                        className='truncate font-heading text-base leading-tight font-bold tracking-wide text-content-title uppercase sm:text-lg'
-                    >
-                        {destination}
+                    <span className='flex min-w-0 items-center gap-2'>
+                        <span
+                            title={destination}
+                            className='truncate font-heading text-base leading-tight font-bold tracking-wide text-content-title uppercase sm:text-lg'
+                        >
+                            {destination}
+                        </span>
+                        {tag && <span className='shrink-0 max-sm:hidden'>{tag}</span>}
                     </span>
                     <span title={operator} className='truncate font-mono text-[0.7rem] text-neon'>
                         {operator}
