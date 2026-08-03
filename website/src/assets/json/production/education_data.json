@@ -9,11 +9,11 @@
             "end": "2021",
             "logo": "./images/logos/education/uofc.png",
             "details": [
-                "Comprehensive exploration of communication processes and media technologies.",
-                "Emphasis on critical analysis, research skills, and practical experience.",
-                "Prepares students for careers in media, public relations, digital communication, and more.",
-                "Curriculum integrates theory and practice, addressing contemporary media issues.",
-                "Offers hands-on experience through internships and projects, guided by expert faculty."
+                "Completed a Bachelor of Arts in Communication and Media Studies while working full-time on campus as Senior Systems Specialist for the Faculty of Arts, balancing coursework against production support for faculty and staff.",
+                "Studied communication theory, rhetoric, and audience analysis — the foundation for the technical writing, architecture proposals, and incident communication that define current engineering work.",
+                "Trained in qualitative and quantitative research methods, including survey design, discourse analysis, and source evaluation, now applied to security awareness programmes and post-incident reviews.",
+                "Coursework in digital media, platform governance, and information ethics that directly informs work on identity, privacy, and acceptable-use policy.",
+                "Included a year abroad at Waseda University in Tokyo through the faculty's international exchange programme, extending the degree to five years."
             ],
             "links": [
                 {
@@ -41,11 +41,11 @@
             "end": "2019",
             "logo": "./images/logos/education/waseda.png",
             "details": [
-                "One-year exchange program at Waseda University's School of International Liberal Studies in Tokyo.",
-                "Immersive cultural and academic experience in a vibrant international environment.",
-                "Diverse curriculum focused on global issues, liberal arts, and interdisciplinary studies.",
-                "Opportunities to engage with students from around the world and participate in various extracurricular activities.",
-                "Enhances cross-cultural communication skills and broadens global perspectives."
+                "Completed a one-year exchange at the School of International Liberal Studies (SILS), taking a full English-language course load alongside intensive Japanese language study.",
+                "Studied global affairs, comparative media, and East Asian politics in small seminar classes with students from across Asia, Europe, and the Americas.",
+                "Built the language foundation and cultural fluency that made relocating to Tokyo permanently in 2021 possible, and that now underpins day-to-day work with Japanese stakeholders and vendors.",
+                "Navigated an unfamiliar academic system, city, and language independently — the same adaptability later applied to leading a distributed IT service desk team in Japan.",
+                "Sharpened cross-cultural communication under real constraints, learning to work through ambiguity where shared context could not be assumed."
             ],
             "links": [
                 {
@@ -73,10 +73,11 @@
             "end": "2011",
             "logo": "./images/logos/education/cato.png",
             "details": [
-                "Comprehensive network security curriculum covering perimeter security, data communications, and practical penetration testing.",
-                "Practical experience in network exploits, vulnerabilities, and penetration testing prepares students for real-world challenges.",
-                "Addressing the exponential need for security professionals, offering a rewarding path in a rapidly growing industry.",
-                "Begins with a foundational Network Security Administrator Certificate program before advancing to specialized training."
+                "Completed a two-year diploma in Network Administration and Security, progressing from the foundational Network Security Administrator certificate into specialised security coursework.",
+                "Built and administered Windows Server and Linux lab environments — Active Directory, DNS, DHCP, file and print services — establishing the systems fundamentals carried into every role since.",
+                "Studied perimeter security and data communications hands-on: firewall rule design, network segmentation, secure remote access, and traffic analysis.",
+                "Ran practical penetration testing labs covering reconnaissance, vulnerability assessment, and common exploit classes, learning to evaluate infrastructure from an attacker's perspective.",
+                "Graduated directly into a field engineering role at Cloudwerx Data Solutions, applying the coursework to VMware, NetApp, and Cisco infrastructure in production healthcare environments."
             ],
             "links": [
                 {
