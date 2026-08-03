@@ -380,7 +380,7 @@ resource "aws_route53_record" "crc-dns-zone-api-record-A" {
 
 resource "aws_route53_record" "crc-dns-zone-ses-record-MX" {
   name    = var.ses-mail-from-domain
-  records = ["10 feedback-smtp.${data.aws_region.current.name}.amazonses.com"]
+  records = ["10 feedback-smtp.${data.aws_region.current.region}.amazonses.com"]
   ttl     = "600"
   type    = "MX"
   zone_id = aws_route53_zone.crc-new-hosted-zone.zone_id
