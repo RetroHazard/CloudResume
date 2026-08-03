@@ -99,7 +99,7 @@ function MonogramPlate({ text, size, className }) {
             style={{ width: size, height: size }}
         >
             <span
-                className='font-mono font-semibold leading-none tracking-tight'
+                className='font-mono leading-none font-semibold tracking-tight'
                 style={{ fontSize: scaleEm(size, 0.42, '0.5em') }}
             >
                 {text}

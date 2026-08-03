@@ -166,6 +166,37 @@ resource "aws_dynamodb_table" "crc-visitor-record" {
   write_capacity = "1"
 }
 
+# Holds two kinds of item, distinguished by key. Per-visitor rows are keyed on the
+# visitor UUID and carry a `ttl`, so a repeat download inside 24h does not double-count.
+# The running total lives at id = "download_count" and deliberately carries no `ttl`
+# attribute — DynamoDB's sweeper ignores items that lack one, so it never expires.
+resource "aws_dynamodb_table" "crc-download-record" {
+  attribute {
+    name = "id"
+    type = "S"
+  }
+
+  billing_mode                = "PROVISIONED"
+  deletion_protection_enabled = "true"
+  hash_key                    = "id"
+  name                        = "crc-download-record"
+
+  point_in_time_recovery {
+    enabled = "false"
+  }
+
+  read_capacity  = "1"
+  stream_enabled = "false"
+  table_class    = "STANDARD"
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = "true"
+  }
+
+  write_capacity = "1"
+}
+
 #  End DynamoDB Block  #
 ########################
 
@@ -399,6 +430,82 @@ resource "aws_lambda_function" "crc-trackVisitors" {
   ]
 }
 
+resource "aws_cloudwatch_log_group" "crc-downloadResume-log-group" {
+  name              = "/aws/lambda/downloadResume"
+  retention_in_days = 14
+}
+
+resource "aws_lambda_function" "crc-downloadResume" {
+  architectures = ["x86_64"]
+
+  environment {
+    variables = {
+      recordTableName = aws_dynamodb_table.crc-download-record.id
+      allowedOrigin   = "https://${var.domain-name}"
+
+      # The site apex, NOT the distribution domain. A signed URL on *.cloudfront.net would
+      # be cross-origin to the page, and browsers silently ignore a link's `download`
+      # attribute cross-origin — the PDF would open in a viewer instead of downloading,
+      # with nothing logged to explain it.
+      downloadBaseUrl = "https://${var.domain-name}"
+
+      resumeObjectKey     = var.resume-object-key
+      signingKeyParameter = var.cf-signing-key-parameter-name
+      signingKeyPairId    = var.cf-signing-key-pair-id
+      signedUrlTtl        = tostring(var.signed-url-ttl-seconds)
+    }
+  }
+
+  ephemeral_storage {
+    size = "512"
+  }
+
+  function_name = "downloadResume"
+  handler       = "downloadResume.lambda_handler"
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = aws_cloudwatch_log_group.crc-downloadResume-log-group.name
+    system_log_level      = "INFO"
+  }
+
+  memory_size  = "128"
+  package_type = "Zip"
+  filename     = data.archive_file.downloadResume_lambda_function_code.output_path
+
+  source_code_hash = data.archive_file.downloadResume_lambda_function_code.output_base64sha256
+
+  # Unreserved, like every other function here. A per-function reservation was the intent —
+  # this is the only endpoint that mints credentials for a paid egress path — but it is not
+  # available on this account: PutFunctionConcurrency refuses any reservation that would
+  # drop UnreservedConcurrentExecution below 10, and the account's total concurrency limit
+  # *is* 10. So reserving anything at all is rejected until that quota is raised.
+  #
+  # Losing it costs less than it appears. A 10-execution account ceiling is itself a hard
+  # bound, and the real control was always the stage throttle in modules/frontend
+  # (2 rps / 5 burst on download/GET), which caps issuance before a request reaches Lambda.
+  #
+  # What is genuinely given up is isolation: a burst on /download can now consume the
+  # account's whole concurrency pool and starve trackVisitors and sendMessage. The stage
+  # throttle is what keeps that from happening. If the account limit is ever raised, this
+  # is worth reinstating.
+  reserved_concurrent_executions = "-1"
+
+  role = var.iam-role-download-issuer-arn
+
+  runtime      = "python3.12"
+  skip_destroy = "false"
+
+  # 5s rather than the 3s the other API functions use: the first invocation after a cold
+  # start pays for an ssm:GetParameter round trip before it can sign anything.
+  timeout = "5"
+
+  depends_on = [
+    aws_cloudwatch_log_group.crc-downloadResume-log-group
+  ]
+}
+
 resource "aws_cloudwatch_log_group" "crc-updateContributions-log-group" {
   name              = "/aws/lambda/updateContributions"
   retention_in_days = 14
@@ -477,6 +584,14 @@ resource "aws_lambda_permission" "crc-event-permissions-api-contact" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${var.api-execution-arn}/*/POST/contact"
   statement_id  = "AllowAPIGatewayInvokeContact"
+}
+
+resource "aws_lambda_permission" "crc-event-permissions-api-download" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.crc-downloadResume.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${var.api-execution-arn}/*/GET/download"
+  statement_id  = "AllowAPIGatewayInvokeDownload"
 }
 
 #  End Lambda Block  #

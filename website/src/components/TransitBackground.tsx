@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useReducedMotion } from 'motion/react';
-import useServiceLevel from '../utils/useServiceLevel';
+import { useServiceLevel } from '../utils/siteClock';
 
 // Ambient wayfinding backdrop: a procedurally-generated transit diagram drawn
 // fresh on every page load. Coloured metro lines cross the viewport with the
@@ -103,9 +103,7 @@ function pickStations(pts: Pt[]): Pt[] {
 // train should read as standing at a platform — otherwise any on-screen vertex,
 // picked at random so the sleeping fleet isn't all bunched in the same place.
 function pickDepot(pts: Pt[], stations: Pt[]): Pt {
-    const pool = stations.length
-        ? stations
-        : pts.filter(([x, y]) => x > 40 && x < VW - 40 && y > 40 && y < VH - 40);
+    const pool = stations.length ? stations : pts.filter(([x, y]) => x > 40 && x < VW - 40 && y > 40 && y < VH - 40);
     if (!pool.length) return pts[Math.floor(pts.length / 2)];
     return pool[Math.floor(Math.random() * pool.length)];
 }
@@ -161,19 +159,19 @@ export default function TransitBackground() {
 
     return (
         <div
-            id="transit-background"
-            aria-hidden="true"
-            className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background"
+            id='transit-background'
+            aria-hidden='true'
+            className='pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background'
         >
             {/* signal glows */}
-            <div className="absolute -top-48 left-1/2 h-[38rem] w-[38rem] -translate-x-1/2 rounded-full bg-neon/[0.08] blur-[130px]" />
-            <div className="absolute bottom-[-10rem] right-[-6rem] h-[30rem] w-[30rem] rounded-full bg-glow/[0.06] blur-[130px]" />
+            <div className='absolute -top-48 left-1/2 h-[38rem] w-[38rem] -translate-x-1/2 rounded-full bg-neon/[0.08] blur-[130px]' />
+            <div className='absolute right-[-6rem] bottom-[-10rem] h-[30rem] w-[30rem] rounded-full bg-glow/[0.06] blur-[130px]' />
 
             {/* transit map */}
             <svg
-                className="absolute inset-0 h-full w-full"
+                className='absolute inset-0 h-full w-full'
                 viewBox={`0 0 ${VW} ${VH}`}
-                preserveAspectRatio="xMidYMid slice"
+                preserveAspectRatio='xMidYMid slice'
             >
                 <g className={prefersReduced ? undefined : 'tb-drift'}>
                     {lines.map((l) => (
@@ -181,11 +179,11 @@ export default function TransitBackground() {
                             key={l.id}
                             id={l.id}
                             d={l.d}
-                            fill="none"
+                            fill='none'
                             stroke={l.color}
                             strokeWidth={3}
-                            strokeLinejoin="round"
-                            strokeLinecap="round"
+                            strokeLinejoin='round'
+                            strokeLinecap='round'
                             opacity={stabled ? 0.32 : 0.5}
                             style={{ filter: `drop-shadow(0 0 5px ${l.color})` }}
                         />
@@ -197,7 +195,7 @@ export default function TransitBackground() {
                                 cx={s[0]}
                                 cy={s[1]}
                                 r={6}
-                                fill="#071319"
+                                fill='#071319'
                                 stroke={l.color}
                                 strokeWidth={2.5}
                                 opacity={0.85}
@@ -210,14 +208,14 @@ export default function TransitBackground() {
                         <circle
                             key={`${l.id}-train-${level.key}`}
                             r={4.5}
-                            fill="#ffffff"
+                            fill='#ffffff'
                             style={{ filter: `drop-shadow(0 0 6px ${l.color})` }}
                         >
                             <animateMotion
                                 dur={`${(Number(l.dur) / (speed || 1)).toFixed(2)}s`}
                                 begin={`${l.begin}s`}
-                                repeatCount="indefinite"
-                                rotate="auto"
+                                repeatCount='indefinite'
+                                rotate='auto'
                             >
                                 <mpath href={`#${l.id}`} />
                             </animateMotion>
@@ -229,7 +227,7 @@ export default function TransitBackground() {
                             cx={l.depot[0]}
                             cy={l.depot[1]}
                             r={4}
-                            fill="#ffffff"
+                            fill='#ffffff'
                             opacity={0.4}
                             style={{ filter: `drop-shadow(0 0 4px ${l.color})` }}
                         />

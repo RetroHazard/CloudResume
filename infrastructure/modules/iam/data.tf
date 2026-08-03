@@ -34,6 +34,69 @@ data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
   }
 }
 
+data "aws_iam_policy_document" "crc-lambda-DownloadResume-logging-policy" {
+  statement {
+    sid    = "AllowFunctionToWriteToCloudwatch"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "${var.crc-cw-lambda-log-group-downloadResume}:*"
+    ]
+  }
+}
+
+# The signing key is a SecureString read at runtime, never through a Terraform data
+# source — `data "aws_ssm_parameter"` writes the decrypted value into state in cleartext,
+# and the state bucket would then hold the CloudFront private key. Terraform only ever
+# learns the parameter's *name*, so the ARN here is constructed rather than looked up.
+data "aws_iam_policy_document" "crc-lambda-DownloadResume-access-policy" {
+  statement {
+    sid    = "AllowFunctionToRecordDownloads"
+    effect = "Allow"
+    actions = [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem"
+    ]
+    resources = [
+      var.crc-download-record_arn
+    ]
+  }
+
+  statement {
+    sid    = "AllowFunctionToReadSigningKey"
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter"
+    ]
+    resources = [
+      "arn:aws:ssm:${data.aws_region.current.name}:${var.account_id}:parameter${var.crc-cf-signing-key-parameter-name}"
+    ]
+  }
+
+  # The AWS-managed alias/aws/ssm key delegates authorisation to IAM, so decryption has to
+  # be granted here. Resolving it through an alias data source exposes no secret material.
+  statement {
+    sid    = "AllowFunctionToDecryptSigningKey"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = [
+      data.aws_kms_alias.ssm.target_key_arn
+    ]
+  }
+}
+
+data "aws_kms_alias" "ssm" {
+  name = "alias/aws/ssm"
+}
+
 data "aws_iam_policy_document" "crc-lambda-SendMessage-logging-policy" {
   statement {
     sid    = "AllowFunctionToWriteToCloudwatch"

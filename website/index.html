@@ -1,20 +1,124 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="dark">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Alexander Bracken — Senior Cloud Security Engineer. Cloud architecture, IAM, and security engineering." />
-    <meta name="theme-color" content="#071319" />
-    <meta name="color-scheme" content="dark" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <title>Cloud Resume</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <script type="module" src="/src/index.js"></script>
-  </body>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta
+            name="description"
+            content="Alexander Bracken — Senior Cloud Security Engineer. Cloud architecture, IAM, and security engineering."
+        />
+        <meta name="theme-color" content="#071319" />
+        <meta name="color-scheme" content="dark" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <title>Cloud Resume</title>
+
+        <!--
+      Boot recovery net.
+
+      This document is the map from content hashes to the live build, so a copy
+      of it that outlives its deploy points at bundles that no longer exist.
+      Those requests fall through to the SPA error-page rule and come back as
+      HTML; a module script served as text/html is refused outright, nothing
+      mounts, and the visitor sits looking at a blank page with no way out but
+      clearing their browser data. Safari is where this actually bites, because
+      it is the most willing of the major browsers to reuse a cached document
+      without revalidating it.
+
+      The deploy now sends `Cache-Control: no-cache` for this file, which is the
+      real fix. This is the belt to that pair of braces: if the page fails to
+      boot anyway, refetch the document past the cache once and reload. Inline
+      and classic (not a module) so it runs even when the module graph is the
+      thing that is broken.
+    -->
+        <script>
+            (function () {
+                var KEY = 'crc:boot-recovered';
+                var done = false;
+
+                // One attempt per tab. sessionStorage is the durable marker, but it
+                // throws outright when the visitor has blocked cookies, so fall back
+                // to "are we already inside a reload?" — enough to stop a loop.
+                try {
+                    done = sessionStorage.getItem(KEY) === '1';
+                } catch (e) {
+                    var nav = (performance.getEntriesByType && performance.getEntriesByType('navigation')[0]) || null;
+                    done = nav ? nav.type === 'reload' : false;
+                }
+
+                function recover(reason) {
+                    if (done) return;
+                    done = true;
+                    try {
+                        sessionStorage.setItem(KEY, '1');
+                    } catch (e) {
+                        /* blocked storage — the navigation-type check above covers us */
+                    }
+                    console.warn('[boot] app failed to start (' + reason + '); refetching past the cache');
+                    // `cache: 'reload'` bypasses the cached copy and replaces the
+                    // stored entry, so the reload that follows gets the live document
+                    // with the live asset hashes in it.
+                    var refetch = window.fetch
+                        ? fetch(location.href, { cache: 'reload', credentials: 'same-origin' })
+                        : Promise.resolve();
+                    refetch
+                        .catch(function () {})
+                        .then(function () {
+                            location.reload();
+                        });
+                }
+
+                // A bundle that 404s, or comes back as the HTML fallback page and is
+                // refused on MIME grounds, fires an error event at its element. These
+                // don't bubble, hence the capture phase.
+                //
+                // Only our own files count. The web font stylesheet is cross-origin
+                // and blocked often enough — content blockers, captive portals — that
+                // treating it as evidence of a stale build would mean reloading the
+                // page on people whose only problem is that the fonts didn't arrive.
+                function isOurs(el) {
+                    var url = el.src || el.href;
+                    if (!url) return false;
+                    try {
+                        return new URL(url, location.href).origin === location.origin;
+                    } catch (e) {
+                        return false;
+                    }
+                }
+
+                window.addEventListener(
+                    'error',
+                    function (event) {
+                        var el = event.target;
+                        if (!el || el === window || !isOurs(el)) return;
+                        if (el.tagName === 'SCRIPT') recover('script failed to load');
+                        else if (el.tagName === 'LINK' && el.rel === 'stylesheet') {
+                            recover('stylesheet failed to load');
+                        }
+                    },
+                    true,
+                );
+
+                // Backstop for failure modes that never fire a resource error — a
+                // bundle that parses but throws on evaluation, say. If nothing has
+                // mounted well after load, treat the page as dead.
+                window.addEventListener('load', function () {
+                    setTimeout(function () {
+                        var root = document.getElementById('root');
+                        if (root && root.childElementCount === 0) recover('nothing mounted');
+                    }, 10000);
+                });
+            })();
+        </script>
+    </head>
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+        <script type="module" src="/src/index.js"></script>
+    </body>
 </html>

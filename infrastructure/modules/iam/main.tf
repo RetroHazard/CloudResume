@@ -24,6 +24,28 @@ resource "aws_iam_policy" "crc-Lambda-TrackVisitors-Logging" {
   }
 }
 
+resource "aws_iam_policy" "crc-Lambda-DownloadResume-AccessPolicy" {
+  name = "crc-Lambda-DownloadResume-AccessPolicy"
+  path = "/CloudResume/"
+
+  policy = data.aws_iam_policy_document.crc-lambda-DownloadResume-access-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
+resource "aws_iam_policy" "crc-Lambda-DownloadResume-Logging" {
+  name = "crc-Lambda-DownloadResume-Logging"
+  path = "/CloudResume/"
+
+  policy = data.aws_iam_policy_document.crc-lambda-DownloadResume-logging-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
 resource "aws_iam_policy" "crc-Lambda-CloudfrontInvalidation-AccessPolicy" {
   name = "crc-CloudFrontInvalidation-AccessPolicy"
   path = "/CloudResume/"
@@ -114,12 +136,12 @@ resource "aws_iam_policy" "crc-GitHub-Terraform-LimitedIAM" {
 
 // IAM Roles
 resource "aws_iam_role" "crc-api-CloudwatchLogs" {
-  description          = "Allows API Gateway to publish to CloudWatch Logs."
+  description           = "Allows API Gateway to publish to CloudWatch Logs."
   force_detach_policies = true
-  assume_role_policy   = data.aws_iam_policy_document.crc-function-assume-role-policy.json
-  max_session_duration = 3600
-  name                 = "CloudResume_API_CloudWatchLogs"
-  path                 = "/CloudResume/"
+  assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
+  max_session_duration  = 3600
+  name                  = "CloudResume_API_CloudWatchLogs"
+  path                  = "/CloudResume/"
 
   lifecycle {
     create_before_destroy = false
@@ -132,12 +154,12 @@ resource "aws_iam_role_policy_attachment" "crc-api-CloudwatchLogs-policy" {
 }
 
 resource "aws_iam_role" "crc-CloudfrontManager" {
-  description          = "Allows Lambda to Manage Cloudfront Invalidations and Publish to CloudWatch"
+  description           = "Allows Lambda to Manage Cloudfront Invalidations and Publish to CloudWatch"
   force_detach_policies = true
-  assume_role_policy   = data.aws_iam_policy_document.crc-function-assume-role-policy.json
-  max_session_duration = 3600
-  name                 = "crc-CloudFrontManager"
-  path                 = "/CloudResume/"
+  assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
+  max_session_duration  = 3600
+  name                  = "crc-CloudFrontManager"
+  path                  = "/CloudResume/"
 
   lifecycle {
     create_before_destroy = false
@@ -155,12 +177,12 @@ resource "aws_iam_role_policy_attachment" "crc-CloudfrontManager-logging-policy"
 }
 
 resource "aws_iam_role" "crc-MessageSender" {
-  description          = "Allows Lambda to Send Messages using SES and Publish to CloudWatch"
+  description           = "Allows Lambda to Send Messages using SES and Publish to CloudWatch"
   force_detach_policies = true
-  assume_role_policy   = data.aws_iam_policy_document.crc-function-assume-role-policy.json
-  max_session_duration = 3600
-  name                 = "crc-MessageSender"
-  path                 = "/CloudResume/"
+  assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
+  max_session_duration  = 3600
+  name                  = "crc-MessageSender"
+  path                  = "/CloudResume/"
 
   lifecycle {
     create_before_destroy = false
@@ -178,12 +200,12 @@ resource "aws_iam_role_policy_attachment" "crc-MessageSender-logging-policy" {
 }
 
 resource "aws_iam_role" "crc-VisitorTracker" {
-  description          = "Allows Lambda to Manage DynamoDB Tables and Publish to CloudWatch"
+  description           = "Allows Lambda to Manage DynamoDB Tables and Publish to CloudWatch"
   force_detach_policies = true
-  assume_role_policy   = data.aws_iam_policy_document.crc-function-assume-role-policy.json
-  max_session_duration = 3600
-  name                 = "crc-VisitorTracker"
-  path                 = "/CloudResume/"
+  assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
+  max_session_duration  = 3600
+  name                  = "crc-VisitorTracker"
+  path                  = "/CloudResume/"
 
   lifecycle {
     create_before_destroy = false
@@ -200,13 +222,36 @@ resource "aws_iam_role_policy_attachment" "crc-VisitorTracker-logging-policy" {
   policy_arn = aws_iam_policy.crc-Lambda-TrackVisitors-Logging.arn
 }
 
-resource "aws_iam_role" "crc-ContributionTracker" {
-  description          = "Allows Lambda to Publish Contribution Data to S3 and Publish to CloudWatch"
+resource "aws_iam_role" "crc-DownloadIssuer" {
+  description           = "Allows Lambda to Sign CV Download URLs, Record Downloads and Publish to CloudWatch"
   force_detach_policies = true
-  assume_role_policy   = data.aws_iam_policy_document.crc-function-assume-role-policy.json
-  max_session_duration = 3600
-  name                 = "crc-ContributionTracker"
-  path                 = "/CloudResume/"
+  assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
+  max_session_duration  = 3600
+  name                  = "crc-DownloadIssuer"
+  path                  = "/CloudResume/"
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "crc-DownloadIssuer-access-policy" {
+  role       = aws_iam_role.crc-DownloadIssuer.name
+  policy_arn = aws_iam_policy.crc-Lambda-DownloadResume-AccessPolicy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "crc-DownloadIssuer-logging-policy" {
+  role       = aws_iam_role.crc-DownloadIssuer.name
+  policy_arn = aws_iam_policy.crc-Lambda-DownloadResume-Logging.arn
+}
+
+resource "aws_iam_role" "crc-ContributionTracker" {
+  description           = "Allows Lambda to Publish Contribution Data to S3 and Publish to CloudWatch"
+  force_detach_policies = true
+  assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
+  max_session_duration  = 3600
+  name                  = "crc-ContributionTracker"
+  path                  = "/CloudResume/"
 
   lifecycle {
     create_before_destroy = false

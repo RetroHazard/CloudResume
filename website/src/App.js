@@ -50,32 +50,38 @@ function AnimatedRoutes() {
 
 export default function App() {
     return (
-        <MotionConfig reducedMotion='user'>
-            <TransitBackground />
-            <StationHeader />
-            <a
-                href='#content'
-                className='sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-14 focus:z-50 focus:rounded focus:bg-primary-500 focus:px-4 focus:py-2 focus:text-secondary-900'
-            >
-                Skip to main content
-            </a>
-            <BrowserRouter>
-                <NoticeBanner />
-                {/* Below `sm` the rail map collapses to a horizontal strip above the
-                    board; from `sm` up it returns to the left-hand line map. */}
-                <div className='mx-auto flex max-w-6xl flex-col items-stretch px-3 max-sm:pt-16 sm:flex-row sm:items-start sm:justify-center sm:px-0'>
-                    <Navigation />
-                    <div className='sm:min-w-102 w-full max-w-2xl space-y-8 max-sm:mx-auto max-sm:pb-12 max-sm:pt-6 sm:w-3/5 sm:px-2 sm:py-20'>
-                        <ErrorBoundary>
-                            <Suspense fallback={<LoadingSkeleton />}>
-                                <main id='content' tabIndex={-1} className='outline-none'>
-                                    <AnimatedRoutes />
-                                </main>
-                            </Suspense>
-                        </ErrorBoundary>
+        // The outer boundary covers the chrome — background, header, nav — which
+        // the inner one around the routes does not. Anything that throws out
+        // there used to unmount the entire tree and leave a blank document; now
+        // the worst case is a page that says so and offers a way back.
+        <ErrorBoundary>
+            <MotionConfig reducedMotion='user'>
+                <TransitBackground />
+                <StationHeader />
+                <a
+                    href='#content'
+                    className='sr-only focus:not-sr-only focus:absolute focus:top-14 focus:left-2 focus:z-50 focus:rounded focus:bg-primary-500 focus:px-4 focus:py-2 focus:text-secondary-900'
+                >
+                    Skip to main content
+                </a>
+                <BrowserRouter>
+                    <NoticeBanner />
+                    {/* Below `sm` the rail map collapses to a horizontal strip above the
+                        board; from `sm` up it returns to the left-hand line map. */}
+                    <div className='mx-auto flex max-w-6xl flex-col items-stretch px-3 max-sm:pt-16 sm:flex-row sm:items-start sm:justify-center sm:px-0'>
+                        <Navigation />
+                        <div className='w-full max-w-2xl space-y-8 max-sm:mx-auto max-sm:pt-6 max-sm:pb-12 sm:w-3/5 sm:min-w-102 sm:px-2 sm:py-20'>
+                            <ErrorBoundary>
+                                <Suspense fallback={<LoadingSkeleton />}>
+                                    <main id='content' tabIndex={-1} className='outline-none'>
+                                        <AnimatedRoutes />
+                                    </main>
+                                </Suspense>
+                            </ErrorBoundary>
+                        </div>
                     </div>
-                </div>
-            </BrowserRouter>
-        </MotionConfig>
+                </BrowserRouter>
+            </MotionConfig>
+        </ErrorBoundary>
     );
 }

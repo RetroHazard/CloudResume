@@ -14,16 +14,18 @@ function PersonalSummary() {
         );
     } else {
         if (import.meta.env.VITE_DATA_SET !== 'production') {
-            console.warn(`PersonalSummary: unknown VITE_DATA_SET value "${import.meta.env.VITE_DATA_SET}", falling back to production content`);
+            console.warn(
+                `PersonalSummary: unknown VITE_DATA_SET value "${import.meta.env.VITE_DATA_SET}", falling back to production content`,
+            );
         }
         return (
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
                     IT Solutions Leader with <strong>15+ years of experience</strong> building and scaling secure
                     enterprise infrastructure across cloud, identity, and endpoint security domains. Expert in{' '}
-                    <strong>AWS, Kubernetes, Terraform</strong>, and <strong>Identity &amp; Access Management (IAM/SSO)</strong>,
-                    with hands-on experience in PKI, MDM/endpoint security, vulnerability management, and{' '}
-                    <em>AI governance</em>.
+                    <strong>AWS, Kubernetes, Terraform</strong>, and{' '}
+                    <strong>Identity &amp; Access Management (IAM/SSO)</strong>, with hands-on experience in PKI,
+                    MDM/endpoint security, vulnerability management, and <em>AI governance</em>.
                 </p>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
                     Known for automating manual security operations (<strong>Python, Go, Bash</strong>) and building

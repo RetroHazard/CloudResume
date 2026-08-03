@@ -40,6 +40,10 @@ export function formatJstTime(date = new Date()) {
 // on the shoulders either side of it, last trains late on, then the overnight
 // shutdown. `key` drives the badge styling in the header.
 //
+// `label` is the header badge's wording; `board` is the same state phrased for a
+// platform board's status pill, which talks about lines rather than the network.
+// Only full service can honestly claim every line is running.
+//
 // `traffic` is the same timetable expressed for the background transit map, so
 // the badge and the trains behind it can never tell different stories:
 //   trains  — how many lines run a train (clamped to the lines actually drawn)
@@ -49,24 +53,28 @@ export const SERVICE_LEVELS = {
     full: {
         key: 'full',
         label: 'In Service',
+        board: 'All Lines Running',
         detail: 'In service — full service 09:00–18:00 JST',
         traffic: { trains: 4, speed: 1, stabled: false },
     },
     reduced: {
         key: 'reduced',
         label: 'Reduced Service',
+        board: 'Reduced Service',
         detail: 'Reduced service — off-peak hours in Tokyo',
         traffic: { trains: 2, speed: 0.7, stabled: false },
     },
     last: {
         key: 'last',
         label: 'Last Train',
+        board: 'Last Trains Running',
         detail: 'Last train — service winding down for the night in Tokyo',
         traffic: { trains: 1, speed: 0.45, stabled: false },
     },
     closed: {
         key: 'closed',
         label: 'Out of Service',
+        board: 'Lines Closed',
         detail: 'Out of service — overnight shutdown, 00:00–06:00 JST',
         traffic: { trains: 0, speed: 0, stabled: true },
     },

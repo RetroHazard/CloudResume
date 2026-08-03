@@ -30,6 +30,10 @@ variable "iam-role-contribution-tracker-arn" {
   type = string
 }
 
+variable "iam-role-download-issuer-arn" {
+  type = string
+}
+
 variable "contribution-accounts" {
   type = list(string)
 }
@@ -78,4 +82,22 @@ variable "r53-ses-verification-mx" {
 
 variable "acm-certificate-validation" {
   type = string
+}
+
+variable "cf-signing-key-pair-id" {
+  type = string
+}
+
+# Signed CV Downloads
+
+variable "cf-signing-key-parameter-name" {
+  type = string
+}
+
+variable "resume-object-key" {
+  type = string
+}
+
+variable "signed-url-ttl-seconds" {
+  type = number
 }

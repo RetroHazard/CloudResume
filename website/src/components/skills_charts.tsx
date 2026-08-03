@@ -96,9 +96,9 @@ export default function SkillsCharts() {
                         <RadarArea index={1} showGlow />
                         <RadarLabels />
                     </RadarChart>
-                    <figcaption className='flex flex-col items-center gap-2 font-mono text-xs uppercase tracking-wider text-content-accent'>
+                    <figcaption className='flex flex-col items-center gap-2 font-mono text-xs tracking-wider text-content-accent uppercase'>
                         // proficiency by category
-                        <span className='flex flex-wrap justify-center gap-x-4 gap-y-1 text-[0.68rem] normal-case tracking-normal text-content-subtitle'>
+                        <span className='flex flex-wrap justify-center gap-x-4 gap-y-1 text-[0.68rem] tracking-normal text-content-subtitle normal-case'>
                             <SeriesKey color={PEAK_COLOR} filled={false}>
                                 peak
                             </SeriesKey>
@@ -122,9 +122,9 @@ export default function SkillsCharts() {
                         ))}
                         <RingCenter defaultLabel='Tools' />
                     </RingChart>
-                    <figcaption className='flex w-full flex-col items-center gap-2 font-mono text-xs uppercase tracking-wider text-content-accent'>
+                    <figcaption className='flex w-full flex-col items-center gap-2 font-mono text-xs tracking-wider text-content-accent uppercase'>
                         // toolbox by category
-                        <table className='w-full max-w-[320px] border-collapse text-[0.68rem] normal-case tracking-normal'>
+                        <table className='w-full max-w-[320px] border-collapse text-[0.68rem] tracking-normal normal-case'>
                             <caption className='sr-only'>
                                 Tools, average proficiency and peak proficiency in each category
                             </caption>

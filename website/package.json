@@ -1,84 +1,88 @@
 {
-  "name": "cloud-resume-challenge",
-  "version": "0.2.5",
-  "private": true,
-  "packageManager": "pnpm@10.33.0",
-  "dependencies": {
-    "@iconify-icon/react": "^2.1.0",
-    "@number-flow/react": "^0.6.2",
-    "@visx/group": "4.0.1-alpha.0",
-    "@visx/responsive": "4.0.1-alpha.0",
-    "@visx/scale": "4.0.1-alpha.0",
-    "@visx/shape": "4.0.1-alpha.0",
-    "animejs": "^4.5.0",
-    "clsx": "^2.1.1",
-    "d3-shape": "^3.2.0",
-    "lucide-react": "^1.26.0",
-    "motion": "^12.42.2",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-google-recaptcha": "^3.1.0",
-    "react-router": "^8.3.0",
-    "tailwind-merge": "^2.3.0"
-  },
-  "scripts": {
-    "test": "vitest run --coverage",
-    "typecheck": "tsc --noEmit",
-    "start-dev": "cross-env VITE_DATA_SET=development vite",
-    "start-prod": "cross-env VITE_DATA_SET=production vite",
-    "build-dev": "cross-env VITE_DATA_SET=development vite build --outDir build/dev",
-    "build-prod": "cross-env VITE_DATA_SET=production vite build --outDir build/prod",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "cypress",
-      "esbuild"
-    ],
-    "overrides": {
-      "ws@>=8.0.0 <8.21.0": ">=8.21.0",
-      "uuid@<11.1.1": ">=11.1.1",
-      "qs@>=6.11.1 <=6.15.1": ">=6.15.2",
-      "tmp@<0.2.6": ">=0.2.6",
-      "form-data@>=4.0.0 <4.0.6": ">=4.0.6",
-      "@babel/core@<=7.29.0": ">=7.29.6",
-      "glob@>=10.0.0 <11": "^11.0.0",
-      "brace-expansion@<5.0.8": "5.0.8"
+    "name": "cloud-resume-challenge",
+    "version": "0.2.5",
+    "private": true,
+    "packageManager": "pnpm@10.33.0",
+    "dependencies": {
+        "@iconify-icon/react": "^2.1.0",
+        "@number-flow/react": "^0.6.2",
+        "@visx/group": "4.0.1-alpha.0",
+        "@visx/responsive": "4.0.1-alpha.0",
+        "@visx/scale": "4.0.1-alpha.0",
+        "@visx/shape": "4.0.1-alpha.0",
+        "animejs": "^4.5.0",
+        "clsx": "^2.1.1",
+        "d3-shape": "^3.2.0",
+        "lucide-react": "^1.26.0",
+        "motion": "^12.42.2",
+        "react": "^19.2.8",
+        "react-dom": "^19.2.8",
+        "react-google-recaptcha": "^3.1.0",
+        "react-router": "^8.3.0",
+        "tailwind-merge": "^2.3.0"
+    },
+    "scripts": {
+        "test": "vitest run --coverage",
+        "typecheck": "tsc --noEmit",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "start-dev": "cross-env VITE_DATA_SET=development vite",
+        "start-prod": "cross-env VITE_DATA_SET=production vite",
+        "build-dev": "cross-env VITE_DATA_SET=development vite build --outDir build/dev",
+        "build-prod": "cross-env VITE_DATA_SET=production vite build --outDir build/prod",
+        "preview": "vite preview --outDir build/dev --port 5173",
+        "cypress:open": "cypress open",
+        "cypress:run": "cypress run",
+        "cypress:smoke": "cypress run --spec 'cypress/e2e/navigation.cy.js,cypress/e2e/visitor-counter.cy.js,cypress/e2e/files-locked.cy.js,cypress/e2e/cv-download-live.cy.js,cypress/e2e/api-live.cy.js,cypress/e2e/bucket-locked.cy.js'"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "cypress",
+            "esbuild"
+        ],
+        "overrides": {
+            "ws@>=8.0.0 <8.21.0": ">=8.21.0",
+            "uuid@<11.1.1": ">=11.1.1",
+            "qs@>=6.11.1 <=6.15.1": ">=6.15.2",
+            "tmp@<0.2.6": ">=0.2.6",
+            "form-data@>=4.0.0 <4.0.6": ">=4.0.6",
+            "@babel/core@<=7.29.0": ">=7.29.6",
+            "glob@>=10.0.0 <11": "^11.0.0",
+            "brace-expansion@<5.0.8": "5.0.8"
+        }
+    },
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@tailwindcss/postcss": "^4.3.3",
+        "@testing-library/dom": "^10.4.1",
+        "@testing-library/jest-dom": "^5.17.0",
+        "@testing-library/react": "^16.3.2",
+        "@testing-library/user-event": "^14.6.1",
+        "@types/node": "^26.1.1",
+        "@types/react": "^19.2.17",
+        "@types/react-dom": "^19.2.3",
+        "@vitejs/plugin-react": "^4.0.0",
+        "@vitest/coverage-v8": "^3.2.7",
+        "cross-env": "^7.0.3",
+        "cypress": "^13.0.0",
+        "jsdom": "^26.0.0",
+        "postcss": "^8.5.23",
+        "prettier": "^3.9.6",
+        "prettier-plugin-tailwindcss": "^0.8.1",
+        "tailwindcss": "^4.3.3",
+        "typescript": "^7.0.2",
+        "vite": "^6.4.3",
+        "vitest": "^3.2.7"
     }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.3",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^26.1.1",
-    "@types/react": "^19.2.17",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^4.0.0",
-    "@vitest/coverage-v8": "^3.2.7",
-    "cross-env": "^7.0.3",
-    "cypress": "^13.0.0",
-    "jsdom": "^26.0.0",
-    "postcss": "^8.5.23",
-    "prettier": "^3.2.5",
-    "prettier-plugin-tailwindcss": "^0.8.1",
-    "tailwindcss": "^4.3.3",
-    "typescript": "^7.0.2",
-    "vite": "^6.4.3",
-    "vitest": "^3.2.7"
-  }
 }

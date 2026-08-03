@@ -1,0 +1,12 @@
+# Build output and coverage
+build/
+coverage/
+
+# Lockfile — pnpm owns the formatting
+pnpm-lock.yaml
+
+# Vitest snapshots are generated; reformatting them makes them fail to match
+src/__tests__/__snapshots__/
+
+# Maintained in S3 by the updateContributions Lambda, not by hand
+public/data/contributions.json

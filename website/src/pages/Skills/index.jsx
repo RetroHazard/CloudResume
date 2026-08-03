@@ -10,7 +10,7 @@ const SkillsCharts = lazy(() => import('../../components/skills_charts'));
 
 function SubHeading({ children }) {
     return (
-        <h2 className='mb-0 flex items-center gap-2 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.2em] text-glow'>
+        <h2 className='mb-0 flex items-center gap-2 font-mono text-[0.62rem] font-semibold tracking-[0.2em] text-glow uppercase'>
             <span aria-hidden='true' className='h-1.5 w-1.5 rounded-full bg-glow' />
             {children}
         </h2>

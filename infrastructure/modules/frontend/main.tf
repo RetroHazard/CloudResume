@@ -120,11 +120,53 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   aliases    = [var.domain-name]
   comment    = "Production Distribution for Cloud Resume"
 
+  # Client-side routing fallback. A key that isn't in the bucket comes back 404 —
+  # that 404 is what every deep link (`/skills`, `/projects`) hits, and it has
+  # to resolve to the app shell for the router to take over.
+  #
+  # It resolves as 200: these are real pages, and answering them 400 told
+  # crawlers, link previewers and anything else reading the status line that
+  # the site was rejecting its own URLs.
+  #
+  # This used to map 403, because without s3:ListBucket S3 reports a missing key as
+  # AccessDenied rather than NoSuchKey. The bucket policy now grants ListBucket to the
+  # distribution for exactly that reason (see data.tf), so the fallback can key off 404
+  # instead. That matters beyond tidiness: a custom_error_response applies to the whole
+  # distribution and cannot be scoped to one behavior, so while it mapped 403 it also
+  # swallowed the 403 CloudFront returns for a missing or expired signature on /files/*,
+  # handing back the app shell with a 200. WAF blocks were masked the same way.
   custom_error_response {
     error_caching_min_ttl = "10"
-    error_code            = "403"
-    response_code         = "400"
-    response_page_path    = "/"
+    error_code            = "404"
+    response_code         = "200"
+    response_page_path    = "/index.html"
+  }
+
+  # The CV is the one object on the site that is not free to fetch. Requests without a
+  # valid signature are rejected at the edge before any of the body is transferred, so a
+  # scraper cannot run up egress without first going through the /download endpoint —
+  # which is throttled and counted.
+  #
+  # Reusing Managed-CachingOptimized is deliberate: Expires, Signature and Key-Pair-Id are
+  # CloudFront-reserved, stripped before the cache key is computed and never forwarded to
+  # S3. The object still caches once at the edge, and every viewer's signature is still
+  # validated per request.
+  ordered_cache_behavior {
+    path_pattern           = "/files/*"
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+    target_origin_id       = aws_s3_bucket.crc-agb-s3-website-prod.id
+    viewer_protocol_policy = "redirect-to-https"
+
+    # A kill switch for the direct object URL, and nothing more. Turning it off makes
+    # /files/…pdf fetchable by hand again, which is useful while debugging a signing
+    # problem — but it does NOT restore the Download CV button, because the button calls
+    # /download and never touches the plain path. If signing is broken, the button is
+    # broken either way; this just means you can still get at the PDF.
+    trusted_key_groups = var.signed-downloads-enabled ? [aws_cloudfront_key_group.crc-cf-signing-key-group.id] : []
+
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.crc-cf-cv-download.id
   }
 
   default_cache_behavior {
@@ -185,6 +227,45 @@ resource "aws_cloudfront_origin_access_control" "crc-cf-production-oac" {
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
+}
+
+# Sourced from Parameter Store rather than a committed PEM — see data.tf for why.
+#
+# nonsensitive() because the provider marks every parameter value sensitive regardless of
+# type. Left alone, a key rotation would render in the plan as "(sensitive value)", which
+# is precisely the diff worth reading. This one is a public key.
+#
+# name_prefix plus create_before_destroy is what makes rotation possible at all.
+# encoded_key forces replacement, and a fixed name would collide with itself mid-swap.
+resource "aws_cloudfront_public_key" "crc-cf-signing-key" {
+  comment     = "Public half of the signed-URL key pair for /files/*"
+  encoded_key = nonsensitive(data.aws_ssm_parameter.crc-cf-signing-public-key.value)
+  name_prefix = "crc-cf-signing-key-"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_cloudfront_key_group" "crc-cf-signing-key-group" {
+  comment = "Key group trusted to sign /files/* URLs"
+  items   = [aws_cloudfront_public_key.crc-cf-signing-key.id]
+  name    = "crc-cf-signing-key-group"
+}
+
+# Makes the download a download regardless of the link's `download` attribute, which
+# browsers only honour same-origin and drop silently otherwise.
+resource "aws_cloudfront_response_headers_policy" "crc-cf-cv-download" {
+  name    = "crc-cf-cv-download"
+  comment = "Forces the CV to download rather than render in the browser's PDF viewer"
+
+  custom_headers_config {
+    items {
+      header   = "Content-Disposition"
+      value    = "attachment"
+      override = true
+    }
+  }
 }
 
 
@@ -388,17 +469,93 @@ resource "aws_api_gateway_deployment" "crc-api-deployment" {
     aws_api_gateway_integration.crc-api-visitors-get,
     aws_api_gateway_method.crc-api-visitors-options,
     aws_api_gateway_integration.crc-api-contact-post,
-    aws_api_gateway_method.crc-api-contact-options
+    aws_api_gateway_method.crc-api-contact-options,
+    aws_api_gateway_integration.crc-api-download-get,
+    aws_api_gateway_method.crc-api-download-options
   ]
 
   rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
 
+  # This used to hash `aws_api_gateway_rest_api.crc-rest-api.body`. That attribute is only
+  # set when an API is defined from an OpenAPI document; this one is built from discrete
+  # resources, so it is null, jsonencode(null) is the constant string "null", and the
+  # trigger never changed. depends_on only orders creation — it does not replace an
+  # existing deployment — so a newly added route would have been created but never
+  # deployed to the stage, answering 403 Missing Authentication Token indefinitely.
+  #
+  # Hashing the route surface itself is the documented pattern. Any new resource, method
+  # or integration has to be added here or it will not go live.
   triggers = {
-    redeployment = sha1(jsonencode(aws_api_gateway_rest_api.crc-rest-api.body))
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_resource.crc-api-resource-visitors,
+      aws_api_gateway_method.crc-api-visitors-get,
+      aws_api_gateway_integration.crc-api-visitors-get,
+      aws_api_gateway_method.crc-api-visitors-options,
+      aws_api_gateway_integration.crc-api-visitors-options,
+      aws_api_gateway_resource.crc-api-resource-contact,
+      aws_api_gateway_method.crc-api-contact-post,
+      aws_api_gateway_integration.crc-api-contact-post,
+      aws_api_gateway_method.crc-api-contact-options,
+      aws_api_gateway_integration.crc-api-contact-options,
+      aws_api_gateway_resource.crc-api-resource-download,
+      aws_api_gateway_method.crc-api-download-get,
+      aws_api_gateway_integration.crc-api-download-get,
+      aws_api_gateway_method.crc-api-download-options,
+      aws_api_gateway_integration.crc-api-download-options,
+    ]))
   }
   lifecycle {
     create_before_destroy = true
   }
+}
+
+# api.<domain> is an edge-optimized endpoint with its own internal CloudFront distribution
+# and no WAF in front of it (the CloudResume-WebACL is CLOUDFRONT-scoped and only ever
+# covered the website distribution, and waf_enabled defaults to false in any case). These
+# throttles are therefore the only thing bounding what the API can be made to cost.
+resource "aws_api_gateway_method_settings" "crc-api-throttle-all" {
+  # The log group must exist before logging_level turns logging on, or API Gateway creates
+  # it implicitly first and Terraform then fails trying to create one that already exists.
+  depends_on = [
+    aws_api_gateway_account.crc-api-logging-role,
+    aws_cloudwatch_log_group.crc-api-execution-logs
+  ]
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  stage_name  = aws_api_gateway_stage.crc-api-stage.stage_name
+  method_path = "*/*"
+
+  settings {
+    throttling_rate_limit  = var.api-throttle-rate-limit
+    throttling_burst_limit = var.api-throttle-burst-limit
+    metrics_enabled        = true
+    data_trace_enabled     = false
+    logging_level          = "ERROR"
+  }
+}
+
+# Tighter than the default, because each call here mints a credential for a paid egress
+# path. depends_on is required rather than cosmetic: both resources PATCH the same stage,
+# and without ordering the wildcard can land second and overwrite this override.
+resource "aws_api_gateway_method_settings" "crc-api-throttle-download" {
+  depends_on = [aws_api_gateway_method_settings.crc-api-throttle-all]
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  stage_name  = aws_api_gateway_stage.crc-api-stage.stage_name
+  method_path = "download/GET"
+
+  settings {
+    throttling_rate_limit  = var.api-throttle-download-rate-limit
+    throttling_burst_limit = var.api-throttle-download-burst-limit
+  }
+}
+
+# Enabling logging_level above makes API Gateway create this group implicitly, with
+# never-expire retention — it would be the only unbounded log group in the account, since
+# every Lambda group here is pinned to 14 days. Declaring it keeps that from happening.
+resource "aws_cloudwatch_log_group" "crc-api-execution-logs" {
+  name              = "API-Gateway-Execution-Logs_${aws_api_gateway_rest_api.crc-rest-api.id}/${var.api-current-stage}"
+  retention_in_days = 14
 }
 
 
@@ -451,6 +608,12 @@ resource "aws_api_gateway_resource" "crc-api-resource-visitors" {
 resource "aws_api_gateway_resource" "crc-api-resource-contact" {
   parent_id   = aws_api_gateway_rest_api.crc-rest-api.root_resource_id
   path_part   = "contact"
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+}
+
+resource "aws_api_gateway_resource" "crc-api-resource-download" {
+  parent_id   = aws_api_gateway_rest_api.crc-rest-api.root_resource_id
+  path_part   = "download"
   rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
 }
 
@@ -577,6 +740,147 @@ resource "aws_api_gateway_integration_response" "crc-api-visitors-options" {
 resource "aws_api_gateway_method_response" "crc-api-visitors-options" {
   http_method = aws_api_gateway_method.crc-api-visitors-options.http_method
   resource_id = aws_api_gateway_resource.crc-api-resource-visitors.id
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "false"
+    "method.response.header.Access-Control-Allow-Methods" = "false"
+    "method.response.header.Access-Control-Allow-Origin"  = "false"
+  }
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  status_code = "200"
+}
+
+
+// Sign CV Download GET
+resource "aws_api_gateway_method" "crc-api-download-get" {
+  api_key_required = "false"
+  authorization    = "NONE"
+  http_method      = "GET"
+
+  request_parameters = {
+    "method.request.querystring.visitorId" = "true"
+  }
+
+  request_validator_id = aws_api_gateway_request_validator.crc-api-param-validator.id
+  resource_id          = aws_api_gateway_resource.crc-api-resource-download.id
+  rest_api_id          = aws_api_gateway_rest_api.crc-rest-api.id
+}
+
+resource "aws_api_gateway_integration" "crc-api-download-get" {
+  depends_on = [aws_api_gateway_method.crc-api-download-get]
+
+  cache_namespace         = aws_api_gateway_resource.crc-api-resource-download.id
+  connection_type         = "INTERNET"
+  content_handling        = "CONVERT_TO_TEXT"
+  http_method             = aws_api_gateway_method.crc-api-download-get.http_method
+  integration_http_method = "POST"
+  passthrough_behavior    = "WHEN_NO_MATCH"
+  resource_id             = aws_api_gateway_resource.crc-api-resource-download.id
+  rest_api_id             = aws_api_gateway_rest_api.crc-rest-api.id
+  timeout_milliseconds    = "29000"
+  type                    = "AWS_PROXY"
+  uri                     = var.api-lambda-download-uri
+}
+
+# Inert for an AWS_PROXY integration — the Lambda's own headers pass straight through —
+# but both existing routes carry the pair, and omitting it only here would read as an
+# oversight rather than a decision.
+resource "aws_api_gateway_integration_response" "crc-api-download-get" {
+  depends_on = [
+    aws_api_gateway_integration.crc-api-download-get,
+    aws_api_gateway_method_response.crc-api-download-get
+  ]
+
+  http_method = aws_api_gateway_method.crc-api-download-get.http_method
+  resource_id = aws_api_gateway_resource.crc-api-resource-download.id
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+
+  response_templates = {
+    "application/json" = ""
+  }
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  status_code = "200"
+}
+
+resource "aws_api_gateway_method_response" "crc-api-download-get" {
+  http_method = aws_api_gateway_method.crc-api-download-get.http_method
+  resource_id = aws_api_gateway_resource.crc-api-resource-download.id
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = "false"
+  }
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  status_code = "200"
+}
+
+
+// Sign CV Download OPTIONS
+resource "aws_api_gateway_method" "crc-api-download-options" {
+  api_key_required = "false"
+  authorization    = "NONE"
+  http_method      = "OPTIONS"
+  resource_id      = aws_api_gateway_resource.crc-api-resource-download.id
+  rest_api_id      = aws_api_gateway_rest_api.crc-rest-api.id
+}
+
+resource "aws_api_gateway_integration" "crc-api-download-options" {
+  depends_on = [aws_api_gateway_method.crc-api-download-options]
+
+  cache_namespace      = aws_api_gateway_resource.crc-api-resource-download.id
+  connection_type      = "INTERNET"
+  http_method          = aws_api_gateway_method.crc-api-download-options.http_method
+  passthrough_behavior = "WHEN_NO_MATCH"
+
+  request_templates = {
+    "application/json" = "{\"statusCode\": 200}"
+  }
+
+  resource_id          = aws_api_gateway_resource.crc-api-resource-download.id
+  rest_api_id          = aws_api_gateway_rest_api.crc-rest-api.id
+  timeout_milliseconds = "29000"
+  type                 = "MOCK"
+}
+
+resource "aws_api_gateway_integration_response" "crc-api-download-options" {
+  depends_on = [
+    aws_api_gateway_integration.crc-api-download-options,
+    aws_api_gateway_method_response.crc-api-download-options
+  ]
+
+  http_method = aws_api_gateway_method.crc-api-download-options.http_method
+  resource_id = aws_api_gateway_resource.crc-api-resource-download.id
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+
+  response_templates = {
+    "application/json" = ""
+  }
+
+  rest_api_id = aws_api_gateway_rest_api.crc-rest-api.id
+  status_code = "200"
+}
+
+resource "aws_api_gateway_method_response" "crc-api-download-options" {
+  http_method = aws_api_gateway_method.crc-api-download-options.http_method
+  resource_id = aws_api_gateway_resource.crc-api-resource-download.id
 
   response_models = {
     "application/json" = "Empty"

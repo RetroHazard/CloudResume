@@ -1,134 +1,134 @@
 {
-  "Certifications": [
-    {
-      "certification": "AWS Certified Security - Specialty",
-      "issuer": "Amazon Web Services",
-      "credential_id": "N/A",
-      "issued_date": "2024-10-19",
-      "expiry_date": "2027-10-19",
-      "logo": "./images/logos/certifications/aws-scs.png",
-      "links": [
+    "Certifications": [
         {
-          "verification": [
-            {
-              "website": "https://www.credly.com/badges/74bfe684-d074-4a72-a0b9-310da4b7f2f7/public_url",
-              "icon": "fa6-solid:award",
-              "display": true
-            }
-          ],
-          "credential_info": [
-            {
-              "website": "https://aws.amazon.com/certification/certified-security-specialty/",
-              "icon": "fa6-solid:info",
-              "display": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "certification": "AWS Certified SysOps Administrator - Associate",
-      "issuer": "Amazon Web Services",
-      "credential_id": "N/A",
-      "issued_date": "2024-8-16",
-      "expiry_date": "2027-8-16",
-      "logo": "./images/logos/certifications/aws-soa.png",
-      "links": [
+            "certification": "AWS Certified Security - Specialty",
+            "issuer": "Amazon Web Services",
+            "credential_id": "N/A",
+            "issued_date": "2024-10-19",
+            "expiry_date": "2027-10-19",
+            "logo": "./images/logos/certifications/aws-scs.png",
+            "links": [
+                {
+                    "verification": [
+                        {
+                            "website": "https://www.credly.com/badges/74bfe684-d074-4a72-a0b9-310da4b7f2f7/public_url",
+                            "icon": "fa6-solid:award",
+                            "display": true
+                        }
+                    ],
+                    "credential_info": [
+                        {
+                            "website": "https://aws.amazon.com/certification/certified-security-specialty/",
+                            "icon": "fa6-solid:info",
+                            "display": true
+                        }
+                    ]
+                }
+            ]
+        },
         {
-          "verification": [
-            {
-              "website": "https://www.credly.com/badges/b38e0a73-1114-46f3-be3f-9623ad3d1490/public_url",
-              "icon": "fa6-solid:award",
-              "display": true
-            }
-          ],
-          "credential_info": [
-            {
-              "website": "https://aws.amazon.com/certification/certified-sysops-admin-associate/",
-              "icon": "fa6-solid:info",
-              "display": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "certification": "AWS Certified Solutions Architect - Associate",
-      "issuer": "Amazon Web Services",
-      "credential_id": "N/A",
-      "issued_date": "2024-07-05",
-      "expiry_date": "2027-07-05",
-      "logo": "./images/logos/certifications/aws-saa.png",
-      "links": [
+            "certification": "AWS Certified SysOps Administrator - Associate",
+            "issuer": "Amazon Web Services",
+            "credential_id": "N/A",
+            "issued_date": "2024-8-16",
+            "expiry_date": "2027-8-16",
+            "logo": "./images/logos/certifications/aws-soa.png",
+            "links": [
+                {
+                    "verification": [
+                        {
+                            "website": "https://www.credly.com/badges/b38e0a73-1114-46f3-be3f-9623ad3d1490/public_url",
+                            "icon": "fa6-solid:award",
+                            "display": true
+                        }
+                    ],
+                    "credential_info": [
+                        {
+                            "website": "https://aws.amazon.com/certification/certified-sysops-admin-associate/",
+                            "icon": "fa6-solid:info",
+                            "display": true
+                        }
+                    ]
+                }
+            ]
+        },
         {
-          "verification": [
-            {
-              "website": "https://www.credly.com/badges/e7414d31-ce44-4096-832c-78b93abbeaac/public_url",
-              "icon": "fa6-solid:award",
-              "display": true
-            }
-          ],
-          "credential_info": [
-            {
-              "website": "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
-              "icon": "fa6-solid:info",
-              "display": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "certification": "Systems Security Certified Practitioner",
-      "issuer": "ISC2",
-      "credential_id": "497518",
-      "issued_date": "2014-11-07",
-      "expiry_date": "2017-11-30",
-      "logo": "./images/logos/certifications/sscp.png",
-      "links": [
+            "certification": "AWS Certified Solutions Architect - Associate",
+            "issuer": "Amazon Web Services",
+            "credential_id": "N/A",
+            "issued_date": "2024-07-05",
+            "expiry_date": "2027-07-05",
+            "logo": "./images/logos/certifications/aws-saa.png",
+            "links": [
+                {
+                    "verification": [
+                        {
+                            "website": "https://www.credly.com/badges/e7414d31-ce44-4096-832c-78b93abbeaac/public_url",
+                            "icon": "fa6-solid:award",
+                            "display": true
+                        }
+                    ],
+                    "credential_info": [
+                        {
+                            "website": "https://aws.amazon.com/certification/certified-solutions-architect-associate/",
+                            "icon": "fa6-solid:info",
+                            "display": true
+                        }
+                    ]
+                }
+            ]
+        },
         {
-          "verification": [
-            {
-              "website": "https://www.credly.com/badges/16895fc2-023c-466c-8118-29c7a239c9c6/public_url",
-              "icon": "fa6-solid:award",
-              "display": true
-            }
-          ],
-          "credential_info": [
-            {
-              "website": "https://www.isc2.org/certifications/sscp",
-              "icon": "fa6-solid:info",
-              "display": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "certification": "ITIL v3 Foundations",
-      "issuer": "AXELOS",
-      "credential_id": "953058",
-      "issued_date": "2012-10-25",
-      "expiry_date": "N/A",
-      "logo": "./images/logos/certifications/itil-foundation.png",
-      "links": [
+            "certification": "Systems Security Certified Practitioner",
+            "issuer": "ISC2",
+            "credential_id": "497518",
+            "issued_date": "2014-11-07",
+            "expiry_date": "2017-11-30",
+            "logo": "./images/logos/certifications/sscp.png",
+            "links": [
+                {
+                    "verification": [
+                        {
+                            "website": "https://www.credly.com/badges/16895fc2-023c-466c-8118-29c7a239c9c6/public_url",
+                            "icon": "fa6-solid:award",
+                            "display": true
+                        }
+                    ],
+                    "credential_info": [
+                        {
+                            "website": "https://www.isc2.org/certifications/sscp",
+                            "icon": "fa6-solid:info",
+                            "display": true
+                        }
+                    ]
+                }
+            ]
+        },
         {
-          "verification": [
-            {
-              "website": "#",
-              "icon": "fa6-solid:award",
-              "display": false
-            }
-          ],
-          "credential_info": [
-            {
-              "website": "https://www.axelos.com/certifications/itil/itil-v3-foundation-certification/",
-              "icon": "fa6-solid:info",
-              "display": true
-            }
-          ]
+            "certification": "ITIL v3 Foundations",
+            "issuer": "AXELOS",
+            "credential_id": "953058",
+            "issued_date": "2012-10-25",
+            "expiry_date": "N/A",
+            "logo": "./images/logos/certifications/itil-foundation.png",
+            "links": [
+                {
+                    "verification": [
+                        {
+                            "website": "#",
+                            "icon": "fa6-solid:award",
+                            "display": false
+                        }
+                    ],
+                    "credential_info": [
+                        {
+                            "website": "https://www.axelos.com/certifications/itil/itil-v3-foundation-certification/",
+                            "icon": "fa6-solid:info",
+                            "display": true
+                        }
+                    ]
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }

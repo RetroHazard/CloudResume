@@ -26,7 +26,7 @@ function VisitorCount() {
 
     return (
         <div
-            className='mb-1 mt-1 inline-flex w-full items-center px-4 py-1 max-sm:hidden'
+            className='mt-1 mb-1 inline-flex w-full items-center px-4 py-1 max-sm:hidden'
             role='status'
             aria-live='polite'
             aria-atomic='true'

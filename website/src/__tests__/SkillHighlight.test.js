@@ -5,8 +5,20 @@ vi.mock('../utils/useJsonData', () => ({
     useJsonData: vi.fn(() => ({
         data: {
             core_skills: [
-                { name: 'Skill A', category: 'Category A', level: '75%', logo: 'logos:skillA', website: 'https://example.com/skillA' },
-                { name: 'Skill B', category: 'Category B', level: '50%', logo: 'logos:skillB', website: 'https://example.com/skillB' },
+                {
+                    name: 'Skill A',
+                    category: 'Category A',
+                    level: '75%',
+                    logo: 'logos:skillA',
+                    website: 'https://example.com/skillA',
+                },
+                {
+                    name: 'Skill B',
+                    category: 'Category B',
+                    level: '50%',
+                    logo: 'logos:skillB',
+                    website: 'https://example.com/skillB',
+                },
             ],
         },
         loading: false,

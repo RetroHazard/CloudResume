@@ -1,6 +1,5 @@
 # CloudResume
-![Infrastructure](https://github.com/RetroHazard/CloudResume/actions/workflows/infrastructure.yml/badge.svg)
-![Website](https://github.com/RetroHazard/CloudResume/actions/workflows/website.yml/badge.svg)
+![Pipeline](https://github.com/RetroHazard/CloudResume/actions/workflows/ci.yml/badge.svg?branch=main&event=push)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/L3L51987AN)
 
@@ -26,6 +25,15 @@ For a more detailed breakdown of my journey, please read the blog post, linked b
 My published article can be found on [LinkedIn](https://www.linkedin.com/pulse/taking-cloud-resume-challenge-alexander-bracken-gm0wc/).
 
 
+## Continuous Integration
+Both stacks are built, tested and deployed from a single GitHub Actions pipeline. Pull requests are
+gated on unit tests, typechecking, formatting, an end-to-end Cypress run against a locally-served
+preview build, a Terraform plan, and lint over the Lambda sources; merges to `main` apply the
+reviewed plan, deploy the site, and smoke-test production. Work already proven on a pull request is
+not repeated after the merge — see [`docs/ci.md`](docs/ci.md) for how that works and why the pipeline
+is shaped the way it is.
+
+
 ## Architectural Overview
 **Earlier architectural revisions can be found within the published article, linked above.**
 The diagram below tracks the current infrastructure and is maintained in this repo as
@@ -39,6 +47,11 @@ from displaying them through a plain `<img>` reference.
   <source media="(prefers-color-scheme: dark)" srcset="docs/architecture-dark.png">
   <img alt="Current Architectural Version" src="docs/architecture-light.png">
 </picture>
+
+The CV download is the one request path that is not a plain static fetch — it goes through a signed
+CloudFront URL minted per click, which also gives it a download counter. See
+[`docs/signed-downloads.md`](docs/signed-downloads.md) for how that works and what it is and is not
+worth.
 
 
 ## Technologies Leveraged
@@ -55,6 +68,7 @@ from displaying them through a plain `<img>` reference.
    + S3
    + DynamoDB
    + Lambda
+   + Systems Manager (Parameter Store)
    + EventBridge
    + Simple Queue Service
    + Simple Email Service

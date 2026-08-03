@@ -1,3 +1,9 @@
+data "aws_region" "current" {}
+
+variable "account_id" {
+  type = string
+}
+
 variable "crc-visitor-record_arn" {
   type = string
 }
@@ -27,6 +33,18 @@ variable "crc-cw-lambda-log-group-trackVisitors" {
 }
 
 variable "crc-cw-lambda-log-group-updateContributions" {
+  type = string
+}
+
+variable "crc-cw-lambda-log-group-downloadResume" {
+  type = string
+}
+
+variable "crc-download-record_arn" {
+  type = string
+}
+
+variable "crc-cf-signing-key-parameter-name" {
   type = string
 }
 

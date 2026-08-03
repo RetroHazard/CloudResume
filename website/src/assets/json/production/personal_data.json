@@ -1,12 +1,7 @@
 {
     "profilePicture": "/images/profile_photo/agb_profile.jpg",
-    "resumeLink": "/files/BRACKEN_ALEXANDER_Resume_20260801.pdf",
     "fullName": "Alexander Bracken",
     "jobTitle": "Senior Cloud Security Engineer",
     "location": "Tokyo, Japan",
-    "availability": [
-        "Seeking new opportunities",
-        "Available for consulting",
-        "Working on side project"
-    ]
+    "availability": ["Seeking new opportunities", "Available for consulting", "Working on side project"]
 }

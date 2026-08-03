@@ -8,6 +8,13 @@ data "archive_file" "trackvisitors_lambda_function_code" {
   output_file_mode = "0666"
 }
 
+data "archive_file" "downloadResume_lambda_function_code" {
+  type             = "zip"
+  source_file      = "${path.root}/codebase/downloadResume.py"
+  output_path      = "${path.root}/codepacks/downloadResume.zip"
+  output_file_mode = "0666"
+}
+
 data "archive_file" "cloudfrontInvalidation_lambda_function_code" {
   type             = "zip"
   source_file      = "${path.root}/codebase/cloudfrontInvalidation.py"

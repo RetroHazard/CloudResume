@@ -22,7 +22,13 @@ function SkillCard({ skill }) {
             aria-label={`${skill.name} (opens in new tab)`}
             className='group flex items-center gap-3 rounded border border-border bg-secondary-800/50 px-3 py-2 no-underline transition-colors hover:border-neon/40'
         >
-            <BrandIcon icon={skill.logo} name={skill.name} monogram={skill.monogram} size='1.5em' className='shrink-0' />
+            <BrandIcon
+                icon={skill.logo}
+                name={skill.name}
+                monogram={skill.monogram}
+                size='1.5em'
+                className='shrink-0'
+            />
             <div className='flex min-w-0 flex-1 flex-col gap-1'>
                 <div className='flex items-baseline justify-between gap-2'>
                     <span
@@ -33,7 +39,7 @@ function SkillCard({ skill }) {
                     </span>
                     {/* The category used to sit here; the drawer above says it now,
                         so the slot carries the tool's own reading instead. */}
-                    <span className='tabular shrink-0 font-mono text-[0.6rem] uppercase tracking-wide text-content-accent'>
+                    <span className='tabular shrink-0 font-mono text-[0.6rem] tracking-wide text-content-accent uppercase'>
                         {skill.level}
                     </span>
                 </div>
@@ -73,27 +79,37 @@ const SkillHighlight = () => {
                     name='rolling-stock'
                     className='group overflow-hidden rounded border border-border bg-secondary-800/40 [&_summary::-webkit-details-marker]:hidden'
                 >
-                    <summary className='grid cursor-pointer list-none items-center gap-3 px-3 py-2.5 transition-colors hover:bg-secondary-800/80 [grid-template-columns:auto_1fr_auto]'>
+                    <summary className='grid cursor-pointer list-none [grid-template-columns:auto_1fr_auto] items-center gap-3 px-3 py-2.5 transition-colors hover:bg-secondary-800/80'>
                         <span
                             aria-hidden='true'
                             className='inline-block h-2.5 w-2.5 shrink-0 rounded-full'
                             style={{ backgroundColor: rampColor(index) }}
                         />
                         <span className='flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5'>
-                            <span className='font-heading text-[0.95rem] font-bold uppercase leading-tight tracking-wide text-content-title sm:text-base'>
+                            <span className='font-heading text-[0.95rem] leading-tight font-bold tracking-wide text-content-title uppercase sm:text-base'>
                                 {group.name}
                             </span>
-                            <span className='tabular font-mono text-[0.58rem] uppercase tracking-wider text-content-accent sm:text-[0.62rem]'>
+                            <span className='tabular font-mono text-[0.58rem] tracking-wider text-content-accent uppercase sm:text-[0.62rem]'>
                                 {group.count} {group.count === 1 ? 'tool' : 'tools'} · avg {group.avg}%
                             </span>
                         </span>
-                        <span aria-hidden='true' className='text-content-accent transition-transform group-open:rotate-90'>
-                            <svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='3'>
+                        <span
+                            aria-hidden='true'
+                            className='text-content-accent transition-transform group-open:rotate-90'
+                        >
+                            <svg
+                                width='14'
+                                height='14'
+                                viewBox='0 0 24 24'
+                                fill='none'
+                                stroke='currentColor'
+                                strokeWidth='3'
+                            >
                                 <path d='M9 6l6 6-6 6' />
                             </svg>
                         </span>
                     </summary>
-                    <div className='grid grid-cols-1 gap-2.5 border-t border-border/60 bg-background/40 px-3 pb-3 pt-3 sm:grid-cols-2'>
+                    <div className='grid grid-cols-1 gap-2.5 border-t border-border/60 bg-background/40 px-3 pt-3 pb-3 sm:grid-cols-2'>
                         {group.skills.map((skill) => (
                             <SkillCard key={skill.name} skill={skill} />
                         ))}

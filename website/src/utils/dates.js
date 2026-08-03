@@ -6,7 +6,10 @@
 const ONGOING = new Set(['---', 'now', 'present', 'current', '']);
 const UNKNOWN = new Set(['n/a', 'na', '-', '--', 'none']);
 
-const norm = (value) => String(value ?? '').trim().toLowerCase();
+const norm = (value) =>
+    String(value ?? '')
+        .trim()
+        .toLowerCase();
 
 export const isOngoing = (value) => ONGOING.has(norm(value));
 export const isUnknown = (value) => UNKNOWN.has(norm(value));

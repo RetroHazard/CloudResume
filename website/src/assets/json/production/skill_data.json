@@ -1,546 +1,546 @@
 {
-  "core_skills": [
-    {
-      "name": "Amazon Web Services",
-      "category": "Cloud",
-      "level": "70%",
-      "logo": "skill-icons:aws-light",
-      "website": "https://aws.amazon.com/"
-    },
-    {
-      "name": "Microsoft Azure",
-      "category": "Cloud",
-      "level": "20%",
-      "logo": "skill-icons:azure-light",
-      "website": "https://azure.microsoft.com/"
-    },
-    {
-      "name": "Google Cloud Platform",
-      "category": "Cloud",
-      "level": "25%",
-      "logo": "skill-icons:gcp-light",
-      "website": "https://cloud.google.com/"
-    },
-    {
-      "name": "Terraform",
-      "category": "Platform",
-      "level": "75%",
-      "logo": "skill-icons:terraform-light",
-      "website": "https://www.terraform.io/"
-    },
-    {
-      "name": "Docker",
-      "category": "Platform",
-      "level": "45%",
-      "logo": "skill-icons:docker",
-      "website": "https://www.docker.com/"
-    },
-    {
-      "name": "Kubernetes",
-      "category": "Platform",
-      "level": "60%",
-      "logo": "skill-icons:kubernetes",
-      "website": "https://kubernetes.io/"
-    },
-    {
-      "name": "Okta",
-      "category": "Security",
-      "level": "80%",
-      "logo": "devicon-plain:okta",
-      "website": "https://www.okta.com/"
-    },
-    {
-      "name": "1Password",
-      "category": "Security",
-      "level": "90%",
-      "logo": "simple-icons:1password",
-      "website": "https://1password.com/"
-    },
-    {
-      "name": "Entra ID",
-      "category": "Security",
-      "level": "45%",
-      "logo": "selfhst:microsoft-entra-id",
-      "website": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id"
-    },
-    {
-      "name": "Push Security",
-      "category": "Security",
-      "level": "45%",
-      "logo": "selfhst:push-security",
-      "website": "https://pushsecurity.com/"
-    },
-    {
-      "name": "Go",
-      "category": "Development",
-      "level": "55%",
-      "logo": "skill-icons:golang",
-      "website": "https://go.dev/"
-    },
-    {
-      "name": "OpenTofu",
-      "category": "Platform",
-      "level": "55%",
-      "logo": "simple-icons:opentofu",
-      "website": "https://opentofu.org/"
-    },
-    {
-      "name": "GitHub Actions",
-      "category": "Platform",
-      "level": "70%",
-      "logo": "simple-icons:githubactions",
-      "website": "https://github.com/features/actions"
-    },
-    {
-      "name": "Helm",
-      "category": "Platform",
-      "level": "45%",
-      "logo": "simple-icons:helm",
-      "website": "https://helm.sh/"
-    },
-    {
-      "name": "ArgoCD",
-      "category": "Platform",
-      "level": "35%",
-      "logo": "simple-icons:argo",
-      "website": "https://argo-cd.readthedocs.io/"
-    },
-    {
-      "name": "CrowdStrike",
-      "category": "Security",
-      "level": "65%",
-      "logo": "selfhst:crowdstrike",
-      "website": "https://www.crowdstrike.com/"
-    },
-    {
-      "name": "Zscaler",
-      "category": "Security",
-      "level": "65%",
-      "logo": "selfhst:zscaler",
-      "website": "https://www.zscaler.com/"
-    },
-    {
-      "name": "Qualys",
-      "category": "Security",
-      "level": "60%",
-      "logo": "simple-icons:qualys",
-      "website": "https://www.qualys.com/"
-    },
-    {
-      "name": "Tailscale",
-      "category": "Security",
-      "level": "60%",
-      "logo": "simple-icons:tailscale",
-      "website": "https://tailscale.com/"
-    },
-    {
-      "name": "UniFi",
-      "category": "Security",
-      "level": "50%",
-      "logo": "selfhst:ubiquiti-unifi",
-      "website": "https://ui.com/"
-    },
-    {
-      "name": "Iru",
-      "category": "Security",
-      "level": "85%",
-      "logo": null,
-      "website": "https://www.iru.com/"
-    },
-    {
-      "name": "JupiterOne",
-      "category": "Security",
-      "level": "40%",
-      "logo": "selfhst:jupiterone-light",
-      "website": "https://www.jupiterone.com/"
-    },
-    {
-      "name": "Cyberhaven",
-      "category": "Security",
-      "level": "50%",
-      "logo": "selfhst:cyberhaven-light",
-      "website": "https://www.cyberhaven.com/"
-    },
-    {
-      "name": "dope.security",
-      "category": "Security",
-      "level": "80%",
-      "logo": "selfhst:dope-security",
-      "website": "https://dope.security/"
-    },
-    {
-      "name": "Santa",
-      "category": "Security",
-      "level": "60%",
-      "logo": null,
-      "website": "https://northpole.security/santa"
-    },
-    {
-      "name": "Workbrew",
-      "category": "Security",
-      "level": "70%",
-      "logo": "selfhst:workbrew",
-      "website": "https://workbrew.com/"
-    },
-    {
-      "name": "Splunk",
-      "category": "Security",
-      "level": "45%",
-      "logo": "simple-icons:splunk",
-      "website": "https://www.splunk.com/"
-    },
-    {
-      "name": "FleetDM",
-      "category": "Security",
-      "level": "35%",
-      "logo": "selfhst:fleet-dm",
-      "website": "https://fleetdm.com/"
-    },
-    {
-      "name": "Okta Identity Governance",
-      "category": "Security",
-      "level": "65%",
-      "logo": "devicon-plain:okta",
-      "website": "https://www.okta.com/products/identity-governance/"
-    },
-    {
-      "name": "Dependabot",
-      "category": "Security",
-      "level": "50%",
-      "logo": "simple-icons:dependabot",
-      "website": "https://docs.github.com/en/code-security/dependabot"
-    },
-    {
-      "name": "AWS Certificate Manager",
-      "category": "Security",
-      "level": "40%",
-      "logo": "logos:aws-certificate-manager",
-      "website": "https://aws.amazon.com/certificate-manager/"
-    },
-    {
-      "name": "Trivy",
-      "category": "Security",
-      "level": "30%",
-      "logo": "simple-icons:trivy",
-      "website": "https://trivy.dev/"
-    },
-    {
-      "name": "Grafana",
-      "category": "Platform",
-      "level": "50%",
-      "logo": "simple-icons:grafana",
-      "website": "https://grafana.com/"
-    },
-    {
-      "name": "LiteLLM",
-      "category": "AI",
-      "level": "70%",
-      "logo": "selfhst:litellm",
-      "website": "https://www.litellm.ai/"
-    },
-    {
-      "name": "AWS Bedrock",
-      "category": "AI",
-      "level": "50%",
-      "logo": "simple-icons:amazonwebservices",
-      "website": "https://aws.amazon.com/bedrock/"
-    },
-    {
-      "name": "Claude",
-      "category": "AI",
-      "level": "75%",
-      "logo": "simple-icons:claude",
-      "website": "https://claude.com/"
-    },
-    {
-      "name": "Gemini",
-      "category": "AI",
-      "level": "60%",
-      "logo": "simple-icons:googlegemini",
-      "website": "https://gemini.google.com/"
-    },
-    {
-      "name": "Codex",
-      "category": "AI",
-      "level": "45%",
-      "logo": "simple-icons:openai",
-      "website": "https://openai.com/codex/"
-    },
-    {
-      "name": "Slack",
-      "category": "Workplace",
-      "level": "75%",
-      "logo": "simple-icons:slack",
-      "website": "https://slack.com/"
-    },
-    {
-      "name": "Google Workspace",
-      "category": "Workplace",
-      "level": "70%",
-      "logo": "logos:google-workspace",
-      "website": "https://workspace.google.com/"
-    },
-    {
-      "name": "Confluence",
-      "category": "Workplace",
-      "level": "60%",
-      "logo": "simple-icons:confluence",
-      "website": "https://www.atlassian.com/software/confluence"
-    },
-    {
-      "name": "Jira",
-      "category": "Workplace",
-      "level": "60%",
-      "logo": "simple-icons:jira",
-      "website": "https://www.atlassian.com/software/jira"
-    },
-    {
-      "name": "Unreal Engine",
-      "category": "Creative",
-      "level": "60%",
-      "logo": "skill-icons:unrealengine",
-      "website": "https://www.unrealengine.com/"
-    },
-    {
-      "name": "Github",
-      "category": "Platform",
-      "level": "65%",
-      "logo": "skill-icons:github-light",
-      "website": "https://github.com/"
-    },
-    {
-      "name": "Perforce",
-      "category": "Platform",
-      "level": "50%",
-      "logo": "simple-icons:perforce",
-      "website": "https://www.perforce.com/"
-    },
-    {
-      "name": "Swift",
-      "category": "Development",
-      "level": "55%",
-      "logo": "skill-icons:swift",
-      "website": "https://www.swift.org/"
-    },
-    {
-      "name": "C++",
-      "category": "Development",
-      "level": "35%",
-      "logo": "skill-icons:cpp",
-      "website": "https://cplusplus.com/"
-    },
-    {
-      "name": "Python",
-      "category": "Development",
-      "level": "60%",
-      "logo": "skill-icons:python-light",
-      "website": "https://www.python.org"
-    },
-    {
-      "name": "BASh",
-      "category": "Development",
-      "level": "70%",
-      "logo": "skill-icons:bash-light",
-      "website": "https://www.gnu.org/software/bash/"
-    },
-    {
-      "name": "JavaScript",
-      "category": "Development",
-      "level": "35%",
-      "logo": "skill-icons:javascript",
-      "website": "https://developer.oracle.com/languages/javascript.html"
-    },
-    {
-      "name": "TypeScript",
-      "category": "Development",
-      "level": "40%",
-      "logo": "skill-icons:typescript",
-      "website": "https://www.typescriptlang.org"
-    },
-    {
-      "name": "Node.js",
-      "category": "Development",
-      "level": "30%",
-      "logo": "skill-icons:nodejs-light",
-      "website": "https://nodejs.org"
-    },
-    {
-      "name": "Next.js",
-      "category": "Development",
-      "level": "45%",
-      "logo": "skill-icons:nextjs-light",
-      "website": "https://nextjs.org/"
-    },
-    {
-      "name": "React",
-      "category": "Development",
-      "level": "45%",
-      "logo": "skill-icons:react-dark",
-      "website": "https://react.dev/"
-    },
-    {
-      "name": "tailwindCSS",
-      "category": "Development",
-      "level": "50%",
-      "logo": "skill-icons:tailwindcss-dark",
-      "website": "https://tailwindcss.com"
-    },
-    {
-      "name": "Xcode",
-      "category": "Development",
-      "level": "35%",
-      "logo": "logos:xcode",
-      "website": "https://developer.apple.com/xcode/"
-    },
-    {
-      "name": "IntelliJ IDEA",
-      "category": "Development",
-      "level": "45%",
-      "logo": "logos:intellij-idea",
-      "website": "https://www.jetbrains.com/idea/"
-    },
-    {
-      "name": "PyCharm",
-      "category": "Development",
-      "level": "60%",
-      "logo": "skill-icons:pycharm-light",
-      "website": "https://www.jetbrains.com/pycharm/"
-    },
-    {
-      "name": "Rider",
-      "category": "Development",
-      "level": "45%",
-      "logo": "skill-icons:rider-light",
-      "website": "https://www.jetbrains.com/rider/"
-    },
-    {
-      "name": "CLion",
-      "category": "Development",
-      "level": "35%",
-      "logo": "skill-icons:clion-light",
-      "website": "https://www.jetbrains.com/clion/"
-    },
-    {
-      "name": "JetBrains Air",
-      "category": "Development",
-      "level": "25%",
-      "logo": "simple-icons:jetbrains",
-      "website": "https://www.jetbrains.com/air/"
-    },
-    {
-      "name": "SideFX Houdini",
-      "category": "Creative",
-      "level": "30%",
-      "logo": "simple-icons:houdini",
-      "website": "https://www.sidefx.com/"
-    },
-    {
-      "name": "Blender",
-      "category": "Creative",
-      "level": "55%",
-      "logo": "skill-icons:blender-dark",
-      "website": "https://www.blender.org/"
-    },
-    {
-      "name": "Creative Cloud",
-      "category": "Creative",
-      "level": "80%",
-      "logo": "simple-icons:adobecreativecloud",
-      "website": "https://www.adobe.com/creativecloud.html"
-    },
-    {
-      "name": "Windows",
-      "category": "Workplace",
-      "level": "90%",
-      "logo": "skill-icons:windows-light",
-      "website": "https://www.microsoft.com/en-us/windows"
-    },
-    {
-      "name": "Linux",
-      "category": "Workplace",
-      "level": "70%",
-      "logo": "skill-icons:linux-light",
-      "website": "https://www.kernel.org/"
-    },
-    {
-      "name": "Microsoft 365",
-      "category": "Workplace",
-      "level": "65%",
-      "logo": "selfhst:microsoft-365",
-      "website": "https://www.microsoft.com/en-us/microsoft-365"
-    },
-    {
-      "name": "Kali Linux",
-      "category": "Security",
-      "level": "40%",
-      "logo": "skill-icons:kali-light",
-      "website": "https://www.kali.org/"
-    },
-    {
-      "name": "macOS",
-      "category": "Workplace",
-      "level": "75%",
-      "logo": "skill-icons:apple-light",
-      "website": "https://www.apple.com"
-    }
-  ],
-  "target_skills": [
-    {
-      "name": "GraphQL",
-      "logo": "simple-icons:graphql",
-      "website": "https://graphql.org/"
-    },
-    {
-      "name": "Datadog",
-      "logo": "simple-icons:datadog",
-      "website": "https://www.datadoghq.com/"
-    },
-    {
-      "name": "Ansible",
-      "logo": "simple-icons:ansible",
-      "website": "https://www.ansible.com/"
-    }
-  ],
-  "industry_knowledge": [
-    { "name": "Identity & Access Management (IAM)" },
-    { "name": "Zero Trust Security Architecture" },
-    { "name": "PKI / Certificate Lifecycle Management" },
-    { "name": "Endpoint Security & Mobile Device Management (MDM)" },
-    { "name": "Cloud Security (AWS)" },
-    { "name": "Vulnerability Management" },
-    { "name": "Access Governance & Certification (Least-Privilege Audits)" },
-    { "name": "Application Allow-Listing / Binary Authorization" },
-    { "name": "DevSecOps" },
-    { "name": "Software Supply-Chain Security" },
-    { "name": "Security Incident Response" },
-    { "name": "Kubernetes Access Control & RBAC" },
-    { "name": "Enterprise AI Governance & AI Tooling Security" },
-    { "name": "Identity Federation (SAML, OAuth 2.0, OIDC, SCIM)" },
-    { "name": "Threat Mitigation" },
-    { "name": "Risk Management" },
-    { "name": "Agile & DevOps" },
-    { "name": "Regulatory & Compliance Controls" }
-  ],
-  "soft_skills": [
-    { "name": "Cross-Functional Stakeholder Communication" },
-    { "name": "Incident Response & Crisis Management" },
-    { "name": "Technical Writing & Knowledge Transfer" },
-    { "name": "Change Management & Org-Wide Rollout Communication" },
-    { "name": "Vendor Evaluation & Build-vs-Buy Decisions" },
-    { "name": "Automation-First Problem Solving" },
-    { "name": "Ownership of Ambiguous, Cross-Team Initiatives" },
-    { "name": "Mentoring" }
-  ],
-  "language_skills": [
-    {
-      "language": "English",
-      "level": "Native",
-      "flag": "circle-flags:ca"
-    },
-    {
-      "language": "Japanese",
-      "level": "Basic Conversation",
-      "flag": "circle-flags:jp"
-    }
-  ]
+    "core_skills": [
+        {
+            "name": "Amazon Web Services",
+            "category": "Cloud",
+            "level": "70%",
+            "logo": "skill-icons:aws-light",
+            "website": "https://aws.amazon.com/"
+        },
+        {
+            "name": "Microsoft Azure",
+            "category": "Cloud",
+            "level": "20%",
+            "logo": "skill-icons:azure-light",
+            "website": "https://azure.microsoft.com/"
+        },
+        {
+            "name": "Google Cloud Platform",
+            "category": "Cloud",
+            "level": "25%",
+            "logo": "skill-icons:gcp-light",
+            "website": "https://cloud.google.com/"
+        },
+        {
+            "name": "Terraform",
+            "category": "Platform",
+            "level": "75%",
+            "logo": "skill-icons:terraform-light",
+            "website": "https://www.terraform.io/"
+        },
+        {
+            "name": "Docker",
+            "category": "Platform",
+            "level": "45%",
+            "logo": "skill-icons:docker",
+            "website": "https://www.docker.com/"
+        },
+        {
+            "name": "Kubernetes",
+            "category": "Platform",
+            "level": "60%",
+            "logo": "skill-icons:kubernetes",
+            "website": "https://kubernetes.io/"
+        },
+        {
+            "name": "Okta",
+            "category": "Security",
+            "level": "80%",
+            "logo": "devicon-plain:okta",
+            "website": "https://www.okta.com/"
+        },
+        {
+            "name": "1Password",
+            "category": "Security",
+            "level": "90%",
+            "logo": "simple-icons:1password",
+            "website": "https://1password.com/"
+        },
+        {
+            "name": "Entra ID",
+            "category": "Security",
+            "level": "45%",
+            "logo": "selfhst:microsoft-entra-id",
+            "website": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id"
+        },
+        {
+            "name": "Push Security",
+            "category": "Security",
+            "level": "45%",
+            "logo": "selfhst:push-security",
+            "website": "https://pushsecurity.com/"
+        },
+        {
+            "name": "Go",
+            "category": "Development",
+            "level": "55%",
+            "logo": "skill-icons:golang",
+            "website": "https://go.dev/"
+        },
+        {
+            "name": "OpenTofu",
+            "category": "Platform",
+            "level": "55%",
+            "logo": "simple-icons:opentofu",
+            "website": "https://opentofu.org/"
+        },
+        {
+            "name": "GitHub Actions",
+            "category": "Platform",
+            "level": "70%",
+            "logo": "simple-icons:githubactions",
+            "website": "https://github.com/features/actions"
+        },
+        {
+            "name": "Helm",
+            "category": "Platform",
+            "level": "45%",
+            "logo": "simple-icons:helm",
+            "website": "https://helm.sh/"
+        },
+        {
+            "name": "ArgoCD",
+            "category": "Platform",
+            "level": "35%",
+            "logo": "simple-icons:argo",
+            "website": "https://argo-cd.readthedocs.io/"
+        },
+        {
+            "name": "CrowdStrike",
+            "category": "Security",
+            "level": "65%",
+            "logo": "selfhst:crowdstrike",
+            "website": "https://www.crowdstrike.com/"
+        },
+        {
+            "name": "Zscaler",
+            "category": "Security",
+            "level": "65%",
+            "logo": "selfhst:zscaler",
+            "website": "https://www.zscaler.com/"
+        },
+        {
+            "name": "Qualys",
+            "category": "Security",
+            "level": "60%",
+            "logo": "simple-icons:qualys",
+            "website": "https://www.qualys.com/"
+        },
+        {
+            "name": "Tailscale",
+            "category": "Security",
+            "level": "60%",
+            "logo": "simple-icons:tailscale",
+            "website": "https://tailscale.com/"
+        },
+        {
+            "name": "UniFi",
+            "category": "Security",
+            "level": "50%",
+            "logo": "selfhst:ubiquiti-unifi",
+            "website": "https://ui.com/"
+        },
+        {
+            "name": "Iru",
+            "category": "Security",
+            "level": "85%",
+            "logo": null,
+            "website": "https://www.iru.com/"
+        },
+        {
+            "name": "JupiterOne",
+            "category": "Security",
+            "level": "40%",
+            "logo": "selfhst:jupiterone-light",
+            "website": "https://www.jupiterone.com/"
+        },
+        {
+            "name": "Cyberhaven",
+            "category": "Security",
+            "level": "50%",
+            "logo": "selfhst:cyberhaven-light",
+            "website": "https://www.cyberhaven.com/"
+        },
+        {
+            "name": "dope.security",
+            "category": "Security",
+            "level": "80%",
+            "logo": "selfhst:dope-security",
+            "website": "https://dope.security/"
+        },
+        {
+            "name": "Santa",
+            "category": "Security",
+            "level": "60%",
+            "logo": null,
+            "website": "https://northpole.security/santa"
+        },
+        {
+            "name": "Workbrew",
+            "category": "Security",
+            "level": "70%",
+            "logo": "selfhst:workbrew",
+            "website": "https://workbrew.com/"
+        },
+        {
+            "name": "Splunk",
+            "category": "Security",
+            "level": "45%",
+            "logo": "simple-icons:splunk",
+            "website": "https://www.splunk.com/"
+        },
+        {
+            "name": "FleetDM",
+            "category": "Security",
+            "level": "35%",
+            "logo": "selfhst:fleet-dm",
+            "website": "https://fleetdm.com/"
+        },
+        {
+            "name": "Okta Identity Governance",
+            "category": "Security",
+            "level": "65%",
+            "logo": "devicon-plain:okta",
+            "website": "https://www.okta.com/products/identity-governance/"
+        },
+        {
+            "name": "Dependabot",
+            "category": "Security",
+            "level": "50%",
+            "logo": "simple-icons:dependabot",
+            "website": "https://docs.github.com/en/code-security/dependabot"
+        },
+        {
+            "name": "AWS Certificate Manager",
+            "category": "Security",
+            "level": "40%",
+            "logo": "logos:aws-certificate-manager",
+            "website": "https://aws.amazon.com/certificate-manager/"
+        },
+        {
+            "name": "Trivy",
+            "category": "Security",
+            "level": "30%",
+            "logo": "simple-icons:trivy",
+            "website": "https://trivy.dev/"
+        },
+        {
+            "name": "Grafana",
+            "category": "Platform",
+            "level": "50%",
+            "logo": "simple-icons:grafana",
+            "website": "https://grafana.com/"
+        },
+        {
+            "name": "LiteLLM",
+            "category": "AI",
+            "level": "70%",
+            "logo": "selfhst:litellm",
+            "website": "https://www.litellm.ai/"
+        },
+        {
+            "name": "AWS Bedrock",
+            "category": "AI",
+            "level": "50%",
+            "logo": "simple-icons:amazonwebservices",
+            "website": "https://aws.amazon.com/bedrock/"
+        },
+        {
+            "name": "Claude",
+            "category": "AI",
+            "level": "75%",
+            "logo": "simple-icons:claude",
+            "website": "https://claude.com/"
+        },
+        {
+            "name": "Gemini",
+            "category": "AI",
+            "level": "60%",
+            "logo": "simple-icons:googlegemini",
+            "website": "https://gemini.google.com/"
+        },
+        {
+            "name": "Codex",
+            "category": "AI",
+            "level": "45%",
+            "logo": "simple-icons:openai",
+            "website": "https://openai.com/codex/"
+        },
+        {
+            "name": "Slack",
+            "category": "Workplace",
+            "level": "75%",
+            "logo": "simple-icons:slack",
+            "website": "https://slack.com/"
+        },
+        {
+            "name": "Google Workspace",
+            "category": "Workplace",
+            "level": "70%",
+            "logo": "logos:google-workspace",
+            "website": "https://workspace.google.com/"
+        },
+        {
+            "name": "Confluence",
+            "category": "Workplace",
+            "level": "60%",
+            "logo": "simple-icons:confluence",
+            "website": "https://www.atlassian.com/software/confluence"
+        },
+        {
+            "name": "Jira",
+            "category": "Workplace",
+            "level": "60%",
+            "logo": "simple-icons:jira",
+            "website": "https://www.atlassian.com/software/jira"
+        },
+        {
+            "name": "Unreal Engine",
+            "category": "Creative",
+            "level": "60%",
+            "logo": "skill-icons:unrealengine",
+            "website": "https://www.unrealengine.com/"
+        },
+        {
+            "name": "Github",
+            "category": "Platform",
+            "level": "65%",
+            "logo": "skill-icons:github-light",
+            "website": "https://github.com/"
+        },
+        {
+            "name": "Perforce",
+            "category": "Platform",
+            "level": "50%",
+            "logo": "simple-icons:perforce",
+            "website": "https://www.perforce.com/"
+        },
+        {
+            "name": "Swift",
+            "category": "Development",
+            "level": "55%",
+            "logo": "skill-icons:swift",
+            "website": "https://www.swift.org/"
+        },
+        {
+            "name": "C++",
+            "category": "Development",
+            "level": "35%",
+            "logo": "skill-icons:cpp",
+            "website": "https://cplusplus.com/"
+        },
+        {
+            "name": "Python",
+            "category": "Development",
+            "level": "60%",
+            "logo": "skill-icons:python-light",
+            "website": "https://www.python.org"
+        },
+        {
+            "name": "BASh",
+            "category": "Development",
+            "level": "70%",
+            "logo": "skill-icons:bash-light",
+            "website": "https://www.gnu.org/software/bash/"
+        },
+        {
+            "name": "JavaScript",
+            "category": "Development",
+            "level": "35%",
+            "logo": "skill-icons:javascript",
+            "website": "https://developer.oracle.com/languages/javascript.html"
+        },
+        {
+            "name": "TypeScript",
+            "category": "Development",
+            "level": "40%",
+            "logo": "skill-icons:typescript",
+            "website": "https://www.typescriptlang.org"
+        },
+        {
+            "name": "Node.js",
+            "category": "Development",
+            "level": "30%",
+            "logo": "skill-icons:nodejs-light",
+            "website": "https://nodejs.org"
+        },
+        {
+            "name": "Next.js",
+            "category": "Development",
+            "level": "45%",
+            "logo": "skill-icons:nextjs-light",
+            "website": "https://nextjs.org/"
+        },
+        {
+            "name": "React",
+            "category": "Development",
+            "level": "45%",
+            "logo": "skill-icons:react-dark",
+            "website": "https://react.dev/"
+        },
+        {
+            "name": "tailwindCSS",
+            "category": "Development",
+            "level": "50%",
+            "logo": "skill-icons:tailwindcss-dark",
+            "website": "https://tailwindcss.com"
+        },
+        {
+            "name": "Xcode",
+            "category": "Development",
+            "level": "35%",
+            "logo": "logos:xcode",
+            "website": "https://developer.apple.com/xcode/"
+        },
+        {
+            "name": "IntelliJ IDEA",
+            "category": "Development",
+            "level": "45%",
+            "logo": "logos:intellij-idea",
+            "website": "https://www.jetbrains.com/idea/"
+        },
+        {
+            "name": "PyCharm",
+            "category": "Development",
+            "level": "60%",
+            "logo": "skill-icons:pycharm-light",
+            "website": "https://www.jetbrains.com/pycharm/"
+        },
+        {
+            "name": "Rider",
+            "category": "Development",
+            "level": "45%",
+            "logo": "skill-icons:rider-light",
+            "website": "https://www.jetbrains.com/rider/"
+        },
+        {
+            "name": "CLion",
+            "category": "Development",
+            "level": "35%",
+            "logo": "skill-icons:clion-light",
+            "website": "https://www.jetbrains.com/clion/"
+        },
+        {
+            "name": "JetBrains Air",
+            "category": "Development",
+            "level": "25%",
+            "logo": "simple-icons:jetbrains",
+            "website": "https://www.jetbrains.com/air/"
+        },
+        {
+            "name": "SideFX Houdini",
+            "category": "Creative",
+            "level": "30%",
+            "logo": "simple-icons:houdini",
+            "website": "https://www.sidefx.com/"
+        },
+        {
+            "name": "Blender",
+            "category": "Creative",
+            "level": "55%",
+            "logo": "skill-icons:blender-dark",
+            "website": "https://www.blender.org/"
+        },
+        {
+            "name": "Creative Cloud",
+            "category": "Creative",
+            "level": "80%",
+            "logo": "simple-icons:adobecreativecloud",
+            "website": "https://www.adobe.com/creativecloud.html"
+        },
+        {
+            "name": "Windows",
+            "category": "Workplace",
+            "level": "90%",
+            "logo": "skill-icons:windows-light",
+            "website": "https://www.microsoft.com/en-us/windows"
+        },
+        {
+            "name": "Linux",
+            "category": "Workplace",
+            "level": "70%",
+            "logo": "skill-icons:linux-light",
+            "website": "https://www.kernel.org/"
+        },
+        {
+            "name": "Microsoft 365",
+            "category": "Workplace",
+            "level": "65%",
+            "logo": "selfhst:microsoft-365",
+            "website": "https://www.microsoft.com/en-us/microsoft-365"
+        },
+        {
+            "name": "Kali Linux",
+            "category": "Security",
+            "level": "40%",
+            "logo": "skill-icons:kali-light",
+            "website": "https://www.kali.org/"
+        },
+        {
+            "name": "macOS",
+            "category": "Workplace",
+            "level": "75%",
+            "logo": "skill-icons:apple-light",
+            "website": "https://www.apple.com"
+        }
+    ],
+    "target_skills": [
+        {
+            "name": "GraphQL",
+            "logo": "simple-icons:graphql",
+            "website": "https://graphql.org/"
+        },
+        {
+            "name": "Datadog",
+            "logo": "simple-icons:datadog",
+            "website": "https://www.datadoghq.com/"
+        },
+        {
+            "name": "Ansible",
+            "logo": "simple-icons:ansible",
+            "website": "https://www.ansible.com/"
+        }
+    ],
+    "industry_knowledge": [
+        { "name": "Identity & Access Management (IAM)" },
+        { "name": "Zero Trust Security Architecture" },
+        { "name": "PKI / Certificate Lifecycle Management" },
+        { "name": "Endpoint Security & Mobile Device Management (MDM)" },
+        { "name": "Cloud Security (AWS)" },
+        { "name": "Vulnerability Management" },
+        { "name": "Access Governance & Certification (Least-Privilege Audits)" },
+        { "name": "Application Allow-Listing / Binary Authorization" },
+        { "name": "DevSecOps" },
+        { "name": "Software Supply-Chain Security" },
+        { "name": "Security Incident Response" },
+        { "name": "Kubernetes Access Control & RBAC" },
+        { "name": "Enterprise AI Governance & AI Tooling Security" },
+        { "name": "Identity Federation (SAML, OAuth 2.0, OIDC, SCIM)" },
+        { "name": "Threat Mitigation" },
+        { "name": "Risk Management" },
+        { "name": "Agile & DevOps" },
+        { "name": "Regulatory & Compliance Controls" }
+    ],
+    "soft_skills": [
+        { "name": "Cross-Functional Stakeholder Communication" },
+        { "name": "Incident Response & Crisis Management" },
+        { "name": "Technical Writing & Knowledge Transfer" },
+        { "name": "Change Management & Org-Wide Rollout Communication" },
+        { "name": "Vendor Evaluation & Build-vs-Buy Decisions" },
+        { "name": "Automation-First Problem Solving" },
+        { "name": "Ownership of Ambiguous, Cross-Team Initiatives" },
+        { "name": "Mentoring" }
+    ],
+    "language_skills": [
+        {
+            "language": "English",
+            "level": "Native",
+            "flag": "circle-flags:ca"
+        },
+        {
+            "language": "Japanese",
+            "level": "Basic Conversation",
+            "flag": "circle-flags:jp"
+        }
+    ]
 }

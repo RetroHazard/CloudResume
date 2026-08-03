@@ -6,7 +6,7 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
     class="overflow-hidden rounded-lg border border-border"
   >
     <div
-      class="flex items-center justify-between gap-3 border-b border-border bg-secondary-800/70 px-3 py-2 font-mono text-[0.58rem] font-semibold uppercase tracking-[0.16em] text-content-accent sm:px-4"
+      class="flex items-center justify-between gap-3 border-b border-border bg-secondary-800/70 px-3 py-2 font-mono text-[0.58rem] font-semibold tracking-[0.16em] text-content-accent uppercase sm:px-4"
     >
       <span>
         Line  ·  Destination — Role / Operator
@@ -27,7 +27,7 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
           open=""
         >
           <summary
-            class="grid cursor-pointer list-none items-center gap-3 px-3 py-3 transition-colors hover:bg-secondary-800/50 sm:px-4 [grid-template-columns:auto_1fr_auto]"
+            class="grid cursor-pointer list-none [grid-template-columns:auto_1fr_auto] items-center gap-3 px-3 py-3 transition-colors hover:bg-secondary-800/50 sm:px-4"
           >
             <span
               aria-hidden="true"
@@ -40,10 +40,14 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
               class="flex min-w-0 flex-col"
             >
               <span
-                class="truncate font-heading text-base font-bold uppercase leading-tight tracking-wide text-content-title sm:text-lg"
-                title="Generic Job Title"
+                class="flex min-w-0 items-center gap-2"
               >
-                Generic Job Title
+                <span
+                  class="truncate font-heading text-base leading-tight font-bold tracking-wide text-content-title uppercase sm:text-lg"
+                  title="Generic Job Title"
+                >
+                  Generic Job Title
+                </span>
               </span>
               <span
                 class="truncate font-mono text-[0.7rem] text-neon"
@@ -64,7 +68,7 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
                   Generic Start
                 </span>
                 <span
-                  class="inline-flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-content-date"
+                  class="inline-flex items-center gap-1.5 font-mono text-[0.62rem] font-semibold tracking-[0.14em] uppercase text-content-date"
                 >
                   Departed
                 </span>
@@ -89,7 +93,7 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
             </span>
           </summary>
           <div
-            class="border-t border-border/60 bg-background/40 px-3 pb-4 pt-3 sm:px-4"
+            class="border-t border-border/60 bg-background/40 px-3 pt-3 pb-4 sm:px-4"
           >
             <div
               class="flex flex-col gap-3"

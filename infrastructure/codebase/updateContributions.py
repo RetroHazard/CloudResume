@@ -43,11 +43,11 @@ def level_for(count):
 def fetch_user(user):
     request = urllib.request.Request(
         api_url.format(user=urllib.parse.quote(user)),
-        headers={'Accept': 'application/json', 'User-Agent': 'CloudResume-updateContributions'}
+        headers={'Accept': 'application/json', 'User-Agent': 'CloudResume-updateContributions'},
     )
     with urllib.request.urlopen(request, timeout=15) as response:
         if response.status != 200:
-            raise ValueError(f"{user}: HTTP {response.status}")
+            raise ValueError(f'{user}: HTTP {response.status}')
         return json.load(response).get('contributions', [])
 
 
@@ -65,18 +65,10 @@ def lambda_handler(event, context):
             if date:
                 by_date[date] = by_date.get(date, 0) + (day.get('count') or 0)
 
-    days = [
-        {'date': date, 'count': count, 'level': level_for(count)}
-        for date, count in sorted(by_date.items())
-    ]
+    days = [{'date': date, 'count': count, 'level': level_for(count)} for date, count in sorted(by_date.items())]
     total = sum(day['count'] for day in days)
 
-    payload = {
-        'total': total,
-        'accounts': accounts,
-        'updated': datetime.now(timezone.utc).isoformat(),
-        'days': days
-    }
+    payload = {'total': total, 'accounts': accounts, 'updated': datetime.now(timezone.utc).isoformat(), 'days': days}
 
     client = boto3.client('s3')
     client.put_object(
@@ -84,8 +76,8 @@ def lambda_handler(event, context):
         Key=objectKey,
         Body=json.dumps(payload, indent=2).encode('utf-8'),
         ContentType='application/json',
-        CacheControl='public, max-age=300'
+        CacheControl='public, max-age=300',
     )
 
-    print(f"Published {objectKey} — {total} contributions over {len(days)} days ({' + '.join(accounts)})")
+    print(f'Published {objectKey} — {total} contributions over {len(days)} days ({" + ".join(accounts)})')
     return {'total': total, 'days': len(days), 'accounts': accounts}

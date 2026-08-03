@@ -8,9 +8,15 @@ export function useJsonData(file) {
         if (!file) return;
         let cancelled = false;
         jsonLoader(file)
-            .then((data) => { if (!cancelled) setState({ data, error: null, loading: false }); })
-            .catch((error) => { if (!cancelled) setState({ data: null, error, loading: false }); });
-        return () => { cancelled = true; };
+            .then((data) => {
+                if (!cancelled) setState({ data, error: null, loading: false });
+            })
+            .catch((error) => {
+                if (!cancelled) setState({ data: null, error, loading: false });
+            });
+        return () => {
+            cancelled = true;
+        };
     }, [file]);
 
     return state;
