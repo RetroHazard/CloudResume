@@ -198,7 +198,7 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
 
     origin_shield {
       enabled              = "true"
-      origin_shield_region = aws_s3_bucket.crc-agb-s3-website-prod.region
+      origin_shield_region = aws_s3_bucket.crc-agb-s3-website-prod.bucket_region
     }
   }
 
