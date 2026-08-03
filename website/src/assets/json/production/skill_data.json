@@ -60,14 +60,14 @@
       "name": "Entra ID",
       "category": "Security",
       "level": "45%",
-      "logo": null,
+      "logo": "selfhst:microsoft-entra-id",
       "website": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id"
     },
     {
       "name": "Push Security",
       "category": "Security",
       "level": "45%",
-      "logo": null,
+      "logo": "selfhst:push-security",
       "website": "https://pushsecurity.com/"
     },
     {
@@ -109,14 +109,14 @@
       "name": "CrowdStrike",
       "category": "Security",
       "level": "65%",
-      "logo": null,
+      "logo": "selfhst:crowdstrike",
       "website": "https://www.crowdstrike.com/"
     },
     {
       "name": "Zscaler",
       "category": "Security",
       "level": "65%",
-      "logo": null,
+      "logo": "selfhst:zscaler",
       "website": "https://www.zscaler.com/"
     },
     {
@@ -151,21 +151,21 @@
       "name": "JupiterOne",
       "category": "Security",
       "level": "40%",
-      "logo": null,
+      "logo": "selfhst:jupiterone-light",
       "website": "https://www.jupiterone.com/"
     },
     {
       "name": "Cyberhaven",
       "category": "Security",
       "level": "50%",
-      "logo": null,
+      "logo": "selfhst:cyberhaven-light",
       "website": "https://www.cyberhaven.com/"
     },
     {
       "name": "dope.security",
       "category": "Security",
       "level": "80%",
-      "logo": null,
+      "logo": "selfhst:dope-security",
       "website": "https://dope.security/"
     },
     {
@@ -179,7 +179,7 @@
       "name": "Workbrew",
       "category": "Security",
       "level": "70%",
-      "logo": null,
+      "logo": "selfhst:workbrew",
       "website": "https://workbrew.com/"
     },
     {
