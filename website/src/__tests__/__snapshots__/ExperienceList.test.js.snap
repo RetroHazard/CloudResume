@@ -40,10 +40,14 @@ exports[`ExperienceList Component > matches snapshot 1`] = `
               class="flex min-w-0 flex-col"
             >
               <span
-                class="truncate font-heading text-base leading-tight font-bold tracking-wide text-content-title uppercase sm:text-lg"
-                title="Generic Job Title"
+                class="flex min-w-0 items-center gap-2"
               >
-                Generic Job Title
+                <span
+                  class="truncate font-heading text-base leading-tight font-bold tracking-wide text-content-title uppercase sm:text-lg"
+                  title="Generic Job Title"
+                >
+                  Generic Job Title
+                </span>
               </span>
               <span
                 class="truncate font-mono text-[0.7rem] text-neon"
