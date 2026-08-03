@@ -16,17 +16,16 @@ web-checks  web-e2e   terraform    py-lint    actionlint
  typecheck  build +   fmt/validate   ruff      (.github
  prettier   preview   plan                      changed)
  vitest     cypress   apply ──[main only, if the plan is non-empty]
-    │          │      ↳ secrets_changed?
+    │          │      ↳ secrets_changed? applied?
     │          │          │
     ├──────────┴──────────┴─────┬──────────────┐
     ▼                           ▼              │
 mark-verified              web-deploy          │
   (PR only)                build-prod          │
   web/ruff/actionlint      + s3 sync           │
-  markers                                      │
-                                │              │
+  markers                       │              │
                                 ▼              │
-                            web-smoke          │
+                              smoke ◀──[also on an apply with no deploy]
                                 │              │
                                 └──────────────┤
                                                ▼
@@ -35,6 +34,7 @@ mark-verified              web-deploy          │
 ```
 
 `web-deploy` runs when `website` changed **or** the plan rewrote the Actions secrets — see below.
+`smoke` runs when `web-deploy` succeeded **or** the apply actually ran.
 
 `ci-ok` is the single required status check. Everything else can be renamed without touching branch
 protection, and a job skipped by `if:` — the normal outcome for a stack that did not change — counts
@@ -126,6 +126,52 @@ The one case it cannot see is an apply that succeeded while the deploy after it 
 plans clean, so nothing signals that the bundle is behind. `workflow_dispatch` with `force_website`
 is the recovery path.
 
+**The smoke test hangs off both.** That narrow deploy gate is right for deciding whether to re-upload
+the bundle and wrong for deciding whether production needs checking. `smoke` used to need only
+`web-deploy`, so every Lambda edit, API Gateway change, CloudFront behaviour and IAM tweak applied
+straight to production with nothing running afterwards — and reported green, because a skipped job
+counts as a pass. It now runs on `web-deploy.result == 'success' || terraform.outputs.applied ==
+'true'`, where `applied` is read off the `Apply` step's own `outcome`. That step's `if:` already
+encodes every condition — `main`, a non-empty plan, not a dry run — and a step excluded by `if:`
+reports `skipped`, so the empty-plan, PR and dry-run paths all resolve to `false` without a second
+copy of the expression to keep in sync.
+
+One job rather than one per stack: an apply can break the site and a deploy can break the API
+contract, so both paths want the same specs, and a run that changes both stacks would otherwise
+smoke test the same site twice. `web-deploy` is tested for `!= 'failure'` rather than `== 'success'`
+alongside the `||`, because it is legitimately skipped on the apply-only path.
+
+`ci-ok` asserts the pairing positively, in both directions: if `web-deploy` succeeded **or** the
+apply ran, `smoke` must have succeeded. `toJSON(needs)` carries job outputs as well as results, so
+the same blob the gate already reads holds `applied`. Everything else in that job treats a skip as a
+pass — correct for a stack that did not change, and exactly what hid the smoke test not running
+across four consecutive deploys (#121–#123). This is the one place the distinction is worth failing
+over.
+
+**What the smoke test covers.** `pnpm cypress:smoke` runs six specs against
+`https://<domain>`, all of them skipping themselves when pointed at a local preview:
+
+| Spec | Proves |
+| --- | --- |
+| `navigation.cy.js` | CloudFront serves 200 on the apex, every SPA route, and the 404 fallback |
+| `visitor-counter.cy.js` | the counter renders (API stubbed) |
+| `files-locked.cy.js` | the edge rejects an unsigned `/files/*` |
+| `bucket-locked.cy.js` | the S3 origin rejects an anonymous read — the other half of the CloudFront-only policy, and the only thing testing it, since there is no `aws_s3_bucket_public_access_block` on the prod bucket |
+| `cv-download-live.cy.js` | a real signed URL fetches the PDF: API GW → Lambda → SSM → DynamoDB → CloudFront key group all agree |
+| `api-live.cy.js` | `GET /visitors` returns JSON with a numeric `count` and the right CORS origin; both request validators still reject a missing querystring at the gateway; `POST /contact` reaches its Lambda |
+
+The two live API specs need `CYPRESS_API_ENDPOINT`, `CYPRESS_S3_BUCKET` and `CYPRESS_AWS_REGION` in
+addition to `CYPRESS_BASE_URL`; every request they make is anonymous, so no AWS credentials are
+involved. `/contact` is probed with a deliberately foreign `Origin`, which `sendMessage` refuses
+before it ever constructs an SES client — that is what proves the route is alive without emailing a
+human on every deploy. The 403 assertion checks the body text as well as the status, because API
+Gateway answers a request for a route that does not exist with a 403 of its own.
+
+Both live specs reuse a fixed identifier (`ci-smoke-test`) for the `visitorId` and `uuid`
+querystrings. `trackVisitors` and `downloadResume` both write a record with a 24-hour TTL and only
+count on a miss, so repeat deploys are absorbed by the dedupe rather than inflating the public
+counters once per push to `main`.
+
 **`terraform apply` consumes the saved plan** rather than re-planning, so what lands is what was
 reviewed a step earlier. The plan is handed straight from the plan step to the apply step within one
 job, and is never carried between runs. Reusing a PR's plan for the post-merge apply would eliminate
@@ -201,6 +247,14 @@ pnpm format:check     # prettier --check .
 pnpm test             # vitest run --coverage
 pnpm build-dev && pnpm preview   # then pnpm cypress:run in another shell
 
+# The smoke set against production. Without the three extra variables the two live
+# API specs skip themselves, exactly as they do in the PR e2e job.
+CYPRESS_BASE_URL=https://<domain> \
+CYPRESS_API_ENDPOINT=<api endpoint> \
+CYPRESS_S3_BUCKET=<prod bucket> \
+CYPRESS_AWS_REGION=<region> \
+pnpm cypress:smoke
+
 ruff check infrastructure/codebase/ && ruff format --check infrastructure/codebase/
 actionlint
 cd infrastructure && terraform fmt -check -recursive && terraform validate
@@ -227,7 +281,7 @@ edge. Four jobs each re-ran `pnpm install`, one of them (`setup`) only to instal
 away because it existed to carry an `if:` gate; the build reached `deploy` smuggled through
 `actions/cache` keyed on `github.sha`. Unit tests re-ran post-merge on content the PR had already
 proved — the markers above are what fixed that. And the post-deploy Cypress job carried
-`continue-on-error: true`, so it rendered green whatever happened; `web-smoke` does not, and runs a
+`continue-on-error: true`, so it rendered green whatever happened; `smoke` does not, and runs a
 subset rather than the full suite.
 
 Deleting `infrastructure-test.yml` also removed a second plan against the same remote state on every
