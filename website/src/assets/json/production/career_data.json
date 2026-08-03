@@ -61,59 +61,95 @@
         },
         {
             "company": "Indeed",
-            "job_title": "Lead, IT Solutions",
             "location": "Tokyo, Japan",
             "type": "Full Time",
-            "start": "2021-04",
-            "end": "2025-09",
             "logo": "./images/logos/companies/indeed.png",
             "website": "https://www.indeed.com/",
-            "details": [
-                "Architecture and implementation lead for a Secure Global Printing Solution, improving printing reliability and scalability for over 10,000 users in Indeed offices around the world, reducing print-related issues by over 80%, reducing costs by up to 45%, and increasing user satisfaction by roughly 25%.",
-                "Implemented a comprehensive IT asset and inventory management system, achieving 99% accuracy in asset tracking, reducing procurement costs by 15%, and ensuring 100% compliance with organizational policies.",
-                "Led process improvement initiatives and streamlined workflows, reducing average ticket resolution time by 30% and increasing user satisfaction scores by 20%.",
-                "Led the IT Service Desk team, ensuring timely resolution of technical issues while maintaining clear and effective communication with stakeholders to align support services with business needs."
-            ],
-            "technologies": [
+            "roles": [
                 {
-                    "name": "AWS",
-                    "logo": "simple-icons:amazonaws",
-                    "website": "https://aws.amazon.com/"
+                    "job_title": "Lead, IT Solutions",
+                    "transition": "Promoted",
+                    "start": "2023-01",
+                    "end": "2025-09",
+                    "details": [
+                        "Served as project lead and architect for a global enterprise printing solution across all regions outside the Americas, improving reliability and scalability for over 10,000 users, reducing print-related issues by 80%, lowering costs by 45%, and increasing user satisfaction by 25%.",
+                        "Led the IT Service Desk team in Japan, mentoring engineers and driving performance enablement while partnering with stakeholders to align support services with evolving business needs.",
+                        "Led process improvement initiatives and streamlined workflows, reducing average ticket resolution time by 30% and increasing user satisfaction scores by 20%."
+                    ],
+                    "technologies": [
+                        {
+                            "name": "AWS",
+                            "logo": "simple-icons:amazonaws",
+                            "website": "https://aws.amazon.com/"
+                        },
+                        {
+                            "name": "Terraform",
+                            "logo": "simple-icons:terraform",
+                            "website": "https://www.terraform.io/"
+                        },
+                        {
+                            "name": "Jira",
+                            "logo": "simple-icons:jira",
+                            "website": "https://www.atlassian.com/software/jira"
+                        },
+                        {
+                            "name": "Confluence",
+                            "logo": "simple-icons:confluence",
+                            "website": "https://www.atlassian.com/software/confluence"
+                        },
+                        {
+                            "name": "CloudFlare",
+                            "logo": "simple-icons:cloudflare",
+                            "website": "https://www.cloudflare.com"
+                        },
+                        {
+                            "name": "Google Workspace",
+                            "logo": "simple-icons:google",
+                            "website": "https://workspace.google.com/"
+                        },
+                        {
+                            "name": "GitLab",
+                            "logo": "simple-icons:gitlab",
+                            "website": "https://about.gitlab.com/"
+                        },
+                        {
+                            "name": "Linux",
+                            "logo": "simple-icons:linux",
+                            "website": "https://www.linux.org/"
+                        }
+                    ]
                 },
                 {
-                    "name": "Terraform",
-                    "logo": "simple-icons:terraform",
-                    "website": "https://www.terraform.io/"
-                },
-                {
-                    "name": "Jira",
-                    "logo": "simple-icons:jira",
-                    "website": "https://www.atlassian.com/software/jira"
-                },
-                {
-                    "name": "Confluence",
-                    "logo": "simple-icons:confluence",
-                    "website": "https://www.atlassian.com/software/confluence"
-                },
-                {
-                    "name": "CloudFlare",
-                    "logo": "simple-icons:cloudflare",
-                    "website": "https://www.cloudflare.com"
-                },
-                {
-                    "name": "Google Workspace",
-                    "logo": "simple-icons:google",
-                    "website": "https://workspace.google.com/"
-                },
-                {
-                    "name": "GitLab",
-                    "logo": "simple-icons:gitlab",
-                    "website": "https://about.gitlab.com/"
-                },
-                {
-                    "name": "Linux",
-                    "logo": "simple-icons:linux",
-                    "website": "https://www.linux.org/"
+                    "job_title": "IT Support Specialist II",
+                    "start": "2021-04",
+                    "end": "2023-01",
+                    "details": [
+                        "Implemented a comprehensive IT asset and inventory management system, achieving 99% accuracy in asset tracking, reducing procurement costs by 15%, and ensuring 100% compliance with organizational policies.",
+                        "Delivered frontline technical support across hardware, software, and access issues for 2000 local users, consistently meeting SLA targets and maintaining high customer-satisfaction scores.",
+                        "Contributed to the initial implementation and regional deployment of a global enterprise printing solution, standing up 4 sites in Japan and validating configurations that established the foundation for a company-wide rollout."
+                    ],
+                    "technologies": [
+                        {
+                            "name": "Jira",
+                            "logo": "simple-icons:jira",
+                            "website": "https://www.atlassian.com/software/jira"
+                        },
+                        {
+                            "name": "Confluence",
+                            "logo": "simple-icons:confluence",
+                            "website": "https://www.atlassian.com/software/confluence"
+                        },
+                        {
+                            "name": "Google Workspace",
+                            "logo": "simple-icons:google",
+                            "website": "https://workspace.google.com/"
+                        },
+                        {
+                            "name": "Linux",
+                            "logo": "simple-icons:linux",
+                            "website": "https://www.linux.org/"
+                        }
+                    ]
                 }
             ]
         },
