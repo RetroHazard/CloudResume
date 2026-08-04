@@ -67,6 +67,7 @@ jobs:
       contents: read
     outputs:
       website: ${{ steps.filter.outputs.website }}
+      website_deployable: ${{ steps.filter.outputs.website_deployable }}
       infrastructure: ${{ steps.filter.outputs.infrastructure }}
       github: ${{ steps.filter.outputs.github }}
       web_digest: ${{ steps.digest.outputs.web }}
@@ -111,8 +112,15 @@ jobs:
             # what enqueues the cloudfrontInvalidation Lambda, so a manual run
             # with force_website is the only way to refresh the cached document
             # without committing a website change.
+            # website_deployable tracks force_website exactly, and must keep
+            # doing so: a dispatch with force_website *is* the CDN-invalidation
+            # escape hatch, and it works by re-uploading index.html. Leaving
+            # this unset here would read as false downstream and silently skip
+            # the deploy — disabling the escape hatch precisely when someone is
+            # reaching for it because the live document is stale.
             {
               printf 'website=%s\n' "$FORCE_WEBSITE"
+              printf 'website_deployable=%s\n' "$FORCE_WEBSITE"
               printf 'infrastructure=%s\n' "$FORCE_INFRA"
               echo 'github=false'
             } >> "$GITHUB_OUTPUT"
@@ -160,10 +168,37 @@ jobs:
           # Without it, changing line-length or the target version would leave
           # py-lint unrun on code it had just changed the rules for.
           match() { echo "$changed" | grep -qE "$1" && echo true || echo false; }
+
+          # Two questions, deliberately not the same one.
+          #
+          # `website` asks "could this affect the website at all", and gates the
+          # checks. It stays broad: editing a test is exactly when the tests
+          # want re-running.
+          #
+          # `website_deployable` asks the narrower "could the built bundle have
+          # changed", and gates the deploy alone. Test sources are never
+          # imported by the app entry, so editing one cannot alter a byte of the
+          # build — and a deploy is not free: the second `aws s3 sync` compares
+          # mtime, so a rebuilt index.html is re-uploaded even when byte
+          # identical, and an ObjectCreated on index.html is what enqueues the
+          # cloudfrontInvalidation Lambda. A Cypress-only edit was therefore
+          # paying for a full rebuild and a CDN invalidation to ship bytes that
+          # had not changed.
+          #
+          # Conservative on purpose, because the two ways of being wrong are not
+          # symmetric: excluding too little costs one needless deploy, while
+          # excluding too much leaves production serving a stale bundle after a
+          # real change. Only provably test-only paths belong here.
+          test_only='^website/(cypress/|cypress\.config\.js$|src/__tests__/)'
+          deployable() {
+            echo "$changed" | grep -E '^website/' | grep -qvE "$test_only" \
+              && echo true || echo false
+          }
           {
-            printf 'website=%s\n'        "$(match '^website/')"
-            printf 'infrastructure=%s\n' "$(match '^(infrastructure/|ruff\.toml$)')"
-            printf 'github=%s\n'         "$(match '^\.github/')"
+            printf 'website=%s\n'            "$(match '^website/')"
+            printf 'website_deployable=%s\n' "$(deployable)"
+            printf 'infrastructure=%s\n'     "$(match '^(infrastructure/|ruff\.toml$)')"
+            printf 'github=%s\n'             "$(match '^\.github/')"
           } >> "$GITHUB_OUTPUT"
 
       - name: Compute content digests
@@ -768,13 +803,19 @@ jobs:
     # and web-checks/web-e2e are skipped whenever the digest marker hit.
     #
     # Two things can require a deploy, hence the `||`. The obvious one is a
-    # change under website/. The other is an apply that rewrites the Actions
-    # secrets, because AWS_API_ENDPOINT is compiled into the bundle and
+    # change under website/ that the bundle could actually contain — hence
+    # website_deployable rather than website, which is broader and also covers
+    # test sources the build never sees. The other is an apply that rewrites the
+    # Actions secrets, because AWS_API_ENDPOINT is compiled into the bundle and
     # AWS_S3_BUCKET_PROD is the upload target — an infrastructure-only change
     # can invalidate the live bundle without touching a single website file.
     # Gating on the plan rather than on `infrastructure == 'true'` is what
     # keeps every Lambda edit and IAM tweak from re-uploading the whole site
     # and paying for a CloudFront invalidation it does not need.
+    #
+    # The checks are still reached on a test-only change: web-checks and web-e2e
+    # gate on the broad `website`, and this job needs them, so narrowing the
+    # deploy trigger cannot let an untested bundle ship.
     #
     # `secrets_changed` is empty when terraform was skipped, which reads as
     # false and correctly leaves website-only runs to the first clause.
@@ -783,7 +824,7 @@ jobs:
           && github.ref == 'refs/heads/main'
           && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
           && needs.changes.result == 'success'
-          && (needs.changes.outputs.website == 'true'
+          && (needs.changes.outputs.website_deployable == 'true'
               || needs.terraform.outputs.secrets_changed == 'true')
           && needs.web-checks.result != 'failure' && needs.web-checks.result != 'cancelled'
           && needs.web-e2e.result    != 'failure' && needs.web-e2e.result    != 'cancelled'
