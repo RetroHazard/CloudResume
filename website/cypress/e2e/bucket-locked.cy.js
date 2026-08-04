@@ -16,6 +16,14 @@ describe('Website bucket origin', () => {
     it('refuses an anonymous request to the S3 endpoint', function () {
         if (!bucket || !region) {
             // No bucket name locally, and nothing to point this at — see files-locked.cy.js.
+            // But in the smoke job, where CYPRESS_REQUIRE_LIVE is set, that means the job is
+            // misconfigured rather than the test inapplicable — see the note in api-live.cy.js.
+            if (Cypress.env('REQUIRE_LIVE')) {
+                throw new Error(
+                    'CYPRESS_REQUIRE_LIVE is set, so this spec must run, but it has no target ' +
+                        `(S3_BUCKET=${bucket || '<empty>'}, AWS_REGION=${region || '<empty>'}).`,
+                );
+            }
             this.skip();
         }
 
