@@ -8,8 +8,10 @@
 // — would serve the whole site straight off S3, bypassing the CDN, the signed-download gate on
 // /files/*, and the access logging. Terraform would report that apply as a clean success.
 describe('Website bucket origin', () => {
-    const bucket = Cypress.env('s3Bucket');
-    const region = Cypress.env('awsRegion');
+    // Verbatim after the CYPRESS_ prefix is stripped — see the note in api-live.cy.js.
+    // As 's3Bucket'/'awsRegion' these never resolved and the test always skipped itself.
+    const bucket = Cypress.env('S3_BUCKET');
+    const region = Cypress.env('AWS_REGION');
 
     it('refuses an anonymous request to the S3 endpoint', function () {
         if (!bucket || !region) {

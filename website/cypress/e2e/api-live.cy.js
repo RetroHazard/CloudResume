@@ -11,7 +11,11 @@
 // files-locked.cy.js and cv-download-live.cy.js, plus one on the endpoint itself — the PR e2e
 // job has no CYPRESS_API_ENDPOINT and must skip rather than fail.
 describe('Live API (production)', () => {
-    const apiEndpoint = (Cypress.env('apiEndpoint') || '').replace(/\/$/, '');
+    // Cypress strips only the CYPRESS_ prefix and keeps the rest of the name verbatim, so
+    // CYPRESS_API_ENDPOINT arrives as 'API_ENDPOINT'. Reading it as 'apiEndpoint' resolved
+    // undefined on every run, which tripped the guard below and self-skipped all four tests
+    // — green, and verifying nothing. contact-form.cy.js has the convention right.
+    const apiEndpoint = (Cypress.env('API_ENDPOINT') || '').replace(/\/$/, '');
     const baseUrl = Cypress.config('baseUrl') || '';
 
     // A stable id, exactly as cv-download-live.cy.js uses for the download uuid. trackVisitors
