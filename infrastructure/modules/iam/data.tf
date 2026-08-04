@@ -75,7 +75,7 @@ data "aws_iam_policy_document" "crc-lambda-DownloadResume-access-policy" {
       "ssm:GetParameter"
     ]
     resources = [
-      "arn:aws:ssm:${data.aws_region.current.name}:${var.account_id}:parameter${var.crc-cf-signing-key-parameter-name}"
+      "arn:aws:ssm:${data.aws_region.current.region}:${var.account_id}:parameter${var.crc-cf-signing-key-parameter-name}"
     ]
   }
 

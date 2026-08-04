@@ -1,29 +1,41 @@
 module "iam_github_oidc_provider" {
-  source  = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-provider"
-  version = "~> 5.0"
+  source  = "terraform-aws-modules/iam/aws//modules/iam-oidc-provider"
+  version = "~> 6.0"
 }
 
 module "iam_github_s3_oidc_role" {
-  source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version  = "~> 5.0"
-  subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "~> 6.0"
+
+  enable_github_oidc = true
+  # The subject carries a trailing wildcard, so it must go through
+  # oidc_wildcard_subjects (StringLike) — oidc_subjects renders StringEquals,
+  # which treats "*" literally and would reject every real Actions token.
+  oidc_wildcard_subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
   policies = {
     S3Limited = module.iam.aws_iam_policy_document_crc-github-s3-actions_arn
   }
   path = "/CloudResume/"
   name = "crc-github-s3-oidc-role"
+  # v6 defaults to name_prefix, which would destroy and recreate the role
+  # under a randomized name; keep the exact name the state already holds.
+  use_name_prefix = false
 }
 
 module "iam_github_tf_oidc_role" {
-  source   = "terraform-aws-modules/iam/aws//modules/iam-github-oidc-role"
-  version  = "~> 5.0"
-  subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role"
+  version = "~> 6.0"
+
+  enable_github_oidc = true
+  # See iam_github_s3_oidc_role: wildcard subject requires StringLike matching.
+  oidc_wildcard_subjects = ["${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}:*"]
   policies = {
     LimitedIAM   = module.iam.aws_iam_policy_document_crc-github-terraform-limited-iam_arn,
     AWSPowerUser = "arn:aws:iam::aws:policy/PowerUserAccess"
   }
-  path = "/CloudResume/"
-  name = "crc-github-tf-oidc-role"
+  path            = "/CloudResume/"
+  name            = "crc-github-tf-oidc-role"
+  use_name_prefix = false
 }
 
 module "iam" {
