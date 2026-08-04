@@ -1089,12 +1089,19 @@ jobs:
       # continue-on-error on both so one spec failing still lets the other run
       # and still reaches the assertion below — the point of this job is to read
       # both results at once, not to stop at the first red.
+      # --quiet + redirect rather than --reporter-options output=FILE: mocha's
+      # built-in json reporter ignores `output` (that belongs to
+      # mocha-junit-reporter / mochawesome), so the first attempt printed the
+      # JSON to stdout and wrote no file at all. --quiet silences Cypress's own
+      # output so the reporter is the only thing on stdout; tee keeps it in the
+      # log as well as on disk.
       - name: Run api-live.cy.js against production
         continue-on-error: true
         run: |
+          set -o pipefail
           pnpm exec cypress run \
             --spec cypress/e2e/api-live.cy.js \
-            --reporter json --reporter-options output=api-live-results.json
+            --quiet --reporter json | tee api-live-results.json
         env:
           CYPRESS_BASE_URL: https://${{ vars.AWS_TF_DOMAIN_NAME }}
           CYPRESS_API_ENDPOINT: ${{ secrets.AWS_API_ENDPOINT }}
@@ -1104,9 +1111,10 @@ jobs:
       - name: Run bucket-locked.cy.js against production
         continue-on-error: true
         run: |
+          set -o pipefail
           pnpm exec cypress run \
             --spec cypress/e2e/bucket-locked.cy.js \
-            --reporter json --reporter-options output=bucket-locked-results.json
+            --quiet --reporter json | tee bucket-locked-results.json
         env:
           CYPRESS_BASE_URL: https://${{ vars.AWS_TF_DOMAIN_NAME }}
           CYPRESS_API_ENDPOINT: ${{ secrets.AWS_API_ENDPOINT }}
@@ -1123,8 +1131,10 @@ jobs:
           set -uo pipefail
           status=0
           for f in api-live-results.json bucket-locked-results.json; do
-            if [ ! -f "$f" ]; then
-              echo "::error::$f was never written — cypress did not get far enough to report"
+            # Checks the shape, not just existence: a cypress crash still leaves
+            # an empty file behind the tee, and jq on that would fail obscurely.
+            if ! jq -e '.stats' "$f" >/dev/null 2>&1; then
+              echo "::error::$f is missing or has no .stats — cypress did not get far enough to report"
               status=1
               continue
             fi
