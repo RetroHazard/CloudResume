@@ -1020,6 +1020,15 @@ jobs:
           CYPRESS_API_ENDPOINT: ${{ secrets.AWS_API_ENDPOINT }}
           CYPRESS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
           CYPRESS_AWS_REGION: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
+          # Turns a missing value above from a silent skip into a failure, for the
+          # two specs that exist only to run here. Without it this job has no way
+          # to tell "the API is healthy" from "the specs never ran": Cypress counts
+          # a self-skipped test as pending, prints "All specs passed!" and exits 0.
+          # That is not hypothetical — the three env keys those specs read were
+          # wrong from the day they were added, so every run between then and the
+          # fix reported green having checked none of the API surface. The specs
+          # still skip normally wherever this is unset, which is every other job.
+          CYPRESS_REQUIRE_LIVE: '1'
 
       - name: Upload screenshots on failure
         if: failure()

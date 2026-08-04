@@ -10,8 +10,22 @@
 // These run against a deployed stage or not at all, so they carry the same localhost guard as
 // files-locked.cy.js and cv-download-live.cy.js, plus one on the endpoint itself — the PR e2e
 // job has no CYPRESS_API_ENDPOINT and must skip rather than fail.
+//
+// That guard is load-bearing and was, for a while, silently swallowing the whole spec: the
+// env reads below used camelCase keys that never resolved, so every test skipped itself on
+// every run and the smoke job reported "All specs passed!" having verified nothing. Cypress
+// exits 0 on a pending test, so nothing downstream noticed.
+//
+// CYPRESS_REQUIRE_LIVE is the assertion that this cannot happen quietly again. The smoke job
+// sets it, which turns "I have nothing to run against" from a skip into a hard failure —
+// there, missing configuration means the job is broken, not that the spec is inapplicable.
+// Everywhere it is unset (web-e2e, a local run) the skip behaviour is unchanged.
 describe('Live API (production)', () => {
-    const apiEndpoint = (Cypress.env('apiEndpoint') || '').replace(/\/$/, '');
+    // Cypress strips only the CYPRESS_ prefix and keeps the rest of the name verbatim, so
+    // CYPRESS_API_ENDPOINT arrives as 'API_ENDPOINT'. Reading it as 'apiEndpoint' resolved
+    // undefined on every run, which tripped the guard below and self-skipped all four tests
+    // — green, and verifying nothing. contact-form.cy.js has the convention right.
+    const apiEndpoint = (Cypress.env('API_ENDPOINT') || '').replace(/\/$/, '');
     const baseUrl = Cypress.config('baseUrl') || '';
 
     // A stable id, exactly as cv-download-live.cy.js uses for the download uuid. trackVisitors
@@ -22,6 +36,14 @@ describe('Live API (production)', () => {
 
     beforeEach(function () {
         if (!apiEndpoint || baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1')) {
+            if (Cypress.env('REQUIRE_LIVE')) {
+                throw new Error(
+                    'CYPRESS_REQUIRE_LIVE is set, so this spec must run, but there is nothing to ' +
+                        `run it against (API_ENDPOINT=${apiEndpoint || '<empty>'}, ` +
+                        `baseUrl=${baseUrl || '<empty>'}). Skipping here would report a green ` +
+                        'smoke test that verified nothing.',
+                );
+            }
             this.skip();
         }
     });
