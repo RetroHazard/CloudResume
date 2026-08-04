@@ -1029,6 +1029,124 @@ jobs:
           path: website/cypress/screenshots
           if-no-files-found: ignore
 
+  # ─────────────────────────────────────────────────────────────────────────
+  # TEMPORARY — REVERT THIS COMMIT BEFORE MERGING.
+  #
+  # Scaffolding for one PR only. The two specs below have never executed: they
+  # read Cypress.env() keys that never resolved, so every test self-skipped and
+  # `smoke` reported green having verified nothing. The sibling commit fixes the
+  # keys, but that fix is unfalsifiable from a PR — `smoke` only runs after a
+  # deploy or an apply, both of which are unreachable on a pull_request, so the
+  # very check that would prove the repair cannot run until after it has already
+  # merged. This job makes that one observation and is then deleted.
+  #
+  # Two reasons it must not survive the merge:
+  #   - It hands production secrets to a pull_request-triggered job. web-e2e
+  #     refuses to do that on purpose ("a PR build has no business holding
+  #     them"), and this job is not a reason to relax that.
+  #   - It points tests at live production from an unmerged branch.
+  #
+  # Deliberately outside ci-ok's `needs:`. It reports as its own check run,
+  # which is all this needs to be readable, and leaving the required gate
+  # untouched keeps the revert to exactly one commit.
+  live-spec-check:
+    name: TEMP live spec check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Same fork/Dependabot guard as terraform: neither gets secrets, so without
+    # this they would fail red on a job they could never have run.
+    if: >-
+      ${{ github.event_name == 'pull_request'
+          && github.event.pull_request.head.repo.fork != true
+          && github.actor != 'dependabot[bot]' }}
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: website
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: ./.github/actions/setup-web
+
+      - name: Cache Cypress binary
+        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-cypress-${{ hashFiles('website/pnpm-lock.yaml') }}
+
+      - name: Install Cypress binary
+        run: pnpm exec cypress install
+
+      # Only the two specs this PR repairs, and every request they make is
+      # anonymous and non-mutating: the GET reuses the same `ci-smoke-test`
+      # visitor id the smoke job does, so the 24h dedupe absorbs it rather than
+      # moving the public counter; the POST carries a foreign Origin and is
+      # refused before an SES client is ever constructed; the bucket request
+      # expects a 403. Safe to run from a PR, which is why this is possible at
+      # all.
+      #
+      # continue-on-error on both so one spec failing still lets the other run
+      # and still reaches the assertion below — the point of this job is to read
+      # both results at once, not to stop at the first red.
+      - name: Run api-live.cy.js against production
+        continue-on-error: true
+        run: |
+          pnpm exec cypress run \
+            --spec cypress/e2e/api-live.cy.js \
+            --reporter json --reporter-options output=api-live-results.json
+        env:
+          CYPRESS_BASE_URL: https://${{ vars.AWS_TF_DOMAIN_NAME }}
+          CYPRESS_API_ENDPOINT: ${{ secrets.AWS_API_ENDPOINT }}
+          CYPRESS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
+          CYPRESS_AWS_REGION: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
+
+      - name: Run bucket-locked.cy.js against production
+        continue-on-error: true
+        run: |
+          pnpm exec cypress run \
+            --spec cypress/e2e/bucket-locked.cy.js \
+            --reporter json --reporter-options output=bucket-locked-results.json
+        env:
+          CYPRESS_BASE_URL: https://${{ vars.AWS_TF_DOMAIN_NAME }}
+          CYPRESS_API_ENDPOINT: ${{ secrets.AWS_API_ENDPOINT }}
+          CYPRESS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_PROD }}
+          CYPRESS_AWS_REGION: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
+
+      # The exit code is not enough on its own. A pending test is precisely the
+      # bug being fixed here, and Cypress exits 0 on it — "All specs passed!" is
+      # what the broken state has been printing all along. So assert on the
+      # counts: pending must be zero, and something must actually have passed,
+      # or this job would go green on the very no-op it exists to detect.
+      - name: Assert both specs actually ran
+        run: |
+          set -uo pipefail
+          status=0
+          for f in api-live-results.json bucket-locked-results.json; do
+            if [ ! -f "$f" ]; then
+              echo "::error::$f was never written — cypress did not get far enough to report"
+              status=1
+              continue
+            fi
+            passes=$(jq -r '.stats.passes // 0' "$f")
+            pending=$(jq -r '.stats.pending // 0' "$f")
+            failures=$(jq -r '.stats.failures // 0' "$f")
+            echo "$f — passes=$passes pending=$pending failures=$failures"
+            [ "$pending" -eq 0 ] || { echo "::error::$f: $pending test(s) still self-skipped — the env plumbing is still wrong"; status=1; }
+            [ "$failures" -eq 0 ] || { echo "::error::$f: $failures test(s) failed against production"; status=1; }
+            [ "$passes" -gt 0 ] || { echo "::error::$f: nothing actually passed"; status=1; }
+          done
+          exit "$status"
+
+      - name: Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: live-spec-check-screenshots
+          path: website/cypress/screenshots
+          if-no-files-found: ignore
+  # ───────────────────────────────── end TEMPORARY ─────────────────────────
+
   # The single required status check. Every other job's name can change without
   # touching branch protection, and a job skipped by `if:` — which is the normal
   # outcome for a stack that did not change, or for checks a marker already
