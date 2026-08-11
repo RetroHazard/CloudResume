@@ -1,5 +1,5 @@
 import { useJsonData, LoadingSkeleton } from '../utils/useJsonData';
-import { groupSkills, pct, rampColor } from '../utils/skillTaxonomy';
+import { categoryColor, groupSkills, pct } from '../utils/skillTaxonomy';
 import { BrandIcon } from './ui/brand_icon';
 
 // The bar is a proficiency reading, so its colour has to mean proficiency.
@@ -66,14 +66,17 @@ const SkillHighlight = () => {
     if (loading) return <LoadingSkeleton />;
     if (error || !data) return null;
 
-    // One drawer per category, biggest first — the same order, and the same
-    // ramp colour, as the rings above. All shut on arrival: the list runs to
-    // dozens of tools, and a wall of them is nobody's idea of a summary.
+    // One drawer per category, biggest first — worth reading widest-first, so
+    // this keeps the grouped order while the rings above re-sort into taxonomy
+    // order. The dot is what connects the two: a category carries one colour
+    // wherever it appears, so the drawer and its ring match without having to
+    // sit in the same position. All shut on arrival: the list runs to dozens of
+    // tools, and a wall of them is nobody's idea of a summary.
     const groups = groupSkills(data.core_skills ?? []);
 
     return (
         <div className='flex flex-col gap-2'>
-            {groups.map((group, index) => (
+            {groups.map((group) => (
                 <details
                     key={group.name}
                     name='rolling-stock'
@@ -83,7 +86,7 @@ const SkillHighlight = () => {
                         <span
                             aria-hidden='true'
                             className='inline-block h-2.5 w-2.5 shrink-0 rounded-full'
-                            style={{ backgroundColor: rampColor(index) }}
+                            style={{ backgroundColor: categoryColor(group.name) }}
                         />
                         <span className='flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5'>
                             <span className='font-heading text-[0.95rem] leading-tight font-bold tracking-wide text-content-title uppercase sm:text-base'>

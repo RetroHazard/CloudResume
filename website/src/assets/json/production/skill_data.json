@@ -4,28 +4,28 @@
             "name": "Amazon Web Services",
             "category": "Cloud",
             "level": "70%",
-            "logo": "skill-icons:aws-light",
+            "logo": "skill-icons:aws-dark",
             "website": "https://aws.amazon.com/"
         },
         {
             "name": "Microsoft Azure",
             "category": "Cloud",
             "level": "20%",
-            "logo": "skill-icons:azure-light",
+            "logo": "skill-icons:azure-dark",
             "website": "https://azure.microsoft.com/"
         },
         {
             "name": "Google Cloud Platform",
             "category": "Cloud",
             "level": "25%",
-            "logo": "skill-icons:gcp-light",
+            "logo": "skill-icons:gcp-dark",
             "website": "https://cloud.google.com/"
         },
         {
             "name": "Terraform",
             "category": "Platform",
             "level": "75%",
-            "logo": "skill-icons:terraform-light",
+            "logo": "skill-icons:terraform-dark",
             "website": "https://www.terraform.io/"
         },
         {
@@ -46,7 +46,7 @@
             "name": "Okta",
             "category": "Security",
             "level": "80%",
-            "logo": "devicon-plain:okta",
+            "logo": "devicon:okta",
             "website": "https://www.okta.com/"
         },
         {
@@ -60,14 +60,14 @@
             "name": "Entra ID",
             "category": "Security",
             "level": "45%",
-            "logo": null,
+            "logo": "selfhst:microsoft-entra-id",
             "website": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id"
         },
         {
             "name": "Push Security",
             "category": "Security",
             "level": "45%",
-            "logo": null,
+            "logo": "selfhst:push-security",
             "website": "https://pushsecurity.com/"
         },
         {
@@ -81,14 +81,14 @@
             "name": "OpenTofu",
             "category": "Platform",
             "level": "55%",
-            "logo": "simple-icons:opentofu",
+            "logo": "selfhst:opentofu",
             "website": "https://opentofu.org/"
         },
         {
             "name": "GitHub Actions",
             "category": "Platform",
             "level": "70%",
-            "logo": "simple-icons:githubactions",
+            "logo": "skill-icons:githubactions-dark",
             "website": "https://github.com/features/actions"
         },
         {
@@ -102,21 +102,21 @@
             "name": "ArgoCD",
             "category": "Platform",
             "level": "35%",
-            "logo": "simple-icons:argo",
+            "logo": "logos:argo-icon",
             "website": "https://argo-cd.readthedocs.io/"
         },
         {
             "name": "CrowdStrike",
             "category": "Security",
             "level": "65%",
-            "logo": null,
+            "logo": "selfhst:crowdstrike",
             "website": "https://www.crowdstrike.com/"
         },
         {
             "name": "Zscaler",
             "category": "Security",
             "level": "65%",
-            "logo": null,
+            "logo": "selfhst:zscaler",
             "website": "https://www.zscaler.com/"
         },
         {
@@ -151,35 +151,35 @@
             "name": "JupiterOne",
             "category": "Security",
             "level": "40%",
-            "logo": null,
+            "logo": "selfhst:jupiterone-light",
             "website": "https://www.jupiterone.com/"
         },
         {
             "name": "Cyberhaven",
             "category": "Security",
             "level": "50%",
-            "logo": null,
+            "logo": "selfhst:cyberhaven-light",
             "website": "https://www.cyberhaven.com/"
         },
         {
             "name": "dope.security",
             "category": "Security",
             "level": "80%",
-            "logo": null,
+            "logo": "selfhst:dope-security",
             "website": "https://dope.security/"
         },
         {
             "name": "Santa",
             "category": "Security",
             "level": "60%",
-            "logo": null,
+            "logo": "selfhst:north-pole-security",
             "website": "https://northpole.security/santa"
         },
         {
             "name": "Workbrew",
             "category": "Security",
             "level": "70%",
-            "logo": null,
+            "logo": "selfhst:workbrew",
             "website": "https://workbrew.com/"
         },
         {
@@ -197,17 +197,10 @@
             "website": "https://fleetdm.com/"
         },
         {
-            "name": "Okta Identity Governance",
-            "category": "Security",
-            "level": "65%",
-            "logo": "devicon-plain:okta",
-            "website": "https://www.okta.com/products/identity-governance/"
-        },
-        {
             "name": "Dependabot",
             "category": "Security",
             "level": "50%",
-            "logo": "simple-icons:dependabot",
+            "logo": "logos:dependabot",
             "website": "https://docs.github.com/en/code-security/dependabot"
         },
         {
@@ -228,7 +221,7 @@
             "name": "Grafana",
             "category": "Platform",
             "level": "50%",
-            "logo": "simple-icons:grafana",
+            "logo": "logos:grafana",
             "website": "https://grafana.com/"
         },
         {
@@ -242,14 +235,14 @@
             "name": "AWS Bedrock",
             "category": "AI",
             "level": "50%",
-            "logo": "simple-icons:amazonwebservices",
+            "logo": "skill-icons:aws-dark",
             "website": "https://aws.amazon.com/bedrock/"
         },
         {
             "name": "Claude",
             "category": "AI",
             "level": "75%",
-            "logo": "simple-icons:claude",
+            "logo": "logos:claude-icon",
             "website": "https://claude.com/"
         },
         {
@@ -270,7 +263,7 @@
             "name": "Slack",
             "category": "Workplace",
             "level": "75%",
-            "logo": "simple-icons:slack",
+            "logo": "logos:slack-icon",
             "website": "https://slack.com/"
         },
         {
@@ -284,14 +277,14 @@
             "name": "Confluence",
             "category": "Workplace",
             "level": "60%",
-            "logo": "simple-icons:confluence",
+            "logo": "logos:confluence",
             "website": "https://www.atlassian.com/software/confluence"
         },
         {
             "name": "Jira",
             "category": "Workplace",
             "level": "60%",
-            "logo": "simple-icons:jira",
+            "logo": "logos:jira",
             "website": "https://www.atlassian.com/software/jira"
         },
         {
@@ -305,7 +298,7 @@
             "name": "Github",
             "category": "Platform",
             "level": "65%",
-            "logo": "skill-icons:github-light",
+            "logo": "skill-icons:github-dark",
             "website": "https://github.com/"
         },
         {
@@ -333,14 +326,14 @@
             "name": "Python",
             "category": "Development",
             "level": "60%",
-            "logo": "skill-icons:python-light",
+            "logo": "skill-icons:python-dark",
             "website": "https://www.python.org"
         },
         {
             "name": "BASh",
             "category": "Development",
             "level": "70%",
-            "logo": "skill-icons:bash-light",
+            "logo": "skill-icons:bash-dark",
             "website": "https://www.gnu.org/software/bash/"
         },
         {
@@ -361,14 +354,14 @@
             "name": "Node.js",
             "category": "Development",
             "level": "30%",
-            "logo": "skill-icons:nodejs-light",
+            "logo": "skill-icons:nodejs-dark",
             "website": "https://nodejs.org"
         },
         {
             "name": "Next.js",
             "category": "Development",
             "level": "45%",
-            "logo": "skill-icons:nextjs-light",
+            "logo": "skill-icons:nextjs-dark",
             "website": "https://nextjs.org/"
         },
         {
@@ -403,21 +396,21 @@
             "name": "PyCharm",
             "category": "Development",
             "level": "60%",
-            "logo": "skill-icons:pycharm-light",
+            "logo": "skill-icons:pycharm-dark",
             "website": "https://www.jetbrains.com/pycharm/"
         },
         {
             "name": "Rider",
             "category": "Development",
             "level": "45%",
-            "logo": "skill-icons:rider-light",
+            "logo": "skill-icons:rider-dark",
             "website": "https://www.jetbrains.com/rider/"
         },
         {
             "name": "CLion",
             "category": "Development",
             "level": "35%",
-            "logo": "skill-icons:clion-light",
+            "logo": "skill-icons:clion-dark",
             "website": "https://www.jetbrains.com/clion/"
         },
         {
@@ -452,14 +445,14 @@
             "name": "Windows",
             "category": "Workplace",
             "level": "90%",
-            "logo": "skill-icons:windows-light",
+            "logo": "skill-icons:windows-dark",
             "website": "https://www.microsoft.com/en-us/windows"
         },
         {
             "name": "Linux",
             "category": "Workplace",
             "level": "70%",
-            "logo": "skill-icons:linux-light",
+            "logo": "skill-icons:linux-dark",
             "website": "https://www.kernel.org/"
         },
         {
@@ -473,14 +466,14 @@
             "name": "Kali Linux",
             "category": "Security",
             "level": "40%",
-            "logo": "skill-icons:kali-light",
+            "logo": "skill-icons:kali-dark",
             "website": "https://www.kali.org/"
         },
         {
             "name": "macOS",
             "category": "Workplace",
             "level": "75%",
-            "logo": "skill-icons:apple-light",
+            "logo": "skill-icons:apple-dark",
             "website": "https://www.apple.com"
         }
     ],
