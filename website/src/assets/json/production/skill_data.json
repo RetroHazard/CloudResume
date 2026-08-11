@@ -197,13 +197,6 @@
             "website": "https://fleetdm.com/"
         },
         {
-            "name": "Okta Identity Governance",
-            "category": "Security",
-            "level": "65%",
-            "logo": "devicon:okta",
-            "website": "https://www.okta.com/products/identity-governance/"
-        },
-        {
             "name": "Dependabot",
             "category": "Security",
             "level": "50%",
