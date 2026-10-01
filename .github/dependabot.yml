@@ -1,0 +1,49 @@
+# Dependabot version updates.
+#
+# Every ecosystem is checked once a month (on the 1st), and each run is
+# batched into at most two PRs per ecosystem: one carrying every minor and
+# patch bump, and one carrying every major bump. Majors are kept apart because
+# they are the ones that need real review, and one breaking major should not
+# hold back a stack of routine patches.
+#
+# This schedule only governs version updates. Security updates are not
+# batched or delayed by it: Dependabot raises those as soon as an alert fires.
+
+version: 2
+
+updates:
+  # pnpm projects use the npm ecosystem; Dependabot reads pnpm-lock.yaml.
+  - package-ecosystem: npm
+    directory: /website
+    schedule:
+      interval: monthly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+      major:
+        update-types: [major]
+
+  # Root module only: it holds .terraform.lock.hcl and the registry modules.
+  - package-ecosystem: terraform
+    directory: /infrastructure
+    schedule:
+      interval: monthly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+      major:
+        update-types: [major]
+
+  # "/" covers .github/workflows; the composite actions live elsewhere and
+  # have to be listed for their pinned actions to be updated too.
+  - package-ecosystem: github-actions
+    directories:
+      - /
+      - /.github/actions/*
+    schedule:
+      interval: monthly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+      major:
+        update-types: [major]
