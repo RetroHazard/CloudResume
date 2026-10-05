@@ -129,6 +129,32 @@
                     ]
                 }
             ]
+        },
+        {
+            "certification": "CompTIA A+",
+            "issuer": "CompTIA",
+            "credential_id": "N/A",
+            "issued_date": "2008-07-30",
+            "expiry_date": "N/A",
+            "logo": "./images/logos/certifications/comptia-aplus.png",
+            "links": [
+                {
+                    "verification": [
+                        {
+                            "website": "https://www.credly.com/badges/a152f6b6-5ab4-4f98-9c74-eec7d5748bd3/public_url",
+                            "icon": "fa6-solid:award",
+                            "display": true
+                        }
+                    ],
+                    "credential_info": [
+                        {
+                            "website": "https://www.comptia.org/certifications/a",
+                            "icon": "fa6-solid:info",
+                            "display": true
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
