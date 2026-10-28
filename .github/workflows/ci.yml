@@ -92,7 +92,7 @@ jobs:
       # that eventually lands on main. Pinning to the head sha silently breaks
       # every marker hit.
       - name: Checkout repository
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
         with:
           fetch-depth: 0
 
@@ -325,7 +325,7 @@ jobs:
         working-directory: website
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
       - uses: ./.github/actions/setup-web
 
       - name: Typecheck
@@ -365,14 +365,14 @@ jobs:
         working-directory: website
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
       - uses: ./.github/actions/setup-web
 
       # setup-web installs with CYPRESS_INSTALL_BINARY=0, so the binary is not
       # on disk yet and this restore actually gets to serve it. `cypress
       # install` below is then a no-op on a hit and the download on a miss.
       - name: Cache Cypress binary
-        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v5
         with:
           path: ~/.cache/Cypress
           key: ${{ runner.os }}-cypress-${{ hashFiles('website/pnpm-lock.yaml') }}
@@ -399,7 +399,7 @@ jobs:
       # `pnpm preview` pins --port 5173 because vite preview defaults to 4173
       # while cypress.config.js targets 5173.
       - name: Run Cypress against the preview build
-        uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6
+        uses: cypress-io/github-action@c541a95ea92d9239347a2355f2e895cd4b3f8060 # v6
         with:
           working-directory: website
           install: false
@@ -410,7 +410,7 @@ jobs:
 
       - name: Upload screenshots on failure
         if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: cypress-screenshots
           path: website/cypress/screenshots
@@ -471,7 +471,7 @@ jobs:
       # to "" and Terraform rejects that for a bool.
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
 
       - uses: ./.github/actions/setup-terraform
         with:
@@ -682,7 +682,7 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
 
       # pipx ships on the runner image; pinning the version keeps a ruff release
       # from turning a green PR red on its own.
@@ -705,7 +705,7 @@ jobs:
       contents: read
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
 
       # Catches `needs:` pointing at jobs that do not exist — which is exactly
       # how verify_s3.yml stayed broken — plus bad expressions, unknown runner
@@ -756,7 +756,7 @@ jobs:
           ${{ needs.changes.outputs.website == 'true'
               && needs.web-checks.result != 'failure' && needs.web-checks.result != 'cancelled'
               && needs.web-e2e.result    != 'failure' && needs.web-e2e.result    != 'cancelled' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: verified-web-${{ needs.changes.outputs.web_digest }}
           path: marker.txt
@@ -773,7 +773,7 @@ jobs:
         if: >-
           ${{ needs.changes.outputs.infrastructure == 'true'
               && needs.py-lint.result != 'failure' && needs.py-lint.result != 'cancelled' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: verified-ruff-${{ needs.changes.outputs.ruff_digest }}
           path: marker.txt
@@ -784,7 +784,7 @@ jobs:
         if: >-
           ${{ needs.changes.outputs.github == 'true'
               && needs.actionlint.result != 'failure' && needs.actionlint.result != 'cancelled' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: verified-actionlint-${{ needs.changes.outputs.actionlint_digest }}
           path: marker.txt
@@ -840,7 +840,7 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
       - uses: ./.github/actions/setup-web
 
       # Build and upload live in one job on purpose.
@@ -879,7 +879,7 @@ jobs:
         run: pnpm build-prod
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@61815dcd50bd041e203e49132bacad1fd04d2708 # v5
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
           aws-region: ${{ vars.AWS_TF_DEPLOYMENT_REGION }}
           role-to-assume: ${{ secrets.AWS_S3_OIDC_ROLE }}
@@ -1023,13 +1023,13 @@ jobs:
         working-directory: website
 
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v6
       - uses: ./.github/actions/setup-web
 
       # As in web-e2e: setup-web skips the binary, so this restore is what
       # keeps the download off the critical path of a production deploy.
       - name: Cache Cypress binary
-        uses: actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7 # v5
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v5
         with:
           path: ~/.cache/Cypress
           key: ${{ runner.os }}-cypress-${{ hashFiles('website/pnpm-lock.yaml') }}
@@ -1051,7 +1051,7 @@ jobs:
       # Both secrets are registered, so Actions masks them in the run banner
       # Cypress prints on start.
       - name: Smoke test production
-        uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6
+        uses: cypress-io/github-action@c541a95ea92d9239347a2355f2e895cd4b3f8060 # v6
         with:
           working-directory: website
           install: false
@@ -1073,7 +1073,7 @@ jobs:
 
       - name: Upload screenshots on failure
         if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: smoke-screenshots
           path: website/cypress/screenshots
