@@ -34,9 +34,11 @@ function PersonalSummary() {
                     business impact.
                 </p>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    A committed continual learner outside the day-to-day — currently porting a macOS screenshot and
-                    automation tool to native <strong>Swift</strong>, and maintaining a{' '}
-                    <strong>Japan immigration statistics dashboard</strong> used by 2,000+ people in its first 30 days.
+                    Outside the day-to-day, runs side projects as production systems rather than demos: this site, a
+                    serverless AWS platform codified end to end in <strong>Terraform</strong>; a{' '}
+                    <strong>Japan immigration statistics dashboard</strong> that has served applicants since 2025 and
+                    refreshes itself from government data; a native <strong>Swift</strong> rebuild of a macOS screenshot
+                    and sharing tool; and commercial <strong>Unreal Engine</strong> plugins published on Fab.
                 </p>
             </>
         );
