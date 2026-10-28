@@ -65,9 +65,12 @@ describe('BrandIcon', () => {
     it('renders the fallback plate at the same footprint as the icon it replaces', () => {
         const { container } = render(<BrandIcon icon={null} name='Kandji' size='1.5em' />);
         const plate = container.firstChild;
-        expect(plate).toHaveStyle({ width: '1.5em', height: '1.5em' });
+        // Inline styles rather than toHaveStyle: jsdom resolves em to px in
+        // computed style, and the point here is that the sizes stay em-relative.
+        expect(plate.style.width).toBe('1.5em');
+        expect(plate.style.height).toBe('1.5em');
         // Glyph scales with the plate rather than sitting at a fixed size.
-        expect(screen.getByText('KA')).toHaveStyle({ fontSize: '0.63em' });
+        expect(screen.getByText('KA').style.fontSize).toBe('0.63em');
     });
 
     it('does not render the icon before a slow lookup settles into failure', async () => {

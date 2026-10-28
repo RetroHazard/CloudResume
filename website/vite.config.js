@@ -12,20 +12,24 @@ export default defineConfig({
         react(),
         {
             name: 'treat-js-files-as-jsx',
+            // Must run before vite:oxc: plugin-react routes .js files through
+            // it for Fast Refresh, and it parses them as plain JS (no JSX).
+            enforce: 'pre',
             async transform(code, id) {
                 if (!id.match(/src\/.*\.js$/)) return null;
-                const { transformWithEsbuild } = await import('vite');
-                return transformWithEsbuild(code, id, {
-                    loader: 'jsx',
-                    jsx: 'automatic',
+                const { transformWithOxc } = await import('vite');
+                const { code: out, map } = await transformWithOxc(code, id, {
+                    lang: 'jsx',
+                    jsx: { runtime: 'automatic' },
                 });
+                return { code: out, map };
             },
         },
     ],
     optimizeDeps: {
         force: true,
-        esbuildOptions: {
-            loader: {
+        rolldownOptions: {
+            moduleTypes: {
                 '.js': 'jsx',
             },
         },
@@ -35,6 +39,11 @@ export default defineConfig({
         environment: 'jsdom',
         setupFiles: './src/setupTests.js',
         css: false,
+        // Vitest 5 prints shadow roots by default, which pulls iconify-icon's
+        // internal <style> into every snapshot that renders an icon.
+        snapshotFormat: {
+            printShadowRoot: false,
+        },
         coverage: {
             // json-summary is what the CI job reads to build its step summary;
             // text keeps the table in the local/CI log.
