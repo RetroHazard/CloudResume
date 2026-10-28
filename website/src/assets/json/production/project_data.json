@@ -70,7 +70,7 @@
                 "Developed a processing time estimator using historical trends and 3-month rolling averages to forecast queue positions and completion dates, helping applicants plan around uncertain timelines.",
                 "Automated data freshness with a daily GitHub Actions watcher that polls Japan's e-Stat API, diffs each release's survey date against the last run, and triggers a build only when new or corrected statistics are published, so most daily runs publish nothing.",
                 "Built a build-time data transform that deaggregates regional bureau statistics so branch offices like Narita and Kansai airports stop being double-counted in their parent bureau's totals, while shrinking the client-side data payload by roughly 10x.",
-                "Shipped a localization foundation where every string, number format, and pluralization rule is sourced from one catalog file per language, with a build-time check that fails if a language marked complete is missing a string added since."
+                "Shipped a localization foundation where every string, number format, and pluralization rule is sourced from one catalogue file per language, with a build-time check that fails if a language marked complete is missing a string added since."
             ],
             "links": [
                 {
@@ -111,7 +111,7 @@
                 },
                 {
                     "name": "visx",
-                    "logo": null,
+                    "logo": "keyline-icons:diagram-project-duotone",
                     "website": "https://airbnb.io/visx/"
                 },
                 {

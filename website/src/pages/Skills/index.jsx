@@ -20,7 +20,7 @@ function SubHeading({ children }) {
 function Skills() {
     return (
         <>
-            <title>Skills | Alexander Bracken</title>
+            <title>Skills | Cloud Resume</title>
             <SectionShell id='skills' kicker='Network Map · Capabilities' title='Skills' line={4}>
                 <div className='flex flex-col gap-10'>
                     <Reveal className='rounded-lg border border-border bg-background/40 p-4 sm:p-6'>
@@ -40,7 +40,7 @@ function Skills() {
                     </Reveal>
 
                     <Reveal className='flex flex-col gap-3'>
-                        <SubHeading>Next Stops — Exploring</SubHeading>
+                        <SubHeading>Under Construction — Exploring</SubHeading>
                         <SkillButton />
                     </Reveal>
 

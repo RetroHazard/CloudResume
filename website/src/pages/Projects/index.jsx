@@ -4,7 +4,7 @@ import { SectionShell, StatusPill } from '../../components/ui/primitives';
 function Projects() {
     return (
         <>
-            <title>Projects | Alexander Bracken</title>
+            <title>Projects | Cloud Resume</title>
             <SectionShell
                 id='projects'
                 kicker='Special Services · Build Log'

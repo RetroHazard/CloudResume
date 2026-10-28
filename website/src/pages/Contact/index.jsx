@@ -218,7 +218,7 @@ const ContactForm = () => {
 function Contact() {
     return (
         <>
-            <title>Contact | Alexander Bracken</title>
+            <title>Contact | Cloud Resume</title>
             <SectionShell
                 id='contact'
                 kicker='Station Office · Inquiry Counter'

@@ -12,7 +12,7 @@ function Home() {
     if (error || !personalData) return null;
     return (
         <>
-            <title>Alexander Bracken — IAM &amp; Cloud Security</title>
+            <title>Cloud Resume</title>
             <SectionShell
                 id='profile'
                 kicker='Terminus · Line Origin'

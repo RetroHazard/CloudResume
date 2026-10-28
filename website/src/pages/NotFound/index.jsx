@@ -5,7 +5,7 @@ function NotFound() {
     const path = typeof window !== 'undefined' ? window.location.pathname : '/';
     return (
         <>
-            <title>404 – Page Not Found | Alexander Bracken</title>
+            <title>404 – Page Not Found | Cloud Resume</title>
             <SectionShell
                 id='not-found'
                 kicker='Service Notice'
