@@ -399,7 +399,7 @@ jobs:
       # `pnpm preview` pins --port 5173 because vite preview defaults to 4173
       # while cypress.config.js targets 5173.
       - name: Run Cypress against the preview build
-        uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6
+        uses: cypress-io/github-action@c541a95ea92d9239347a2355f2e895cd4b3f8060 # v7
         with:
           working-directory: website
           install: false
@@ -1051,7 +1051,7 @@ jobs:
       # Both secrets are registered, so Actions masks them in the run banner
       # Cypress prints on start.
       - name: Smoke test production
-        uses: cypress-io/github-action@f790eee7a50d9505912f50c2095510be7de06aa7 # v6
+        uses: cypress-io/github-action@c541a95ea92d9239347a2355f2e895cd4b3f8060 # v7
         with:
           working-directory: website
           install: false
