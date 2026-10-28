@@ -2,7 +2,8 @@
     "Education": [
         {
             "school": "University of Calgary",
-            "degree": "BA, Communication and Media Studies (Minor in East Asia Studies)",
+            "degree": "BA, Communication and Media Studies",
+            "minor": "East Asia Studies",
             "location": "Calgary, Canada",
             "category": "Liberal Arts",
             "start": "2016",

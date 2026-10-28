@@ -32,6 +32,7 @@ const EducationList = () => {
                                     />
                                     <div className='flex flex-col'>
                                         <p className='card-accent'>{item.category}</p>
+                                        {item.minor && <p className='card-accent'>Minor · {item.minor}</p>}
                                         <p className='card-accent tabular'>{formatRange(item.start, item.end)}</p>
                                         <p className='card-fine'>{item.location}</p>
                                     </div>
