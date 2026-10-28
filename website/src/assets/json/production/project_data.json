@@ -1,6 +1,61 @@
 {
     "Projects": [
         {
+            "name": "Keystone Prefabs",
+            "company": "Hollow Souls",
+            "category": "Commercial Editor Plugin",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2026",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Designed and shipped a commercial Unreal Engine 5.7/5.8 editor plugin on Fab that brings a Unity-style prefab workflow to Unreal, with nested prefabs and cycle detection, variants that store only their differences from a parent, and in-place Edit/Commit/Discard that updates every loaded instance in a single undoable transaction.",
+                "Built a per-instance override system that tracks property and node-transform changes automatically and surfaces Revert to Prefab and Apply to Prefab controls directly in the Details panel, with Apply able to target the prefab itself, a variant parent, or a nested prefab.",
+                "Engineered World Partition support by keeping each prefab instance as a single actor with component nodes, so one instance is one external actor file; stale instances in unloaded cells are found through actor descriptors without loading them, and re-synced in bulk by a commandlet with dry-run, CI verify, and source-control checkout modes.",
+                "Added a Pack step that collapses identical static meshes into ISM/HISM components with a before-and-after draw-call estimate, taking a 1,000-mesh prefab from 1,000 estimated draw calls to 1, and a Bake step that exports to plain actors, Level Instances, or Packed Level Actors so users are never locked in.",
+                "Exposed a Python API for batch work and runtime spawning from cooked data for Blueprint and C++, backed by 21 Python editor tests, 6 editor UI automation tests, and a packaged Win64 smoke test, and published user documentation with a built-in diagnostics report wired into the GitHub issue templates."
+            ],
+            "links": [
+                {
+                    "product": [
+                        {
+                            "website": "https://www.fab.com/listings/af717d90-a63e-4728-9b72-023969f6abd1",
+                            "icon": "material-symbols:package-2-sharp"
+                        }
+                    ],
+                    "docs": [
+                        {
+                            "website": "https://github.com/Hollow-Soul-Studios/KeystonePrefabs",
+                            "icon": "fa6-solid:book"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Unreal Engine",
+                    "logo": "simple-icons:unrealengine",
+                    "website": "https://www.unrealengine.com/"
+                },
+                {
+                    "name": "C++",
+                    "logo": "ph:file-cpp-fill",
+                    "website": "https://cplusplus.com/"
+                },
+                {
+                    "name": "Python",
+                    "logo": "simple-icons:python",
+                    "website": "https://www.python.org"
+                },
+                {
+                    "name": "GitHub",
+                    "logo": "simple-icons:github",
+                    "website": "https://github.com"
+                }
+            ]
+        },
+        {
             "name": "SwiftX",
             "company": "Hollow Souls",
             "category": "macOS Application",
@@ -202,23 +257,37 @@
             ]
         },
         {
-            "name": "Untitled Project",
+            "name": "Interactive Switches",
             "company": "Hollow Souls",
             "category": "Commercial Game Component",
-            "role": "Solo Dev",
+            "role": "Project Lead",
             "size": "1",
             "start": "2022",
-            "end": "2023",
+            "end": "NOW",
             "logo": "./images/logos/companies/hollowsouls.png",
             "details": [
-                "Independently creating, designing, and coding a comprehensive game prototype, demonstrating expertise in end-to-end game development.",
-                "Defining core gameplay mechanics and determining their interaction with players, ensuring an engaging and intuitive user experience.",
-                "Building a detailed library of reference imagery to guide the artistic style and environmental design, ensuring visual coherence and aesthetic quality.",
-                "Producing a range of high-quality digital assets for use in current and future projects, showcasing versatility and creativity in asset development.",
-                "Developing and implementing a marketing strategy tailored for social media and funding platforms, effectively promoting the project and engaging target audiences.",
-                "Generating various methodologies for application construction and testing, and providing comprehensive documentation, ensuring a structured and efficient development process."
+                "Designed and developed a configurable lighting-control system for Unreal Engine in which switch plates of up to four switches can each be wired to any number of lights, including lights of different component types, just like real-world switches.",
+                "Shipped v2.0 with full server-authoritative network replication: light state is a RepNotify variable written only on the server, so every client, including players who join late, sees the same lights and switch positions across Listen Server, Dedicated Server, and standalone play.",
+                "Kept networking lightweight by routing player interaction through a single reliable Server RPC, leaving switches as non-replicated actors that animate locally from their lights' replicated state, and placing idle lights in network dormancy so they use no bandwidth until they change.",
+                "Built the system entirely in Blueprints around a parent light class and master switch Blueprints, so developers add new light types as child classes and hook cosmetic changes into a state-change event without touching the switch logic.",
+                "Supported every Unreal Engine release from 4.20 through 5.8, publishing v2.0 for UE 5.8 alongside the single-player v1.0 for earlier engines, with polished switch meshes, materials, and a post-process interaction outline included."
             ],
-            "links": [],
+            "links": [
+                {
+                    "product": [
+                        {
+                            "website": "https://www.fab.com/listings/689ab427-0aca-4599-a1d3-7b3d9e8c56cf",
+                            "icon": "material-symbols:package-2-sharp"
+                        }
+                    ],
+                    "docs": [
+                        {
+                            "website": "https://github.com/Hollow-Soul-Studios/InteractiveSwitches",
+                            "icon": "fa6-solid:book"
+                        }
+                    ]
+                }
+            ],
             "technologies": [
                 {
                     "name": "Unreal Engine",
@@ -231,9 +300,9 @@
                     "website": "https://www.blender.org/"
                 },
                 {
-                    "name": "C++",
-                    "logo": "ph:file-cpp-fill",
-                    "website": "https://cplusplus.com/"
+                    "name": "Blueprints",
+                    "logo": null,
+                    "website": "https://dev.epicgames.com/documentation/en-us/unreal-engine/blueprints-visual-scripting-in-unreal-engine"
                 },
                 {
                     "name": "Perforce",
@@ -253,37 +322,23 @@
             ]
         },
         {
-            "name": "Interactive Switches",
+            "name": "Untitled Project",
             "company": "Hollow Souls",
             "category": "Commercial Game Component",
-            "role": "Project Lead",
+            "role": "Solo Dev",
             "size": "1",
             "start": "2022",
             "end": "2023",
             "logo": "./images/logos/companies/hollowsouls.png",
             "details": [
-                "Designed and developed a comprehensive set of interactive switches for Unreal Engine, enhancing user engagement and interactivity within virtual environments.",
-                "Created a highly customizable switch framework that allows developers to easily integrate a variety of switch types and configurations, improving versatility and adaptability in project applications.",
-                "Utilized Unreal Engine’s Blueprint system to streamline the implementation process, ensuring high efficiency and ease of use for developers, which minimizes development time and resources.",
-                "Delivered high-quality, fully functional switch assets with detailed visual fidelity, ensuring a professional and polished look for any game or simulation project.",
-                "Ensured cross-compatibility and optimization for various Unreal Engine versions, providing a reliable and stable solution for a wide range of development environments and platforms."
+                "Independently creating, designing, and coding a comprehensive game prototype, demonstrating expertise in end-to-end game development.",
+                "Defining core gameplay mechanics and determining their interaction with players, ensuring an engaging and intuitive user experience.",
+                "Building a detailed library of reference imagery to guide the artistic style and environmental design, ensuring visual coherence and aesthetic quality.",
+                "Producing a range of high-quality digital assets for use in current and future projects, showcasing versatility and creativity in asset development.",
+                "Developing and implementing a marketing strategy tailored for social media and funding platforms, effectively promoting the project and engaging target audiences.",
+                "Generating various methodologies for application construction and testing, and providing comprehensive documentation, ensuring a structured and efficient development process."
             ],
-            "links": [
-                {
-                    "product": [
-                        {
-                            "website": "https://www.unrealengine.com/marketplace/en-US/product/interactive-switches",
-                            "icon": "material-symbols:package-2-sharp"
-                        }
-                    ],
-                    "repo": [
-                        {
-                            "website": "https://github.com/Hollow-Soul-Studios/InteractiveSwitches",
-                            "icon": "simple-icons:git"
-                        }
-                    ]
-                }
-            ],
+            "links": [],
             "technologies": [
                 {
                     "name": "Unreal Engine",
