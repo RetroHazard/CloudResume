@@ -63,10 +63,12 @@ function Navigation() {
                     reads as a line when the stops are stacked, so it is desktop-only —
                     below `sm` the stops wrap into rows and the rail would cut through
                     them. Centred on the nodes: the link's px-3 (0.75rem) plus half
-                    the h-4 node (0.5rem) puts their centres at 1.25rem (left-5). */}
+                    the h-4 node (0.5rem) puts their centres at 1.25rem (left-5). It
+                    ends at the centre of the visitor-count terminus node, which sits
+                    the same 1.25rem above the list's bottom edge (bottom-5). */}
                 <span
                     aria-hidden='true'
-                    className='pointer-events-none absolute top-9 bottom-8 left-5 w-0.5 -translate-x-1/2 bg-gradient-to-b from-line-green via-line-blue to-line-red opacity-40 max-sm:hidden'
+                    className='pointer-events-none absolute top-9 bottom-5 left-5 w-0.5 -translate-x-1/2 bg-gradient-to-b from-line-green via-line-blue to-line-red opacity-40 max-sm:hidden'
                 />
                 <li aria-hidden='true' className='mb-1 flex items-center gap-2 px-2 pb-1 max-sm:hidden'>
                     <span className='grid h-6 w-6 place-items-center rounded-full bg-neon font-heading text-xs font-extrabold text-background'>
