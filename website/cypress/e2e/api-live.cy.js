@@ -25,8 +25,19 @@ describe('Live API (production)', () => {
     // CYPRESS_API_ENDPOINT arrives as 'API_ENDPOINT'. Reading it as 'apiEndpoint' resolved
     // undefined on every run, which tripped the guard below and self-skipped all four tests
     // — green, and verifying nothing. contact-form.cy.js has the convention right.
-    const apiEndpoint = (Cypress.env('API_ENDPOINT') || '').replace(/\/$/, '');
+    //
+    // Cypress 16 removed the synchronous Cypress.env(); cy.env() is a command, so the values
+    // are read once in before() and the guard below stays synchronous.
+    let apiEndpoint = '';
+    let requireLive = false;
     const baseUrl = Cypress.config('baseUrl') || '';
+
+    before(() => {
+        cy.env(['API_ENDPOINT', 'REQUIRE_LIVE']).then(({ API_ENDPOINT, REQUIRE_LIVE }) => {
+            apiEndpoint = (API_ENDPOINT || '').replace(/\/$/, '');
+            requireLive = !!REQUIRE_LIVE;
+        });
+    });
 
     // A stable id, exactly as cv-download-live.cy.js uses for the download uuid. trackVisitors
     // writes a visitor record with a 24h TTL and only increments the counter on a miss, so
@@ -36,7 +47,7 @@ describe('Live API (production)', () => {
 
     beforeEach(function () {
         if (!apiEndpoint || baseUrl.includes('localhost') || baseUrl.includes('127.0.0.1')) {
-            if (Cypress.env('REQUIRE_LIVE')) {
+            if (requireLive) {
                 throw new Error(
                     'CYPRESS_REQUIRE_LIVE is set, so this spec must run, but there is nothing to ' +
                         `run it against (API_ENDPOINT=${apiEndpoint || '<empty>'}, ` +

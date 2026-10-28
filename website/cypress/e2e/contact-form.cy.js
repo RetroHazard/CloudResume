@@ -34,21 +34,21 @@ describe('Contact form', () => {
     it('shows reCAPTCHA error when captcha is not completed (site key configured)', () => {
         // This test only applies when VITE_RECAPTCHA_SITE_KEY is set (production build).
         // When the key is absent, reCAPTCHA does not render and the check is skipped.
-        cy.get('body').then(($body) => {
-            const hasSiteKey =
-                $body.find('[class*="g-recaptcha"], .grecaptcha-badge').length > 0 ||
-                !!Cypress.env('VITE_RECAPTCHA_SITE_KEY');
+        cy.env(['VITE_RECAPTCHA_SITE_KEY']).then(({ VITE_RECAPTCHA_SITE_KEY: siteKey }) => {
+            cy.get('body').then(($body) => {
+                const hasSiteKey = $body.find('[class*="g-recaptcha"], .grecaptcha-badge').length > 0 || !!siteKey;
 
-            if (!hasSiteKey) {
-                // No site key — skip this test gracefully.
-                cy.log('reCAPTCHA not rendered (no site key). Skipping.');
-                return;
-            }
+                if (!hasSiteKey) {
+                    // No site key — skip this test gracefully.
+                    cy.log('reCAPTCHA not rendered (no site key). Skipping.');
+                    return;
+                }
 
-            fillForm();
-            // Do NOT call cy.completeRecaptcha() — token stays empty.
-            cy.get('button[type="submit"]').click();
-            cy.contains('Please complete the reCAPTCHA.').should('be.visible');
+                fillForm();
+                // Do NOT call cy.completeRecaptcha() — token stays empty.
+                cy.get('button[type="submit"]').click();
+                cy.contains('Please complete the reCAPTCHA.').should('be.visible');
+            });
         });
     });
 
