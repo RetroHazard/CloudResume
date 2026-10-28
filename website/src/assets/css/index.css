@@ -51,12 +51,20 @@
     --color-glow: #ffc24b; /* board flap text / amber highlight */
     --color-alert: #ff5a5f; /* delayed / suspended */
 
-    /* Line colours (used for per-entry "line badges") */
+    /* Line colours (used for per-entry "line badges", and for skill categories —
+       see categoryColor in utils/skillTaxonomy). The last three were added for
+       the category palette, which needs seven hues and cannot use red: that one
+       is --color-alert as well, and a category painted in it reads as a fault.
+       Every one of these clears 3:1 against both the chart surface (#0c1e26)
+       and the ring track (--border) — the floor the ring chart is held to. */
     --color-line-green: #2ee08a;
     --color-line-amber: #ffc24b;
     --color-line-blue: #4aa8ff;
     --color-line-red: #ff5a5f;
     --color-line-violet: #b48cff;
+    --color-line-lime: #a3e635;
+    --color-line-cyan: #3fd8d0;
+    --color-line-rose: #ff7ab8;
 
     /* Skill / chart accents */
     --color-skill-0: #12262e;
@@ -140,23 +148,11 @@
     --chart-label: #8ba7ac;
     --chart-grid: #17323c;
 
-    /* Ring ramp — a one-hue sequential scale in signal green, brightest step
-       first. The rings encode magnitude (how many tools sit in a category), so
-       lightness carries the value and hue stays out of it; the categorical
-       --chart-1..5 slots are for charts where colour means identity.
-       The seventh category (AI) needed a seventh step, and the ramp had no room
-       below it: continuing at the old ~0.07 spacing landed at 2.83:1, under the
-       3:1 floor. So the range is unchanged at both ends and the steps are
-       redistributed — ~0.058 apart in OKLCH lightness rather than ~0.07. Each
-       still reads as its own step against the dark surface, and the darkest
-       still clears 3:1 against it (3.74:1). */
-    --chart-ramp-1: #6effad;
-    --chart-ramp-2: #2eef93;
-    --chart-ramp-3: #18da83;
-    --chart-ramp-4: #16c576;
-    --chart-ramp-5: #0cb069;
-    --chart-ramp-6: #069b5b;
-    --chart-ramp-7: #0e8750;
+    /* The rings used to carry a one-hue green ramp, where lightness encoded how
+       many tools sat in a category. That restated what the arc length already
+       said, and it left every category looking like a shade of the same thing.
+       Colour now carries identity instead — a fixed hue per category, drawn
+       from the line palette above. See utils/skillTaxonomy. */
 }
 
 /* Reserve space for the vertical scrollbar on every page, whether or not

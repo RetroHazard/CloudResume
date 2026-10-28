@@ -33,7 +33,12 @@ mark-verified              web-deploy          │
                                             (always)
 ```
 
-`web-deploy` runs when `website` changed **or** the plan rewrote the Actions secrets — see below.
+`web-deploy` runs when `website_deployable` is true **or** the plan rewrote the Actions secrets — see
+below. `website_deployable` is narrower than the `website` filter that gates the checks: it ignores
+paths the bundle can never contain (`website/cypress/`, `website/cypress.config.js`,
+`website/src/__tests__/`), so a test-only change is still checked but does not rebuild, re-upload and
+invalidate the CDN to ship bytes that have not changed. Only provably test-only paths belong in that
+list — excluding too little costs one needless deploy, excluding too much leaves production stale.
 `smoke` runs when `web-deploy` succeeded **or** the apply actually ran.
 
 `ci-ok` is the single required status check. Everything else can be renamed without touching branch
@@ -114,7 +119,7 @@ apply rewrites `AWS_API_ENDPOINT`, the bundle already in S3 is stale even though
 `api_current_stage` comes from a repository *variable*, so it can move with no diff at all.
 `AWS_S3_BUCKET_PROD` has the same property, being the upload target.
 
-So `web-deploy` runs on `website == 'true' || terraform.outputs.secrets_changed == 'true'`, where
+So `web-deploy` runs on `website_deployable == 'true' || terraform.outputs.secrets_changed == 'true'`, where
 that second output comes from reading the saved plan for `github_actions_secret` resources with a
 `create`, `update` or `delete` action. Gating on the plan rather than on `infrastructure == 'true'`
 is what keeps every Lambda edit and IAM tweak from re-uploading the whole site and paying for a
@@ -149,7 +154,8 @@ across four consecutive deploys (#121–#123). This is the one place the distinc
 over.
 
 **What the smoke test covers.** `pnpm cypress:smoke` runs six specs against
-`https://<domain>`, all of them skipping themselves when pointed at a local preview:
+`https://<domain>`. The ones that only make sense against a deployed site skip themselves when pointed
+at a local preview:
 
 | Spec | Proves |
 | --- | --- |
@@ -167,10 +173,19 @@ before it ever constructs an SES client — that is what proves the route is ali
 human on every deploy. The 403 assertion checks the body text as well as the status, because API
 Gateway answers a request for a route that does not exist with a 403 of its own.
 
-Both live specs reuse a fixed identifier (`ci-smoke-test`) for the `visitorId` and `uuid`
-querystrings. `trackVisitors` and `downloadResume` both write a record with a 24-hour TTL and only
-count on a miss, so repeat deploys are absorbed by the dedupe rather than inflating the public
-counters once per push to `main`.
+The smoke specs reuse a fixed identifier (`ci-smoke-test`) wherever the stack expects one: as the
+`visitorId` for `GET /visitors` and, via the `uuid` localStorage key, for `GET /download`. `trackVisitors`
+and `downloadResume` both write a record with a 24-hour TTL and only count on a miss, so repeat deploys
+are absorbed by the dedupe rather than inflating the public counters once per push to `main`. (`uuid` is
+also the querystring `POST /contact` requires, but that route is only ever probed, never counted.)
+
+**A spec that cannot run is a failure here, not a skip.** Cypress counts a self-skipped test as pending
+and exits 0, so a smoke job whose env values were missing or misnamed would print "All specs passed!"
+having checked nothing — which is exactly what happened to the two live API specs until #131. The
+smoke job sets `CYPRESS_REQUIRE_LIVE=1`, and `api-live.cy.js` and `bucket-locked.cy.js` throw instead of
+skipping when it is set and their target is absent. Everywhere it is unset (`web-e2e`, a local run) they
+skip as before. Note that Cypress strips only the `CYPRESS_` prefix and keeps the rest of the name
+verbatim, so `CYPRESS_API_ENDPOINT` is read as `Cypress.env('API_ENDPOINT')`.
 
 **`terraform apply` consumes the saved plan** rather than re-planning, so what lands is what was
 reviewed a step earlier. The plan is handed straight from the plan step to the apply step within one
@@ -248,7 +263,8 @@ pnpm test             # vitest run --coverage
 pnpm build-dev && pnpm preview   # then pnpm cypress:run in another shell
 
 # The smoke set against production. Without the three extra variables the two live
-# API specs skip themselves, exactly as they do in the PR e2e job.
+# API specs skip themselves, exactly as they do in the PR e2e job; add
+# CYPRESS_REQUIRE_LIVE=1 to make that a failure instead, as the deploy pipeline does.
 CYPRESS_BASE_URL=https://<domain> \
 CYPRESS_API_ENDPOINT=<api endpoint> \
 CYPRESS_S3_BUCKET=<prod bucket> \

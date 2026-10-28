@@ -70,14 +70,19 @@ const icons = {
     <circle cx="0" cy="0" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/>`,
   key: `<circle cx="-6" cy="-6" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
     <path d="M-1.5 -1 L13 13 M9 9 L13 5 M5 13 L9 9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>`,
+  cert: `<rect x="-12" y="-13" width="24" height="19" rx="2" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <path d="M-7 -6 H7 M-7 -1 H1" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
+    <circle cx="6" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="2.1"/>
+    <path d="M3 12 L2 17 L6 15 L10 17 L9 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>`,
+  pulse: `<path d="M-14 1 H-7 L-3 -9 L2 10 L6 1 H14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`,
   git: `<circle cx="0" cy="4" r="5" fill="none" stroke="currentColor" stroke-width="2.2"/>
     <circle cx="-11" cy="-10" r="4.2" fill="none" stroke="currentColor" stroke-width="2.1"/>
     <circle cx="11" cy="-10" r="4.2" fill="none" stroke="currentColor" stroke-width="2.1"/>
     <path d="M0 -1 V-6 M0 -6 Q0 -10 -7 -10 M0 -6 Q0 -10 7 -10" fill="none" stroke="currentColor" stroke-width="2.1"/>`,
 };
 
-function mknode(id, cx, cy, label, sub, category, iconKey, size = B) {
-  return { id, cx, cy, label, sub, category, iconKey, size };
+function mknode(id, cx, cy, label, sub, category, iconKey, size = B, sub2 = null) {
+  return { id, cx, cy, label, sub, category, iconKey, size, sub2 };
 }
 const N = {};
 function add(...a) { const n = mknode(...a); N[n.id] = n; return n; }
@@ -88,14 +93,17 @@ add('visitor', 90, 260, 'Visitor', 'browser', 'client', 'user', 50);
 add('r53', 260, 260, 'Route 53', 'DNS · DNSSEC', 'edge', 'globe');
 add('waf', 470, 140, 'WAF', 'managed rules', 'security', 'shield', 46);
 add('cf', 470, 260, 'CloudFront', 'OAC · signed /files/*', 'edge', 'cloud');
-add('apigw', 470, 400, 'API Gateway', 'EDGE · custom domain', 'edge', 'door');
+add('apigw', 470, 400, 'API Gateway', 'EDGE · custom domain', 'edge', 'door', B, 'throttle 10/20 · 2/5');
 add('s3', 680, 260, 'S3', 'site + data', 'storage', 'bucket');
 add('lsend', 890, 330, 'λ sendMessage', 'POST /contact', 'compute', 'lambda', 50);
 add('ltrack', 890, 450, 'λ trackVisitors', 'GET /visitors', 'compute', 'lambda', 50);
-add('ses', 1130, 330, 'SES', 'contact mail', 'integ', 'mail');
+add('ses', 1130, 330, 'SES', 'mail · DKIM/SPF/DMARC', 'integ', 'mail');
 add('ddb', 1130, 450, 'DynamoDB', '3 tables', 'database', 'db');
 add('ldownload', 890, 570, 'λ downloadResume', 'GET /download', 'compute', 'lambda', 50);
 add('ssm', 1130, 570, 'SSM', 'signing key', 'mgmt', 'key', 46);
+add('health', 260, 150, 'R53 Health Check', 'HTTPS /index.html', 'edge', 'pulse', 46);
+add('acm', 592, 560, 'ACM', 'site + api cert', 'security', 'cert', 46);
+add('logs', 890, 150, 'S3 Access Logs', 'site + CloudFront', 'storage', 'bucket', 50);
 
 // Row B (y=750): event-driven automation
 add('eventbridge', 260, 750, 'EventBridge', 'rate(6h)', 'integ', 'clock');
@@ -107,6 +115,7 @@ add('linvalidate', 890, 750, 'λ cloudfrontInvalidation', 'batch 15 / 5s window'
 add('cw', 680, 950, 'CloudWatch', 'logs + metrics', 'mgmt', 'eye');
 add('iam', 890, 950, 'IAM', 'least-privilege roles', 'security', 'key', 46);
 add('gha', 90, 950, 'GitHub Actions', 'OIDC, no static keys', 'cicd', 'git');
+add('tfstate', 300, 950, 'Terraform State', 'S3 backend · lock file', 'storage', 'bucket', 50);
 
 // ---- edges ------------------------------------------------------------------
 const E = [];
@@ -136,6 +145,11 @@ edge('linvalidate', 'cf', 'event', 'CreateInvalidation (async)', { x: 145, y: 40
 edge('gha', 's3', 'sync', 'sync build --delete', { x: 300, y: 340 }, { path: 'cicd-deploy' });
 edge('gha', null, 'sync', 'terraform apply → AWS', { x: 130, y: 700 }, { path: 'cicd-boundary' });
 
+edge('health', 'cf', 'sync', 'HTTPS probe', { x: 346, y: 134 }, { path: 'health-probe' });
+edge('acm', 'cf', 'sync', 'TLS cert', { x: 504, y: 520 }, { path: 'acm-cf' });
+edge('acm', 'apigw', 'sync', null, null, { path: 'acm-api' });
+edge('gha', 'tfstate', 'sync', 'state + lock', { x: 196, y: 986 }, { path: 'tf-state' });
+
 const logSources = ['lsend', 'ltrack', 'ldownload', 'lupdate', 'linvalidate', 'waf'];
 
 // ---- helpers ------------------------------------------------------------------
@@ -147,12 +161,14 @@ function badge(n) {
   const labelY = n.cy + half + 17;
   const subY = labelY + 15;
   const sub = n.sub ? `<text x="${n.cx}" y="${subY}" class="sub" text-anchor="middle">${esc(n.sub)}</text>` : '';
+  const sub2 = n.sub2 ? `<text x="${n.cx}" y="${subY + 13}" class="sub" text-anchor="middle">${esc(n.sub2)}</text>` : '';
   return `
   <g class="node">
     <rect x="${n.cx - half}" y="${n.cy - half}" width="${n.size}" height="${n.size}" rx="${r}" class="badge" fill="${c.fill}"/>
     <g transform="translate(${n.cx} ${n.cy})" color="${c.ink}" class="icon">${icons[n.iconKey]}</g>
     <text x="${n.cx}" y="${labelY}" class="label" text-anchor="middle">${esc(n.label)}</text>
     ${sub}
+    ${sub2}
   </g>`;
 }
 
@@ -180,6 +196,20 @@ function edgePath(e) {
       // gha -> s3: right, up a clear column (between Visitor and Route53), then right
       // into S3's bottom-left corner — clear of Route53's caption and the WAF column.
       return `M ${a.cx + ah} ${a.cy} L 180 ${a.cy} L 180 350 L ${b.cx - 16} 350 L ${b.cx - 16} ${b.cy + bh}`;
+    case 'health-probe':
+      // health -> cf: right, down a clear column between the alias A caption and the WAF
+      // log run, then into CloudFront's left edge above the Route 53 alias arrow.
+      return `M ${a.cx + ah} ${a.cy} L 405 ${a.cy} L 405 240 L ${b.cx - bh} 240`;
+    case 'acm-cf':
+      // acm -> cf: left to a trunk column, up past API Gateway's outbound lines, into
+      // CloudFront's right edge below the origin-fetch arrow.
+      return `M ${a.cx - ah} ${a.cy} L 538 ${a.cy} L 538 280 L ${b.cx + bh} 280`;
+    case 'acm-api':
+      // branch off the trunk above into API Gateway's right edge
+      return `M 538 420 L ${b.cx + bh} 420`;
+    case 'tf-state':
+      // below the cicd-deploy departure so the two do not share a segment
+      return `M ${a.cx + ah} 964 L ${b.cx - bh} 964`;
     case 'cicd-boundary':
       // gha -> the AWS request-flow boundary (represents "provisions everything above")
       return `M ${a.cx} ${a.cy - ah} L ${a.cx} 640`;
@@ -226,6 +256,16 @@ function logLine(fromId) {
 }
 function logTrunk() {
   return `<path d="M ${cwNode.cx} ${busY} L ${cwNode.cx} ${cwNode.cy - cwNode.size/2}" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>`;
+}
+
+// CloudFront and S3 server access logs land in one bucket. Same trunk idiom as the
+// CloudWatch bus: the CloudFront feeder merges into S3's run, which carries the arrowhead.
+function logBucketLines() {
+  const lg = N['logs'], s3 = N['s3'], cf = N['cf'];
+  return `<path d="M ${cf.cx + 20} ${cf.cy - cf.size / 2} L ${cf.cx + 20} 212 L ${s3.cx} 212" class="edge edge-log" fill="none"/>
+<path d="M ${s3.cx} ${s3.cy - s3.size / 2} L ${s3.cx} ${lg.cy} L ${lg.cx - lg.size / 2} ${lg.cy}" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
+<g class="edge-label"><rect x="${(s3.cx + lg.cx) / 2 - 56}" y="${lg.cy - 20}" width="112" height="15" class="edge-label-bg"/>
+<text x="${(s3.cx + lg.cx) / 2}" y="${lg.cy - 9}" text-anchor="middle" class="edge-text">server access logs</text></g>`;
 }
 
 const zones = [
@@ -285,6 +325,7 @@ ${zones.map(z => `<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx=
 ${E.map(edgeSvg).join('\n')}
 ${logSources.map(logLine).join('\n')}
 ${logTrunk()}
+${logBucketLines()}
 
 ${Object.values(N).map(badge).join('\n')}
 
@@ -295,6 +336,7 @@ ${Object.values(N).map(badge).join('\n')}
   <text x="222" y="0" class="legend-text">async event</text>
   <line x1="340" y1="-4" x2="366" y2="-4" class="edge-log" marker-end="url(#arrow-log)"/>
   <text x="372" y="0" class="legend-text">logs / metrics</text>
+  <text x="520" y="0" class="legend-text">API throttle (rps / burst): 10/20 on every method, 2/5 on GET /download</text>
 </g>
 </svg>`;
 

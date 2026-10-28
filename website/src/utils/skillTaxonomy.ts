@@ -29,8 +29,33 @@ export const CATEGORIES = ['Cloud', 'Platform', 'AI', 'Security', 'Development',
 /** Where a tool with no category at all ends up. */
 export const UNCATEGORISED = 'Other';
 
-/** Sequential ramp steps available for group colours. See --chart-ramp-* in index.css. */
-const RAMP_STEPS = 7;
+/**
+ * One colour per category, held for the life of the category rather than
+ * assigned by position — so a category keeps its colour as the data shifts
+ * under it, and the ring, its legend row and its Rolling Stock drawer below
+ * all agree without being in the same order.
+ *
+ * Drawn from the line palette in index.css, because on this site a coloured
+ * roundel already means "which line is this". Red is the one line colour left
+ * out: it is --color-alert too, and a category painted in it reads as a fault
+ * rather than a category.
+ *
+ * The pairing is chosen so that categories landing on adjacent rings are far
+ * apart in hue — the rings sit in the order below, and no two neighbours are
+ * closer than 110°, which is what keeps them separable at a glance.
+ */
+const CATEGORY_COLOURS: Record<string, string> = {
+    Cloud: 'var(--color-line-blue)',
+    Platform: 'var(--color-line-lime)',
+    AI: 'var(--color-line-violet)',
+    Security: 'var(--color-line-green)',
+    Development: 'var(--color-line-amber)',
+    Workplace: 'var(--color-line-cyan)',
+    Creative: 'var(--color-line-rose)',
+};
+
+/** The palette an off-taxonomy category falls back into. */
+const FALLBACK_COLOURS = Object.values(CATEGORY_COLOURS);
 
 export type SkillLike = { name: string; category?: string; level?: string };
 
@@ -88,5 +113,22 @@ export function byTaxonomyOrder(a: { name: string }, b: { name: string }): numbe
     return rank(a.name) - rank(b.name) || a.name.localeCompare(b.name);
 }
 
-/** Ramp step for a group at `index` in the grouped order (brightest = biggest). */
-export const rampColor = (index: number) => `var(--chart-ramp-${Math.min(index + 1, RAMP_STEPS)})`;
+/**
+ * The colour a category is drawn in, anywhere it appears.
+ *
+ * Grouping deliberately keeps whatever category a tool carries, so a name off
+ * the canonical list still has to come out somewhere rather than undefined. It
+ * falls back to a hash of its own name — stable across reloads and independent
+ * of how many other strays there are, which a running counter would not be. A
+ * stray can collide with a canonical category's colour; that is accepted, since
+ * the alternative is an eighth hue crowding a palette already spaced as wide as
+ * seven will go.
+ */
+export function categoryColor(name: string): string {
+    const known = CATEGORY_COLOURS[name];
+    if (known) return known;
+
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = (hash * 31 + name.charCodeAt(i)) | 0;
+    return FALLBACK_COLOURS[Math.abs(hash) % FALLBACK_COLOURS.length];
+}

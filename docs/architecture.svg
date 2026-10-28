@@ -107,6 +107,19 @@
       <rect x="60.95" y="690" width="138.1" height="15" class="edge-label-bg"/>
       <text x="130" y="701" text-anchor="middle" class="edge-text">terraform apply → AWS</text>
     </g>
+<path d="M 283 150 L 405 150 L 405 240 L 442 240" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+      <rect x="307.45" y="124" width="77.1" height="15" class="edge-label-bg"/>
+      <text x="346" y="135" text-anchor="middle" class="edge-text">HTTPS probe</text>
+    </g>
+<path d="M 569 560 L 538 560 L 538 280 L 498 280" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+      <rect x="474.6" y="510" width="58.8" height="15" class="edge-label-bg"/>
+      <text x="504" y="521" text-anchor="middle" class="edge-text">TLS cert</text>
+    </g>
+<path d="M 538 420 L 498 420" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/>
+<path d="M 118 964 L 275 964" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+      <rect x="154.4" y="976" width="83.19999999999999" height="15" class="edge-label-bg"/>
+      <text x="196" y="987" text-anchor="middle" class="edge-text">state + lock</text>
+    </g>
 <path d="M 915 330 L 980 330 L 980 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 915 450 L 1000 450 L 1000 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 915 570 L 1020 570 L 1020 910 L 680 910" class="edge edge-log" fill="none"/>
@@ -114,6 +127,10 @@
 <path d="M 890 775 L 890 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 493 140 L 558 140 L 558 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 680 910 L 680 922" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
+<path d="M 490 232 L 490 212 L 680 212" class="edge edge-log" fill="none"/>
+<path d="M 680 232 L 680 150 L 865 150" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
+<g class="edge-label"><rect x="729" y="130" width="112" height="15" class="edge-label-bg"/>
+<text x="785" y="141" text-anchor="middle" class="edge-text">server access logs</text></g>
 
 
   <g class="node">
@@ -121,6 +138,7 @@
     <g transform="translate(90 260)" color="#FFFFFF" class="icon"><circle cx="0" cy="-6" r="7" fill="currentColor"/><path d="M -12 15 Q 0 -3 12 15 Z" fill="currentColor"/></g>
     <text x="90" y="302" class="label" text-anchor="middle">Visitor</text>
     <text x="90" y="317" class="sub" text-anchor="middle">browser</text>
+    
   </g>
 
   <g class="node">
@@ -132,6 +150,7 @@
     <path d="M -12 7 Q 0 3 12 7" fill="none" stroke="currentColor" stroke-width="2"/></g>
     <text x="260" y="305" class="label" text-anchor="middle">Route 53</text>
     <text x="260" y="320" class="sub" text-anchor="middle">DNS · DNSSEC</text>
+    
   </g>
 
   <g class="node">
@@ -140,6 +159,7 @@
     <path d="M-5 0 L-1 5 L6 -6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="470" y="180" class="label" text-anchor="middle">WAF</text>
     <text x="470" y="195" class="sub" text-anchor="middle">managed rules</text>
+    
   </g>
 
   <g class="node">
@@ -147,6 +167,7 @@
     <g transform="translate(470 260)" color="#FFFFFF" class="icon"><path d="M-13 6 A7 7 0 0 1 -11 -8 A9 9 0 0 1 6 -11 A8 8 0 0 1 14 3 A6 6 0 0 1 12 15 H-9 A6 6 0 0 1 -13 6 Z" fill="none" stroke="currentColor" stroke-width="2.4"/></g>
     <text x="470" y="305" class="label" text-anchor="middle">CloudFront</text>
     <text x="470" y="320" class="sub" text-anchor="middle">OAC · signed /files/*</text>
+    
   </g>
 
   <g class="node">
@@ -159,6 +180,7 @@
     <circle cx="4" cy="0" r="1.6" fill="currentColor"/></g>
     <text x="470" y="445" class="label" text-anchor="middle">API Gateway</text>
     <text x="470" y="460" class="sub" text-anchor="middle">EDGE · custom domain</text>
+    <text x="470" y="473" class="sub" text-anchor="middle">throttle 10/20 · 2/5</text>
   </g>
 
   <g class="node">
@@ -167,6 +189,7 @@
     <ellipse cx="0" cy="-9" rx="12" ry="3.2" fill="none" stroke="currentColor" stroke-width="2.3"/></g>
     <text x="680" y="305" class="label" text-anchor="middle">S3</text>
     <text x="680" y="320" class="sub" text-anchor="middle">site + data</text>
+    
   </g>
 
   <g class="node">
@@ -174,6 +197,7 @@
     <g transform="translate(890 330)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="890" y="372" class="label" text-anchor="middle">λ sendMessage</text>
     <text x="890" y="387" class="sub" text-anchor="middle">POST /contact</text>
+    
   </g>
 
   <g class="node">
@@ -181,6 +205,7 @@
     <g transform="translate(890 450)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="890" y="492" class="label" text-anchor="middle">λ trackVisitors</text>
     <text x="890" y="507" class="sub" text-anchor="middle">GET /visitors</text>
+    
   </g>
 
   <g class="node">
@@ -188,7 +213,8 @@
     <g transform="translate(1130 330)" color="#FFFFFF" class="icon"><rect x="-13" y="-9" width="26" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2.3"/>
     <path d="M-13 -8 L0 3 L13 -8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></g>
     <text x="1130" y="375" class="label" text-anchor="middle">SES</text>
-    <text x="1130" y="390" class="sub" text-anchor="middle">contact mail</text>
+    <text x="1130" y="390" class="sub" text-anchor="middle">mail · DKIM/SPF/DMARC</text>
+    
   </g>
 
   <g class="node">
@@ -198,6 +224,7 @@
     <path d="M-12 0 A12 4.2 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="2"/></g>
     <text x="1130" y="495" class="label" text-anchor="middle">DynamoDB</text>
     <text x="1130" y="510" class="sub" text-anchor="middle">3 tables</text>
+    
   </g>
 
   <g class="node">
@@ -205,6 +232,7 @@
     <g transform="translate(890 570)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="890" y="612" class="label" text-anchor="middle">λ downloadResume</text>
     <text x="890" y="627" class="sub" text-anchor="middle">GET /download</text>
+    
   </g>
 
   <g class="node">
@@ -213,6 +241,35 @@
     <path d="M-1.5 -1 L13 13 M9 9 L13 5 M5 13 L9 9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="1130" y="610" class="label" text-anchor="middle">SSM</text>
     <text x="1130" y="625" class="sub" text-anchor="middle">signing key</text>
+    
+  </g>
+
+  <g class="node">
+    <rect x="237" y="127" width="46" height="46" rx="13" class="badge" fill="#6C4CE0"/>
+    <g transform="translate(260 150)" color="#FFFFFF" class="icon"><path d="M-14 1 H-7 L-3 -9 L2 10 L6 1 H14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <text x="260" y="190" class="label" text-anchor="middle">R53 Health Check</text>
+    <text x="260" y="205" class="sub" text-anchor="middle">HTTPS /index.html</text>
+    
+  </g>
+
+  <g class="node">
+    <rect x="569" y="537" width="46" height="46" rx="13" class="badge" fill="#D64550"/>
+    <g transform="translate(592 560)" color="#FFFFFF" class="icon"><rect x="-12" y="-13" width="24" height="19" rx="2" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <path d="M-7 -6 H7 M-7 -1 H1" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
+    <circle cx="6" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="2.1"/>
+    <path d="M3 12 L2 17 L6 15 L10 17 L9 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></g>
+    <text x="592" y="600" class="label" text-anchor="middle">ACM</text>
+    <text x="592" y="615" class="sub" text-anchor="middle">site + api cert</text>
+    
+  </g>
+
+  <g class="node">
+    <rect x="865" y="125" width="50" height="50" rx="13" class="badge" fill="#4C9A63"/>
+    <g transform="translate(890 150)" color="#FFFFFF" class="icon"><path d="M-12 -9 L-10 12 A11 3 0 0 0 10 12 L12 -9" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <ellipse cx="0" cy="-9" rx="12" ry="3.2" fill="none" stroke="currentColor" stroke-width="2.3"/></g>
+    <text x="890" y="192" class="label" text-anchor="middle">S3 Access Logs</text>
+    <text x="890" y="207" class="sub" text-anchor="middle">site + CloudFront</text>
+    
   </g>
 
   <g class="node">
@@ -222,6 +279,7 @@
     <path d="M11 -11 A14 14 0 0 1 13 -2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></g>
     <text x="260" y="795" class="label" text-anchor="middle">EventBridge</text>
     <text x="260" y="810" class="sub" text-anchor="middle">rate(6h)</text>
+    
   </g>
 
   <g class="node">
@@ -229,6 +287,7 @@
     <g transform="translate(470 750)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="470" y="792" class="label" text-anchor="middle">λ updateContributions</text>
     <text x="470" y="807" class="sub" text-anchor="middle">merges GH graphs</text>
+    
   </g>
 
   <g class="node">
@@ -238,6 +297,7 @@
     <rect x="9" y="-6" width="9" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="2.1"/></g>
     <text x="650" y="792" class="label" text-anchor="middle">SQS</text>
     <text x="650" y="807" class="sub" text-anchor="middle">invalidation queue</text>
+    
   </g>
 
   <g class="node">
@@ -245,6 +305,7 @@
     <g transform="translate(890 750)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="890" y="792" class="label" text-anchor="middle">λ cloudfrontInvalidation</text>
     <text x="890" y="807" class="sub" text-anchor="middle">batch 15 / 5s window</text>
+    
   </g>
 
   <g class="node">
@@ -253,6 +314,7 @@
     <circle cx="0" cy="0" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/></g>
     <text x="680" y="995" class="label" text-anchor="middle">CloudWatch</text>
     <text x="680" y="1010" class="sub" text-anchor="middle">logs + metrics</text>
+    
   </g>
 
   <g class="node">
@@ -261,6 +323,7 @@
     <path d="M-1.5 -1 L13 13 M9 9 L13 5 M5 13 L9 9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="890" y="990" class="label" text-anchor="middle">IAM</text>
     <text x="890" y="1005" class="sub" text-anchor="middle">least-privilege roles</text>
+    
   </g>
 
   <g class="node">
@@ -271,6 +334,16 @@
     <path d="M0 -1 V-6 M0 -6 Q0 -10 -7 -10 M0 -6 Q0 -10 7 -10" fill="none" stroke="currentColor" stroke-width="2.1"/></g>
     <text x="90" y="995" class="label" text-anchor="middle">GitHub Actions</text>
     <text x="90" y="1010" class="sub" text-anchor="middle">OIDC, no static keys</text>
+    
+  </g>
+
+  <g class="node">
+    <rect x="275" y="925" width="50" height="50" rx="13" class="badge" fill="#4C9A63"/>
+    <g transform="translate(300 950)" color="#FFFFFF" class="icon"><path d="M-12 -9 L-10 12 A11 3 0 0 0 10 12 L12 -9" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <ellipse cx="0" cy="-9" rx="12" ry="3.2" fill="none" stroke="currentColor" stroke-width="2.3"/></g>
+    <text x="300" y="992" class="label" text-anchor="middle">Terraform State</text>
+    <text x="300" y="1007" class="sub" text-anchor="middle">S3 backend · lock file</text>
+    
   </g>
 
 <g transform="translate(30, 1098)">
@@ -280,5 +353,6 @@
   <text x="222" y="0" class="legend-text">async event</text>
   <line x1="340" y1="-4" x2="366" y2="-4" class="edge-log" marker-end="url(#arrow-log)"/>
   <text x="372" y="0" class="legend-text">logs / metrics</text>
+  <text x="520" y="0" class="legend-text">API throttle (rps / burst): 10/20 on every method, 2/5 on GET /download</text>
 </g>
 </svg>
