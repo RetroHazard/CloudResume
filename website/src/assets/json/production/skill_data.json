@@ -470,6 +470,7 @@
         { "name": "Agentic Development (AI-Assisted Software Engineering)" },
         { "name": "AI Agent Identity & Access Control" },
         { "name": "LLM Gateway & Model Access Management" },
+        { "name": "Model Context Protocol (MCP) & Tool Integration" },
         { "name": "Identity Federation (SAML, OAuth 2.0, OIDC, SCIM)" },
         { "name": "Threat Mitigation" },
         { "name": "Risk Management" },
