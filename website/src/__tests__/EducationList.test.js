@@ -15,7 +15,7 @@ const sampleData = {
             details: ['Sample detail 1', 'Sample detail 2', 'Sample detail 3', 'Sample detail 4'],
             links: [
                 {
-                    program: [
+                    programme: [
                         {
                             website: 'https://sampleprogram.com',
                             icon: 'fa6-solid:circle-info',

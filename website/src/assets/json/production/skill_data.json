@@ -460,7 +460,7 @@
         { "name": "Cloud Security (AWS)" },
         { "name": "Vulnerability Management" },
         { "name": "Access Governance & Certification (Least-Privilege Audits)" },
-        { "name": "Application Allow-Listing / Binary Authorization" },
+        { "name": "Application Allow-Listing / Binary Authorisation" },
         { "name": "DevSecOps" },
         { "name": "Software Supply-Chain Security" },
         { "name": "Security Incident Response" },

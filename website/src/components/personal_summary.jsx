@@ -22,7 +22,7 @@ function PersonalSummary() {
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
                     IAM and cloud-security engineer with <strong>15 years in technology</strong>, from frontline support
-                    through systems, networks, and cloud infrastructure into a specialization in identity, access, and
+                    through systems, networks, and cloud infrastructure into a specialisation in identity, access, and
                     security. Hands-on with <strong>Okta, Terraform, AWS, and Kubernetes</strong>, and with{' '}
                     <strong>identity federation (SAML, OAuth 2.0, OIDC, SCIM)</strong>, PKI, MDM/endpoint security,
                     vulnerability management, and <em>AI governance</em>.
