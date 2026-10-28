@@ -32,11 +32,25 @@ function useContactSubmit(captchaRef) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const token = RECAPTCHA_SITE_KEY ? captchaRef.current?.getValue() : null;
-        if (RECAPTCHA_SITE_KEY && !token) {
-            setStatus({ type: 'error', text: 'Please complete the reCAPTCHA.' });
-            return;
+        // Invisible reCAPTCHA runs here, on submit. Most visitors get a token back
+        // silently; a suspicious one gets Google's image challenge first. This runs
+        // before the loading state on purpose: if the visitor closes the challenge,
+        // Google never calls back and the promise never settles, so the button has
+        // to stay live for them to try again.
+        let token = null;
+        if (RECAPTCHA_SITE_KEY) {
+            try {
+                captchaRef.current?.reset();
+                token = await captchaRef.current?.executeAsync();
+            } catch {
+                token = null;
+            }
+            if (!token) {
+                setStatus({ type: 'error', text: 'reCAPTCHA verification failed. Please try again.' });
+                return;
+            }
         }
+        setStatus({ type: null, text: '' });
         setIsLoading(true);
         const startTime = Date.now();
         let resultType = 'success';
@@ -192,7 +206,7 @@ const ContactForm = () => {
             </div>
             <div className='flex flex-col gap-y-3'>
                 {RECAPTCHA_SITE_KEY && (
-                    <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} ref={captchaRef} theme='dark' className='captcha-frame' />
+                    <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} ref={captchaRef} size='invisible' theme='dark' />
                 )}
                 <button
                     type='submit'
@@ -211,6 +225,21 @@ const ContactForm = () => {
                     />
                     <span aria-hidden='true'>{isLoading ? 'Dispatching…' : 'Dispatch Message'}</span>
                 </button>
+                {/* Google's floating badge is hidden (see .grecaptcha-badge in index.css);
+                    its terms allow that only if this attribution sits in the form instead. */}
+                {RECAPTCHA_SITE_KEY && (
+                    <p className='card-fine'>
+                        Protected by reCAPTCHA. Google{' '}
+                        <a href='https://policies.google.com/privacy' target='_blank' rel='noopener noreferrer'>
+                            Privacy Policy
+                        </a>{' '}
+                        and{' '}
+                        <a href='https://policies.google.com/terms' target='_blank' rel='noopener noreferrer'>
+                            Terms of Service
+                        </a>{' '}
+                        apply.
+                    </p>
+                )}
             </div>
             <StatusAlert status={status} />
         </form>

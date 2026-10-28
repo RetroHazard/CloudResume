@@ -101,3 +101,9 @@ variable "resume-object-key" {
 variable "signed-url-ttl-seconds" {
   type = number
 }
+
+# Contact Form
+
+variable "recaptcha-secret-parameter-name" {
+  type = string
+}

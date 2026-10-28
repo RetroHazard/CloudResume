@@ -229,25 +229,13 @@ html {
         @apply block w-full rounded border border-secondary-600 bg-secondary-800 p-2.5 text-base text-content-body shadow-sm transition-colors placeholder:text-content-accent focus:border-neon focus:ring-1 focus:ring-neon focus:outline-none sm:text-sm;
     }
 
-    /* reCAPTCHA checkbox, framed like a form field. Google draws a 302×76 widget
-       inside a 304×78 iframe, and because the page is `color-scheme: dark` while
-       the iframe's document is light, the browser paints an opaque white backdrop
-       behind it — showing as a white strip down the right and bottom edges.
-       Matching the iframe's scheme makes that backdrop transparent; clipping to
-       the widget's inner box drops both the strip and Google's own grey border,
-       so the frame's field-style border is the only edge. #222 is the widget's own dark
-       fill, so the frame doesn't flash a different colour while the script loads. */
-    .captcha-frame {
-        @apply overflow-hidden rounded border border-secondary-600 shadow-sm;
-        width: 302px;
-        height: 76px;
-        background: #222;
-    }
-    .captcha-frame > div {
-        margin: -1px;
-    }
-    .captcha-frame iframe {
-        color-scheme: light;
+    /* Invisible reCAPTCHA floats a white "protected by" badge in the bottom-right
+       corner of the window. Google allows hiding it as long as the form carries
+       the attribution text instead (see the contact form); `visibility` rather
+       than `display: none` is what Google documents, and keeps the widget able
+       to run. */
+    .grecaptcha-badge {
+        visibility: hidden;
     }
 
     /* ── Board typography (used across list rows) ──────────────────────── */
