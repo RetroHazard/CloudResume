@@ -26,15 +26,21 @@ function VisitorCount() {
 
     return (
         <div
-            className='mt-1 mb-1 inline-flex w-full items-center px-4 py-1 max-sm:hidden'
+            className='relative my-0.5 inline-flex w-full items-center gap-3 px-3 py-2.5 text-content-accent max-sm:hidden'
             role='status'
             aria-live='polite'
             aria-atomic='true'
         >
-            <i className='icon-box mr-2.5 h-5 w-5 text-base' aria-hidden='true'>
+            {/* grey terminus node, laid out like a station stop so the icon and
+                count line up with the nav items above and the rail ends here */}
+            <span
+                aria-hidden='true'
+                className='relative z-10 h-4 w-4 shrink-0 rounded-full border-2 border-secondary-400 bg-background'
+            />
+            <i className='icon-box h-4 w-4 text-sm' aria-hidden='true'>
                 <Icon icon='fa6-solid:users' />
             </i>
-            <span className='font-sans text-base'>
+            <span className='font-sans text-base leading-4'>
                 <span className='sr-only'>Site visitors: </span>
                 {visitors !== null ? visitors : '—'}
             </span>
