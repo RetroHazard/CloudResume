@@ -191,7 +191,9 @@ const ContactForm = () => {
                 />
             </div>
             <div className='flex flex-col gap-y-3'>
-                {RECAPTCHA_SITE_KEY && <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} ref={captchaRef} theme='dark' />}
+                {RECAPTCHA_SITE_KEY && (
+                    <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} ref={captchaRef} theme='dark' className='captcha-frame' />
+                )}
                 <button
                     type='submit'
                     disabled={isLoading}
