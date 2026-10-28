@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
+import { cvSourcePlugin } from './scripts/cv-source.mjs';
 
 export default defineConfig({
     resolve: {
@@ -10,6 +11,7 @@ export default defineConfig({
     },
     plugins: [
         react(),
+        cvSourcePlugin(),
         {
             name: 'treat-js-files-as-jsx',
             // Must run before vite:oxc: plugin-react routes .js files through

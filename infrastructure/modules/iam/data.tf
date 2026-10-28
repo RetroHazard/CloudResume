@@ -69,6 +69,48 @@ data "aws_iam_policy_document" "crc-lambda-DownloadResume-access-policy" {
   }
 
   statement {
+    sid    = "AllowFunctionToReadCvSource"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "${var.crc-s3-production-arn}/${var.crc-cv-source-object-key}"
+    ]
+  }
+
+  # Write and prune the generated CVs, and nothing else in the bucket.
+  statement {
+    sid    = "AllowFunctionToCacheGeneratedCvs"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:DeleteObject"
+    ]
+    resources = [
+      "${var.crc-s3-production-arn}/${var.crc-cv-object-prefix}/*"
+    ]
+  }
+
+  # Listing is how the function asks "is this digest already rendered?". It is scoped to the
+  # CV prefix, so the function cannot enumerate the rest of the site.
+  statement {
+    sid    = "AllowFunctionToFindGeneratedCvs"
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket"
+    ]
+    resources = [
+      var.crc-s3-production-arn
+    ]
+    condition {
+      test     = "StringLike"
+      variable = "s3:prefix"
+      values   = ["${var.crc-cv-object-prefix}/*"]
+    }
+  }
+
+  statement {
     sid    = "AllowFunctionToReadSigningKey"
     effect = "Allow"
     actions = [

@@ -135,6 +135,7 @@ edge('ltrack', 'ddb', 'sync', 'put / get item', { x: 1010, y: 434 });
 edge('apigw', 'ldownload', 'sync', null);
 edge('ldownload', 'ssm', 'sync', 'GetParameter', { x: 1010, y: 554 });
 edge('ldownload', 'ddb', 'sync', 'record download', { x: 1000, y: 516 }, { path: 'download-ddb' });
+edge('ldownload', 's3', 'sync', 'cv-source · CV cache', { x: 752, y: 612 }, { path: 'download-s3' });
 
 edge('eventbridge', 'lupdate', 'event', 'invoke', { x: 365, y: 734 });
 edge('s3', 'sqs', 'event', 'ObjectCreated', { x: 730, y: 445 }, { path: 'straight' });
@@ -192,6 +193,10 @@ function edgePath(e) {
       // ldownload -> ddb: leave from the top, run under trackVisitors' caption, and enter
       // DynamoDB's left edge below the trackVisitors arrow so the two do not stack.
       return `M ${a.cx} ${a.cy - ah} L ${a.cx} 520 L 1040 520 L 1040 465 L ${b.cx - bh} 465`;
+    case 'download-s3':
+      // ldownload -> s3: leave the left edge just under the API Gateway arrow, rise in the
+      // channel between the API fan-out trunk and lupdate's return, into S3's right edge.
+      return `M ${a.cx - ah} ${a.cy + 10} L 722 ${a.cy + 10} L 722 ${b.cy} L ${b.cx + bh} ${b.cy}`;
     case 'cicd-deploy':
       // gha -> s3: right, up a clear column (between Visitor and Route53), then right
       // into S3's bottom-left corner — clear of Route53's caption and the WAF column.

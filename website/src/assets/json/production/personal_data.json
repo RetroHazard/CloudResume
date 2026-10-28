@@ -2,6 +2,11 @@
     "profilePicture": "/images/profile_photo/agb_profile.jpg",
     "fullName": "Alexander Bracken",
     "jobTitle": "Senior IAM & Cloud Security Engineer",
+    "summary": [
+        "IAM and cloud-security engineer with **15 years in technology**, from frontline support through systems, networks, and cloud infrastructure into a specialisation in identity, access, and security. Hands-on with **Okta, Terraform, AWS, and Kubernetes**, and with **identity federation (SAML, OAuth 2.0, OIDC, SCIM)**, PKI, MDM/endpoint security, vulnerability management, and *AI governance*.",
+        "Known for automating manual security operations (**Python, Go, Bash**) and building internal tools that reduce risk and operational overhead. Proven ability to lead cross-functional initiatives from design through *fleet-wide rollout*, balancing technical depth with clear business impact.",
+        "Outside the day-to-day, runs side projects as production systems rather than demos: this site, a serverless AWS platform codified end to end in **Terraform**; a **Japan immigration statistics dashboard** that has served applicants since 2025 and refreshes itself from government data; a native **Swift** rebuild of a macOS screenshot and sharing tool; and commercial **Unreal Engine** plugins published on Fab."
+    ],
     "location": "Tokyo, Japan",
     "availability": ["Seeking new opportunities", "Available for consulting", "Working on side project"]
 }

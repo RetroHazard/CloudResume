@@ -79,6 +79,10 @@
       <rect x="949.25" y="506" width="101.5" height="15" class="edge-label-bg"/>
       <text x="1000" y="517" text-anchor="middle" class="edge-text">record download</text>
     </g>
+<path d="M 865 580 L 722 580 L 722 260 L 708 260" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+      <rect x="686" y="602" width="132" height="15" class="edge-label-bg"/>
+      <text x="752" y="613" text-anchor="middle" class="edge-text">cv-source · CV cache</text>
+    </g>
 <path d="M 288 750 L 445 750" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
       <rect x="341.7" y="724" width="46.599999999999994" height="15" class="edge-label-bg"/>
       <text x="365" y="735" text-anchor="middle" class="edge-text">invoke</text>

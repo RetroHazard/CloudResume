@@ -307,6 +307,10 @@ resource "aws_lambda_function" "crc-cloudfrontInvalidation" {
     variables = {
       prod_bucket       = var.s3-bucket-production-name
       prod_distribution = var.cf-production-distribution
+
+      # Generated CVs are content-addressed: a key is written once and never changes, so
+      # there is nothing cached to invalidate and each invalidation path would be billed.
+      immutable_prefix = "${var.cv-object-prefix}/"
     }
   }
 
@@ -453,7 +457,12 @@ resource "aws_lambda_function" "crc-downloadResume" {
       # with nothing logged to explain it.
       downloadBaseUrl = "https://${var.domain-name}"
 
-      resumeObjectKey     = var.resume-object-key
+      # The CV is compiled from the data the site build publishes, and cached next to it
+      # under a digest of its content. See renderResume.py.
+      siteBucket     = var.s3-bucket-production-name
+      cvSourceKey    = var.cv-source-object-key
+      cvObjectPrefix = var.cv-object-prefix
+
       signingKeyParameter = var.cf-signing-key-parameter-name
       signingKeyPairId    = var.cf-signing-key-pair-id
       signedUrlTtl        = tostring(var.signed-url-ttl-seconds)
@@ -501,9 +510,11 @@ resource "aws_lambda_function" "crc-downloadResume" {
   runtime      = "python3.12"
   skip_destroy = "false"
 
-  # 5s rather than the 3s the other API functions use: the first invocation after a cold
-  # start pays for an ssm:GetParameter round trip before it can sign anything.
-  timeout = "5"
+  # Longer than the 3s the other API functions use. The first invocation after a cold start
+  # pays for an ssm:GetParameter round trip before it can sign anything, and the first click
+  # after the site content changes also renders and uploads a fresh CV. That render is tens
+  # of milliseconds on a laptop but runs on a fraction of a vCPU at 128 MB.
+  timeout = "10"
 
   depends_on = [
     aws_cloudwatch_log_group.crc-downloadResume-log-group

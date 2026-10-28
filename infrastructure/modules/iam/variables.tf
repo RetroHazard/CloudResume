@@ -56,6 +56,14 @@ variable "crc-contribution-object-key" {
   type = string
 }
 
+variable "crc-cv-source-object-key" {
+  type = string
+}
+
+variable "crc-cv-object-prefix" {
+  type = string
+}
+
 variable "crc-ses-configuration-set" {
   type = string
 }

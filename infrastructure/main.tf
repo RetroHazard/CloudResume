@@ -57,6 +57,8 @@ module "iam" {
   crc-cf-signing-key-parameter-name              = var.cloudfront_signing_key_parameter
   crc-recaptcha-secret-parameter-name            = var.recaptcha_secret_parameter
   crc-contribution-object-key                    = var.contribution_object_key
+  crc-cv-source-object-key                       = var.cv_source_object_key
+  crc-cv-object-prefix                           = var.cv_object_prefix
   crc-ses-configuration-set                      = module.backend.aws_ses_configuration_set_crc-contact-mail_arn
   crc-ses-mail-destination                       = module.backend.aws_ses_email_identity_crc-mail-destination_arn
   crc-ses-mail-domain                            = module.backend.aws_ses_domain_identity_crc-mail-domain_arn
@@ -106,7 +108,8 @@ module "backend" {
 
   cf-signing-key-pair-id        = module.frontend.aws_cloudfront_public_key_crc-cf-signing-key_id
   cf-signing-key-parameter-name = var.cloudfront_signing_key_parameter
-  resume-object-key             = var.resume_object_key
+  cv-source-object-key          = var.cv_source_object_key
+  cv-object-prefix              = var.cv_object_prefix
   signed-url-ttl-seconds        = var.signed_url_ttl_seconds
 
   recaptcha-secret-parameter-name = var.recaptcha_secret_parameter

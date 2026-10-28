@@ -10,8 +10,14 @@ Two properties are load-bearing and easy to break:
     the only condition the HTML spec places on honouring a link's `download` attribute, so
     signing the distribution domain instead would make browsers silently *navigate* to the
     PDF rather than download it, with nothing logged anywhere.
-  * The object key comes from configuration, never from the request. A handler that signed
+  * The object key is derived server-side, never from the request. A handler that signed
     a caller-supplied key would be a signing oracle for every object in the bucket.
+
+The PDF itself is no longer a hand-maintained file. The site build publishes the data it
+renders as `data/cv-source.json`, and this function compiles that into a CV (renderResume)
+on demand, caching the result in S3 under a digest of its content. A click only pays for a
+render when the site has changed since the last one; otherwise it costs a conditional GET
+that S3 answers with a 304.
 """
 
 import base64
@@ -23,17 +29,23 @@ import time
 from datetime import datetime, timedelta, timezone
 
 import boto3
+from botocore.exceptions import ClientError
+
+import renderResume
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 dynamodb = boto3.resource('dynamodb')
 ssm = boto3.client('ssm')
+s3 = boto3.client('s3')
 
 record_table = dynamodb.Table(os.environ['recordTableName'])
 ALLOWED_ORIGIN = os.environ['allowedOrigin']
 BASE_URL = os.environ['downloadBaseUrl'].rstrip('/')
-OBJECT_KEY = os.environ['resumeObjectKey'].lstrip('/')
+SITE_BUCKET = os.environ['siteBucket']
+CV_SOURCE_KEY = os.environ['cvSourceKey'].lstrip('/')
+CV_PREFIX = os.environ['cvObjectPrefix'].strip('/')
 KEY_PARAMETER = os.environ['signingKeyParameter']
 KEY_PAIR_ID = os.environ['signingKeyPairId']
 URL_TTL = int(os.environ['signedUrlTtl'])
@@ -47,6 +59,10 @@ COUNTER_ID = 'download_count'
 # as an opaque Runtime.ImportModuleError with no usable traceback; deferring it means the
 # real exception reaches CloudWatch.
 _signing_key = None
+
+# What this container last resolved the CV to: the source object's ETag, the UTC day the
+# model was built on (certification expiry is date-dependent), and the PDF key it mapped to.
+_cv = {'etag': None, 'day': None, 'key': None}
 
 
 def _read_tlv(buf, index):
@@ -143,6 +159,77 @@ def _signed_url(url, expires):
     return f'{url}?Expires={expires}&Signature={signature}&Key-Pair-Id={KEY_PAIR_ID}'
 
 
+def _cv_exists(key):
+    # ListObjectsV2 rather than HeadObject: without s3:ListBucket, S3 reports a missing key
+    # as 403 rather than 404, and ListBucket can be scoped to the CV prefix this way.
+    listing = s3.list_objects_v2(Bucket=SITE_BUCKET, Prefix=key, MaxKeys=1)
+    return any(item['Key'] == key for item in listing.get('Contents', []))
+
+
+def _prune_superseded(current_folder):
+    """Remove CVs rendered from older site data. Best effort: a leftover file costs pennies.
+
+    Only runs right after a render, i.e. when the content has just changed. A visitor whose
+    signed URL for the old file is still inside its TTL can lose that one download; a retry
+    mints a URL for the new file.
+    """
+    try:
+        listing = s3.list_objects_v2(Bucket=SITE_BUCKET, Prefix=f'{CV_PREFIX}/')
+        stale = [{'Key': o['Key']} for o in listing.get('Contents', []) if not o['Key'].startswith(current_folder)]
+        if stale:
+            s3.delete_objects(Bucket=SITE_BUCKET, Delete={'Objects': stale, 'Quiet': True})
+            logger.info('Pruned %d superseded CV object(s)', len(stale))
+    except Exception:
+        logger.exception('Failed to prune superseded CVs')
+
+
+def _current_cv_key():
+    """Return the S3 key of a CV matching what the site is serving now, rendering one if needed.
+
+    Three tiers, cheapest first:
+
+      1. The source is unchanged since this container last looked (S3 answers the
+         conditional GET with a 304) -> reuse the key already resolved. No body, no render.
+      2. The source changed, but its CV content did not (a new logo, an icon, a link) ->
+         the digest matches a PDF that is already in the bucket. One LIST, no render.
+      3. The content changed -> render once, store it, and every later click is tier 1 or 2.
+
+    The key embeds a digest of the rendered content, so a stored PDF is immutable and can
+    never be served stale from CloudFront's cache.
+    """
+    today = datetime.now(timezone.utc).date()
+    request = {'Bucket': SITE_BUCKET, 'Key': CV_SOURCE_KEY}
+    if _cv['etag'] and _cv['day'] == today:
+        request['IfNoneMatch'] = _cv['etag']
+    try:
+        source = s3.get_object(**request)
+    except ClientError as err:
+        if err.response.get('ResponseMetadata', {}).get('HTTPStatusCode') == 304:
+            return _cv['key']
+        raise
+
+    model = renderResume.build_model(json.loads(source['Body'].read()), BASE_URL, today=today)
+    folder = f'{CV_PREFIX}/{renderResume.content_digest(model)[:24]}/'
+    key = folder + renderResume.file_name(model)
+
+    if not _cv_exists(key):
+        started = time.monotonic()
+        pdf = renderResume.render_pdf(model)
+        s3.put_object(
+            Bucket=SITE_BUCKET,
+            Key=key,
+            Body=pdf,
+            ContentType='application/pdf',
+            CacheControl='public, max-age=31536000, immutable',
+            Metadata={'renderer-version': renderResume.RENDERER_VERSION},
+        )
+        logger.info('Rendered %s (%d bytes) in %.0f ms', key, len(pdf), (time.monotonic() - started) * 1000)
+        _prune_superseded(folder)
+
+    _cv.update(etag=source['ETag'], day=today, key=key)
+    return key
+
+
 def _record_download(visitor_id):
     """Best-effort telemetry. Returns the running total, or None if it could not be read.
 
@@ -197,8 +284,14 @@ def lambda_handler(event, context):
     # must never be counted. Recording first would inflate download_count on every failed
     # signature and burn the visitor's 24h dedupe row for a file they never received.
     try:
+        object_key = _current_cv_key()
+    except Exception:
+        logger.exception('Failed to resolve or render the CV')
+        return _response(500, {'error': 'Internal Server Error'})
+
+    try:
         expires = int(time.time()) + URL_TTL
-        url = _signed_url(f'{BASE_URL}/{OBJECT_KEY}', expires)
+        url = _signed_url(f'{BASE_URL}/{object_key}', expires)
     except Exception:
         # Never echo the exception to the caller — it would describe the key material.
         logger.exception('Failed to sign a CV download URL')
@@ -210,7 +303,7 @@ def lambda_handler(event, context):
         200,
         {
             'downloadUrl': url,
-            'fileName': OBJECT_KEY.rsplit('/', 1)[-1],
+            'fileName': object_key.rsplit('/', 1)[-1],
             'expiresAt': expires,
             'count': count,
         },

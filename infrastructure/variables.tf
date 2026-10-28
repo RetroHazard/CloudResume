@@ -63,10 +63,21 @@ variable "signed_downloads_enabled" {
   default     = true
 }
 
-variable "resume_object_key" {
-  description = "S3 Object Key of the CV served through signed URLs"
+variable "cv_source_object_key" {
+  description = "S3 Object Key of the CV source data the website build publishes. downloadResume compiles the CV from it"
   type        = string
-  default     = "files/BRACKEN_ALEXANDER_Resume_20260801.pdf"
+  default     = "data/cv-source.json"
+}
+
+variable "cv_object_prefix" {
+  description = "S3 Key Prefix generated CVs are cached under, one folder per content digest. Must sit under files/ so the objects are only reachable through signed URLs"
+  type        = string
+  default     = "files/cv"
+
+  validation {
+    condition     = startswith(var.cv_object_prefix, "files/") && !endswith(var.cv_object_prefix, "/")
+    error_message = "cv_object_prefix must sit under files/ (the signed-URL behaviour) and carry no trailing slash."
+  }
 }
 
 variable "cloudfront_signing_key_parameter" {

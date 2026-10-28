@@ -69,6 +69,7 @@ jobs:
       website: ${{ steps.filter.outputs.website }}
       website_deployable: ${{ steps.filter.outputs.website_deployable }}
       infrastructure: ${{ steps.filter.outputs.infrastructure }}
+      python: ${{ steps.filter.outputs.python }}
       github: ${{ steps.filter.outputs.github }}
       web_digest: ${{ steps.digest.outputs.web }}
       web_verified: ${{ steps.verified.outputs.web }}
@@ -169,6 +170,12 @@ jobs:
           # py-lint unrun on code it had just changed the rules for.
           match() { echo "$changed" | grep -qE "$1" && echo true || echo false; }
 
+          # The Lambda job also runs the renderer's unit tests, and those read
+          # the site's résumé JSON: the downloadable CV is compiled from it, so a
+          # data-only edit can break the PDF without touching infrastructure/.
+          # Kept separate from `infrastructure`, which also gates Terraform.
+          python_inputs='^(infrastructure/|ruff\.toml$|website/src/assets/json/)'
+
           # Two questions, deliberately not the same one.
           #
           # `website` asks "could this affect the website at all", and gates the
@@ -198,6 +205,7 @@ jobs:
             printf 'website=%s\n'            "$(match '^website/')"
             printf 'website_deployable=%s\n' "$(deployable)"
             printf 'infrastructure=%s\n'     "$(match '^(infrastructure/|ruff\.toml$)')"
+            printf 'python=%s\n'             "$(match "$python_inputs")"
             printf 'github=%s\n'             "$(match '^\.github/')"
           } >> "$GITHUB_OUTPUT"
 
@@ -211,8 +219,9 @@ jobs:
           # every marker it could affect.
           #
           #   web         website/ + .github/       typecheck, prettier, vitest, cypress
-          #   ruff        infrastructure/           ruff over codebase/
-          #               + ruff.toml + .github/
+          #   ruff        infrastructure/           ruff over codebase/, and the
+          #               + ruff.toml + .github/    Lambda unit tests, which also
+          #               + website/src/assets/json read the site's résumé data
           #   actionlint  .github/                  actionlint
           #
           # The grouping is not cosmetic: a digest must cover exactly the jobs
@@ -227,7 +236,8 @@ jobs:
           gh=$(git rev-parse HEAD:.github)
           web=$(printf '%s\n' "$(git rev-parse HEAD:website)" "$gh" | sha256sum | cut -c1-32)
           ruff=$(printf '%s\n' "$(git rev-parse HEAD:infrastructure)" \
-                                "$(git rev-parse HEAD:ruff.toml)" "$gh" | sha256sum | cut -c1-32)
+                                "$(git rev-parse HEAD:ruff.toml)" \
+                                "$(git rev-parse HEAD:website/src/assets/json)" "$gh" | sha256sum | cut -c1-32)
           actionlint=$(printf '%s\n' "$gh" | sha256sum | cut -c1-32)
           {
             echo "web=$web"
@@ -673,11 +683,11 @@ jobs:
           terraform show -no-color tfplan
 
   py-lint:
-    name: Lambda lint
+    name: Lambda lint and tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: [changes]
-    if: ${{ needs.changes.outputs.infrastructure == 'true' && needs.changes.outputs.ruff_verified != 'true' }}
+    if: ${{ needs.changes.outputs.python == 'true' && needs.changes.outputs.ruff_verified != 'true' }}
     permissions:
       contents: read
 
@@ -694,6 +704,11 @@ jobs:
 
       - name: Format check
         run: ruff format --check infrastructure/codebase/
+
+      # Stdlib unittest against in-memory boto3 fakes, so nothing to install.
+      # The runner's python3 is 3.12, matching the Lambda runtime.
+      - name: Unit tests
+        run: python3 -m unittest discover -s infrastructure/tests -v
 
   actionlint:
     name: Workflow lint
@@ -771,7 +786,7 @@ jobs:
       # marker already existed, and this re-upload just refreshes it.
       - name: Record the Lambda lint
         if: >-
-          ${{ needs.changes.outputs.infrastructure == 'true'
+          ${{ needs.changes.outputs.python == 'true'
               && needs.py-lint.result != 'failure' && needs.py-lint.result != 'cancelled' }}
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
@@ -925,9 +940,15 @@ jobs:
             --cache-control 'public, max-age=31536000, immutable'
 
           # Then the documents that point at them, pruning anything the build
-          # no longer produces.
+          # no longer produces. files/cv/ is not build output: it is where the
+          # downloadResume Lambda caches the CVs it compiles from
+          # data/cv-source.json, and it prunes that prefix itself. Letting
+          # --delete sweep it would throw the cache away on every deploy and
+          # make the first visitor afterwards pay for a render even when the
+          # deploy changed nothing on the CV.
           aws s3 sync build/prod/ "$BUCKET" $DRY --delete \
             --exclude 'assets/*' \
+            --exclude 'files/cv/*' \
             --cache-control 'no-cache'
 
           # Superseded bundles are NOT deleted in the same run. A cached copy

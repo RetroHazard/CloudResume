@@ -94,7 +94,11 @@ variable "cf-signing-key-parameter-name" {
   type = string
 }
 
-variable "resume-object-key" {
+variable "cv-source-object-key" {
+  type = string
+}
+
+variable "cv-object-prefix" {
   type = string
 }
 

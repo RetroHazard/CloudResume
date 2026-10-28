@@ -8,9 +8,21 @@ data "archive_file" "trackvisitors_lambda_function_code" {
   output_file_mode = "0666"
 }
 
+# Two files rather than one: the handler imports the CV renderer it falls back to when no
+# PDF matching the current site data has been cached yet.
 data "archive_file" "downloadResume_lambda_function_code" {
-  type             = "zip"
-  source_file      = "${path.root}/codebase/downloadResume.py"
+  type = "zip"
+
+  source {
+    content  = file("${path.root}/codebase/downloadResume.py")
+    filename = "downloadResume.py"
+  }
+
+  source {
+    content  = file("${path.root}/codebase/renderResume.py")
+    filename = "renderResume.py"
+  }
+
   output_path      = "${path.root}/codepacks/downloadResume.zip"
   output_file_mode = "0666"
 }

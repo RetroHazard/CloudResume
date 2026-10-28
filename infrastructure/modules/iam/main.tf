@@ -223,7 +223,7 @@ resource "aws_iam_role_policy_attachment" "crc-VisitorTracker-logging-policy" {
 }
 
 resource "aws_iam_role" "crc-DownloadIssuer" {
-  description           = "Allows Lambda to Sign CV Download URLs, Record Downloads and Publish to CloudWatch"
+  description           = "Allows Lambda to Compile and Cache the CV, Sign Download URLs, Record Downloads and Publish to CloudWatch"
   force_detach_policies = true
   assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
   max_session_duration  = 3600
