@@ -1041,7 +1041,7 @@ jobs:
       # renders, and that the stack behind it answers. The full suite already
       # gated this content on the PR.
       #
-      # Cypress exposes CYPRESS_FOO as Cypress.env('foo'), which is how the three
+      # Cypress hands CYPRESS_FOO to the specs as cy.env(['FOO']), which is how the three
       # values below reach api-live.cy.js and bucket-locked.cy.js. Every request
       # those specs make is anonymous, so no AWS credentials are needed here — and
       # the specs skip themselves when a value is absent, which is what keeps them

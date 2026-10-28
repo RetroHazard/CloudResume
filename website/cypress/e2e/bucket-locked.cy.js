@@ -10,15 +10,25 @@
 describe('Website bucket origin', () => {
     // Verbatim after the CYPRESS_ prefix is stripped — see the note in api-live.cy.js.
     // As 's3Bucket'/'awsRegion' these never resolved and the test always skipped itself.
-    const bucket = Cypress.env('S3_BUCKET');
-    const region = Cypress.env('AWS_REGION');
+    // Read in before() because cy.env() is a command — see the note in api-live.cy.js.
+    let bucket;
+    let region;
+    let requireLive = false;
+
+    before(() => {
+        cy.env(['S3_BUCKET', 'AWS_REGION', 'REQUIRE_LIVE']).then((env) => {
+            bucket = env.S3_BUCKET;
+            region = env.AWS_REGION;
+            requireLive = !!env.REQUIRE_LIVE;
+        });
+    });
 
     it('refuses an anonymous request to the S3 endpoint', function () {
         if (!bucket || !region) {
             // No bucket name locally, and nothing to point this at — see files-locked.cy.js.
             // But in the smoke job, where CYPRESS_REQUIRE_LIVE is set, that means the job is
             // misconfigured rather than the test inapplicable — see the note in api-live.cy.js.
-            if (Cypress.env('REQUIRE_LIVE')) {
+            if (requireLive) {
                 throw new Error(
                     'CYPRESS_REQUIRE_LIVE is set, so this spec must run, but it has no target ' +
                         `(S3_BUCKET=${bucket || '<empty>'}, AWS_REGION=${region || '<empty>'}).`,
