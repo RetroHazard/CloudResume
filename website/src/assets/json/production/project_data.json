@@ -1,6 +1,61 @@
 {
     "Projects": [
         {
+            "name": "Keystone Prefabs",
+            "company": "Hollow Souls",
+            "category": "Commercial Editor Plugin",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2026",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Designed and shipped a commercial Unreal Engine 5.7/5.8 editor plugin on Fab that brings a Unity-style prefab workflow to Unreal, with nested prefabs and cycle detection, variants that store only their differences from a parent, and in-place Edit/Commit/Discard that updates every loaded instance in a single undoable transaction.",
+                "Built a per-instance override system that tracks property and node-transform changes automatically and surfaces Revert to Prefab and Apply to Prefab controls directly in the Details panel, with Apply able to target the prefab itself, a variant parent, or a nested prefab.",
+                "Engineered World Partition support by keeping each prefab instance as a single actor with component nodes, so one instance is one external actor file; stale instances in unloaded cells are found through actor descriptors without loading them, and re-synced in bulk by a commandlet with dry-run, CI verify, and source-control checkout modes.",
+                "Added a Pack step that collapses identical static meshes into ISM/HISM components with a before-and-after draw-call estimate, taking a 1,000-mesh prefab from 1,000 estimated draw calls to 1, and a Bake step that exports to plain actors, Level Instances, or Packed Level Actors so users are never locked in.",
+                "Exposed a Python API for batch work and runtime spawning from cooked data for Blueprint and C++, backed by 21 Python editor tests, 6 editor UI automation tests, and a packaged Win64 smoke test, and published user documentation with a built-in diagnostics report wired into the GitHub issue templates."
+            ],
+            "links": [
+                {
+                    "product": [
+                        {
+                            "website": "https://www.fab.com/listings/af717d90-a63e-4728-9b72-023969f6abd1",
+                            "icon": "material-symbols:package-2-sharp"
+                        }
+                    ],
+                    "docs": [
+                        {
+                            "website": "https://github.com/Hollow-Soul-Studios/KeystonePrefabs",
+                            "icon": "fa6-solid:book"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Unreal Engine",
+                    "logo": "simple-icons:unrealengine",
+                    "website": "https://www.unrealengine.com/"
+                },
+                {
+                    "name": "C++",
+                    "logo": "ph:file-cpp-fill",
+                    "website": "https://cplusplus.com/"
+                },
+                {
+                    "name": "Python",
+                    "logo": "simple-icons:python",
+                    "website": "https://www.python.org"
+                },
+                {
+                    "name": "GitHub",
+                    "logo": "simple-icons:github",
+                    "website": "https://github.com"
+                }
+            ]
+        },
+        {
             "name": "SwiftX",
             "company": "Hollow Souls",
             "category": "macOS Application",
