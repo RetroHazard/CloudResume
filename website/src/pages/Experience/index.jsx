@@ -4,7 +4,7 @@ import { SectionShell, StatusPill } from '../../components/ui/primitives';
 function Experience() {
     return (
         <>
-            <title>Experience | Cloud Resume</title>
+            <title>Experience | Alexander Bracken</title>
             <SectionShell
                 id='experience'
                 kicker='Platform 02 · Career Line'

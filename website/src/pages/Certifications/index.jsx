@@ -4,7 +4,7 @@ import { SectionShell } from '../../components/ui/primitives';
 function Certifications() {
     return (
         <>
-            <title>Certifications | Cloud Resume</title>
+            <title>Certifications | Alexander Bracken</title>
             <SectionShell id='certifications' kicker='Fare Gate · Valid Passes' title='Certifications' line={3}>
                 <CertificationList />
             </SectionShell>

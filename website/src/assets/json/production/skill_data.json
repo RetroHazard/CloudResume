@@ -52,7 +52,7 @@
         {
             "name": "1Password",
             "category": "Security",
-            "level": "90%",
+            "level": "80%",
             "logo": "simple-icons:1password",
             "website": "https://1password.com/"
         },
@@ -141,10 +141,10 @@
             "website": "https://ui.com/"
         },
         {
-            "name": "Iru",
+            "name": "Iru (formerly Kandji)",
             "category": "Security",
             "level": "85%",
-            "logo": null,
+            "logo": "selfhst:iru",
             "website": "https://www.iru.com/"
         },
         {
@@ -295,7 +295,7 @@
             "website": "https://www.unrealengine.com/"
         },
         {
-            "name": "Github",
+            "name": "GitHub",
             "category": "Platform",
             "level": "65%",
             "logo": "skill-icons:github-dark",
@@ -330,7 +330,7 @@
             "website": "https://www.python.org"
         },
         {
-            "name": "BASh",
+            "name": "Bash",
             "category": "Development",
             "level": "70%",
             "logo": "skill-icons:bash-dark",
@@ -341,7 +341,7 @@
             "category": "Development",
             "level": "35%",
             "logo": "skill-icons:javascript",
-            "website": "https://developer.oracle.com/languages/javascript.html"
+            "website": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
         },
         {
             "name": "TypeScript",
@@ -372,53 +372,11 @@
             "website": "https://react.dev/"
         },
         {
-            "name": "tailwindCSS",
+            "name": "Tailwind CSS",
             "category": "Development",
             "level": "50%",
             "logo": "skill-icons:tailwindcss-dark",
             "website": "https://tailwindcss.com"
-        },
-        {
-            "name": "Xcode",
-            "category": "Development",
-            "level": "35%",
-            "logo": "logos:xcode",
-            "website": "https://developer.apple.com/xcode/"
-        },
-        {
-            "name": "IntelliJ IDEA",
-            "category": "Development",
-            "level": "45%",
-            "logo": "logos:intellij-idea",
-            "website": "https://www.jetbrains.com/idea/"
-        },
-        {
-            "name": "PyCharm",
-            "category": "Development",
-            "level": "60%",
-            "logo": "skill-icons:pycharm-dark",
-            "website": "https://www.jetbrains.com/pycharm/"
-        },
-        {
-            "name": "Rider",
-            "category": "Development",
-            "level": "45%",
-            "logo": "skill-icons:rider-dark",
-            "website": "https://www.jetbrains.com/rider/"
-        },
-        {
-            "name": "CLion",
-            "category": "Development",
-            "level": "35%",
-            "logo": "skill-icons:clion-dark",
-            "website": "https://www.jetbrains.com/clion/"
-        },
-        {
-            "name": "JetBrains Air",
-            "category": "Development",
-            "level": "25%",
-            "logo": "simple-icons:jetbrains",
-            "website": "https://www.jetbrains.com/air/"
         },
         {
             "name": "SideFX Houdini",

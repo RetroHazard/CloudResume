@@ -1,61 +1,6 @@
 {
     "Projects": [
         {
-            "name": "Keystone Prefabs",
-            "company": "Hollow Souls",
-            "category": "Commercial Editor Plugin",
-            "role": "Solo Dev",
-            "size": "1",
-            "start": "2026",
-            "end": "NOW",
-            "logo": "./images/logos/companies/hollowsouls.png",
-            "details": [
-                "Designed and shipped a commercial Unreal Engine 5.7/5.8 editor plugin on Fab that brings a Unity-style prefab workflow to Unreal, with nested prefabs and cycle detection, variants that store only their differences from a parent, and in-place Edit/Commit/Discard that updates every loaded instance in a single undoable transaction.",
-                "Built a per-instance override system that tracks property and node-transform changes automatically and surfaces Revert to Prefab and Apply to Prefab controls directly in the Details panel, with Apply able to target the prefab itself, a variant parent, or a nested prefab.",
-                "Engineered World Partition support by keeping each prefab instance as a single actor with component nodes, so one instance is one external actor file; stale instances in unloaded cells are found through actor descriptors without loading them, and re-synced in bulk by a commandlet with dry-run, CI verify, and source-control checkout modes.",
-                "Added a Pack step that collapses identical static meshes into ISM/HISM components with a before-and-after draw-call estimate, taking a 1,000-mesh prefab from 1,000 estimated draw calls to 1, and a Bake step that exports to plain actors, Level Instances, or Packed Level Actors so users are never locked in.",
-                "Exposed a Python API for batch work and runtime spawning from cooked data for Blueprint and C++, backed by 21 Python editor tests, 6 editor UI automation tests, and a packaged Win64 smoke test, and published user documentation with a built-in diagnostics report wired into the GitHub issue templates."
-            ],
-            "links": [
-                {
-                    "product": [
-                        {
-                            "website": "https://www.fab.com/listings/af717d90-a63e-4728-9b72-023969f6abd1",
-                            "icon": "material-symbols:package-2-sharp"
-                        }
-                    ],
-                    "docs": [
-                        {
-                            "website": "https://github.com/Hollow-Soul-Studios/KeystonePrefabs",
-                            "icon": "fa6-solid:book"
-                        }
-                    ]
-                }
-            ],
-            "technologies": [
-                {
-                    "name": "Unreal Engine",
-                    "logo": "simple-icons:unrealengine",
-                    "website": "https://www.unrealengine.com/"
-                },
-                {
-                    "name": "C++",
-                    "logo": "ph:file-cpp-fill",
-                    "website": "https://cplusplus.com/"
-                },
-                {
-                    "name": "Python",
-                    "logo": "simple-icons:python",
-                    "website": "https://www.python.org"
-                },
-                {
-                    "name": "GitHub",
-                    "logo": "simple-icons:github",
-                    "website": "https://github.com"
-                }
-            ]
-        },
-        {
             "name": "SwiftX",
             "company": "Hollow Souls",
             "category": "macOS Application",
@@ -120,11 +65,12 @@
             "end": "NOW",
             "logo": "./images/logos/companies/hollowsouls.png",
             "details": [
-                "Originally built the dashboard on Create React App and attracted over 2,000 unique users in its first 30 days, then migrated it to Next.js after CRA's deprecation and carried it through a ground-up 'Civic Glass' redesign onto Next.js 15, React 19, and strict TypeScript, replacing Chart.js with a vendored visx-based chart library.",
+                "Originally built the dashboard on Create React App and attracted over 2,000 unique users in its first 30 days, then, after CRA's deprecation, carried it through a ground-up 'Civic Glass' redesign onto Next.js 15, React 19, and strict TypeScript, replacing Chart.js with a vendored visx-based chart library.",
                 "Expanded the dashboard from 4 to 7 interactive chart types, including two charts hand-built without a charting library — a zoomable category-mix treemap and a ranked processing-efficiency lollipop chart — alongside a Sankey outcomes flow with an approval-rate gauge and an interactive prefectural choropleth map.",
+                "Developed a processing time estimator using historical trends and 3-month rolling averages to forecast queue positions and completion dates, helping applicants plan around uncertain timelines.",
                 "Automated data freshness with a daily GitHub Actions watcher that polls Japan's e-Stat API, diffs each release's survey date against the last run, and triggers a build only when new or corrected statistics are published, so most daily runs publish nothing.",
                 "Built a build-time data transform that deaggregates regional bureau statistics so branch offices like Narita and Kansai airports stop being double-counted in their parent bureau's totals, while shrinking the client-side data payload by roughly 10x.",
-                "Shipped a localization foundation where every string, number format, and pluralization rule is sourced from one catalogue file per language, with a build-time check that fails if a language marked complete is missing a string added since."
+                "Shipped a localization foundation where every string, number format, and pluralization rule is sourced from one catalog file per language, with a build-time check that fails if a language marked complete is missing a string added since."
             ],
             "links": [
                 {
@@ -164,7 +110,12 @@
                     "website": "https://www.typescriptlang.org/"
                 },
                 {
-                    "name": "tailwindCSS",
+                    "name": "visx",
+                    "logo": null,
+                    "website": "https://airbnb.io/visx/"
+                },
+                {
+                    "name": "Tailwind CSS",
                     "logo": "simple-icons:tailwindcss",
                     "website": "https://tailwindcss.com"
                 },
@@ -245,7 +196,7 @@
                     "website": "https://nodejs.org/en"
                 },
                 {
-                    "name": "tailwindCSS",
+                    "name": "Tailwind CSS",
                     "logo": "simple-icons:tailwindcss",
                     "website": "https://tailwindcss.com"
                 },
@@ -257,10 +208,65 @@
             ]
         },
         {
+            "name": "Keystone Prefabs",
+            "company": "Hollow Souls",
+            "category": "Commercial Editor Plugin",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2026",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Designed and shipped a commercial Unreal Engine 5.7/5.8 editor plugin on Fab that brings a Unity-style prefab workflow to Unreal, with nested prefabs and cycle detection, variants that store only their differences from a parent, and in-place Edit/Commit/Discard that updates every loaded instance in a single undoable transaction.",
+                "Built a per-instance override system that tracks property and node-transform changes automatically and surfaces Revert to Prefab and Apply to Prefab controls directly in the Details panel, with Apply able to target the prefab itself, a variant parent, or a nested prefab.",
+                "Engineered World Partition support by keeping each prefab instance as a single actor with component nodes, so one instance is one external actor file; stale instances in unloaded cells are found through actor descriptors without loading them, and re-synced in bulk by a commandlet with dry-run, CI verify, and source-control checkout modes.",
+                "Added a Pack step that collapses identical static meshes into ISM/HISM components with a before-and-after draw-call estimate, taking a 1,000-mesh prefab from 1,000 estimated draw calls to 1, and a Bake step that exports to plain actors, Level Instances, or Packed Level Actors so users are never locked in.",
+                "Exposed a Python API for batch work and runtime spawning from cooked data for Blueprint and C++, backed by 21 Python editor tests, 6 editor UI automation tests, and a packaged Win64 smoke test, and published user documentation with a built-in diagnostics report wired into the GitHub issue templates."
+            ],
+            "links": [
+                {
+                    "product": [
+                        {
+                            "website": "https://www.fab.com/listings/af717d90-a63e-4728-9b72-023969f6abd1",
+                            "icon": "material-symbols:package-2-sharp"
+                        }
+                    ],
+                    "docs": [
+                        {
+                            "website": "https://github.com/Hollow-Soul-Studios/KeystonePrefabs",
+                            "icon": "fa6-solid:book"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Unreal Engine",
+                    "logo": "simple-icons:unrealengine",
+                    "website": "https://www.unrealengine.com/"
+                },
+                {
+                    "name": "C++",
+                    "logo": "ph:file-cpp-fill",
+                    "website": "https://cplusplus.com/"
+                },
+                {
+                    "name": "Python",
+                    "logo": "simple-icons:python",
+                    "website": "https://www.python.org"
+                },
+                {
+                    "name": "GitHub",
+                    "logo": "simple-icons:github",
+                    "website": "https://github.com"
+                }
+            ]
+        },
+        {
             "name": "Interactive Switches",
             "company": "Hollow Souls",
             "category": "Commercial Game Component",
-            "role": "Project Lead",
+            "role": "Solo Dev",
             "size": "1",
             "start": "2022",
             "end": "NOW",
@@ -310,58 +316,7 @@
                     "website": "https://www.perforce.com/"
                 },
                 {
-                    "name": "Jetbrains Rider",
-                    "logo": "simple-icons:rider",
-                    "website": "https://www.jetbrains.com/rider/"
-                },
-                {
-                    "name": "Creative Cloud",
-                    "logo": "simple-icons:adobecreativecloud",
-                    "website": "https://www.adobe.com/creativecloud.html"
-                }
-            ]
-        },
-        {
-            "name": "Untitled Project",
-            "company": "Hollow Souls",
-            "category": "Commercial Game Component",
-            "role": "Solo Dev",
-            "size": "1",
-            "start": "2022",
-            "end": "2023",
-            "logo": "./images/logos/companies/hollowsouls.png",
-            "details": [
-                "Independently creating, designing, and coding a comprehensive game prototype, demonstrating expertise in end-to-end game development.",
-                "Defining core gameplay mechanics and determining their interaction with players, ensuring an engaging and intuitive user experience.",
-                "Building a detailed library of reference imagery to guide the artistic style and environmental design, ensuring visual coherence and aesthetic quality.",
-                "Producing a range of high-quality digital assets for use in current and future projects, showcasing versatility and creativity in asset development.",
-                "Developing and implementing a marketing strategy tailored for social media and funding platforms, effectively promoting the project and engaging target audiences.",
-                "Generating various methodologies for application construction and testing, and providing comprehensive documentation, ensuring a structured and efficient development process."
-            ],
-            "links": [],
-            "technologies": [
-                {
-                    "name": "Unreal Engine",
-                    "logo": "simple-icons:unrealengine",
-                    "website": "https://www.unrealengine.com/"
-                },
-                {
-                    "name": "Blender",
-                    "logo": "simple-icons:blender",
-                    "website": "https://www.blender.org/"
-                },
-                {
-                    "name": "C++",
-                    "logo": "ph:file-cpp-fill",
-                    "website": "https://cplusplus.com/"
-                },
-                {
-                    "name": "Perforce",
-                    "logo": "simple-icons:perforce",
-                    "website": "https://www.perforce.com/"
-                },
-                {
-                    "name": "Jetbrains Rider",
+                    "name": "JetBrains Rider",
                     "logo": "simple-icons:rider",
                     "website": "https://www.jetbrains.com/rider/"
                 },

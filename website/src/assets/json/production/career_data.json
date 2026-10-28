@@ -3,20 +3,26 @@
         {
             "company": "BitMEX",
             "job_title": "Senior IAM Solutions Engineer",
-            "location": "Remote",
+            "location": "Remote, Tokyo, Japan",
             "type": "Contract",
             "start": "2025-09",
             "end": "---",
             "logo": "./images/logos/companies/bitmex.png",
             "website": "https://bitmex.com/",
             "details": [
-                "Designed and implemented an internal fleet security management platform (Go, React, Kubernetes/EKS), achieving 25x growth in device coverage to over 250 endpoints within three months of general availability and establishing scalable device-management infrastructure supporting enterprise-wide security governance.",
-                "Authored 90+ merged pull requests and conducted 100+ code reviews across identity, endpoint-management, and PKI systems over 10 months, maintaining zero-downtime delivery on Terraform-managed Okta infrastructure serving 250+ engineers.",
-                "Led a company-wide Mobile Device Management (MDM) platform re-architecture, migrating the entire device fleet to a new management model with zero business disruption, followed by an organization-wide platform rebrand and communication rollout.",
-                "Established a fleet-wide governance framework for AI developer tooling — covering configuration management, credential lifecycle, and security guardrails — resolving critical connectivity and supply-chain security incidents same-day to achieve 100% developer uptime and secure organization-wide adoption.",
-                "Managed quarterly identity access-certification campaigns across cloud and Kubernetes environments, auditing and reconciling access for dozens of engineering teams to strengthen least-privilege compliance and organizational security posture."
+                "Owned Terraform-managed Okta infrastructure for 250+ engineers, driving architecture decisions across SSO, SAML, OIDC, and SCIM provisioning through ~85 merged pull requests and ~115 code reviews over 12 months, and produced the gap analysis (access certification, breakglass, IaC maturity, admin tooling) behind the security team's recommendation to retain Okta as the workforce identity provider.",
+                "Ran quarterly access-certification campaigns across cloud and Kubernetes (RBAC) environments, and replaced standing production admin access with approval-gated Okta Access Request breakglass catalogs, expanded from a limited proof of concept to 50+ items with automated or human-in-the-loop approval gates by criticality.",
+                "Built an internal fleet management platform and frontend (Go API, React SPA, OIDC/RBAC, Kubernetes/EKS) for North Pole Security's Santa binary-authorization agent with Airbnb's Rudolph sync backend, growing device coverage 25x to 250+ endpoints within 3 months of general availability.",
+                "Led a company-wide Mobile Device Management (MDM) re-architecture, migrating the entire device fleet to a new identity-integrated management model in 5 phases over ~6 weeks with zero business disruption, followed by a company-wide platform rebrand and communication rollout.",
+                "Built fleet-wide governance for AI developer tooling (Claude Code), covering configuration management, credential lifecycle, and security guardrails. Resolved supply-chain and connectivity incidents same-day, and closed an AI-agent sensitive-data access risk within 3 days through identity-group-scoped connector controls, without disrupting a business-critical internal tool.",
+                "Engineered and presented an identity-provider-based (OAuth) API key issuance proof of concept for the internal LLM gateway (AWS Bedrock via LiteLLM), covering interactive and headless clients, as the foundation for adopting Okta's AI gateway and agent-identity features."
             ],
             "technologies": [
+                {
+                    "name": "Okta",
+                    "logo": "simple-icons:okta",
+                    "website": "https://www.okta.com/"
+                },
                 {
                     "name": "AWS",
                     "logo": "simple-icons:amazonaws",
@@ -26,11 +32,6 @@
                     "name": "Terraform",
                     "logo": "simple-icons:terraform",
                     "website": "https://www.terraform.io/"
-                },
-                {
-                    "name": "Okta",
-                    "logo": "simple-icons:okta",
-                    "website": "https://www.okta.com/"
                 },
                 {
                     "name": "Kubernetes",
@@ -53,6 +54,16 @@
                     "website": "https://www.python.org"
                 },
                 {
+                    "name": "Iru",
+                    "logo": "selfhst:iru",
+                    "website": "https://www.iru.com/"
+                },
+                {
+                    "name": "Santa",
+                    "logo": "selfhst:north-pole-security",
+                    "website": "https://northpole.security/santa"
+                },
+                {
                     "name": "Google Workspace",
                     "logo": "simple-icons:google",
                     "website": "https://workspace.google.com/"
@@ -73,7 +84,8 @@
                     "end": "2025-09",
                     "details": [
                         "Served as project lead and architect for a global enterprise printing solution across all regions outside the Americas, improving reliability and scalability for over 10,000 users, reducing print-related issues by 80%, lowering costs by 45%, and increasing user satisfaction by 25%.",
-                        "Led the IT Service Desk team in Japan, mentoring engineers and driving performance enablement while partnering with stakeholders to align support services with evolving business needs.",
+                        "People manager for the 3-person IT Service Desk team in Japan, running quarterly performance cycles (reviews, scoring, and development feedback), mentoring engineers, and partnering with stakeholders to align support services with evolving business needs.",
+                        "Led a cross-team development program pairing each service desk engineer with a Tier 3 team and mentor based on their interests; engineers joined projects and regular syncs, carrying context between IT operations and core infrastructure teams to strengthen cooperation across the engineering organization.",
                         "Led process improvement initiatives and streamlined workflows, reducing average ticket resolution time by 30% and increasing user satisfaction scores by 20%."
                     ],
                     "technologies": [
@@ -98,7 +110,7 @@
                             "website": "https://www.atlassian.com/software/confluence"
                         },
                         {
-                            "name": "CloudFlare",
+                            "name": "Cloudflare",
                             "logo": "simple-icons:cloudflare",
                             "website": "https://www.cloudflare.com"
                         },
@@ -163,9 +175,9 @@
             "logo": "./images/logos/companies/uofc.png",
             "website": "https://www.ucalgary.ca/",
             "details": [
-                "Managed and supported Office 365 and Azure Active Directory environments, including user account provisioning, group management, and troubleshooting authentication issues to ensure seamless operations for the Faculty of Arts department.",
-                "Administered Active Directory for user access control and resource management while providing enterprise-level support for both Windows and Mac systems in a mixed-platform environment.",
-                "Planned and executed system updates, security patches, and hardware upgrades across departmental servers and workstations to maintain optimal performance and compliance with institutional standards.",
+                "Managed and supported Office 365 (now Microsoft 365) and Azure Active Directory (now Entra ID) environments, including user account provisioning, group management, and troubleshooting authentication issues to ensure seamless operations for the Faculty of Arts.",
+                "Administered Active Directory for user access control and resource management, reducing access-related incidents by 50% and improving user experience across Windows and Mac systems in a mixed-platform environment.",
+                "Planned and executed system updates, security patches, and hardware upgrades across departmental servers and workstations, achieving 99.9% uptime and reducing security vulnerabilities by 70%.",
                 "Delivered technical support to faculty and staff, resolving hardware, software, and connectivity issues efficiently while conducting training sessions to enhance user proficiency with enterprise tools."
             ],
             "technologies": [
@@ -185,7 +197,7 @@
                     "website": "https://www.office.com/"
                 },
                 {
-                    "name": "Sharepoint",
+                    "name": "SharePoint",
                     "logo": "simple-icons:microsoftsharepoint",
                     "website": "https://www.microsoft.com/en-us/microsoft-365/sharepoint/collaboration"
                 }
@@ -202,7 +214,7 @@
             "website": "https://www.pythian.com/",
             "details": [
                 "Monitored large-scale distributed systems to ensure high availability and reliability, responding promptly to incidents to minimize downtime and maintain service-level objectives.",
-                "Developed and deployed automation scripts  to streamline infrastructure management, reduce manual interventions, and enhance system scalability.",
+                "Developed and deployed automation scripts to streamline infrastructure management, reduce manual interventions, and enhance system scalability.",
                 "Improved system performance through tuning and capacity planning while identifying and addressing potential risks to prevent issues.",
                 "Partnered with development teams to improve release processes, documented operational procedures, and conducted post-incident reviews to drive continuous improvement across systems."
             ],
@@ -213,7 +225,7 @@
                     "website": "https://www.linux.org/"
                 },
                 {
-                    "name": "BASh",
+                    "name": "Bash",
                     "logo": "simple-icons:gnubash",
                     "website": "https://www.gnu.org/software/bash/"
                 },
@@ -251,7 +263,7 @@
                     "website": "https://www.linux.org/"
                 },
                 {
-                    "name": "BASh",
+                    "name": "Bash",
                     "logo": "simple-icons:gnubash",
                     "website": "https://www.gnu.org/software/bash/"
                 },
@@ -275,7 +287,7 @@
                 "Administered and maintained VMware vSphere environments to support virtualized workloads, ensuring high availability and performance for healthcare applications and services.",
                 "Managed NetApp storage systems, including provisioning, monitoring, and troubleshooting, to ensure secure and scalable data storage for critical healthcare operations.",
                 "Oversaw data center operations, including hardware maintenance, environmental controls, and Cisco IOS network configuration, to maintain a reliable and secure IT infrastructure.",
-                "Provided technical support for hosted solutions such as Microsoft Exchange, Blackberry Enterprise, Citrix Cloud, and Sun Terminals, while ensuring compliance with healthcare industry standards and regulations."
+                "Provided technical support for hosted solutions such as Microsoft Exchange, BlackBerry Enterprise Server, Citrix, and Sun Terminals, while ensuring compliance with healthcare industry standards and regulations."
             ],
             "technologies": [
                 {

@@ -21,11 +21,11 @@ function PersonalSummary() {
         return (
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    IT Solutions Leader with <strong>15+ years of experience</strong> building and scaling secure
-                    enterprise infrastructure across cloud, identity, and endpoint security domains. Expert in{' '}
-                    <strong>AWS, Kubernetes, Terraform</strong>, and{' '}
-                    <strong>Identity &amp; Access Management (IAM/SSO)</strong>, with hands-on experience in PKI,
-                    MDM/endpoint security, vulnerability management, and <em>AI governance</em>.
+                    IAM and cloud-security engineer with <strong>15 years in technology</strong>, from frontline support
+                    through systems, networks, and cloud infrastructure into a specialization in identity, access, and
+                    security. Hands-on with <strong>Okta, Terraform, AWS, and Kubernetes</strong>, and with{' '}
+                    <strong>identity federation (SAML, OAuth 2.0, OIDC, SCIM)</strong>, PKI, MDM/endpoint security,
+                    vulnerability management, and <em>AI governance</em>.
                 </p>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
                     Known for automating manual security operations (<strong>Python, Go, Bash</strong>) and building
@@ -34,9 +34,9 @@ function PersonalSummary() {
                     business impact.
                 </p>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    A committed continual learner outside the day-to-day — currently going deep on{' '}
-                    <strong>Game Development</strong>, coding in <strong>C++</strong> and exploring 3D modeling and
-                    simulation.
+                    A committed continual learner outside the day-to-day — currently porting a macOS screenshot and
+                    automation tool to native <strong>Swift</strong>, and maintaining a{' '}
+                    <strong>Japan immigration statistics dashboard</strong> used by 2,000+ people in its first 30 days.
                 </p>
             </>
         );
