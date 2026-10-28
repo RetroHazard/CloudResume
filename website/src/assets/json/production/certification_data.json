@@ -30,8 +30,8 @@
             "certification": "AWS Certified SysOps Administrator - Associate",
             "issuer": "Amazon Web Services",
             "credential_id": "N/A",
-            "issued_date": "2024-8-16",
-            "expiry_date": "2027-8-16",
+            "issued_date": "2024-08-16",
+            "expiry_date": "2027-08-16",
             "logo": "./images/logos/certifications/aws-soa.png",
             "links": [
                 {
@@ -105,7 +105,7 @@
             ]
         },
         {
-            "certification": "ITIL v3 Foundations",
+            "certification": "ITIL v3 Foundation",
             "issuer": "AXELOS",
             "credential_id": "953058",
             "issued_date": "2012-10-25",

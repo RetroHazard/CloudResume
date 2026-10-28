@@ -15,7 +15,7 @@ const sampleData = {
             details: ['Sample detail 1', 'Sample detail 2', 'Sample detail 3', 'Sample detail 4'],
             links: [
                 {
-                    program: [
+                    programme: [
                         {
                             website: 'https://sampleprogram.com',
                             icon: 'fa6-solid:circle-info',
@@ -39,6 +39,16 @@ vi.mock('../utils/useJsonData', () => ({
 }));
 
 describe('EducationList Component', () => {
+    it('shows the minor only when one is listed', () => {
+        const { queryByText, rerender } = render(<EducationList />);
+        expect(queryByText(/^Minor ·/)).not.toBeInTheDocument();
+
+        sampleData.Education[0].minor = 'Sample Minor';
+        rerender(<EducationList />);
+        expect(queryByText('Minor · Sample Minor')).toBeInTheDocument();
+        delete sampleData.Education[0].minor;
+    });
+
     it('renders correctly', () => {
         const { getByText, getAllByRole, container } = render(<EducationList />);
 

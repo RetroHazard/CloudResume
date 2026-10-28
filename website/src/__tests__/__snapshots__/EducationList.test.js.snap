@@ -133,7 +133,7 @@ exports[`EducationList Component > matches snapshot 1`] = `
                   class="flex flex-wrap justify-end gap-2"
                 >
                   <a
-                    aria-label="Sample University program (opens in new tab)"
+                    aria-label="Sample University programme (opens in new tab)"
                     class="social-link"
                     href="https://sampleprogram.com"
                     rel="noopener noreferrer"

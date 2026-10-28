@@ -21,11 +21,11 @@ function PersonalSummary() {
         return (
             <>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    IT Solutions Leader with <strong>15+ years of experience</strong> building and scaling secure
-                    enterprise infrastructure across cloud, identity, and endpoint security domains. Expert in{' '}
-                    <strong>AWS, Kubernetes, Terraform</strong>, and{' '}
-                    <strong>Identity &amp; Access Management (IAM/SSO)</strong>, with hands-on experience in PKI,
-                    MDM/endpoint security, vulnerability management, and <em>AI governance</em>.
+                    IAM and cloud-security engineer with <strong>15 years in technology</strong>, from frontline support
+                    through systems, networks, and cloud infrastructure into a specialisation in identity, access, and
+                    security. Hands-on with <strong>Okta, Terraform, AWS, and Kubernetes</strong>, and with{' '}
+                    <strong>identity federation (SAML, OAuth 2.0, OIDC, SCIM)</strong>, PKI, MDM/endpoint security,
+                    vulnerability management, and <em>AI governance</em>.
                 </p>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
                     Known for automating manual security operations (<strong>Python, Go, Bash</strong>) and building
@@ -34,9 +34,11 @@ function PersonalSummary() {
                     business impact.
                 </p>
                 <p className='mb-0 leading-relaxed max-sm:text-xs sm:text-sm'>
-                    A committed continual learner outside the day-to-day — currently going deep on{' '}
-                    <strong>Game Development</strong>, coding in <strong>C++</strong> and exploring 3D modeling and
-                    simulation.
+                    Outside the day-to-day, runs side projects as production systems rather than demos: this site, a
+                    serverless AWS platform codified end to end in <strong>Terraform</strong>; a{' '}
+                    <strong>Japan immigration statistics dashboard</strong> that has served applicants since 2025 and
+                    refreshes itself from government data; a native <strong>Swift</strong> rebuild of a macOS screenshot
+                    and sharing tool; and commercial <strong>Unreal Engine</strong> plugins published on Fab.
                 </p>
             </>
         );

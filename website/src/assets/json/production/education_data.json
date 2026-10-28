@@ -2,7 +2,8 @@
     "Education": [
         {
             "school": "University of Calgary",
-            "degree": "BA. Communication and Media Studies",
+            "degree": "BA, Communication and Media Studies",
+            "minor": "East Asia Studies",
             "location": "Calgary, Canada",
             "category": "Liberal Arts",
             "start": "2016",
@@ -11,7 +12,7 @@
             "details": [
                 "Completed a Bachelor of Arts in Communication and Media Studies while working full-time on campus as Senior Systems Specialist for the Faculty of Arts, balancing coursework against production support for faculty and staff.",
                 "Studied communication theory, rhetoric, and audience analysis — the foundation for the technical writing, architecture proposals, and incident communication that define current engineering work.",
-                "Trained in qualitative and quantitative research methods, including survey design, discourse analysis, and source evaluation, now applied to security awareness programmes and post-incident reviews.",
+                "Trained in qualitative and quantitative research methods, including survey design, discourse analysis, and source evaluation, now applied to post-incident reviews and technical documentation.",
                 "Coursework in digital media, platform governance, and information ethics that directly informs work on identity, privacy, and acceptable-use policy.",
                 "Included a year abroad at Waseda University in Tokyo through the faculty's international exchange programme, extending the degree to five years."
             ],
@@ -23,7 +24,7 @@
                             "icon": "fa6-solid:globe"
                         }
                     ],
-                    "program": [
+                    "programme": [
                         {
                             "website": "https://www.ucalgary.ca/future-students/undergraduate/explore-programs/communication-media-studies",
                             "icon": "fa6-solid:circle-info"
@@ -34,7 +35,7 @@
         },
         {
             "school": "Waseda University",
-            "degree": "EX. International Studies",
+            "degree": "EX, International Studies",
             "location": "Tokyo, Japan",
             "category": "Liberal Arts",
             "start": "2018",
@@ -44,7 +45,7 @@
                 "Completed a one-year exchange at the School of International Liberal Studies (SILS), taking a full English-language course load alongside intensive Japanese language study.",
                 "Studied global affairs, comparative media, and East Asian politics in small seminar classes with students from across Asia, Europe, and the Americas.",
                 "Built the language foundation and cultural fluency that made relocating to Tokyo permanently in 2021 possible, and that now underpins day-to-day work with Japanese stakeholders and vendors.",
-                "Navigated an unfamiliar academic system, city, and language independently — the same adaptability later applied to leading a distributed IT service desk team in Japan.",
+                "Navigated an unfamiliar academic system, city, and language independently — the same adaptability later applied to leading the IT service desk team in Japan.",
                 "Sharpened cross-cultural communication under real constraints, learning to work through ambiguity where shared context could not be assumed."
             ],
             "links": [
@@ -55,7 +56,7 @@
                             "icon": "fa6-solid:globe"
                         }
                     ],
-                    "program": [
+                    "programme": [
                         {
                             "website": "https://www.waseda.jp/fire/sils/en/students/study-abroad/",
                             "icon": "fa6-solid:circle-info"
@@ -66,7 +67,7 @@
         },
         {
             "school": "College for Arts and Technology",
-            "degree": "AS. Network Administration and Security",
+            "degree": "AS, Network Administration and Security",
             "location": "Kelowna, Canada",
             "category": "Computer Science",
             "start": "2009",
@@ -87,7 +88,7 @@
                             "icon": "fa6-solid:globe"
                         }
                     ],
-                    "program": [
+                    "programme": [
                         {
                             "website": "https://collegeforartsandtech.com/program/network-administration-security/",
                             "icon": "fa6-solid:circle-info"
