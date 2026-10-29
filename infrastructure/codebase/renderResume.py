@@ -325,6 +325,7 @@ def build_model(source, site_url, today=None, contact_email=None):
         {
             'school': entry.get('school', ''),
             'degree': entry.get('degree', ''),
+            'minor': entry.get('minor', ''),
             'location': entry.get('location', ''),
             'dates': format_range(entry.get('start'), entry.get('end')),
         }
@@ -697,8 +698,11 @@ def _education(doc, model):
             doc.gap(3)
         doc.ensure(BODY_LEADING * 2)
         doc.split_line([('B', entry['degree']), ('R', ' — ' + entry['school'])], entry['dates'])
-        if entry['location']:
-            doc.paragraph([('I', entry['location'])], size=SMALL_SIZE, leading=SMALL_LEADING, color=MUTED)
+        meta = ' · '.join(
+            p for p in (f'Minor in {entry["minor"]}' if entry.get('minor') else '', entry['location']) if p
+        )
+        if meta:
+            doc.paragraph([('I', meta)], size=SMALL_SIZE, leading=SMALL_LEADING, color=MUTED)
 
 
 def _languages(doc, model):

@@ -145,6 +145,16 @@ class ModelTests(unittest.TestCase):
         lapsed = [c for c in self.model['certifications'] if not c['active']]
         self.assertTrue(any('Systems Security Certified Practitioner' == c['name'] for c in lapsed))
 
+    def test_an_education_minor_is_printed_like_the_site_shows_it(self):
+        source = {
+            'education': {
+                'Education': [{'school': 'U', 'degree': 'BA', 'minor': 'East Asia Studies', 'location': 'Calgary'}]
+            }
+        }
+        model = renderResume.build_model(source, SITE, today=TODAY)
+        self.assertEqual(model['education'][0]['minor'], 'East Asia Studies')
+        self.assertIn('Minor in East Asia Studies · Calgary', shown_text(renderResume.render_pdf(model)))
+
     def test_file_name_is_surname_first(self):
         self.assertEqual(renderResume.file_name({'name': 'Alexander Bracken'}), 'BRACKEN_ALEXANDER_Resume.pdf')
         self.assertEqual(renderResume.file_name({'name': 'Zoë  de la Cruz'}), 'CRUZ_ZOE_DE_LA_Resume.pdf')
