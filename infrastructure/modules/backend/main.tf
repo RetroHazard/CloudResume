@@ -197,6 +197,33 @@ resource "aws_dynamodb_table" "crc-download-record" {
   write_capacity = "1"
 }
 
+# The CV's forwarding addresses. Each alias row is keyed on its local part
+# ("alexander.k7q2mx") and carries a status: active (printed on the CV now), retired
+# (rotated out, still forwarded, so CVs already sent keep working) or revoked (dropped).
+# The row at id = "#current" points at the live alias; the CV contact workflow deletes it to
+# rotate or revoke, and the next CV download mints a replacement.
+resource "aws_dynamodb_table" "crc-mail-alias" {
+  attribute {
+    name = "id"
+    type = "S"
+  }
+
+  billing_mode                = "PROVISIONED"
+  deletion_protection_enabled = "true"
+  hash_key                    = "id"
+  name                        = "crc-mail-alias"
+
+  point_in_time_recovery {
+    enabled = "false"
+  }
+
+  read_capacity  = "1"
+  stream_enabled = "false"
+  table_class    = "STANDARD"
+
+  write_capacity = "1"
+}
+
 #  End DynamoDB Block  #
 ########################
 
@@ -238,14 +265,119 @@ resource "aws_ses_domain_identity" "crc-mail-domain" {
   domain = var.domain-name
 }
 
-resource "aws_ses_email_identity" "crc-mail-destination" {
-  email = "a.bracken87+cloudresume_ses@gmail.com"
+# The real inbox's SES identity is verified by hand in the SES console, not managed here.
+# An email identity's resource ID *is* the address, and Terraform prints resource IDs in
+# every plan's refresh output ("Refreshing state... [id=...]") regardless of `sensitive`,
+# which on a public repository would publish it on every CI run. Everything that needs the
+# address (sendMessage, forwardMail, their IAM policies) reads var.contact-destination-email
+# instead. To change the destination: verify the new address in SES (Verified identities ->
+# Create identity -> Email address), then update the CONTACT_DESTINATION_EMAIL secret.
+#
+# This forgets the identity Terraform used to manage without deleting it from SES.
+removed {
+  from = aws_ses_email_identity.crc-mail-destination
+
+  lifecycle {
+    destroy = false
+  }
 }
 
 resource "aws_ses_domain_mail_from" "crc-mail-from-domain" {
   domain           = aws_ses_domain_identity.crc-mail-domain.domain
   mail_from_domain = "contact.${aws_ses_domain_identity.crc-mail-domain.domain}"
 }
+
+##############################
+# Inbound mail for the CV alias
+
+# Raw inbound messages, held only long enough to be forwarded. Deliberately not the website
+# bucket: everything in that one is reachable through CloudFront.
+resource "random_string" "mail_bucket_suffix" {
+  length  = 6
+  special = false
+  upper   = false
+}
+
+resource "aws_s3_bucket" "crc-agb-s3-mail" {
+  bucket        = "crc-agb-s3-mail-${random_string.mail_bucket_suffix.result}"
+  force_destroy = "false"
+
+  object_lock_enabled = "false"
+}
+
+resource "aws_s3_bucket_public_access_block" "crc-agb-s3-mail" {
+  bucket = aws_s3_bucket.crc-agb-s3-mail.id
+
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "crc-agb-s3-mail" {
+  bucket = aws_s3_bucket.crc-agb-s3-mail.id
+
+  rule {
+    id     = "Expire Received Mail"
+    status = "Enabled"
+
+    filter {}
+
+    expiration {
+      days = var.mail-retention-days
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "crc-agb-s3-mail" {
+  bucket = aws_s3_bucket.crc-agb-s3-mail.id
+  policy = data.aws_iam_policy_document.crc-agb-s3-mail.json
+
+  depends_on = [aws_s3_bucket_public_access_block.crc-agb-s3-mail]
+}
+
+# SES allows one active receipt rule set per account and region. This one becomes it: if
+# the account already has another active rule set, applying this replaces it.
+resource "aws_ses_receipt_rule_set" "crc-inbound" {
+  rule_set_name = "CloudResume-Inbound"
+}
+
+resource "aws_ses_active_receipt_rule_set" "crc-inbound" {
+  rule_set_name = aws_ses_receipt_rule_set.crc-inbound.rule_set_name
+}
+
+# Every address at the apex lands here; forwardMail decides which ones are live. Scanning
+# is what supplies the spam, virus, SPF, DKIM and DMARC verdicts it filters on.
+resource "aws_ses_receipt_rule" "crc-contact-forward" {
+  name          = local.mail-receipt-rule
+  rule_set_name = aws_ses_receipt_rule_set.crc-inbound.rule_set_name
+  recipients    = [var.domain-name]
+  enabled       = true
+  scan_enabled  = true
+  tls_policy    = "Optional"
+
+  s3_action {
+    bucket_name       = aws_s3_bucket.crc-agb-s3-mail.id
+    object_key_prefix = local.mail-object-prefix
+    position          = 1
+  }
+
+  lambda_action {
+    function_arn    = aws_lambda_function.crc-forwardMail.arn
+    invocation_type = "Event"
+    position        = 2
+  }
+
+  # SES test-writes to the bucket and checks it may invoke the function when the rule is
+  # created, so both grants have to exist first.
+  depends_on = [
+    aws_s3_bucket_policy.crc-agb-s3-mail,
+    aws_lambda_permission.crc-ses-permissions-forward-mail
+  ]
+}
+
+#  End Inbound mail block  #
+############################
 
 #  End SES Block  #
 ###################
@@ -307,6 +439,10 @@ resource "aws_lambda_function" "crc-cloudfrontInvalidation" {
     variables = {
       prod_bucket       = var.s3-bucket-production-name
       prod_distribution = var.cf-production-distribution
+
+      # Generated CVs are content-addressed: a key is written once and never changes, so
+      # there is nothing cached to invalidate and each invalidation path would be billed.
+      immutable_prefix = "${var.cv-object-prefix}/"
     }
   }
 
@@ -351,7 +487,7 @@ resource "aws_lambda_function" "crc-sendMessage" {
     variables = {
       mailRegion      = data.aws_region.current.region
       sendFromAddress = "noreply@${aws_ses_domain_identity.crc-mail-domain.domain}"
-      sendToAddress   = aws_ses_email_identity.crc-mail-destination.email
+      sendToAddress   = var.contact-destination-email
       allowedOrigin   = "https://${var.domain-name}"
 
       recaptchaSecretParameter = var.recaptcha-secret-parameter-name
@@ -453,10 +589,19 @@ resource "aws_lambda_function" "crc-downloadResume" {
       # with nothing logged to explain it.
       downloadBaseUrl = "https://${var.domain-name}"
 
-      resumeObjectKey     = var.resume-object-key
+      # The CV is compiled from the data the site build publishes, and cached next to it
+      # under a digest of its content. See renderResume.py.
+      siteBucket     = var.s3-bucket-production-name
+      cvSourceKey    = var.cv-source-object-key
+      cvObjectPrefix = var.cv-object-prefix
+
       signingKeyParameter = var.cf-signing-key-parameter-name
       signingKeyPairId    = var.cf-signing-key-pair-id
       signedUrlTtl        = tostring(var.signed-url-ttl-seconds)
+
+      # Forwarding aliases printed on the CV in place of a real address. See forwardMail.
+      aliasTableName = aws_dynamodb_table.crc-mail-alias.id
+      contactDomain  = var.domain-name
     }
   }
 
@@ -501,13 +646,84 @@ resource "aws_lambda_function" "crc-downloadResume" {
   runtime      = "python3.12"
   skip_destroy = "false"
 
-  # 5s rather than the 3s the other API functions use: the first invocation after a cold
-  # start pays for an ssm:GetParameter round trip before it can sign anything.
-  timeout = "5"
+  # Longer than the 3s the other API functions use. The first invocation after a cold start
+  # pays for an ssm:GetParameter round trip before it can sign anything, and the first click
+  # after the site content changes also renders and uploads a fresh CV. That render is tens
+  # of milliseconds on a laptop but runs on a fraction of a vCPU at 128 MB.
+  timeout = "10"
 
   depends_on = [
     aws_cloudwatch_log_group.crc-downloadResume-log-group
   ]
+}
+
+resource "aws_cloudwatch_log_group" "crc-forwardMail-log-group" {
+  name              = "/aws/lambda/forwardMail"
+  retention_in_days = 14
+}
+
+resource "aws_lambda_function" "crc-forwardMail" {
+  architectures = ["x86_64"]
+
+  environment {
+    variables = {
+      mailBucket     = aws_s3_bucket.crc-agb-s3-mail.id
+      mailPrefix     = local.mail-object-prefix
+      aliasTableName = aws_dynamodb_table.crc-mail-alias.id
+      contactDomain  = var.domain-name
+
+      # Abuse alerts: an email with this link once an alias's daily drops reach the limit.
+      abuseAlertThreshold = tostring(var.alias-abuse-alert-threshold)
+      revokeWorkflowUrl   = var.revoke-workflow-url
+
+      # The real inbox. It reaches the function's configuration from an Actions secret
+      # (see var.contact_destination_email) and is never printed, published to the site,
+      # or included in anything the CV is built from. Read from the variable rather than
+      # the identity resource so it keeps its sensitive mark in the published plan.
+      forwardToAddress = var.contact-destination-email
+      sendFromAddress  = "noreply@${aws_ses_domain_identity.crc-mail-domain.domain}"
+    }
+  }
+
+  ephemeral_storage {
+    size = "512"
+  }
+
+  function_name = "forwardMail"
+  handler       = "forwardMail.lambda_handler"
+
+  logging_config {
+    application_log_level = "INFO"
+    log_format            = "JSON"
+    log_group             = aws_cloudwatch_log_group.crc-forwardMail-log-group.name
+    system_log_level      = "INFO"
+  }
+
+  # Messages are read whole into memory to rewrite their headers; SES caps them at 40 MB.
+  memory_size                    = "256"
+  package_type                   = "Zip"
+  filename                       = data.archive_file.forwardMail_lambda_function_code.output_path
+  source_code_hash               = data.archive_file.forwardMail_lambda_function_code.output_base64sha256
+  reserved_concurrent_executions = "-1"
+  role                           = var.iam-role-mail-forwarder-arn
+  runtime                        = "python3.12"
+  skip_destroy                   = "false"
+  timeout                        = "30"
+
+  depends_on = [
+    aws_cloudwatch_log_group.crc-forwardMail-log-group
+  ]
+}
+
+# source_arn is built as a string: referencing the rule would be a cycle, since the rule
+# depends on this permission existing.
+resource "aws_lambda_permission" "crc-ses-permissions-forward-mail" {
+  action         = "lambda:InvokeFunction"
+  function_name  = aws_lambda_function.crc-forwardMail.function_name
+  principal      = "ses.amazonaws.com"
+  source_account = var.account_id
+  source_arn     = local.mail-receipt-rule-arn
+  statement_id   = "AllowSESInvokeForwardMail"
 }
 
 resource "aws_cloudwatch_log_group" "crc-updateContributions-log-group" {

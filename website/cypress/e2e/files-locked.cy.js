@@ -17,7 +17,14 @@ describe('Protected CV object', () => {
         }
 
         cy.request({
-            url: '/files/BRACKEN_ALEXANDER_Resume_20260801.pdf',
+            // Generated CVs live under a content digest that changes whenever the site does,
+            // so there is no stable key to probe. There does not need to be: the signature is
+            // checked at the edge before the origin is consulted, so an unsigned request for
+            // any key under /files/* has to come back 403 whether or not the object exists.
+            // If the gate were ever off, this missing key would instead fall through to the
+            // SPA fallback and return the app shell with a 200, which the assertions below
+            // reject just as firmly as they would a leaked PDF.
+            url: '/files/cv/unsigned-probe/Resume.pdf',
             failOnStatusCode: false,
         }).then((response) => {
             // Assert the body too, not just the status. The failure mode this exists to

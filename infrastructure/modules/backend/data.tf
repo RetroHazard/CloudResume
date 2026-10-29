@@ -8,10 +8,29 @@ data "archive_file" "trackvisitors_lambda_function_code" {
   output_file_mode = "0666"
 }
 
+# Two files rather than one: the handler imports the CV renderer it falls back to when no
+# PDF matching the current site data has been cached yet.
 data "archive_file" "downloadResume_lambda_function_code" {
-  type             = "zip"
-  source_file      = "${path.root}/codebase/downloadResume.py"
+  type = "zip"
+
+  source {
+    content  = file("${path.root}/codebase/downloadResume.py")
+    filename = "downloadResume.py"
+  }
+
+  source {
+    content  = file("${path.root}/codebase/renderResume.py")
+    filename = "renderResume.py"
+  }
+
   output_path      = "${path.root}/codepacks/downloadResume.zip"
+  output_file_mode = "0666"
+}
+
+data "archive_file" "forwardMail_lambda_function_code" {
+  type             = "zip"
+  source_file      = "${path.root}/codebase/forwardMail.py"
+  output_path      = "${path.root}/codepacks/forwardMail.zip"
   output_file_mode = "0666"
 }
 
@@ -81,3 +100,43 @@ data "aws_iam_policy_document" "crc_cloudfront_invalidation_queue_policy" {
 
   }
 }
+
+#############################
+# Begin Inbound Mail Block #
+
+locals {
+  mail-object-prefix    = "inbound/"
+  mail-receipt-rule     = "contact-forward"
+  mail-receipt-rule-arn = "arn:aws:ses:${data.aws_region.current.region}:${var.account_id}:receipt-rule-set/CloudResume-Inbound:receipt-rule/contact-forward"
+}
+
+# SES writes each received message here before invoking forwardMail. Scoped to this account
+# and this one receipt rule, so no other SES customer can deliver into the bucket.
+data "aws_iam_policy_document" "crc-agb-s3-mail" {
+  statement {
+    sid       = "AllowSESToStoreReceivedMail"
+    effect    = "Allow"
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.crc-agb-s3-mail.arn}/${local.mail-object-prefix}*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ses.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceAccount"
+      values   = [var.account_id]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "aws:SourceArn"
+      values   = [local.mail-receipt-rule-arn]
+    }
+  }
+}
+
+#  End Inbound Mail Block  #
+#############################

@@ -56,6 +56,26 @@ variable "crc-contribution-object-key" {
   type = string
 }
 
+variable "crc-cv-source-object-key" {
+  type = string
+}
+
+variable "crc-cv-object-prefix" {
+  type = string
+}
+
+variable "crc-mail-alias_arn" {
+  type = string
+}
+
+variable "crc-mail-bucket-arn" {
+  type = string
+}
+
+variable "crc-cw-lambda-log-group-forwardMail" {
+  type = string
+}
+
 variable "crc-ses-configuration-set" {
   type = string
 }
@@ -64,6 +84,7 @@ variable "crc-ses-mail-domain" {
   type = string
 }
 
-variable "crc-ses-mail-destination" {
-  type = string
+variable "crc-ses-mail-destination-email" {
+  type      = string
+  sensitive = true
 }

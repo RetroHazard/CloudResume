@@ -100,7 +100,7 @@ function Home() {
                     <span className='font-mono text-[0.6rem] font-semibold tracking-[0.2em] text-content-accent uppercase'>
                         ⓘ Passenger Information
                     </span>
-                    <PersonalSummary />
+                    <PersonalSummary paragraphs={personalData.summary} />
                 </div>
             </SectionShell>
         </>

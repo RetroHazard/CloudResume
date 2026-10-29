@@ -25,6 +25,18 @@ output "aws_dynamodb_table_crc-download-record_arn" {
   value = aws_dynamodb_table.crc-download-record.arn
 }
 
+output "aws_dynamodb_table_crc-mail-alias_arn" {
+  value = aws_dynamodb_table.crc-mail-alias.arn
+}
+
+output "aws_dynamodb_table_crc-mail-alias_name" {
+  value = aws_dynamodb_table.crc-mail-alias.id
+}
+
+output "aws_s3_bucket_crc-agb-s3-mail_arn" {
+  value = aws_s3_bucket.crc-agb-s3-mail.arn
+}
+
 #  End DynamoDB Block  #
 ########################
 
@@ -38,10 +50,6 @@ output "aws_ses_configuration_set_crc-contact-mail_arn" {
 
 output "aws_ses_domain_identity_crc-mail-domain_arn" {
   value = aws_ses_domain_identity.crc-mail-domain.arn
-}
-
-output "aws_ses_email_identity_crc-mail-destination_arn" {
-  value = aws_ses_email_identity.crc-mail-destination.arn
 }
 
 output "aws_ses_domain_mail_from_crc-mail-from-domain" {
@@ -92,6 +100,10 @@ output "aws_cloudwatch_log_group_crc-updateContributions_arn" {
 
 output "aws_cloudwatch_log_group_crc-downloadResume_arn" {
   value = aws_cloudwatch_log_group.crc-downloadResume-log-group.arn
+}
+
+output "aws_cloudwatch_log_group_crc-forwardMail_arn" {
+  value = aws_cloudwatch_log_group.crc-forwardMail-log-group.arn
 }
 
 output "aws_lambda_function_crc-downloadResume_uri" {

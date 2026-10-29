@@ -57,8 +57,13 @@ module "iam" {
   crc-cf-signing-key-parameter-name              = var.cloudfront_signing_key_parameter
   crc-recaptcha-secret-parameter-name            = var.recaptcha_secret_parameter
   crc-contribution-object-key                    = var.contribution_object_key
+  crc-cv-source-object-key                       = var.cv_source_object_key
+  crc-cv-object-prefix                           = var.cv_object_prefix
+  crc-mail-alias_arn                             = module.backend.aws_dynamodb_table_crc-mail-alias_arn
+  crc-mail-bucket-arn                            = module.backend.aws_s3_bucket_crc-agb-s3-mail_arn
+  crc-cw-lambda-log-group-forwardMail            = module.backend.aws_cloudwatch_log_group_crc-forwardMail_arn
   crc-ses-configuration-set                      = module.backend.aws_ses_configuration_set_crc-contact-mail_arn
-  crc-ses-mail-destination                       = module.backend.aws_ses_email_identity_crc-mail-destination_arn
+  crc-ses-mail-destination-email                 = var.contact_destination_email
   crc-ses-mail-domain                            = module.backend.aws_ses_domain_identity_crc-mail-domain_arn
 }
 
@@ -103,10 +108,16 @@ module "backend" {
   iam-role-visitor-tracker-arn      = module.iam.aws_iam_role_crc-VisitorTracker_arn
   iam-role-contribution-tracker-arn = module.iam.aws_iam_role_crc-ContributionTracker_arn
   iam-role-download-issuer-arn      = module.iam.aws_iam_role_crc-DownloadIssuer_arn
+  iam-role-mail-forwarder-arn       = module.iam.aws_iam_role_crc-MailForwarder_arn
 
   cf-signing-key-pair-id        = module.frontend.aws_cloudfront_public_key_crc-cf-signing-key_id
   cf-signing-key-parameter-name = var.cloudfront_signing_key_parameter
-  resume-object-key             = var.resume_object_key
+  cv-source-object-key          = var.cv_source_object_key
+  cv-object-prefix              = var.cv_object_prefix
+  mail-retention-days           = var.mail_retention_days
+  alias-abuse-alert-threshold   = var.alias_abuse_alert_threshold
+  revoke-workflow-url           = "https://github.com/${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}/actions/workflows/cv-contact.yml"
+  contact-destination-email     = var.contact_destination_email
   signed-url-ttl-seconds        = var.signed_url_ttl_seconds
 
   recaptcha-secret-parameter-name = var.recaptcha_secret_parameter

@@ -7,6 +7,9 @@ import json
 
 prodBucket = os.environ.get('prod_bucket')
 prodDistribution = os.environ.get('prod_distribution')
+# Keys under this prefix are written once and never change (generated CVs are stored under a
+# digest of their content), so CloudFront can never hold a stale copy of one.
+immutablePrefix = os.environ.get('immutable_prefix')
 min_wait_time = 5
 
 
@@ -28,6 +31,10 @@ def lambda_handler(event, context):
             object_key = s3_event['s3']['object']['key']
             path = '/' + object_key
             print(f'Bucket: {bucket_name}, Path: {path}')
+
+            if immutablePrefix and object_key.startswith(immutablePrefix):
+                print(f'Skipping immutable object: {path}')
+                continue
 
             # Determine the distribution ID based on the bucket name
             if bucket_name == prodBucket:

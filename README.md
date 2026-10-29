@@ -37,6 +37,19 @@ reviewed plan, deploy the site, and smoke-test production. Work already proven o
 not repeated after the merge — see [`docs/ci.md`](docs/ci.md) for how that works and why the pipeline
 is shaped the way it is.
 
+## Generated CV
+
+The Download CV button serves a PDF compiled from the same JSON the site renders, so the CV can
+never drift from the site. The `downloadResume` Lambda keys a cached copy in S3 by a digest of
+the CV's content, and only renders a new one, with a dependency-free PDF writer, when that
+content has changed. Page budget, section order and trimming rules are set in the site data
+too. See [`docs/generated-cv.md`](docs/generated-cv.md).
+
+The CV's contact address is a disposable forwarding alias rather than a real inbox: SES
+receives the mail, filters it, and relays it on. A new alias is issued each month, so every
+forwarded message shows how old the sender's copy of the CV is, and any alias can be revoked
+from a workflow. See [`docs/cv-contact.md`](docs/cv-contact.md).
+
 ## Architectural Overview
 
 **Earlier architectural revisions can be found within the published article, linked above.**

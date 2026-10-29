@@ -34,6 +34,10 @@ variable "iam-role-download-issuer-arn" {
   type = string
 }
 
+variable "iam-role-mail-forwarder-arn" {
+  type = string
+}
+
 variable "contribution-accounts" {
   type = list(string)
 }
@@ -94,7 +98,11 @@ variable "cf-signing-key-parameter-name" {
   type = string
 }
 
-variable "resume-object-key" {
+variable "cv-source-object-key" {
+  type = string
+}
+
+variable "cv-object-prefix" {
   type = string
 }
 
@@ -106,4 +114,23 @@ variable "signed-url-ttl-seconds" {
 
 variable "recaptcha-secret-parameter-name" {
   type = string
+}
+
+# CV Contact Forwarding
+
+variable "mail-retention-days" {
+  type = number
+}
+
+variable "alias-abuse-alert-threshold" {
+  type = number
+}
+
+variable "revoke-workflow-url" {
+  type = string
+}
+
+variable "contact-destination-email" {
+  type      = string
+  sensitive = true
 }

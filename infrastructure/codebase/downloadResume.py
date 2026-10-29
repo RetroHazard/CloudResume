@@ -10,8 +10,18 @@ Two properties are load-bearing and easy to break:
     the only condition the HTML spec places on honouring a link's `download` attribute, so
     signing the distribution domain instead would make browsers silently *navigate* to the
     PDF rather than download it, with nothing logged anywhere.
-  * The object key comes from configuration, never from the request. A handler that signed
+  * The object key is derived server-side, never from the request. A handler that signed
     a caller-supplied key would be a signing oracle for every object in the bucket.
+
+The PDF itself is no longer a hand-maintained file. The site build publishes the data it
+renders as `data/cv-source.json`, and this function compiles that into a CV (renderResume)
+on demand, caching the result in S3 under a digest of its content. A click only pays for a
+render when the site has changed since the last one; otherwise it costs a conditional GET
+that S3 answers with a 304.
+
+The CV's contact address is a forwarding alias issued here as well, one per calendar month
+(see _contact_address and forwardMail.py), so a rotation or a revocation shows up on the
+next download.
 """
 
 import base64
@@ -19,24 +29,37 @@ import hashlib
 import json
 import logging
 import os
+import re
+import secrets
 import time
 from datetime import datetime, timedelta, timezone
 
 import boto3
+from botocore.exceptions import ClientError
+
+import renderResume
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 dynamodb = boto3.resource('dynamodb')
 ssm = boto3.client('ssm')
+s3 = boto3.client('s3')
 
 record_table = dynamodb.Table(os.environ['recordTableName'])
+alias_table = dynamodb.Table(os.environ['aliasTableName'])
 ALLOWED_ORIGIN = os.environ['allowedOrigin']
 BASE_URL = os.environ['downloadBaseUrl'].rstrip('/')
-OBJECT_KEY = os.environ['resumeObjectKey'].lstrip('/')
+SITE_BUCKET = os.environ['siteBucket']
+CV_SOURCE_KEY = os.environ['cvSourceKey'].lstrip('/')
+CV_PREFIX = os.environ['cvObjectPrefix'].strip('/')
 KEY_PARAMETER = os.environ['signingKeyParameter']
 KEY_PAIR_ID = os.environ['signingKeyPairId']
 URL_TTL = int(os.environ['signedUrlTtl'])
+CONTACT_DOMAIN = os.environ['contactDomain']
+
+# The alias table's pointer to the live address. Rotating or revoking deletes it.
+ALIAS_POINTER = '#current'
 
 # The counter shares the dedupe table. It deliberately carries no `ttl` attribute —
 # DynamoDB's TTL sweeper ignores items that lack one, so this row never expires while the
@@ -47,6 +70,11 @@ COUNTER_ID = 'download_count'
 # as an opaque Runtime.ImportModuleError with no usable traceback; deferring it means the
 # real exception reaches CloudWatch.
 _signing_key = None
+
+# What this container last resolved the CV to: the source object's ETag and parsed body, the
+# UTC day the model was built on (certification expiry is date-dependent), the contact alias
+# it printed, and the PDF key all of that mapped to.
+_cv = {'etag': None, 'source': None, 'day': None, 'contact': None, 'key': None}
 
 
 def _read_tlv(buf, index):
@@ -143,6 +171,181 @@ def _signed_url(url, expires):
     return f'{url}?Expires={expires}&Signature={signature}&Key-Pair-Id={KEY_PAIR_ID}'
 
 
+def _cv_exists(key):
+    # ListObjectsV2 rather than HeadObject: without s3:ListBucket, S3 reports a missing key
+    # as 403 rather than 404, and ListBucket can be scoped to the CV prefix this way.
+    listing = s3.list_objects_v2(Bucket=SITE_BUCKET, Prefix=key, MaxKeys=1)
+    return any(item['Key'] == key for item in listing.get('Contents', []))
+
+
+def _prune_superseded(current_folder):
+    """Remove CVs rendered from older site data. Best effort: a leftover file costs pennies.
+
+    Only runs right after a render, i.e. when the content has just changed. A visitor whose
+    signed URL for the old file is still inside its TTL can lose that one download; a retry
+    mints a URL for the new file.
+    """
+    try:
+        listing = s3.list_objects_v2(Bucket=SITE_BUCKET, Prefix=f'{CV_PREFIX}/')
+        stale = [{'Key': o['Key']} for o in listing.get('Contents', []) if not o['Key'].startswith(current_folder)]
+        if stale:
+            s3.delete_objects(Bucket=SITE_BUCKET, Delete={'Objects': stale, 'Quiet': True})
+            logger.info('Pruned %d superseded CV object(s)', len(stale))
+    except Exception:
+        logger.exception('Failed to prune superseded CVs')
+
+
+# Unambiguous lowercase letters and digits: the address may be read off paper and retyped.
+_ALIAS_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'
+
+
+def _conditional_failed(err):
+    return err.response.get('Error', {}).get('Code') == 'ConditionalCheckFailedException'
+
+
+def _issue_alias(full_name, month, replacing=None):
+    """Mint an alias for `month` and make it the live one. Returns its address.
+
+    `replacing` is the live alias being rotated out, if any. The pointer swap is conditional on
+    it (or on there being no pointer at all), so when two containers rotate at once exactly
+    one alias wins: the loser's is revoked before anyone can have seen it, and the winner is
+    read back. Only after a successful swap is the old alias retired, which keeps it
+    forwarding for anyone holding a CV from its month.
+    """
+    first = re.sub(r'[^a-z0-9]', '', renderResume._ascii((full_name or '').split(' ')[0]).lower()) or 'contact'
+    local = f'{first}.{"".join(secrets.choice(_ALIAS_ALPHABET) for _ in range(6))}'
+    now = datetime.now(timezone.utc).isoformat()
+    alias_table.put_item(
+        Item={'id': local, 'status': 'active', 'month': month, 'created': now},
+        ConditionExpression='attribute_not_exists(id)',
+    )
+    pointer = {
+        'Item': {'id': ALIAS_POINTER, 'address': local, 'month': month, 'since': now},
+        'ConditionExpression': 'attribute_not_exists(id)',
+    }
+    if replacing:
+        pointer.update(
+            ConditionExpression='#a = :old',
+            ExpressionAttributeNames={'#a': 'address'},
+            ExpressionAttributeValues={':old': replacing},
+        )
+    try:
+        alias_table.put_item(**pointer)
+    except ClientError as err:
+        if not _conditional_failed(err):
+            raise
+        alias_table.update_item(
+            Key={'id': local},
+            UpdateExpression='SET #s = :revoked, #t = :now, #r = :why',
+            ExpressionAttributeNames={'#s': 'status', '#t': 'revoked', '#r': 'reason'},
+            ExpressionAttributeValues={':revoked': 'revoked', ':now': now, ':why': 'lost a concurrent mint'},
+        )
+        return _contact_address(full_name, month, issue=False)
+
+    if replacing:
+        # Conditional, so an alias someone revoked by hand stays revoked.
+        try:
+            alias_table.update_item(
+                Key={'id': replacing},
+                UpdateExpression='SET #s = :retired, #t = :now',
+                ConditionExpression='#s = :active',
+                ExpressionAttributeNames={'#s': 'status', '#t': 'retired'},
+                ExpressionAttributeValues={':retired': 'retired', ':active': 'active', ':now': now},
+            )
+        except ClientError as err:
+            if not _conditional_failed(err):
+                raise
+    logger.info('Issued CV contact alias %s for %s', local, month)
+    return f'{local}@{CONTACT_DOMAIN}'
+
+
+def _contact_address(full_name, month, issue=True):
+    """The forwarding address the CV should print right now, issuing one when due.
+
+    One alias per calendar month (UTC): the first download of a month retires last month's
+    alias and issues a new one, so every alias's `month` says when the CV carrying it was
+    downloaded, and old aliases keep forwarding. Revoking or rotating by hand (the CV contact
+    workflow) deletes the pointer, which makes the next download issue a replacement early.
+
+    Because the address is part of the CV model, a new alias changes the content digest and
+    the CV is re-rendered with it on that same click.
+
+    Fails open: if the table is unreachable the CV goes out without an address rather than
+    not at all. The digest then differs from the with-address CV, so the address returns on
+    the first click after the table recovers.
+    """
+    try:
+        pointer = alias_table.get_item(Key={'id': ALIAS_POINTER}).get('Item')
+        if pointer and pointer.get('month') == month:
+            return f'{pointer["address"]}@{CONTACT_DOMAIN}'
+        if not issue:
+            return f'{pointer["address"]}@{CONTACT_DOMAIN}' if pointer else None
+        return _issue_alias(full_name, month, replacing=pointer['address'] if pointer else None)
+    except Exception:
+        logger.exception('Could not resolve the CV contact alias; rendering without one')
+        return None
+
+
+def _current_cv_key():
+    """Return the S3 key of a CV matching what the site is serving now, rendering one if needed.
+
+    Three tiers, cheapest first:
+
+      1. The source is unchanged since this container last looked (S3 answers the
+         conditional GET with a 304), and so is the contact alias -> reuse the key already
+         resolved. No body, no render.
+      2. The source changed, but its CV content did not (a new logo, an icon, a link) ->
+         the digest matches a PDF that is already in the bucket. One LIST, no render.
+      3. The content changed -> render once, store it, and every later click is tier 1 or 2.
+
+    The contact alias is looked up on every click (one GetItem) so that a revocation or the
+    monthly rotation takes effect on the very next download rather than whenever a container
+    recycles.
+
+    The key embeds a digest of the rendered content, so a stored PDF is immutable and can
+    never be served stale from CloudFront's cache.
+    """
+    today = datetime.now(timezone.utc).date()
+    request = {'Bucket': SITE_BUCKET, 'Key': CV_SOURCE_KEY}
+    if _cv['etag']:
+        request['IfNoneMatch'] = _cv['etag']
+    try:
+        response = s3.get_object(**request)
+        source, etag, unchanged = json.loads(response['Body'].read()), response['ETag'], False
+    except ClientError as err:
+        if err.response.get('ResponseMetadata', {}).get('HTTPStatusCode') != 304:
+            raise
+        source, etag, unchanged = _cv['source'], _cv['etag'], True
+
+    contact = None
+    if renderResume.settings_from(source)['contactEmail']:
+        contact = _contact_address((source.get('personal') or {}).get('fullName', ''), today.strftime('%Y-%m'))
+
+    if unchanged and _cv['day'] == today and _cv['contact'] == contact:
+        return _cv['key']
+
+    model = renderResume.build_model(source, BASE_URL, today=today, contact_email=contact)
+    folder = f'{CV_PREFIX}/{renderResume.content_digest(model)[:24]}/'
+    key = folder + renderResume.file_name(model)
+
+    if not _cv_exists(key):
+        started = time.monotonic()
+        pdf = renderResume.render_pdf(model)
+        s3.put_object(
+            Bucket=SITE_BUCKET,
+            Key=key,
+            Body=pdf,
+            ContentType='application/pdf',
+            CacheControl='public, max-age=31536000, immutable',
+            Metadata={'renderer-version': renderResume.RENDERER_VERSION},
+        )
+        logger.info('Rendered %s (%d bytes) in %.0f ms', key, len(pdf), (time.monotonic() - started) * 1000)
+        _prune_superseded(folder)
+
+    _cv.update(etag=etag, source=source, day=today, contact=contact, key=key)
+    return key
+
+
 def _record_download(visitor_id):
     """Best-effort telemetry. Returns the running total, or None if it could not be read.
 
@@ -197,8 +400,14 @@ def lambda_handler(event, context):
     # must never be counted. Recording first would inflate download_count on every failed
     # signature and burn the visitor's 24h dedupe row for a file they never received.
     try:
+        object_key = _current_cv_key()
+    except Exception:
+        logger.exception('Failed to resolve or render the CV')
+        return _response(500, {'error': 'Internal Server Error'})
+
+    try:
         expires = int(time.time()) + URL_TTL
-        url = _signed_url(f'{BASE_URL}/{OBJECT_KEY}', expires)
+        url = _signed_url(f'{BASE_URL}/{object_key}', expires)
     except Exception:
         # Never echo the exception to the caller — it would describe the key material.
         logger.exception('Failed to sign a CV download URL')
@@ -210,7 +419,7 @@ def lambda_handler(event, context):
         200,
         {
             'downloadUrl': url,
-            'fileName': OBJECT_KEY.rsplit('/', 1)[-1],
+            'fileName': object_key.rsplit('/', 1)[-1],
             'expiresAt': expires,
             'count': count,
         },

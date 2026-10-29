@@ -63,10 +63,21 @@ variable "signed_downloads_enabled" {
   default     = true
 }
 
-variable "resume_object_key" {
-  description = "S3 Object Key of the CV served through signed URLs"
+variable "cv_source_object_key" {
+  description = "S3 Object Key of the CV source data the website build publishes. downloadResume compiles the CV from it"
   type        = string
-  default     = "files/BRACKEN_ALEXANDER_Resume_20260801.pdf"
+  default     = "data/cv-source.json"
+}
+
+variable "cv_object_prefix" {
+  description = "S3 Key Prefix generated CVs are cached under, one folder per content digest. Must sit under files/ so the objects are only reachable through signed URLs"
+  type        = string
+  default     = "files/cv"
+
+  validation {
+    condition     = startswith(var.cv_object_prefix, "files/") && !endswith(var.cv_object_prefix, "/")
+    error_message = "cv_object_prefix must sit under files/ (the signed-URL behaviour) and carry no trailing slash."
+  }
 }
 
 variable "cloudfront_signing_key_parameter" {
@@ -115,4 +126,33 @@ variable "api_throttle_download_burst_limit" {
   description = "Burst ceiling for GET /download"
   type        = number
   default     = 5
+}
+variable "mail_retention_days" {
+  description = "Days a message received for the CV contact alias is kept in the private mail bucket after forwarding"
+  type        = number
+  default     = 7
+}
+
+variable "alias_abuse_alert_threshold" {
+  description = "Messages dropped as spam, malware or spoofed mail in one UTC day after which the real inbox is emailed an alert, with a link to the revoke workflow, about a CV contact alias. Revoking stays manual. 0 disables alerts"
+  type        = number
+  default     = 10
+
+  validation {
+    condition     = var.alias_abuse_alert_threshold >= 0 && floor(var.alias_abuse_alert_threshold) == var.alias_abuse_alert_threshold
+    error_message = "alias_abuse_alert_threshold must be a whole number, 0 or more."
+  }
+}
+
+variable "contact_destination_email" {
+  description = "The real inbox behind the contact form and the CV's forwarding alias. Supplied from the CONTACT_DESTINATION_EMAIL Actions secret, so it is never committed, and marked sensitive so it is redacted from the plans the pipeline publishes. Must already be a verified SES identity: Terraform deliberately does not manage it (see docs/cv-contact.md)"
+  type        = string
+  sensitive   = true
+
+  # Without this, a missing secret would arrive as "" and the Lambdas would be deployed
+  # pointing at an empty address instead of the plan failing.
+  validation {
+    condition     = can(regex("^[^@[:space:]]+@[^@[:space:]]+\\.[^@[:space:]]+$", var.contact_destination_email))
+    error_message = "contact_destination_email is not an email address. In CI it comes from the CONTACT_DESTINATION_EMAIL repository secret; locally, set TF_VAR_contact_destination_email."
+  }
 }

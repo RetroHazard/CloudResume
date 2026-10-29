@@ -6,9 +6,11 @@ signature is minted per click by a Lambda that also records the download in Dyna
 
 ## What this is and is not
 
-It is not a confidentiality control. The PDF is committed to a public repository and can be
-pulled from GitHub without touching AWS at all. Nothing here changes that, and it was never
-meant to.
+It is not a confidentiality control. Every word in the CV is public, both on the site and in
+this repository, and nothing here changes that or was ever meant to.
+
+The PDF is no longer a committed file. It is compiled from the site's data on demand and
+cached in S3. See [`generated-cv.md`](generated-cv.md).
 
 What it does buy:
 
@@ -26,10 +28,12 @@ What it does buy:
 Download CV click
   └─> GET https://api.<domain>/<stage>/download?visitorId=<uuid>
         └─> λ downloadResume
-              ├─ crc-download-record   dedupe on visitorId (24h TTL), bump download_count
-              ├─ ssm:GetParameter      private key, cached for the life of the container
+              ├─ s3 data/cv-source.json  conditional GET; render + cache the CV only if its
+              │                          content changed (see generated-cv.md)
+              ├─ ssm:GetParameter        private key, cached for the life of the container
+              ├─ crc-download-record     dedupe on visitorId (24h TTL), bump download_count
               └─ returns { downloadUrl, fileName, expiresAt, count }
-  └─> browser downloads https://<domain>/files/<cv>.pdf?Expires=…&Signature=…&Key-Pair-Id=…
+  └─> browser downloads https://<domain>/files/cv/<digest>/<Name>_Resume.pdf?Expires=…&Signature=…&Key-Pair-Id=…
         └─> CloudFront validates against the trusted key group, then serves from cache
 ```
 
@@ -39,8 +43,9 @@ Download CV click
 link's `download` attribute same-origin. Signing `*.cloudfront.net` would make the PDF open
 in a viewer instead of saving, and nothing would log an error.
 
-**The object key comes from configuration, never the request.** A handler that signed a
-caller-supplied key would be a signing oracle for the whole bucket.
+**The object key is derived server-side, never from the request.** It is computed from the
+published site data, under a fixed prefix. A handler that signed a caller-supplied key would
+be a signing oracle for the whole bucket.
 
 **Telemetry never blocks the download.** The table is provisioned at 1 WCU. A throttled
 counter write is logged and swallowed; the URL is still issued.

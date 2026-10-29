@@ -68,6 +68,62 @@ data "aws_iam_policy_document" "crc-lambda-DownloadResume-access-policy" {
     ]
   }
 
+  # Resolve the live contact alias, and mint a replacement after one is rotated or revoked.
+  statement {
+    sid    = "AllowFunctionToIssueContactAliases"
+    effect = "Allow"
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:UpdateItem"
+    ]
+    resources = [
+      var.crc-mail-alias_arn
+    ]
+  }
+
+  statement {
+    sid    = "AllowFunctionToReadCvSource"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "${var.crc-s3-production-arn}/${var.crc-cv-source-object-key}"
+    ]
+  }
+
+  # Write and prune the generated CVs, and nothing else in the bucket.
+  statement {
+    sid    = "AllowFunctionToCacheGeneratedCvs"
+    effect = "Allow"
+    actions = [
+      "s3:PutObject",
+      "s3:DeleteObject"
+    ]
+    resources = [
+      "${var.crc-s3-production-arn}/${var.crc-cv-object-prefix}/*"
+    ]
+  }
+
+  # Listing is how the function asks "is this digest already rendered?". It is scoped to the
+  # CV prefix, so the function cannot enumerate the rest of the site.
+  statement {
+    sid    = "AllowFunctionToFindGeneratedCvs"
+    effect = "Allow"
+    actions = [
+      "s3:ListBucket"
+    ]
+    resources = [
+      var.crc-s3-production-arn
+    ]
+    condition {
+      test     = "StringLike"
+      variable = "s3:prefix"
+      values   = ["${var.crc-cv-object-prefix}/*"]
+    }
+  }
+
   statement {
     sid    = "AllowFunctionToReadSigningKey"
     effect = "Allow"
@@ -124,7 +180,7 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
     ]
     resources = [
       var.crc-ses-configuration-set,
-      var.crc-ses-mail-destination,
+      local.ses-destination-identity-arn,
       var.crc-ses-mail-domain
     ]
   }
@@ -325,4 +381,68 @@ data "aws_iam_policy_document" "crc-github-terraform-limited-iam" {
     ]
     resources = ["*"]
   }
+}
+
+data "aws_iam_policy_document" "crc-lambda-ForwardMail-logging-policy" {
+  statement {
+    sid    = "AllowFunctionToWriteToCloudwatch"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "${var.crc-cw-lambda-log-group-forwardMail}:*"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "crc-lambda-ForwardMail-access-policy" {
+  statement {
+    sid    = "AllowFunctionToReadReceivedMail"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "${var.crc-mail-bucket-arn}/*"
+    ]
+  }
+
+  # Read an alias's status and count what happened to its mail. No PutItem or DeleteItem:
+  # the forwarder can never create, revive, revoke or remove an address.
+  statement {
+    sid    = "AllowFunctionToCheckAliases"
+    effect = "Allow"
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem"
+    ]
+    resources = [
+      var.crc-mail-alias_arn
+    ]
+  }
+
+  # Only as the site's own domain, and only to the one verified destination. Even a bug
+  # here cannot turn the function into an open relay.
+  statement {
+    sid    = "AllowFunctionToForwardMail"
+    effect = "Allow"
+    actions = [
+      "ses:SendRawEmail"
+    ]
+    resources = [
+      local.ses-destination-identity-arn,
+      var.crc-ses-mail-domain
+    ]
+  }
+}
+
+# An email identity's ARN embeds the address itself. It is built here from the sensitive
+# variable, rather than taken from the identity resource's computed `arn`, which would carry
+# the address into the published plan unredacted.
+locals {
+  ses-destination-identity-arn = "arn:aws:ses:${data.aws_region.current.region}:${var.account_id}:identity/${var.crc-ses-mail-destination-email}"
 }

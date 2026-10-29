@@ -72,7 +72,9 @@ resource "aws_iam_policy" "crc-Lambda-SendMessage-AccessPolicy" {
   name = "crc-Lambda-SendMessage-AccessPolicy"
   path = "/CloudResume/"
 
-  policy = data.aws_iam_policy_document.crc-lambda-SendMessage-access-policy.json
+  # sensitive(): the document names the real inbox's SES identity, so its diff is redacted
+  # from published plans. Review changes to it with a local plan.
+  policy = sensitive(data.aws_iam_policy_document.crc-lambda-SendMessage-access-policy.json)
 
   lifecycle {
     create_before_destroy = false
@@ -223,7 +225,7 @@ resource "aws_iam_role_policy_attachment" "crc-VisitorTracker-logging-policy" {
 }
 
 resource "aws_iam_role" "crc-DownloadIssuer" {
-  description           = "Allows Lambda to Sign CV Download URLs, Record Downloads and Publish to CloudWatch"
+  description           = "Allows Lambda to Compile and Cache the CV, Sign Download URLs, Record Downloads and Publish to CloudWatch"
   force_detach_policies = true
   assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
   max_session_duration  = 3600
@@ -266,4 +268,51 @@ resource "aws_iam_role_policy_attachment" "crc-ContributionTracker-access-policy
 resource "aws_iam_role_policy_attachment" "crc-ContributionTracker-logging-policy" {
   role       = aws_iam_role.crc-ContributionTracker.name
   policy_arn = aws_iam_policy.crc-Lambda-UpdateContributions-Logging.arn
+}
+
+resource "aws_iam_policy" "crc-Lambda-ForwardMail-AccessPolicy" {
+  name = "crc-Lambda-ForwardMail-AccessPolicy"
+  path = "/CloudResume/"
+
+  # sensitive(): the document names the real inbox's SES identity, so its diff is redacted
+  # from published plans. Review changes to it with a local plan.
+  policy = sensitive(data.aws_iam_policy_document.crc-lambda-ForwardMail-access-policy.json)
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
+resource "aws_iam_policy" "crc-Lambda-ForwardMail-Logging" {
+  name = "crc-Lambda-ForwardMail-Logging"
+  path = "/CloudResume/"
+
+  policy = data.aws_iam_policy_document.crc-lambda-ForwardMail-logging-policy.json
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
+resource "aws_iam_role" "crc-MailForwarder" {
+  description           = "Allows Lambda to Forward Mail Sent to the CV Contact Alias and Publish to CloudWatch"
+  force_detach_policies = true
+  assume_role_policy    = data.aws_iam_policy_document.crc-function-assume-role-policy.json
+  max_session_duration  = 3600
+  name                  = "crc-MailForwarder"
+  path                  = "/CloudResume/"
+
+  lifecycle {
+    create_before_destroy = false
+  }
+}
+
+resource "aws_iam_role_policy_attachment" "crc-MailForwarder-access-policy" {
+  role       = aws_iam_role.crc-MailForwarder.name
+  policy_arn = aws_iam_policy.crc-Lambda-ForwardMail-AccessPolicy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "crc-MailForwarder-logging-policy" {
+  role       = aws_iam_role.crc-MailForwarder.name
+  policy_arn = aws_iam_policy.crc-Lambda-ForwardMail-Logging.arn
 }
