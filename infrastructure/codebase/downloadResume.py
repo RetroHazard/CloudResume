@@ -344,6 +344,11 @@ def _current_cv_key():
             Key=key,
             Body=pdf,
             ContentType='application/pdf',
+            # Stored on the object rather than added by CloudFront: a custom response
+            # headers policy is not available on the flat-rate Free plan. The browser only
+            # honours the link's `download` attribute same-origin, so without this the
+            # PDF opens in a viewer instead of saving.
+            ContentDisposition='attachment',
             CacheControl='public, max-age=31536000, immutable',
             Metadata={'renderer-version': renderResume.RENDERER_VERSION},
         )
