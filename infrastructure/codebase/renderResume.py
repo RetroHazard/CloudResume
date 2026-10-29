@@ -197,16 +197,12 @@ def format_range(start, end):
     return start or end
 
 
-def _is_expired(expiry, today):
-    raw = str(expiry or '').strip()
-    if raw.lower() in _ONGOING or raw.lower() in _UNKNOWN:
-        return False
-    parts = raw.split('-')
-    try:
-        year, month, day = int(parts[0]), int(parts[1]), int(parts[2])
-        return (year, month, day) < (today.year, today.month, today.day)
-    except (IndexError, ValueError):
-        return False
+def _date_key(value):
+    """`2024-10-19` -> (2024, 10, 19), for sorting. Anything unparseable sorts as oldest."""
+    parts = str(value or '').strip().split('-')
+    if not re.fullmatch(r'\d{4}', parts[0]):
+        return ()
+    return tuple(int(p) for p in parts if p.isdigit())
 
 
 def _level(skill):
@@ -232,7 +228,7 @@ def build_model(source, site_url, today=None, contact_email=None):
     link on the site leaves it unchanged and reuses the cached PDF; a reworded bullet, a new
     role, a changed rule in cv_data.json or a rotated contact address does not.
 
-    `today` only decides which certifications have lapsed and which roles count as recent.
+    `today` only decides which roles count as recent.
     Pass it explicitly in tests so the model does not drift with the calendar.
 
     `contact_email` is the forwarding address downloadResume issues. It is printed only when
@@ -335,11 +331,14 @@ def build_model(source, site_url, today=None, contact_email=None):
                 'issuer': cert.get('issuer', ''),
                 # Only the grant date: an expiry reads like a job's date range to a parser.
                 'issued': format_date(cert.get('issued_date')),
-                'active': not _is_expired(cert.get('expiry_date'), today),
+                'order': _date_key(cert.get('issued_date')),
             }
         )
-    # Current credentials first; the sort is stable, so the site's own order holds within each group.
-    certifications.sort(key=lambda c: not c['active'])
+    # Newest first, by grant date: with only that date printed, any other order reads as a
+    # mistake. Stable, so credentials granted together keep the site's order.
+    certifications.sort(key=lambda c: c['order'], reverse=True)
+    for cert in certifications:
+        del cert['order']
 
     education = [
         {

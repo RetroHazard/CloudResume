@@ -160,11 +160,17 @@ class ModelTests(unittest.TestCase):
         self.assertFalse(kept('2015'))
         self.assertTrue(kept('---'))
 
-    def test_lapsed_certifications_sort_after_current_ones(self):
-        active = [c['active'] for c in self.model['certifications']]
-        self.assertEqual(active, sorted(active, reverse=True))
-        lapsed = [c for c in self.model['certifications'] if not c['active']]
-        self.assertTrue(any('Systems Security Certified Practitioner' == c['name'] for c in lapsed))
+    def test_certifications_are_newest_first_by_grant_date(self):
+        certs = {
+            'Certifications': [
+                {'certification': 'A+', 'issued_date': '2008-07-01', 'expiry_date': 'N/A'},
+                {'certification': 'SSCP', 'issued_date': '2014-11-07', 'expiry_date': '2017-11-30'},
+                {'certification': 'Undated'},
+                {'certification': 'AWS', 'issued_date': '2024-10-19', 'expiry_date': '2027-10-19'},
+            ]
+        }
+        model = renderResume.build_model({'certifications': certs}, SITE, today=TODAY)
+        self.assertEqual([c['name'] for c in model['certifications']], ['AWS', 'SSCP', 'A+', 'Undated'])
 
     def test_cv_summary_replaces_the_site_summary_on_the_cv_only(self):
         source = {'personal': {'summary': ['On the site.'], 'cvSummary': ['On the CV.']}}
