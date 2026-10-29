@@ -84,6 +84,7 @@ variable "crc-ses-mail-domain" {
   type = string
 }
 
-variable "crc-ses-mail-destination" {
-  type = string
+variable "crc-ses-mail-destination-email" {
+  type      = string
+  sensitive = true
 }

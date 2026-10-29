@@ -476,6 +476,10 @@ jobs:
       TF_VAR_domain_name: ${{ vars.AWS_TF_DOMAIN_NAME }}
       TF_VAR_sanitized_domain_name: ${{ vars.AWS_TF_SANITIZED_DOMAIN_NAME }}
       TF_VAR_api_current_stage: ${{ vars.AWS_TF_API_CURRENT_STAGE }}
+      # The real inbox behind the contact form and the CV alias. A secret, not a
+      # variable, so it stays out of the repository and is masked in the logs;
+      # the Terraform variable is also sensitive, so plans redact it.
+      TF_VAR_contact_destination_email: ${{ secrets.CONTACT_DESTINATION_EMAIL }}
       # TF_VAR_signed_downloads_enabled is not here — it is resolved and
       # validated by a step below, because an unset variable would interpolate
       # to "" and Terraform rejects that for a bool.

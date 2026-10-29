@@ -266,7 +266,7 @@ resource "aws_ses_domain_identity" "crc-mail-domain" {
 }
 
 resource "aws_ses_email_identity" "crc-mail-destination" {
-  email = "a.bracken87+cloudresume_ses@gmail.com"
+  email = var.contact-destination-email
 }
 
 resource "aws_ses_domain_mail_from" "crc-mail-from-domain" {
@@ -474,7 +474,7 @@ resource "aws_lambda_function" "crc-sendMessage" {
     variables = {
       mailRegion      = data.aws_region.current.region
       sendFromAddress = "noreply@${aws_ses_domain_identity.crc-mail-domain.domain}"
-      sendToAddress   = aws_ses_email_identity.crc-mail-destination.email
+      sendToAddress   = var.contact-destination-email
       allowedOrigin   = "https://${var.domain-name}"
 
       recaptchaSecretParameter = var.recaptcha-secret-parameter-name
@@ -659,9 +659,11 @@ resource "aws_lambda_function" "crc-forwardMail" {
       aliasTableName = aws_dynamodb_table.crc-mail-alias.id
       contactDomain  = var.domain-name
 
-      # The real inbox lives only here, in the function's configuration. It is never
-      # printed, published to the site, or included in anything the CV is built from.
-      forwardToAddress = aws_ses_email_identity.crc-mail-destination.email
+      # The real inbox. It reaches the function's configuration from an Actions secret
+      # (see var.contact_destination_email) and is never printed, published to the site,
+      # or included in anything the CV is built from. Read from the variable rather than
+      # the identity resource so it keeps its sensitive mark in the published plan.
+      forwardToAddress = var.contact-destination-email
       sendFromAddress  = "noreply@${aws_ses_domain_identity.crc-mail-domain.domain}"
     }
   }

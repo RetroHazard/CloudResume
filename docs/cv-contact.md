@@ -83,9 +83,12 @@ Forwarding for aliases already issued keeps working.
 - **SES sandbox.** If the account is still in the sandbox, SES only sends to verified
   addresses. The destination is already a verified identity (the contact form uses it), so
   forwarding works either way.
-- **The real inbox address is committed.** The forwarding destination is
-  `aws_ses_email_identity.crc-mail-destination` in `modules/backend/main.tf`. That predates
-  this feature (the contact form sends to it), and it is in the repository's history.
-  Moving it to a sensitive Terraform variable fed from a GitHub secret would keep it out of
-  the code going forward; rotating to a new destination address is the only way to get it
-  out of the history.
+- **The real inbox comes from a secret.** The forwarding destination (also the contact
+  form's) is the `CONTACT_DESTINATION_EMAIL` repository secret, passed to Terraform as the
+  sensitive variable `contact_destination_email`. It isn't in the code, it's masked in logs,
+  and it's redacted from the plans the pipeline publishes. That includes the IAM policies
+  naming its SES identity, since that ARN embeds the address; review changes to those two
+  policies with a local plan. A missing or malformed secret fails the plan rather than
+  replacing the SES identity. For local runs, set `TF_VAR_contact_destination_email`.
+  The address is still in the repository's git history from before this change. Only
+  switching to a different destination address takes it out of circulation.

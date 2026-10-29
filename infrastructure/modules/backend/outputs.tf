@@ -52,10 +52,6 @@ output "aws_ses_domain_identity_crc-mail-domain_arn" {
   value = aws_ses_domain_identity.crc-mail-domain.arn
 }
 
-output "aws_ses_email_identity_crc-mail-destination_arn" {
-  value = aws_ses_email_identity.crc-mail-destination.arn
-}
-
 output "aws_ses_domain_mail_from_crc-mail-from-domain" {
   value = aws_ses_domain_mail_from.crc-mail-from-domain.mail_from_domain
 }

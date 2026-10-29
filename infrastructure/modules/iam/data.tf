@@ -180,7 +180,7 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
     ]
     resources = [
       var.crc-ses-configuration-set,
-      var.crc-ses-mail-destination,
+      local.ses-destination-identity-arn,
       var.crc-ses-mail-domain
     ]
   }
@@ -434,8 +434,15 @@ data "aws_iam_policy_document" "crc-lambda-ForwardMail-access-policy" {
       "ses:SendRawEmail"
     ]
     resources = [
-      var.crc-ses-mail-destination,
+      local.ses-destination-identity-arn,
       var.crc-ses-mail-domain
     ]
   }
+}
+
+# An email identity's ARN embeds the address itself. It is built here from the sensitive
+# variable, rather than taken from the identity resource's computed `arn`, which would carry
+# the address into the published plan unredacted.
+locals {
+  ses-destination-identity-arn = "arn:aws:ses:${data.aws_region.current.region}:${var.account_id}:identity/${var.crc-ses-mail-destination-email}"
 }

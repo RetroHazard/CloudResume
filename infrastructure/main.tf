@@ -63,7 +63,7 @@ module "iam" {
   crc-mail-bucket-arn                            = module.backend.aws_s3_bucket_crc-agb-s3-mail_arn
   crc-cw-lambda-log-group-forwardMail            = module.backend.aws_cloudwatch_log_group_crc-forwardMail_arn
   crc-ses-configuration-set                      = module.backend.aws_ses_configuration_set_crc-contact-mail_arn
-  crc-ses-mail-destination                       = module.backend.aws_ses_email_identity_crc-mail-destination_arn
+  crc-ses-mail-destination-email                 = var.contact_destination_email
   crc-ses-mail-domain                            = module.backend.aws_ses_domain_identity_crc-mail-domain_arn
 }
 
@@ -115,6 +115,7 @@ module "backend" {
   cv-source-object-key          = var.cv_source_object_key
   cv-object-prefix              = var.cv_object_prefix
   mail-retention-days           = var.mail_retention_days
+  contact-destination-email     = var.contact_destination_email
   signed-url-ttl-seconds        = var.signed_url_ttl_seconds
 
   recaptcha-secret-parameter-name = var.recaptcha_secret_parameter

@@ -121,3 +121,8 @@ variable "recaptcha-secret-parameter-name" {
 variable "mail-retention-days" {
   type = number
 }
+
+variable "contact-destination-email" {
+  type      = string
+  sensitive = true
+}

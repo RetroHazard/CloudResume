@@ -132,3 +132,16 @@ variable "mail_retention_days" {
   type        = number
   default     = 7
 }
+
+variable "contact_destination_email" {
+  description = "The real inbox behind the contact form and the CV's forwarding alias. Supplied from the CONTACT_DESTINATION_EMAIL Actions secret, so it is never committed, and marked sensitive so it is redacted from the plans the pipeline publishes"
+  type        = string
+  sensitive   = true
+
+  # Without this, a missing secret would arrive as "" and the plan would replace the SES
+  # identity with an empty one instead of failing.
+  validation {
+    condition     = can(regex("^[^@[:space:]]+@[^@[:space:]]+\\.[^@[:space:]]+$", var.contact_destination_email))
+    error_message = "contact_destination_email is not an email address. In CI it comes from the CONTACT_DESTINATION_EMAIL repository secret; locally, set TF_VAR_contact_destination_email."
+  }
+}

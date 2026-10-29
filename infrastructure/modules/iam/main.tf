@@ -72,7 +72,9 @@ resource "aws_iam_policy" "crc-Lambda-SendMessage-AccessPolicy" {
   name = "crc-Lambda-SendMessage-AccessPolicy"
   path = "/CloudResume/"
 
-  policy = data.aws_iam_policy_document.crc-lambda-SendMessage-access-policy.json
+  # sensitive(): the document names the real inbox's SES identity, so its diff is redacted
+  # from published plans. Review changes to it with a local plan.
+  policy = sensitive(data.aws_iam_policy_document.crc-lambda-SendMessage-access-policy.json)
 
   lifecycle {
     create_before_destroy = false
@@ -272,7 +274,9 @@ resource "aws_iam_policy" "crc-Lambda-ForwardMail-AccessPolicy" {
   name = "crc-Lambda-ForwardMail-AccessPolicy"
   path = "/CloudResume/"
 
-  policy = data.aws_iam_policy_document.crc-lambda-ForwardMail-access-policy.json
+  # sensitive(): the document names the real inbox's SES identity, so its diff is redacted
+  # from published plans. Review changes to it with a local plan.
+  policy = sensitive(data.aws_iam_policy_document.crc-lambda-ForwardMail-access-policy.json)
 
   lifecycle {
     create_before_destroy = false
