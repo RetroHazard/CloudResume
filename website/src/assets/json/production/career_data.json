@@ -73,10 +73,10 @@
         },
         {
             "company": "Hollow Souls",
-            "job_title": "Solo Developer",
+            "job_title": "Independent Developer",
             "location": "Tokyo, Japan",
             "type": "Self-Employed",
-            "start": "2021",
+            "start": "2021-01",
             "end": "---",
             "logo": "./images/logos/companies/hollowsouls.png",
             "website": "https://www.hollowsouls.com/",
