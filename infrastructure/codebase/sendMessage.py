@@ -172,6 +172,8 @@ def lambda_handler(event, context):
 
         return api_response
 
-    except Exception as e:
-        # Handle any errors that may occur
-        return {'statusCode': 500, 'body': json.dumps({'error': str(e)})}
+    except Exception:
+        # The detail goes to the log, not the caller: an SES or parsing error can name
+        # addresses, identities or internals that a public endpoint has no reason to echo.
+        logger.exception('Contact form submission failed')
+        return _rejected(500, 'Message could not be sent')

@@ -133,6 +133,10 @@
       <rect x="154.4" y="976" width="83.19999999999999" height="15" class="edge-label-bg"/>
       <text x="196" y="987" text-anchor="middle" class="edge-text">state + lock</text>
     </g>
+<path d="M 708 950 L 865 950" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
+      <rect x="764.75" y="924" width="40.5" height="15" class="edge-label-bg"/>
+      <text x="785" y="935" text-anchor="middle" class="edge-text">alarm</text>
+    </g>
 <path d="M 915 330 L 980 330 L 980 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 915 450 L 1000 450 L 1000 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 915 570 L 1020 570 L 1020 910 L 680 910" class="edge edge-log" fill="none"/>
@@ -336,17 +340,27 @@
     <g transform="translate(680 950)" color="#FFFFFF" class="icon"><path d="M-14 0 C-9 -9 9 -9 14 0 C9 9 -9 9 -14 0 Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
     <circle cx="0" cy="0" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/></g>
     <text x="680" y="995" class="label" text-anchor="middle">CloudWatch</text>
-    <text x="680" y="1010" class="sub" text-anchor="middle">logs + metrics</text>
+    <text x="680" y="1010" class="sub" text-anchor="middle">logs · metrics · alarms</text>
     
   </g>
 
   <g class="node">
-    <rect x="867" y="927" width="46" height="46" rx="13" class="badge" fill="#D64550"/>
-    <g transform="translate(890 950)" color="#FFFFFF" class="icon"><circle cx="-7" cy="0" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <rect x="865" y="925" width="50" height="50" rx="13" class="badge" fill="#C23E86"/>
+    <g transform="translate(890 950)" color="#FFFFFF" class="icon"><path d="M-10 6 V-3 A10 10 0 0 1 10 -3 V6 L13 10 H-13 Z" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/>
+    <path d="M-4 13 A4 4 0 0 0 4 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="0" y1="-13" x2="0" y2="-16" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></g>
+    <text x="890" y="992" class="label" text-anchor="middle">SNS</text>
+    <text x="890" y="1007" class="sub" text-anchor="middle">contact form alerts</text>
+    <text x="890" y="1020" class="sub" text-anchor="middle">email → inbox</text>
+  </g>
+
+  <g class="node">
+    <rect x="1077" y="927" width="46" height="46" rx="13" class="badge" fill="#D64550"/>
+    <g transform="translate(1100 950)" color="#FFFFFF" class="icon"><circle cx="-7" cy="0" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
     <circle cx="-7" cy="0" r="1.8" fill="currentColor"/>
     <path d="M-1 0 H14 M14 0 V6 M9 0 V5" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g>
-    <text x="890" y="990" class="label" text-anchor="middle">IAM</text>
-    <text x="890" y="1005" class="sub" text-anchor="middle">least-privilege roles</text>
+    <text x="1100" y="990" class="label" text-anchor="middle">IAM</text>
+    <text x="1100" y="1005" class="sub" text-anchor="middle">least-privilege roles</text>
     
   </g>
 

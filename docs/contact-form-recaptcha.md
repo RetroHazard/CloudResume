@@ -62,6 +62,31 @@ the invisible widget. Register a new one.
 4. Deploy. Do steps 2 and 3 before the deploy that carries this change, because the Lambda refuses
    every submission while the parameter is missing or doesn't match the site key on the page.
 
+## Failure alerts
+
+A submission that fails on our side is emailed to the inbox the form delivers to
+(`CONTACT_DESTINATION_EMAIL`), through the `crc-contact-form-alerts` SNS topic. Two alarms
+publish to it:
+
+| Alarm                            | Fires when                                                                                          |
+| -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `crc-contact-form-failures`      | `sendMessage` logs at ERROR: SES refused the send, or `siteverify` couldn't be reached (500 or 503) |
+| `crc-contact-form-lambda-errors` | The Lambda itself errored or timed out, which the handler can't catch or log                        |
+
+The first alarm needs a metric filter because the handler catches its own failures and returns a
+response, so the Lambda's `Errors` metric never counts them. Rejections are not failures and
+don't alert: a missing or invalid token, or a foreign `Origin`, is logged at INFO or not at all.
+`test_sendMessage.py` holds both sides of that line, since anything logged at ERROR now sends an
+email.
+
+Each alarm emails once when it goes into alarm, and again only after a quiet five minutes followed
+by another failure. The email names the alarm, and the detail is in the
+`/aws/lambda/sendMessage` log group.
+
+SNS confirms an email subscription before it delivers anything. The first deploy that creates the
+topic sends a confirmation email to that inbox, and alerts only start once its link is followed.
+If the destination address changes, the subscription is replaced and needs confirming again.
+
 ## Local development
 
 Without `VITE_RECAPTCHA_SITE_KEY`, the widget doesn't render and the form sends no token, so any

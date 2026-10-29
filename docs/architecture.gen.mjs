@@ -75,6 +75,9 @@ const icons = {
     <path d="M-7 -6 H7 M-7 -1 H1" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
     <circle cx="6" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="2.1"/>
     <path d="M3 12 L2 17 L6 15 L10 17 L9 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>`,
+  bell: `<path d="M-10 6 V-3 A10 10 0 0 1 10 -3 V6 L13 10 H-13 Z" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linejoin="round"/>
+    <path d="M-4 13 A4 4 0 0 0 4 13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+    <line x1="0" y1="-13" x2="0" y2="-16" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>`,
   pulse: `<path d="M-14 1 H-7 L-3 -9 L2 10 L6 1 H14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`,
   git: `<circle cx="0" cy="4" r="5" fill="none" stroke="currentColor" stroke-width="2.2"/>
     <circle cx="-11" cy="-10" r="4.2" fill="none" stroke="currentColor" stroke-width="2.1"/>
@@ -114,8 +117,9 @@ add('sqs', 650, 750, 'SQS', 'invalidation queue', 'integ', 'queue', 50);
 add('linvalidate', 890, 750, 'λ cloudfrontInvalidation', 'batch 15 / 5s window', 'compute', 'lambda', 50);
 
 // Row C (y=950): observability + CI/CD
-add('cw', 680, 950, 'CloudWatch', 'logs + metrics', 'mgmt', 'eye');
-add('iam', 890, 950, 'IAM', 'least-privilege roles', 'security', 'key', 46);
+add('cw', 680, 950, 'CloudWatch', 'logs · metrics · alarms', 'mgmt', 'eye');
+add('sns', 890, 950, 'SNS', 'contact form alerts', 'integ', 'bell', 50, 'email → inbox');
+add('iam', 1100, 950, 'IAM', 'least-privilege roles', 'security', 'key', 46);
 add('gha', 90, 950, 'GitHub Actions', 'OIDC, no static keys', 'cicd', 'git');
 add('tfstate', 300, 950, 'Terraform State', 'S3 backend · lock file', 'storage', 'bucket', 50);
 
@@ -155,6 +159,7 @@ edge('health', 'cf', 'sync', 'HTTPS probe', { x: 346, y: 134 }, { path: 'health-
 edge('acm', 'cf', 'sync', 'TLS cert', { x: 504, y: 520 }, { path: 'acm-cf' });
 edge('acm', 'apigw', 'sync', null, null, { path: 'acm-api' });
 edge('gha', 'tfstate', 'sync', 'state + lock', { x: 196, y: 986 }, { path: 'tf-state' });
+edge('cw', 'sns', 'event', 'alarm', { x: 785, y: 934 });
 
 const logSources = ['lsend', 'ltrack', 'ldownload', 'lupdate', 'linvalidate', 'waf', 'lforward'];
 

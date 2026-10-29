@@ -72,7 +72,7 @@ function useContactSubmit(captchaRef) {
                 if (resultType === 'error') {
                     setStatus({
                         type: 'error',
-                        text: 'Failed to send message. A notification has been sent to the Administrator. If the issue persists, please try again later.',
+                        text: 'Failed to send message. Please try again in a few minutes.',
                     });
                 } else {
                     setStatus({
@@ -254,7 +254,7 @@ function Contact() {
                 id='contact'
                 kicker='Station Office · Inquiry Counter'
                 title='Contact'
-                line={0}
+                line={6}
                 right={<StatusPill tone='on'>Open</StatusPill>}
             >
                 <div className='mx-auto max-w-screen-md'>
