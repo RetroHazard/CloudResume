@@ -35,9 +35,8 @@ variable "default_tags" {
 }
 
 variable "waf_enabled" {
-  description = "Whether CloudResume-WebACL exists and is attached to the website distribution. Leave this on: a distribution on a CloudFront flat-rate plan must keep a web ACL attached, and the plan refuses to detach it, so turning this off once subscribed makes every apply fail. On the plan the ACL and its rules are covered by the flat rate"
-  type        = bool
-  default     = true
+  type    = bool
+  default = false
 }
 
 variable "contribution_accounts" {

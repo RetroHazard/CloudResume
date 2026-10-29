@@ -140,6 +140,7 @@
 <path d="M 493 140 L 558 140 L 558 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 1265 160 L 1290 160 L 1290 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 680 910 L 680 922" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
+<path d="M 490 232 L 490 212 L 680 212" class="edge edge-log" fill="none"/>
 <path d="M 680 232 L 680 150 L 865 150" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
 <g class="edge-label"><rect x="729" y="130" width="112" height="15" class="edge-label-bg"/>
 <text x="785" y="141" text-anchor="middle" class="edge-text">server access logs</text></g>
@@ -288,7 +289,7 @@
     <g transform="translate(890 150)" color="#FFFFFF" class="icon"><path d="M-12 -9 L-10 12 A11 3 0 0 0 10 12 L12 -9" fill="none" stroke="currentColor" stroke-width="2.3"/>
     <ellipse cx="0" cy="-9" rx="12" ry="3.2" fill="none" stroke="currentColor" stroke-width="2.3"/></g>
     <text x="890" y="192" class="label" text-anchor="middle">S3 Access Logs</text>
-    <text x="890" y="207" class="sub" text-anchor="middle">site bucket</text>
+    <text x="890" y="207" class="sub" text-anchor="middle">site + CloudFront</text>
     
   </g>
 

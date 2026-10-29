@@ -29,7 +29,7 @@ import unicodedata
 import zlib
 from datetime import datetime, timezone
 
-RENDERER_VERSION = '6'
+RENDERER_VERSION = '5'
 
 # Advance widths per 1000 units of font size, for WinAnsi codes 32-255, taken from the Adobe
 # core-14 AFM metrics. Oblique shares the upright widths. The zero entries are the five code
