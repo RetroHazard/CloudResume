@@ -104,7 +104,7 @@ add('ldownload', 890, 570, 'λ downloadResume', 'GET /download', 'compute', 'lam
 add('ssm', 1130, 570, 'SSM', 'signing key', 'mgmt', 'key', 46);
 add('health', 260, 150, 'R53 Health Check', 'HTTPS /index.html', 'edge', 'pulse', 46);
 add('acm', 592, 560, 'ACM', 'site + api cert', 'security', 'cert', 46);
-add('logs', 890, 150, 'S3 Access Logs', 'site + CloudFront', 'storage', 'bucket', 50);
+add('logs', 890, 150, 'S3 Access Logs', 'site bucket', 'storage', 'bucket', 50);
 
 // Row B (y=750): event-driven automation
 add('eventbridge', 260, 750, 'EventBridge', 'rate(6h)', 'integ', 'clock');
@@ -273,12 +273,11 @@ function logTrunk() {
   return `<path d="M ${cwNode.cx} ${busY} L ${cwNode.cx} ${cwNode.cy - cwNode.size/2}" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>`;
 }
 
-// CloudFront and S3 server access logs land in one bucket. Same trunk idiom as the
-// CloudWatch bus: the CloudFront feeder merges into S3's run, which carries the arrowhead.
+// S3 server access logs for the site bucket. CloudFront used to feed the same bucket;
+// its access logs are off now, because the flat-rate Free plan does not include them.
 function logBucketLines() {
-  const lg = N['logs'], s3 = N['s3'], cf = N['cf'];
-  return `<path d="M ${cf.cx + 20} ${cf.cy - cf.size / 2} L ${cf.cx + 20} 212 L ${s3.cx} 212" class="edge edge-log" fill="none"/>
-<path d="M ${s3.cx} ${s3.cy - s3.size / 2} L ${s3.cx} ${lg.cy} L ${lg.cx - lg.size / 2} ${lg.cy}" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
+  const lg = N['logs'], s3 = N['s3'];
+  return `<path d="M ${s3.cx} ${s3.cy - s3.size / 2} L ${s3.cx} ${lg.cy} L ${lg.cx - lg.size / 2} ${lg.cy}" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
 <g class="edge-label"><rect x="${(s3.cx + lg.cx) / 2 - 56}" y="${lg.cy - 20}" width="112" height="15" class="edge-label-bg"/>
 <text x="${(s3.cx + lg.cx) / 2}" y="${lg.cy - 9}" text-anchor="middle" class="edge-text">server access logs</text></g>`;
 }

@@ -182,11 +182,12 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
   http_version        = "http2"
   is_ipv6_enabled     = "false"
 
-  logging_config {
-    bucket          = aws_s3_bucket.crc-agb-s3-website-logging.bucket_domain_name
-    include_cookies = "false"
-    prefix          = "cf_crc_production/"
-  }
+  # No logging_config and no origin_shield, deliberately. Both are paid tiers of the
+  # CloudFront flat-rate plans (access logs from Pro, Origin Shield on Premium only), and
+  # the distribution has to be free of them before it can be moved onto the Free plan.
+  # Downloads are counted by GET /download now, so the access logs had stopped being the
+  # only record of anything, and Origin Shield was a per-request surcharge on a site whose
+  # origin is S3 and whose traffic never needed the extra cache tier.
 
   origin {
     connection_attempts = "3"
@@ -195,11 +196,6 @@ resource "aws_cloudfront_distribution" "crc-cf-production-distribution" {
     domain_name              = aws_s3_bucket.crc-agb-s3-website-prod.bucket_regional_domain_name
     origin_id                = aws_s3_bucket.crc-agb-s3-website-prod.id
     origin_access_control_id = aws_cloudfront_origin_access_control.crc-cf-production-oac.id
-
-    origin_shield {
-      enabled              = "true"
-      origin_shield_region = aws_s3_bucket.crc-agb-s3-website-prod.bucket_region
-    }
   }
 
   price_class = "PriceClass_All"
@@ -255,6 +251,14 @@ resource "aws_cloudfront_key_group" "crc-cf-signing-key-group" {
 
 # Makes the download a download regardless of the link's `download` attribute, which
 # browsers only honour same-origin and drop silently otherwise.
+#
+# On its way out. Custom response header policies are a Business-tier feature of the
+# flat-rate plans, so downloadResume now stores the same header as Content-Disposition
+# metadata when it writes a CV to S3, and S3 returns it on every origin fetch. This stays
+# attached until the CV currently cached under files/cv/ has been re-rendered with that
+# metadata (RENDERER_VERSION was bumped to force it, and the smoke test's click after the
+# deploy does the render). With override = true it replaces the S3 copy rather than
+# doubling it, so the two overlap harmlessly in the meantime.
 resource "aws_cloudfront_response_headers_policy" "crc-cf-cv-download" {
   name    = "crc-cf-cv-download"
   comment = "Forces the CV to download rather than render in the browser's PDF viewer"
@@ -522,7 +526,7 @@ resource "aws_api_gateway_deployment" "crc-api-deployment" {
 
 # api.<domain> is an edge-optimized endpoint with its own internal CloudFront distribution
 # and no WAF in front of it (the CloudResume-WebACL is CLOUDFRONT-scoped and only ever
-# covered the website distribution, and waf_enabled defaults to false in any case). These
+# covered the website distribution — never this one, whatever waf_enabled is set to). These
 # throttles are therefore the only thing bounding what the API can be made to cost.
 resource "aws_api_gateway_method_settings" "crc-api-throttle-all" {
   # The log group must exist before logging_level turns logging on, or API Gateway creates
