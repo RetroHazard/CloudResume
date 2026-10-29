@@ -122,6 +122,14 @@ variable "mail-retention-days" {
   type = number
 }
 
+variable "alias-abuse-alert-threshold" {
+  type = number
+}
+
+variable "revoke-workflow-url" {
+  type = string
+}
+
 variable "contact-destination-email" {
   type      = string
   sensitive = true

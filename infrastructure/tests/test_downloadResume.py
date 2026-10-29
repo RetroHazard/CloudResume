@@ -11,6 +11,7 @@ import os
 import sys
 import types
 import unittest
+from datetime import datetime
 from unittest import mock
 from pathlib import Path
 
@@ -83,7 +84,7 @@ class FakeTable:
 
 
 class FakeAliasTable:
-    """The contact-alias table, with the one condition downloadResume relies on."""
+    """The contact-alias table, evaluating the few expression shapes downloadResume uses."""
 
     def __init__(self):
         self.items = {}
@@ -94,30 +95,62 @@ class FakeAliasTable:
         if self.down:
             raise RuntimeError('DynamoDB unavailable')
 
+    def _holds(self, item, condition, names, values):
+        if condition is None:
+            return True
+        if condition == 'attribute_not_exists(id)':
+            return item is None
+        if condition == 'attribute_exists(id)':
+            return item is not None
+        name, value = (part.strip() for part in condition.split('='))
+        return item is not None and item.get(names[name]) == values[value]
+
     def get_item(self, Key, **_):
         self._check()
         item = self.items.get(Key['id'])
         return {'Item': dict(item)} if item else {}
 
-    def put_item(self, Item, ConditionExpression=None):
+    def put_item(self, Item, ConditionExpression=None, ExpressionAttributeNames=None, ExpressionAttributeValues=None):
         self._check()
         if Item['id'] == '#current' and self.on_pointer_write:
             hook, self.on_pointer_write = self.on_pointer_write, None
             hook()
-        if ConditionExpression == 'attribute_not_exists(id)' and Item['id'] in self.items:
+        existing = self.items.get(Item['id'])
+        if not self._holds(existing, ConditionExpression, ExpressionAttributeNames, ExpressionAttributeValues):
             raise ClientError(400, 'ConditionalCheckFailedException')
         self.items[Item['id']] = dict(Item)
 
-    def update_item(self, Key, ExpressionAttributeNames, ExpressionAttributeValues, **_):
+    def update_item(
+        self, Key, UpdateExpression, ExpressionAttributeNames, ExpressionAttributeValues, ConditionExpression=None
+    ):
         self._check()
-        item = self.items[Key['id']]
-        for placeholder, name in ExpressionAttributeNames.items():
-            value = ExpressionAttributeValues.get(':' + {'status': 'revoked', 'revoked': 'now'}.get(name, 'why'))
-            item[name] = value
+        item = self.items.get(Key['id'])
+        if item is None or not self._holds(
+            item, ConditionExpression, ExpressionAttributeNames, ExpressionAttributeValues
+        ):
+            raise ClientError(400, 'ConditionalCheckFailedException')
+        for assignment in UpdateExpression.removeprefix('SET ').split(','):
+            name, value = (part.strip() for part in assignment.split('='))
+            item[ExpressionAttributeNames[name]] = ExpressionAttributeValues[value]
 
     def live(self):
         pointer = self.items.get('#current')
         return pointer and pointer['address']
+
+    def aliases(self):
+        return {k: v for k, v in self.items.items() if not k.startswith('#')}
+
+
+def at(module, moment):
+    """Pin the handler's clock to `moment` (UTC)."""
+    real = module.datetime
+
+    class Frozen(real):
+        @classmethod
+        def now(cls, tz=None):
+            return moment.replace(tzinfo=tz) if tz else moment
+
+    module.datetime = Frozen
 
 
 def load_handler(aliases=None):
@@ -346,6 +379,74 @@ class ContactAliasTests(Harness):
         self.assertEqual(self.aliases.items, {})
         [key] = self.cv_keys()
         self.assertNotIn('@example.com', self.pdf_text(key))
+
+
+class MonthlyRotationTests(Harness):
+    """One alias per calendar month; old ones keep forwarding; the CV follows along."""
+
+    def setUp(self):
+        super().setUp()
+        at(self.module, datetime(2026, 11, 3, 9, 0))
+
+    def test_an_alias_records_the_month_it_was_issued(self):
+        click(self.module)
+        live = self.aliases.live()
+        self.assertEqual(self.aliases.items[live]['month'], '2026-11')
+        self.assertEqual(self.aliases.items['#current']['month'], '2026-11')
+
+    def test_the_same_month_reuses_the_alias(self):
+        click(self.module)
+        first = self.aliases.live()
+        at(self.module, datetime(2026, 11, 30, 23, 59))
+        click(self.module, visitor='b')
+        self.assertEqual(self.aliases.live(), first)
+        self.assertEqual(len(self.aliases.aliases()), 1)
+
+    def test_a_new_month_issues_a_new_alias_and_retires_the_old_one(self):
+        click(self.module)
+        october = self.aliases.live()
+        [old_key] = self.cv_keys()
+
+        at(self.module, datetime(2026, 12, 1, 0, 5))
+        status, body = click(self.module, visitor='b')
+
+        december = self.aliases.live()
+        self.assertEqual(status, 200)
+        self.assertNotEqual(december, october)
+        self.assertEqual(self.aliases.items[december]['month'], '2026-12')
+        self.assertEqual(self.aliases.items[october]['status'], 'retired')
+        # The CV is re-rendered with the new address on that same click.
+        [new_key] = self.cv_keys()
+        self.assertNotEqual(new_key, old_key)
+        self.assertIn(new_key, body['downloadUrl'])
+
+    def test_rotation_never_revives_a_hand_revoked_alias(self):
+        click(self.module)
+        live = self.aliases.live()
+        self.aliases.items[live]['status'] = 'revoked'  # revoked by hand, pointer left in place
+
+        at(self.module, datetime(2026, 12, 1, 0, 5))
+        click(self.module, visitor='b')
+
+        self.assertEqual(self.aliases.items[live]['status'], 'revoked')
+
+    def test_concurrent_rotations_settle_on_one_alias(self):
+        click(self.module)
+        november = self.aliases.live()
+
+        def rival():
+            self.aliases.items['alexander.rival2'] = {'id': 'alexander.rival2', 'status': 'active', 'month': '2026-12'}
+            self.aliases.items['#current'] = {'id': '#current', 'address': 'alexander.rival2', 'month': '2026-12'}
+
+        self.aliases.on_pointer_write = rival
+        at(self.module, datetime(2026, 12, 1, 0, 5))
+        click(self.module, visitor='b')
+
+        self.assertEqual(self.aliases.live(), 'alexander.rival2')
+        statuses = {k: v['status'] for k, v in self.aliases.aliases().items()}
+        self.assertEqual(statuses.pop('alexander.rival2'), 'active')
+        statuses.pop(november)
+        self.assertEqual(list(statuses.values()), ['revoked'])
 
 
 if __name__ == '__main__':

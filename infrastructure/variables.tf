@@ -133,6 +133,17 @@ variable "mail_retention_days" {
   default     = 7
 }
 
+variable "alias_abuse_alert_threshold" {
+  description = "Messages dropped as spam, malware or spoofed mail in one UTC day after which the real inbox is emailed an alert, with a link to the revoke workflow, about a CV contact alias. Revoking stays manual. 0 disables alerts"
+  type        = number
+  default     = 10
+
+  validation {
+    condition     = var.alias_abuse_alert_threshold >= 0 && floor(var.alias_abuse_alert_threshold) == var.alias_abuse_alert_threshold
+    error_message = "alias_abuse_alert_threshold must be a whole number, 0 or more."
+  }
+}
+
 variable "contact_destination_email" {
   description = "The real inbox behind the contact form and the CV's forwarding alias. Supplied from the CONTACT_DESTINATION_EMAIL Actions secret, so it is never committed, and marked sensitive so it is redacted from the plans the pipeline publishes"
   type        = string

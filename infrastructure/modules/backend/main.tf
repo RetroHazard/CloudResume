@@ -659,6 +659,10 @@ resource "aws_lambda_function" "crc-forwardMail" {
       aliasTableName = aws_dynamodb_table.crc-mail-alias.id
       contactDomain  = var.domain-name
 
+      # Abuse alerts: an email with this link once an alias's daily drops reach the limit.
+      abuseAlertThreshold = tostring(var.alias-abuse-alert-threshold)
+      revokeWorkflowUrl   = var.revoke-workflow-url
+
       # The real inbox. It reaches the function's configuration from an Actions secret
       # (see var.contact_destination_email) and is never printed, published to the site,
       # or included in anything the CV is built from. Read from the variable rather than

@@ -115,6 +115,8 @@ module "backend" {
   cv-source-object-key          = var.cv_source_object_key
   cv-object-prefix              = var.cv_object_prefix
   mail-retention-days           = var.mail_retention_days
+  alias-abuse-alert-threshold   = var.alias_abuse_alert_threshold
+  revoke-workflow-url           = "https://github.com/${var.default_tags.GithubOrg}/${var.default_tags.GithubRepo}/actions/workflows/cv-contact.yml"
   contact-destination-email     = var.contact_destination_email
   signed-url-ttl-seconds        = var.signed_url_ttl_seconds
 

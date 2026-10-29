@@ -15,7 +15,13 @@ whole domain, stores the raw message in a private bucket and invokes this functi
     byte-for-byte; only header lines are touched.
 
 Every outcome is counted on the alias's row, which is what `status` in the CV contact
-workflow reports, and what tells you an address has started attracting abuse.
+workflow reports. Abusive drops are also tallied per day, and an alias that reaches the
+configured limit triggers an alert email with a link to the revoke workflow (see _watch).
+Revoking is always done by hand.
+
+Aliases rotate monthly (see downloadResume), and each records the month it was issued. A
+forwarded message says which month in its From line, e.g. "Zoë Recruiter via CV (Nov 2026)",
+so the age of the CV the sender is holding is visible at a glance.
 """
 
 import email.utils
@@ -27,6 +33,7 @@ from email.parser import BytesHeaderParser
 from email.policy import default as default_policy
 
 import boto3
+from botocore.exceptions import ClientError
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -42,6 +49,15 @@ SEND_FROM = os.environ['sendFromAddress']
 FORWARD_TO = os.environ['forwardToAddress']
 
 FORWARDING_STATUSES = {'active', 'retired'}
+
+# Abuse alerts. When an alias has this many messages dropped as abuse in one UTC day, the
+# real inbox gets an email with a link to the revoke workflow. 0 turns alerts off. Only scan
+# failures count: mail to an already-revoked alias is not evidence of new abuse.
+ABUSE_ALERT_THRESHOLD = int(os.environ.get('abuseAlertThreshold', '0'))
+ABUSE_REASONS = {'virus', 'spam', 'dmarc', 'unauthenticated'}
+REVOKE_URL = os.environ.get('revokeWorkflowUrl', '')
+
+_MONTHS = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec')
 
 # SES v1 SendRawEmail rejects anything larger. Bigger messages are announced, not forwarded.
 MAX_FORWARD_BYTES = 10 * 1024 * 1024
@@ -109,7 +125,7 @@ def _header_value(line):
     return line.split(b':', 1)[1].lstrip() if b':' in line else b''
 
 
-def rewrite(raw, alias):
+def rewrite(raw, alias, issued=None):
     """Re-address a received message for forwarding. The body is returned untouched."""
     lines, newline, body = _split_headers(raw)
     by_name = {}
@@ -122,12 +138,16 @@ def rewrite(raw, alias):
 
     # Reply-To carries the original header bytes verbatim, so an encoded display name or an
     # address list survives exactly as the sender wrote it.
+    label = _month_label(issued)
+    via = f' ({label})' if label else ''
     reply_to = by_name.get('reply-to') or by_name.get('from')
     kept = [line for line in lines if _header_name(line) not in _STRIP]
     added = [
-        b'From: ' + email.utils.formataddr((f'{shown} via CV', SEND_FROM), charset='utf-8').encode('ascii'),
+        b'From: ' + email.utils.formataddr((f'{shown} via CV{via}', SEND_FROM), charset='utf-8').encode('ascii'),
         b'X-CV-Alias: ' + alias.encode('ascii', 'replace'),
     ]
+    if issued:
+        added.append(b'X-CV-Issued: ' + issued.encode('ascii', 'replace'))
     if reply_to:
         added.append(b'Reply-To: ' + _header_value(reply_to))
     return newline.join(added + kept) + newline * 2 + body
@@ -170,18 +190,101 @@ def _count(alias, outcome, reason=None):
         logger.warning('Could not record %s for alias %s', outcome, alias, exc_info=True)
 
 
-def _status(local):
+def _conditional_failed(err):
+    return err.response.get('Error', {}).get('Code') == 'ConditionalCheckFailedException'
+
+
+def _record_abuse(alias, day):
+    """Count one abusive message against `alias` for `day` (UTC). Returns the day's total.
+
+    The tally lives on the alias row as (abuse_day, abuse_count) and starts over on the first
+    abusive message of a new day, so the row never grows a field per day.
+    """
+    names = {'#c': 'abuse_count', '#d': 'abuse_day'}
+    try:
+        updated = alias_table.update_item(
+            Key={'id': alias},
+            UpdateExpression='ADD #c :one',
+            ConditionExpression='#d = :day',
+            ExpressionAttributeNames=names,
+            ExpressionAttributeValues={':one': 1, ':day': day},
+            ReturnValues='UPDATED_NEW',
+        )
+        return int(updated['Attributes']['abuse_count'])
+    except ClientError as err:
+        if not _conditional_failed(err):
+            raise
+    alias_table.update_item(
+        Key={'id': alias},
+        UpdateExpression='SET #d = :day, #c = :one',
+        ConditionExpression='attribute_exists(id)',
+        ExpressionAttributeNames=names,
+        ExpressionAttributeValues={':one': 1, ':day': day},
+    )
+    return 1
+
+
+def _abuse_alert(alias, count, day, issued):
+    address = f'{alias}@{CONTACT_DOMAIN}'
+    text = (
+        f'{address} (issued {issued or "unknown"}) has received {count} messages on {day} (UTC) '
+        'that were dropped as spam, malware or spoofed mail.\r\n\r\n'
+        'Nothing has been changed: the address still forwards clean mail. If it looks abused, '
+        'revoke it from the "CV contact address" workflow (action: revoke, address: '
+        f'{address}):\r\n\r\n{REVOKE_URL}\r\n\r\n'
+        'Revoking the address currently on the CV makes the next CV download issue a new one.\r\n'
+    )
+    return (
+        b'From: ' + email.utils.formataddr(('CV contact forwarder', SEND_FROM)).encode('ascii') + b'\r\n'
+        b'Subject: ' + f'[CV] {address} is attracting abuse'.encode('ascii', 'replace') + b'\r\n'
+        b'Content-Type: text/plain; charset=utf-8\r\n'
+        b'MIME-Version: 1.0\r\n\r\n' + text.encode('utf-8')
+    )
+
+
+def _watch(alias, item, reason):
+    """Tally an abusive message for an alias and email an alert when it reaches the threshold.
+
+    Revocation itself is always a person's decision (the CV contact workflow), so this only
+    alerts, once per alias per day: exactly when the day's count reaches the threshold.
+
+    Never raises: the message is already being dropped, and a failure here must not turn into
+    a Lambda error that SES would retry.
+    """
+    if not ABUSE_ALERT_THRESHOLD or reason not in ABUSE_REASONS:
+        return
+    try:
+        day = datetime.now(timezone.utc).date().isoformat()
+        count = _record_abuse(alias, day)
+        if count == ABUSE_ALERT_THRESHOLD:
+            alert = _abuse_alert(alias, count, day, item.get('month'))
+            ses.send_raw_email(Source=SEND_FROM, Destinations=[FORWARD_TO], RawMessage={'Data': alert})
+            logger.warning('Abuse alert sent for alias %s: %d drops on %s', alias, count, day)
+    except Exception:
+        logger.exception('Abuse tracking failed for alias %s', alias)
+
+
+def _month_label(month):
+    """'2026-11' -> 'Nov 2026'; anything else -> ''."""
+    try:
+        year, number = month.split('-')
+        return f'{_MONTHS[int(number) - 1]} {int(year)}'
+    except (AttributeError, ValueError, IndexError):
+        return ''
+
+
+def _alias_item(local):
     if not local or local.startswith('#'):
         return None
-    item = alias_table.get_item(Key={'id': local}).get('Item')
-    return item.get('status') if item else None
+    return alias_table.get_item(Key={'id': local}).get('Item')
 
 
 def handle(record):
     mail, receipt = record['mail'], record['receipt']
     message_id = mail['messageId']
     aliases = [a for a in (_local_part(r) for r in receipt.get('recipients', [])) if a]
-    statuses = {alias: _status(alias) for alias in aliases}
+    items = {alias: _alias_item(alias) for alias in aliases}
+    statuses = {alias: (item or {}).get('status') for alias, item in items.items()}
     live = [alias for alias, status in statuses.items() if status in FORWARDING_STATUSES]
     reason = rejection_reason(receipt)
 
@@ -189,6 +292,8 @@ def handle(record):
         for alias in aliases:
             if statuses[alias] is not None:
                 _count(alias, 'dropped', reason or statuses[alias])
+            if statuses[alias] in FORWARDING_STATUSES:
+                _watch(alias, items[alias], reason)
         logger.info(
             'Dropped %s: %s',
             message_id,
@@ -199,8 +304,9 @@ def handle(record):
 
     alias = live[0]
     address = f'{alias}@{CONTACT_DOMAIN}'
+    issued = (items[alias] or {}).get('month')
     raw = s3.get_object(Bucket=MAIL_BUCKET, Key=f'{MAIL_PREFIX}{message_id}')['Body'].read()
-    message = rewrite(raw, address)
+    message = rewrite(raw, address, issued=issued)
     if len(message) > MAX_FORWARD_BYTES:
         message = _too_large_notice(address, mail)
 

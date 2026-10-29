@@ -1,16 +1,18 @@
 # Manages the forwarding address printed on the generated CV.
 #
 # The CV never carries the real inbox. downloadResume prints a random alias
-# (alexander.k7q2mx@<domain>) and forwardMail relays mail sent to it. This is the
-# control panel for those aliases:
+# (alexander.k7q2mx@<domain>) and forwardMail relays mail sent to it. Aliases
+# rotate on their own: the first CV download of each calendar month issues a new
+# one and retires the last, which keeps forwarding. This is the control panel:
 #
-#   status   list every alias with its state and what has happened to its mail
-#   rotate   retire the live alias and issue a new one on the next CV download.
-#            Retired aliases keep forwarding, so CVs already sent still work.
-#            Use it to put a fresh address on the CV without cutting anyone off.
+#   status   list every alias with the month it was issued, its state, and what
+#            has happened to its mail.
 #   revoke   stop forwarding an alias outright: spam, abuse, a leak. With no
 #            address given it revokes the live one, and the next CV download
 #            issues a new one. Mail to a revoked alias is dropped silently.
+#            forwardMail's abuse alert emails link straight here.
+#   rotate   retire the live alias ahead of the monthly rotation. It keeps
+#            forwarding; the next CV download issues a new one.
 #
 # Rotating or revoking the live alias deletes the table's "#current" pointer,
 # which is all downloadResume needs to mint a replacement and re-render the CV.
@@ -22,12 +24,16 @@ on:
       action:
         description: What to do.
         type: choice
-        options: [status, rotate, revoke]
+        options: [status, revoke, rotate]
         default: status
       address:
         description: >-
           revoke only. A specific alias to revoke, e.g. an old retired one that has
           started attracting spam. Leave empty to revoke the live alias.
+        type: string
+        required: false
+      reason:
+        description: Optional note kept on the alias, e.g. "spam" or "leaked on a job board".
         type: string
         required: false
 
@@ -61,6 +67,7 @@ jobs:
         env:
           ACTION: ${{ inputs.action }}
           ADDRESS: ${{ inputs.address }}
+          REASON: ${{ inputs.reason }}
         run: |
           set -euo pipefail
           now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
@@ -85,12 +92,14 @@ jobs:
           fi
 
           status=$([ "$ACTION" = "revoke" ] && echo revoked || echo retired)
-          values=$(jq -nc --arg s "$status" --arg t "$now" '{":s":{"S":$s},":t":{"S":$t}}')
+          reason=${REASON:-manual $ACTION}
+          values=$(jq -nc --arg s "$status" --arg t "$now" --arg r "$reason" \
+                     '{":s":{"S":$s},":t":{"S":$t},":r":{"S":$r}}')
           aws dynamodb update-item --table-name "$TABLE" \
             --key "$(jq -nc --arg id "$target" '{id:{S:$id}}')" \
             --condition-expression 'attribute_exists(id)' \
-            --update-expression 'SET #s = :s, #t = :t' \
-            --expression-attribute-names "$(jq -nc --arg t "$status" '{"#s":"status","#t":$t}')" \
+            --update-expression 'SET #s = :s, #t = :t, #r = :r' \
+            --expression-attribute-names "$(jq -nc --arg t "$status" '{"#s":"status","#t":$t,"#r":"reason"}')" \
             --expression-attribute-values "$values"
 
           # Only the live alias has a pointer. Removing it is what makes the next CV
@@ -113,13 +122,13 @@ jobs:
           set -euo pipefail
           aws dynamodb scan --table-name "$TABLE" --output json > aliases.json
           {
-            echo '| Alias | Status | Created | Forwarded | Dropped | Last received |'
+            echo '| Alias | Issued for | Status | Forwarded | Dropped | Last received |'
             echo '| --- | --- | --- | --- | --- | --- |'
             jq -r --arg domain "$DOMAIN" '
               .Items
               | map(select(.id.S != "#current"))
               | sort_by(.created.S) | reverse | .[]
-              | "| \(.id.S)@\($domain) | \(.status.S) | \(.created.S[0:10]) "
+              | "| \(.id.S)@\($domain) | \(.month.S // "—") | \(.status.S)\(if .reason.S then " (\(.reason.S))" else "" end) "
                 + "| \(.forwarded.N // "0") | \(.dropped.N // "0") "
                 + "| \((.last_received.S // "—")[0:16]) |"' aliases.json
           } | tee -a "$GITHUB_STEP_SUMMARY"

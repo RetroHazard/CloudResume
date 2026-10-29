@@ -3,8 +3,9 @@
 The generated CV has to give recruiters a way to reach you, but it is a freely downloadable
 document. So it prints neither a phone number nor the real inbox. It prints a random
 forwarding alias on the site's own domain, such as `alexander.k7q2mx@<domain>`. Mail sent to
-the alias is filtered and relayed to the real inbox, and the alias can be retired or revoked
-at any time without touching anything else.
+the alias is filtered and relayed to the real inbox. A new alias is issued every month, so
+each one dates the CV it was printed on, and any alias can be revoked by hand with one
+workflow run.
 
 ## How it works
 
@@ -16,8 +17,9 @@ recruiter → alexander.k7q2mx@<domain>
             ├─ drop: virus, spam, DMARC fail with p=reject, or SPF and DKIM both failing
             ├─ drop: recipient isn't an active or retired alias (revoked, unknown, typo)
             └─ SendRawEmail → real inbox
-                 From:     "Zoë Recruiter via CV" <noreply@<domain>>
+                 From:     "Zoë Recruiter via CV (Nov 2026)" <noreply@<domain>>
                  Reply-To: zoe@recruiter.example   ← so Reply answers the sender directly
+                 X-CV-Issued: 2026-11              ← the month their copy of the CV is from
                  (body and every other header byte-for-byte as received)
 ```
 
@@ -28,31 +30,53 @@ address is live to whoever is probing it.
 
 Nothing about the alias lives in the repository or in the site data. `downloadResume` reads
 the live alias from the `crc-mail-alias` table on each CV download and prints it in the CV
-header. If there isn't one, it mints a new one (your first name plus six random characters,
-skipping lookalikes such as `l`/`1` and `o`/`0`, since the address may be retyped from
-paper). Because the address is part of the CV model, a new alias changes the content digest,
-and the CV is re-rendered on that same click.
+header. Aliases are your first name plus six random characters, skipping lookalikes such as
+`l`/`1` and `o`/`0` since the address may be retyped from paper.
+
+### Monthly rotation
+
+There is one alias per calendar month (UTC). The first CV download of a new month issues a
+new alias, records the month on it, and retires the previous one. A retired alias keeps
+forwarding, so every CV ever downloaded stays reachable unless you revoke its alias.
+
+Because the address is part of the CV model, a new alias changes the content digest, so the
+CV is re-rendered with it on that same click. The rotation is lazy: a month in which nobody
+downloads the CV issues no alias, because nobody received one.
+
+That gives you:
+
+- **Which address was valid when:** the `status` view lists each alias with its month.
+- **How old a sender's CV is:** forwarded mail says so in its From line and in the
+  `X-CV-Issued` header. A message saying "(Mar 2026)" in December came from a CV that has
+  been circulating for nine months.
 
 Each alias has one of three states:
 
 | Status | On the CV | Mail forwarded |
 | --- | --- | --- |
-| `active` | yes, the one live alias | yes |
-| `retired` | no | yes, so CVs already sent keep working |
+| `active` | yes, this month's alias | yes |
+| `retired` | no, superseded by a later month or rotated by hand | yes, so CVs already sent keep working |
 | `revoked` | no | no, dropped silently |
+
+### Abuse alerts
+
+`forwardMail` tallies, per alias per UTC day, the messages it drops as spam, malware or spoofed
+mail. When an alias reaches `alias_abuse_alert_threshold` (default 10) in a day, the real inbox
+gets one email naming the alias, its month, and a link to the revoke workflow. Nothing is
+revoked automatically; that decision is always yours. Set the threshold to 0 to turn alerts
+off.
 
 ## Managing it
 
 Run the **CV contact address** workflow (Actions → CV contact address → Run workflow):
 
-- **status**: every alias, its state, and how much mail it has forwarded and dropped.
-  A climbing `Dropped` count, or forwarded mail you don't recognise, is the sign an address
-  has leaked into spam lists.
-- **rotate**: retire the live alias. The next CV download prints a fresh one; the old one
-  keeps forwarding. Use it for routine freshness.
-- **revoke**: stop an alias outright. Leave *address* empty to revoke the live alias (the
-  next download prints a replacement), or name an older retired alias that has started
-  attracting spam.
+- **status**: every alias, the month it was issued for, its state (with the reason, if it
+  was revoked or rotated by hand), and how much mail it has forwarded and dropped.
+- **revoke**: stop an alias outright. It's a single run: leave *address* empty to revoke
+  this month's alias (the next CV download issues a replacement), or name any older alias
+  from an alert or the status view. *reason* is optional and shows up in `status`.
+- **rotate**: retire this month's alias early. It keeps forwarding; the next download issues
+  a new one for the same month. Rarely needed now that rotation is monthly.
 
 The workflow uses the same `AWS_TF_OIDC_ROLE` secret and `AWS_TF_*` variables as the
 pipeline, so it needs no extra setup.
@@ -68,8 +92,10 @@ Forwarding for aliases already issued keeps working.
   recipient sees your real address. That is a deliberate choice for a CV, where you will
   usually want an ongoing conversation. Sending *as* the alias would need SMTP credentials
   configured in your mail client and is not set up here.
-- **Spam scoring is SES's.** Messages SES scores as borderline still get through. Revoking
-  is the backstop.
+- **Spam scoring is SES's.** Messages SES scores as borderline still get through, and they
+  don't count towards an alert. Revoking is the backstop.
+- **Anyone can trip an alert.** Someone who knows an alias could send spoofed mail to it on
+  purpose. That only produces an email to you, which is why alerts never revoke on their own.
 
 ## Prerequisites and caveats
 

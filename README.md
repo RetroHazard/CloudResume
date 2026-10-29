@@ -46,8 +46,9 @@ content has changed. Page budget, section order and trimming rules are set in th
 too. See [`docs/generated-cv.md`](docs/generated-cv.md).
 
 The CV's contact address is a disposable forwarding alias rather than a real inbox: SES
-receives the mail, filters it, and relays it on, and the alias can be rotated or revoked from
-a workflow. See [`docs/cv-contact.md`](docs/cv-contact.md).
+receives the mail, filters it, and relays it on. A new alias is issued each month, so every
+forwarded message shows how old the sender's copy of the CV is, and any alias can be revoked
+from a workflow. See [`docs/cv-contact.md`](docs/cv-contact.md).
 
 ## Architectural Overview
 

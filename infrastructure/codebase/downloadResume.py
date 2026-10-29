@@ -19,8 +19,9 @@ on demand, caching the result in S3 under a digest of its content. A click only 
 render when the site has changed since the last one; otherwise it costs a conditional GET
 that S3 answers with a 304.
 
-The CV's contact address is a forwarding alias issued here as well (see _contact_address and
-forwardMail.py), so revoking one shows up on the next download.
+The CV's contact address is a forwarding alias issued here as well, one per calendar month
+(see _contact_address and forwardMail.py), so a rotation or a revocation shows up on the
+next download.
 """
 
 import base64
@@ -198,27 +199,40 @@ def _prune_superseded(current_folder):
 _ALIAS_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'
 
 
-def _mint_alias(full_name):
-    """Create a new forwarding alias and make it the live one. Returns its address.
+def _conditional_failed(err):
+    return err.response.get('Error', {}).get('Code') == 'ConditionalCheckFailedException'
 
-    Two containers can race here, e.g. on the first clicks after a rotation. The pointer is
-    written with a condition, so exactly one alias wins; a loser's alias is revoked before
-    anyone can have seen it, and the winner is read back.
+
+def _issue_alias(full_name, month, replacing=None):
+    """Mint an alias for `month` and make it the live one. Returns its address.
+
+    `replacing` is the live alias being rotated out, if any. The pointer swap is conditional on
+    it (or on there being no pointer at all), so when two containers rotate at once exactly
+    one alias wins: the loser's is revoked before anyone can have seen it, and the winner is
+    read back. Only after a successful swap is the old alias retired, which keeps it
+    forwarding for anyone holding a CV from its month.
     """
     first = re.sub(r'[^a-z0-9]', '', renderResume._ascii((full_name or '').split(' ')[0]).lower()) or 'contact'
     local = f'{first}.{"".join(secrets.choice(_ALIAS_ALPHABET) for _ in range(6))}'
     now = datetime.now(timezone.utc).isoformat()
     alias_table.put_item(
-        Item={'id': local, 'status': 'active', 'created': now},
+        Item={'id': local, 'status': 'active', 'month': month, 'created': now},
         ConditionExpression='attribute_not_exists(id)',
     )
-    try:
-        alias_table.put_item(
-            Item={'id': ALIAS_POINTER, 'address': local, 'since': now},
-            ConditionExpression='attribute_not_exists(id)',
+    pointer = {
+        'Item': {'id': ALIAS_POINTER, 'address': local, 'month': month, 'since': now},
+        'ConditionExpression': 'attribute_not_exists(id)',
+    }
+    if replacing:
+        pointer.update(
+            ConditionExpression='#a = :old',
+            ExpressionAttributeNames={'#a': 'address'},
+            ExpressionAttributeValues={':old': replacing},
         )
+    try:
+        alias_table.put_item(**pointer)
     except ClientError as err:
-        if err.response.get('Error', {}).get('Code') != 'ConditionalCheckFailedException':
+        if not _conditional_failed(err):
             raise
         alias_table.update_item(
             Key={'id': local},
@@ -226,17 +240,35 @@ def _mint_alias(full_name):
             ExpressionAttributeNames={'#s': 'status', '#t': 'revoked', '#r': 'reason'},
             ExpressionAttributeValues={':revoked': 'revoked', ':now': now, ':why': 'lost a concurrent mint'},
         )
-        return _contact_address(full_name, mint=False)
-    logger.info('Minted CV contact alias %s', local)
+        return _contact_address(full_name, month, issue=False)
+
+    if replacing:
+        # Conditional, so an alias someone revoked by hand stays revoked.
+        try:
+            alias_table.update_item(
+                Key={'id': replacing},
+                UpdateExpression='SET #s = :retired, #t = :now',
+                ConditionExpression='#s = :active',
+                ExpressionAttributeNames={'#s': 'status', '#t': 'retired'},
+                ExpressionAttributeValues={':retired': 'retired', ':active': 'active', ':now': now},
+            )
+        except ClientError as err:
+            if not _conditional_failed(err):
+                raise
+    logger.info('Issued CV contact alias %s for %s', local, month)
     return f'{local}@{CONTACT_DOMAIN}'
 
 
-def _contact_address(full_name, mint=True):
-    """The forwarding address the CV should print right now, minting one if there is none.
+def _contact_address(full_name, month, issue=True):
+    """The forwarding address the CV should print right now, issuing one when due.
 
-    Revoking or rotating an alias (the CV contact workflow) deletes the pointer, so the next
-    click mints a replacement. Because the address is part of the CV model, that also changes
-    the content digest and the CV is re-rendered with the new address.
+    One alias per calendar month (UTC): the first download of a month retires last month's
+    alias and issues a new one, so every alias's `month` says when the CV carrying it was
+    downloaded, and old aliases keep forwarding. Revoking or rotating by hand (the CV contact
+    workflow) deletes the pointer, which makes the next download issue a replacement early.
+
+    Because the address is part of the CV model, a new alias changes the content digest and
+    the CV is re-rendered with it on that same click.
 
     Fails open: if the table is unreachable the CV goes out without an address rather than
     not at all. The digest then differs from the with-address CV, so the address returns on
@@ -244,9 +276,11 @@ def _contact_address(full_name, mint=True):
     """
     try:
         pointer = alias_table.get_item(Key={'id': ALIAS_POINTER}).get('Item')
-        if pointer:
+        if pointer and pointer.get('month') == month:
             return f'{pointer["address"]}@{CONTACT_DOMAIN}'
-        return _mint_alias(full_name) if mint else None
+        if not issue:
+            return f'{pointer["address"]}@{CONTACT_DOMAIN}' if pointer else None
+        return _issue_alias(full_name, month, replacing=pointer['address'] if pointer else None)
     except Exception:
         logger.exception('Could not resolve the CV contact alias; rendering without one')
         return None
@@ -264,8 +298,9 @@ def _current_cv_key():
          the digest matches a PDF that is already in the bucket. One LIST, no render.
       3. The content changed -> render once, store it, and every later click is tier 1 or 2.
 
-    The contact alias is looked up on every click (one GetItem) so that revoking it takes
-    effect on the very next download rather than whenever a container recycles.
+    The contact alias is looked up on every click (one GetItem) so that a revocation or the
+    monthly rotation takes effect on the very next download rather than whenever a container
+    recycles.
 
     The key embeds a digest of the rendered content, so a stored PDF is immutable and can
     never be served stale from CloudFront's cache.
@@ -284,7 +319,7 @@ def _current_cv_key():
 
     contact = None
     if renderResume.settings_from(source)['contactEmail']:
-        contact = _contact_address((source.get('personal') or {}).get('fullName', ''))
+        contact = _contact_address((source.get('personal') or {}).get('fullName', ''), today.strftime('%Y-%m'))
 
     if unchanged and _cv['day'] == today and _cv['contact'] == contact:
         return _cv['key']

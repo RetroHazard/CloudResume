@@ -412,7 +412,7 @@ data "aws_iam_policy_document" "crc-lambda-ForwardMail-access-policy" {
   }
 
   # Read an alias's status and count what happened to its mail. No PutItem or DeleteItem:
-  # the forwarder can never create, revive or remove an address.
+  # the forwarder can never create, revive, revoke or remove an address.
   statement {
     sid    = "AllowFunctionToCheckAliases"
     effect = "Allow"

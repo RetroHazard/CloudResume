@@ -46,6 +46,12 @@ def receipt(recipients=('alexander.k7q2mx@example.com',), **verdicts):
     return base
 
 
+class ClientError(Exception):
+    def __init__(self, code):
+        super().__init__(code)
+        self.response = {'Error': {'Code': code}}
+
+
 class FakeTable:
     def __init__(self, items):
         self.items = items
@@ -55,8 +61,19 @@ class FakeTable:
         item = self.items.get(Key['id'])
         return {'Item': item} if item else {}
 
-    def update_item(self, Key, **kwargs):
-        self.updates.append((Key['id'], kwargs['ExpressionAttributeNames']))
+    def update_item(self, Key, UpdateExpression, ExpressionAttributeNames, ExpressionAttributeValues, **kwargs):
+        self.updates.append((Key['id'], ExpressionAttributeNames))
+        item = self.items[Key['id']]
+        names, values = ExpressionAttributeNames, ExpressionAttributeValues
+        # The abuse tally: increment only while the stored day matches, else start over.
+        if UpdateExpression == 'ADD #c :one':
+            if item.get('abuse_day') != values[':day']:
+                raise ClientError('ConditionalCheckFailedException')
+            item['abuse_count'] += 1
+            return {'Attributes': {'abuse_count': item['abuse_count']}}
+        if UpdateExpression == 'SET #d = :day, #c = :one':
+            item[names['#d']], item[names['#c']] = values[':day'], 1
+        return {}
 
 
 def load(aliases):
@@ -69,7 +86,11 @@ def load(aliases):
     fake_boto3 = types.ModuleType('boto3')
     fake_boto3.client = lambda name: {'s3': s3, 'ses': ses}[name]
     fake_boto3.resource = lambda name: types.SimpleNamespace(Table=lambda _: table)
+    fake_exceptions = types.ModuleType('botocore.exceptions')
+    fake_exceptions.ClientError = ClientError
     sys.modules['boto3'] = fake_boto3
+    sys.modules['botocore'] = types.ModuleType('botocore')
+    sys.modules['botocore.exceptions'] = fake_exceptions
     os.environ.update(
         aliasTableName='aliases',
         mailBucket='mail-bucket',
@@ -77,6 +98,8 @@ def load(aliases):
         contactDomain='Example.com',
         sendFromAddress='noreply@example.com',
         forwardToAddress='real.inbox@gmail.example',
+        abuseAlertThreshold='3',
+        revokeWorkflowUrl='https://github.com/owner/repo/actions/workflows/cv-contact.yml',
     )
     sys.modules.pop('forwardMail', None)
     module = importlib.import_module('forwardMail')
@@ -88,11 +111,11 @@ def deliver(module, **kwargs):
     return module.lambda_handler(event, None)
 
 
-class ForwardingTests(unittest.TestCase):
+class Harness(unittest.TestCase):
     def setUp(self):
         self.module, self.sent, self.table, self.objects = load(
             {
-                'alexander.k7q2mx': {'id': 'alexander.k7q2mx', 'status': 'active'},
+                'alexander.k7q2mx': {'id': 'alexander.k7q2mx', 'status': 'active', 'month': '2026-11'},
                 'alexander.old111': {'id': 'alexander.old111', 'status': 'retired'},
                 'alexander.bad999': {'id': 'alexander.bad999', 'status': 'revoked'},
             }
@@ -102,6 +125,8 @@ class ForwardingTests(unittest.TestCase):
         [call] = self.sent
         return call, email.message_from_bytes(call['RawMessage']['Data'], policy=default_policy)
 
+
+class ForwardingTests(Harness):
     def test_live_alias_is_forwarded_to_the_real_inbox_only(self):
         self.assertEqual(deliver(self.module), ['forwarded'])
         call, message = self.forwarded()
@@ -114,8 +139,19 @@ class ForwardingTests(unittest.TestCase):
         _, message = self.forwarded()
         self.assertEqual(message['Reply-To'].addresses[0].addr_spec, 'zoe@recruiter.example')
         self.assertEqual(message['From'].addresses[0].addr_spec, 'noreply@example.com')
-        self.assertEqual(message['From'].addresses[0].display_name, 'Zoë Recruiter via CV')
         self.assertEqual(message['X-CV-Alias'], 'alexander.k7q2mx@example.com')
+
+    def test_the_forward_says_which_month_the_senders_cv_is_from(self):
+        deliver(self.module)
+        _, message = self.forwarded()
+        self.assertEqual(message['From'].addresses[0].display_name, 'Zoë Recruiter via CV (Nov 2026)')
+        self.assertEqual(message['X-CV-Issued'], '2026-11')
+
+    def test_an_alias_without_a_month_still_forwards_cleanly(self):
+        deliver(self.module, recipients=['alexander.old111@example.com'])
+        _, message = self.forwarded()
+        self.assertEqual(message['From'].addresses[0].display_name, 'Zoë Recruiter via CV')
+        self.assertIsNone(message['X-CV-Issued'])
 
     def test_body_and_ordinary_headers_survive_untouched(self):
         deliver(self.module)
@@ -156,6 +192,7 @@ class ForwardingTests(unittest.TestCase):
             'dmarc': {'dmarcVerdict': {'status': 'FAIL'}, 'dmarcPolicy': 'REJECT'},
             'unauthenticated': {'spfVerdict': {'status': 'FAIL'}, 'dkimVerdict': {'status': 'FAIL'}},
         }
+        self.module.ABUSE_ALERT_THRESHOLD = 0  # alerts are covered in AbuseAlertTests
         for reason, verdicts in cases.items():
             with self.subTest(reason=reason):
                 self.table.updates.clear()
@@ -179,6 +216,48 @@ class ForwardingTests(unittest.TestCase):
         call, message = self.forwarded()
         self.assertEqual(message['Reply-To'].addresses[0].addr_spec, 'zoe@recruiter.example')
         self.assertNotIn(b'\r\n', call['RawMessage']['Data'].split(b'\n\n', 1)[1])
+
+
+class AbuseAlertTests(Harness):
+    """Drops are tallied per alias per day; reaching the threshold alerts, never revokes."""
+
+    def spam(self, times, recipient='alexander.k7q2mx@example.com'):
+        for _ in range(times):
+            deliver(self.module, recipients=[recipient], spamVerdict={'status': 'FAIL'})
+
+    def test_reaching_the_threshold_sends_one_alert(self):
+        self.spam(2)
+        self.assertEqual(self.sent, [])
+        self.spam(3)  # 3rd, 4th and 5th of the day: alert on the 3rd only
+        [call] = self.sent
+        message = email.message_from_bytes(call['RawMessage']['Data'], policy=default_policy)
+        self.assertEqual(call['Destinations'], ['real.inbox@gmail.example'])
+        self.assertIn('alexander.k7q2mx@example.com', message['Subject'])
+        body = message.get_content()
+        self.assertIn('https://github.com/owner/repo/actions/workflows/cv-contact.yml', body)
+        self.assertIn('issued 2026-11', body)
+
+    def test_an_alert_never_revokes_anything(self):
+        self.spam(5)
+        self.assertEqual(self.table.items['alexander.k7q2mx']['status'], 'active')
+        self.assertEqual(deliver(self.module), ['forwarded'])
+
+    def test_the_tally_starts_over_each_day(self):
+        self.table.items['alexander.k7q2mx'].update(abuse_day='2000-01-01', abuse_count=99)
+        self.spam(2)
+        self.assertEqual(self.table.items['alexander.k7q2mx']['abuse_count'], 2)
+        self.assertEqual(self.sent, [])
+
+    def test_only_scan_failures_count(self):
+        for _ in range(5):
+            deliver(self.module, recipients=['alexander.bad999@example.com'])
+        self.assertNotIn('abuse_count', self.table.items['alexander.bad999'])
+        self.assertEqual(self.sent, [])
+
+    def test_alerts_can_be_turned_off(self):
+        self.module.ABUSE_ALERT_THRESHOLD = 0
+        self.spam(5)
+        self.assertEqual(self.sent, [])
 
 
 if __name__ == '__main__':
