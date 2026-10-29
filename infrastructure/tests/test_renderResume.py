@@ -595,16 +595,21 @@ class PdfTests(unittest.TestCase):
         changed['summary'] = ['Reworded.']
         self.assertNotEqual(renderResume.generation_id(changed), renderResume.generation_id(self.model))
 
-    def test_the_imprint_fits_between_the_footer_ends(self):
-        for page in renderResume.fit(self.model, 'Generated 28 Sep 2026 · ID 0123456789ab')[1]:
-            baseline = f' {renderResume.MARGIN_BOTTOM - 24:.2f} Td'.encode()
-            starts = [float(op.split(baseline)[0].rsplit(b' ', 1)[-1]) for op in page.ops if baseline in op]
-            self.assertEqual(len(starts), 3)
-            left, centre, right = starts
-            name = renderResume._encode(f'{self.model["name"]} — Curriculum Vitae')
-            imprint_width = renderResume.text_width('Generated 28 Sep 2026 · ID 0123456789ab', 'R', 7.5)
-            self.assertLess(left + renderResume._width(name, 'R', 7.5) + 12, centre)
-            self.assertLess(centre + imprint_width + 12, right)
+    def test_the_imprint_sits_small_under_the_name(self):
+        def footer_block(page, text):
+            return next(op for op in page.ops if renderResume._pdf_string(renderResume._encode(text)) in op)
+
+        name = f'{self.model["name"]} — Curriculum Vitae'
+        imprint = 'Generated 28 Sep 2026 · ID 0123456789ab'
+        for page in renderResume.fit(self.model, imprint)[1]:
+            name_x, name_y = map(float, re.search(rb'([\d.]+) ([\d.]+) Td', footer_block(page, name)).groups())
+            block = footer_block(page, imprint)
+            x, y = map(float, re.search(rb'([\d.]+) ([\d.]+) Td', block).groups())
+            size = float(re.search(rb'/\w+ ([\d.]+) Tf', block).group(1))
+            self.assertEqual(x, name_x)
+            self.assertLess(y, name_y)
+            self.assertLess(size, 7.5)
+            self.assertGreater(y - size, 12)  # clear of a printer's unprintable edge
 
     def test_links_are_annotated(self):
         for link in self.model['links']:

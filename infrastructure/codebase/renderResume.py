@@ -90,6 +90,10 @@ _RESOURCES = {**{style: font[0] for style, font in _FONTS.items()}, 'J': _CJK[0]
 PAGE_W, PAGE_H = 595.28, 841.89
 MARGIN_X, MARGIN_TOP, MARGIN_BOTTOM = 50.0, 48.0, 50.0
 CONTENT_W = PAGE_W - 2 * MARGIN_X
+# Footer baselines: the name and page number, then the generation imprint set small beneath
+# the name.
+FOOTER_Y = MARGIN_BOTTOM - 20
+IMPRINT_Y, IMPRINT_SIZE = FOOTER_Y - 8, 6.0
 
 INK = (0.13, 0.13, 0.15)
 MUTED = (0.38, 0.40, 0.44)
@@ -810,16 +814,14 @@ def _layout(model, imprint=''):
 
     # Footers go on last, once the page count is known.
     total = len(doc.pages)
-    footer_y = MARGIN_BOTTOM - 24
     for number, page in enumerate(doc.pages, start=1):
         doc.page = page
         left = _encode(f'{model["name"]} — Curriculum Vitae')
         right = _encode(f'Page {number} of {total}')
-        doc.text([('R', left)], MARGIN_X, footer_y, 7.5, color=MUTED)
+        doc.text([('R', left)], MARGIN_X, FOOTER_Y, 7.5, color=MUTED)
         if imprint:
-            centre = _encode(imprint)
-            doc.text([('R', centre)], (PAGE_W - _width(centre, 'R', 7.5)) / 2, footer_y, 7.5, color=MUTED)
-        doc.text([('R', right)], PAGE_W - MARGIN_X - _width(right, 'R', 7.5), footer_y, 7.5, color=MUTED)
+            doc.text([('R', _encode(imprint))], MARGIN_X, IMPRINT_Y, IMPRINT_SIZE, color=MUTED)
+        doc.text([('R', right)], PAGE_W - MARGIN_X - _width(right, 'R', 7.5), FOOTER_Y, 7.5, color=MUTED)
 
     return doc.pages
 
@@ -891,8 +893,8 @@ def fit(model, imprint=''):
     render time and the cache key stays the cheap digest of the untrimmed model. If even the
     fully trimmed CV is over budget it is returned as is: pinned content wins over the budget.
 
-    `imprint` is the generation line printed in the centre of every footer. It never affects
-    pagination.
+    `imprint` is the generation line printed small under the name in every footer. It never
+    affects pagination.
     """
     pages = _layout(model, imprint)
     budget = model.get('maxPages') or 0

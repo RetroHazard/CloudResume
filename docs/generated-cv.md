@@ -66,8 +66,8 @@ A few layout rules exist for parsers rather than for looks:
 
 ### The footer imprint
 
-Every page's footer carries a line such as `Generated 29 Oct 2026 · ID 52d614bae667`, and the
-same ID is written to the PDF's document info as `/GenerationID`.
+Every page's footer carries a line such as `Generated 29 Oct 2026 · ID 52d614bae667`, set
+small under the name, and the same ID is written to the PDF's document info as `/GenerationID`.
 
 - **The ID** (`generation_id`) is the first 12 hex characters of the content digest, which is
   also the start of the S3 folder the PDF is stored under. Two copies with the same ID carry
