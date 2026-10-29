@@ -72,6 +72,69 @@
             ]
         },
         {
+            "company": "Hollow Souls",
+            "job_title": "Independent Developer",
+            "location": "Tokyo, Japan",
+            "type": "Self-Employed",
+            "start": "2021-01",
+            "end": "---",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "website": "https://www.hollowsouls.com/",
+            "details": [
+                "Founded and run Hollow Souls as a one-person studio, owning every product end to end, from design and engineering through release, documentation, and support, across Unreal Engine tooling, native macOS software, web applications, and cloud infrastructure.",
+                "Shipped two commercial Unreal Engine products on Fab: Interactive Switches, a Blueprint-only lighting system with server-authoritative multiplayer replication, originally sold on the Unreal Engine Marketplace, and Keystone Prefabs, a C++ editor plugin that brings nested, overridable prefabs and variants to Unreal Engine 5.7 and 5.8.",
+                "Launched the studio's landing site as a Next.js and React Three Fiber static export served from S3 through CloudFront, with a Lambda contact endpoint backed by SES, reCAPTCHA, and DynamoDB rate limiting, all declared in Terraform and deployed by GitHub Actions at an expected cost of about $0.55 a month.",
+                "Built and maintain the studio's software and cloud work alongside the Unreal products, including SwiftX, a native Swift port of a screenshot and file-sharing app for macOS, the Japan Immigration Statistics Dashboard, and this serverless résumé platform on AWS."
+            ],
+            "technologies": [
+                {
+                    "name": "Unreal Engine",
+                    "logo": "simple-icons:unrealengine",
+                    "website": "https://www.unrealengine.com/"
+                },
+                {
+                    "name": "C++",
+                    "logo": "ph:file-cpp-fill",
+                    "website": "https://cplusplus.com/"
+                },
+                {
+                    "name": "Blender",
+                    "logo": "simple-icons:blender",
+                    "website": "https://www.blender.org/"
+                },
+                {
+                    "name": "Houdini",
+                    "logo": "simple-icons:houdini",
+                    "website": "https://www.sidefx.com/"
+                },
+                {
+                    "name": "Swift",
+                    "logo": "simple-icons:swift",
+                    "website": "https://www.swift.org/"
+                },
+                {
+                    "name": "TypeScript",
+                    "logo": "simple-icons:typescript",
+                    "website": "https://www.typescriptlang.org/"
+                },
+                {
+                    "name": "Next.js",
+                    "logo": "simple-icons:nextdotjs",
+                    "website": "https://nextjs.org/"
+                },
+                {
+                    "name": "AWS",
+                    "logo": "simple-icons:amazonaws",
+                    "website": "https://aws.amazon.com/"
+                },
+                {
+                    "name": "Terraform",
+                    "logo": "simple-icons:terraform",
+                    "website": "https://www.terraform.io/"
+                }
+            ]
+        },
+        {
             "company": "Indeed",
             "location": "Tokyo, Japan",
             "type": "Full Time",

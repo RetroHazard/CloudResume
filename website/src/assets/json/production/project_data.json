@@ -35,6 +35,12 @@
                             "website": "https://github.com/RetroHazard/CloudResume",
                             "icon": "simple-icons:git"
                         }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/cloud-resume",
+                            "icon": "fa6-solid:ghost"
+                        }
                     ]
                 }
             ],
@@ -106,6 +112,12 @@
                             "website": "https://github.com/RetroHazard/SwiftX",
                             "icon": "simple-icons:git"
                         }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/swiftx",
+                            "icon": "fa6-solid:ghost"
+                        }
                     ]
                 }
             ],
@@ -162,6 +174,12 @@
                         {
                             "website": "https://github.com/RetroHazard/JP_Immigration_Dashboard",
                             "icon": "simple-icons:git"
+                        }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/jp-immigration-dashboard",
+                            "icon": "fa6-solid:ghost"
                         }
                     ]
                 }
@@ -238,6 +256,12 @@
                             "website": "https://github.com/Hollow-Soul-Studios/KeystonePrefabs",
                             "icon": "fa6-solid:book"
                         }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/keystone-prefabs",
+                            "icon": "fa6-solid:ghost"
+                        }
                     ]
                 }
             ],
@@ -293,6 +317,12 @@
                         {
                             "website": "https://github.com/Hollow-Soul-Studios/InteractiveSwitches",
                             "icon": "fa6-solid:book"
+                        }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/interactive-switches",
+                            "icon": "fa6-solid:ghost"
                         }
                     ]
                 }
