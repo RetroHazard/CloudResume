@@ -72,7 +72,7 @@ worth.
 
 The contact form is guarded by invisible reCAPTCHA, verified server-side in the `sendMessage`
 Lambda — see [`docs/contact-form-recaptcha.md`](docs/contact-form-recaptcha.md) for the keys it needs
-and how to set them up.
+and how to set them up, and for the alerts emailed when a submission fails.
 
 ## Technologies Leveraged
 
@@ -93,6 +93,7 @@ and how to set them up.
   - EventBridge
   - Simple Queue Service
   - Simple Email Service
+  - Simple Notification Service
   - CloudWatch
   - CloudTrail
   - CloudFormation

@@ -525,6 +525,66 @@ resource "aws_lambda_function" "crc-sendMessage" {
   ]
 }
 
+# Contact form failure alerts, emailed to the same inbox the form delivers to. SNS sends a
+# confirmation email on the first apply, and nothing arrives until its link is followed.
+resource "aws_sns_topic" "crc-contact-form-alerts" {
+  name = "crc-contact-form-alerts"
+}
+
+resource "aws_sns_topic_subscription" "crc-contact-form-alerts-email" {
+  topic_arn = aws_sns_topic.crc-contact-form-alerts.arn
+  protocol  = "email"
+  endpoint  = var.contact-destination-email
+}
+
+# The handler catches its own failures and answers 500 or 503, so the Lambda never errors
+# and AWS/Lambda Errors stays at zero for them. What it does do is log them at ERROR, which
+# is the only ERROR it logs: a rejected reCAPTCHA or a foreign origin is INFO or nothing.
+resource "aws_cloudwatch_log_metric_filter" "crc-sendMessage-failures" {
+  name           = "sendMessage-failures"
+  log_group_name = aws_cloudwatch_log_group.crc-sendMessage-log-group.name
+  pattern        = "{ $.level = \"ERROR\" }"
+
+  metric_transformation {
+    name      = "ContactFormFailures"
+    namespace = "CloudResume"
+    value     = "1"
+    unit      = "Count"
+  }
+}
+
+resource "aws_cloudwatch_metric_alarm" "crc-sendMessage-failures" {
+  alarm_name          = "crc-contact-form-failures"
+  alarm_description   = "A contact form submission failed (SES send or reCAPTCHA verification). The visitor was shown the failure message. Details: the /aws/lambda/sendMessage log group, level ERROR."
+  namespace           = "CloudResume"
+  metric_name         = aws_cloudwatch_log_metric_filter.crc-sendMessage-failures.metric_transformation[0].name
+  statistic           = "Sum"
+  period              = 300
+  evaluation_periods  = 1
+  threshold           = 1
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  # The metric only has data when something fails.
+  treat_missing_data = "notBreaching"
+  alarm_actions      = [aws_sns_topic.crc-contact-form-alerts.arn]
+}
+
+# What the handler can't catch: a timeout, or a failure at import or init. These also fail
+# the submission, but never reach the handler's own logging.
+resource "aws_cloudwatch_metric_alarm" "crc-sendMessage-errors" {
+  alarm_name          = "crc-contact-form-lambda-errors"
+  alarm_description   = "The sendMessage Lambda errored or timed out, so a contact form submission failed. Details: the /aws/lambda/sendMessage log group."
+  namespace           = "AWS/Lambda"
+  metric_name         = "Errors"
+  dimensions          = { FunctionName = aws_lambda_function.crc-sendMessage.function_name }
+  statistic           = "Sum"
+  period              = 300
+  evaluation_periods  = 1
+  threshold           = 1
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  treat_missing_data  = "notBreaching"
+  alarm_actions       = [aws_sns_topic.crc-contact-form-alerts.arn]
+}
+
 resource "aws_cloudwatch_log_group" "crc-trackVisitors-log-group" {
   name              = "/aws/lambda/trackVisitors"
   retention_in_days = 14

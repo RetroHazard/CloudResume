@@ -113,3 +113,30 @@ class FailureTests(unittest.TestCase):
         with self.assertLogs(self.module.logger, level='ERROR'):
             response = submit(self.module)
         self.assertEqual(response['headers'], {'Access-Control-Allow-Origin': ORIGIN})
+
+
+class AlertLevelTests(unittest.TestCase):
+    """Anything logged at ERROR raises the contact form alarm, so bot traffic must not be."""
+
+    def setUp(self):
+        self.module, self.sent = load()
+
+    def test_a_failed_recaptcha_is_not_an_error(self):
+        self.module._verify_recaptcha = lambda token: False
+        with self.assertNoLogs(self.module.logger, level='ERROR'):
+            self.assertEqual(submit(self.module)['statusCode'], 403)
+
+    def test_a_foreign_origin_is_not_an_error(self):
+        # The deploy smoke test (api-live.cy.js) posts with a foreign origin every run.
+        event = {'headers': {'origin': 'https://elsewhere.example'}, 'body': '{}'}
+        with self.assertNoLogs(self.module.logger, level='ERROR'):
+            self.assertEqual(self.module.lambda_handler(event, None)['statusCode'], 403)
+
+    def test_an_unreachable_recaptcha_is_an_error(self):
+        def unreachable(token):
+            raise TimeoutError('siteverify timed out')
+
+        self.module._verify_recaptcha = unreachable
+        with self.assertLogs(self.module.logger, level='ERROR'):
+            self.assertEqual(submit(self.module)['statusCode'], 503)
+        self.assertEqual(self.sent, [])
