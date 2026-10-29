@@ -611,6 +611,14 @@ class PdfTests(unittest.TestCase):
             self.assertLess(size, 7.5)
             self.assertGreater(y - size, 12)  # clear of a printer's unprintable edge
 
+    def test_every_page_is_a4(self):
+        boxes = re.findall(rb'/MediaBox \[0 0 ([\d.]+) ([\d.]+)\]', self.pdf)
+        self.assertEqual(len(boxes), len(page_streams(self.pdf)))
+        for width, height in boxes:
+            # 210 x 297 mm in points. US Letter would be 612 x 792.
+            self.assertAlmostEqual(float(width), 210 / 25.4 * 72, places=1)
+            self.assertAlmostEqual(float(height), 297 / 25.4 * 72, places=1)
+
     def test_links_are_annotated(self):
         for link in self.model['links']:
             self.assertIn(f'/URI ({link["url"]})'.encode(), self.pdf)

@@ -45,7 +45,7 @@ so in practice the first render after a content change happens in CI, not for a 
 the same reason the URL signer is hand-rolled: the Lambda runtime bundles nothing that can
 lay out a PDF, and functions here ship as bare `.py` files rather than layers.
 
-The output is built to get through applicant tracking systems: one column, real text in
+The output is A4 and built to get through applicant tracking systems: one column, real text in
 reading order, the standard Helvetica family (nothing embedded), clickable links, and
 document metadata (title, author, keywords). Characters outside WinAnsi are folded to their
 nearest ASCII equivalent, so a stray `→` turns into `->` rather than failing the render.
