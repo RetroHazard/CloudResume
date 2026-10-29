@@ -1,8 +1,10 @@
 import json
 import logging
 import os
+import re
 import urllib.parse
 import urllib.request
+from email.utils import formataddr
 
 import boto3
 
@@ -21,6 +23,10 @@ RECAPTCHA_SECRET_PARAMETER = os.environ['recaptchaSecretParameter']
 # minted on some other site that embeds the same public site key is refused even if
 # "Verify the origin of reCAPTCHA solutions" is ever switched off in the admin console.
 ALLOWED_HOSTNAME = urllib.parse.urlparse(ALLOWED_ORIGIN).hostname
+
+# Deliberately loose: one @, a dotted domain, nothing that could end the address early.
+# SES itself is the real judge; this only keeps an obvious typo from failing the send.
+_ADDRESS = re.compile(r'[^@\s<>",;]+@[^@\s<>",;]+\.[^@\s<>",;]+')
 
 VERIFY_URL = 'https://www.google.com/recaptcha/api/siteverify'
 VERIFY_TIMEOUT_SECONDS = 3
@@ -59,6 +65,23 @@ def _verify_recaptcha(token):
         )
         return False
     return True
+
+
+def _reply_to(first_name, last_name, address):
+    """The sender as a Reply-To entry, or None if the address isn't one SES would accept.
+
+    SES rejects the whole send over a malformed Reply-To, so a bad address only costs the
+    convenience of Reply; it is still printed in the body. SES also needs an ASCII address
+    (no SMTPUTF8) and a MIME-encoded name when the name isn't plain ASCII.
+    """
+    address = address.strip() if isinstance(address, str) else ''
+    if not address.isascii() or len(address) > 254:
+        return None
+    if not _ADDRESS.fullmatch(address):
+        return None
+    name = ' '.join(part for part in (first_name, last_name) if isinstance(part, str) and part)
+    name = re.sub(r'[\r\n"]+', ' ', name).strip()
+    return formataddr((name, address), charset='utf-8')
 
 
 def _rejected(status, error):
@@ -117,7 +140,9 @@ def lambda_handler(event, context):
         UUID: {uuid}
         """
 
-        # Send the email using SES
+        # Send the email using SES. SES only sends as a verified identity, so the From stays
+        # noreply; Reply-To carries the visitor's address so a plain Reply goes to them.
+        reply_to = _reply_to(first_name, last_name, email)
         ses_client.send_email(
             Source=SEND_AS,
             Destination={
@@ -125,6 +150,7 @@ def lambda_handler(event, context):
                     SEND_TO,
                 ],
             },
+            ReplyToAddresses=[reply_to] if reply_to else [],
             Message={
                 'Subject': {'Data': email_subject, 'Charset': 'UTF-8'},
                 'Body': {'Text': {'Data': email_body, 'Charset': 'UTF-8'}},
