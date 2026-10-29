@@ -49,14 +49,18 @@ def page_streams(pdf):
     return streams
 
 
-def shown_text(pdf):
-    """The text each BT...ET block shows, decoded from WinAnsi, one block per line."""
+def page_text(stream):
+    """The text each BT...ET block of one page shows, decoded from WinAnsi, one block per line."""
     lines = []
-    for stream in page_streams(pdf):
-        for block in re.findall(rb'BT (.*?) ET', stream):
-            shown = re.findall(rb'\(((?:\\.|[^\\)])*)\) Tj', block)
-            lines.append(b''.join(re.sub(rb'\\(.)', rb'\1', raw) for raw in shown).decode('cp1252'))
+    for block in re.findall(rb'BT (.*?) ET', stream):
+        shown = re.findall(rb'\(((?:\\.|[^\\)])*)\) Tj', block)
+        lines.append(b''.join(re.sub(rb'\\(.)', rb'\1', raw) for raw in shown).decode('cp1252'))
     return '\n'.join(lines)
+
+
+def shown_text(pdf):
+    """`page_text` over every page, in order."""
+    return '\n'.join(page_text(stream) for stream in page_streams(pdf))
 
 
 class FormatDateTests(unittest.TestCase):
@@ -576,6 +580,31 @@ class PdfTests(unittest.TestCase):
         count = int(re.search(rb'/Type /Pages /Kids \[[^\]]*\] /Count (\d+)', self.pdf).group(1))
         self.assertEqual(len(page_streams(self.pdf)), count)
         self.assertIn(f'Page {count} of {count}', shown_text(self.pdf))
+
+    def test_every_footer_carries_the_generation_imprint(self):
+        cv_id = renderResume.generation_id(self.model)
+        self.assertRegex(cv_id, r'^[0-9a-f]{12}$')
+        imprint = re.compile(rf'Generated \d{{1,2}} [A-Z][a-z]{{2}} \d{{4}} · ID {cv_id}')
+        for stream in page_streams(self.pdf):
+            self.assertRegex(page_text(stream), imprint)
+        self.assertIn(f'/GenerationID ({cv_id})'.encode(), self.pdf)
+
+    def test_the_generation_id_is_the_head_of_the_cache_key(self):
+        self.assertTrue(renderResume.content_digest(self.model).startswith(renderResume.generation_id(self.model)))
+        changed = copy.deepcopy(self.model)
+        changed['summary'] = ['Reworded.']
+        self.assertNotEqual(renderResume.generation_id(changed), renderResume.generation_id(self.model))
+
+    def test_the_imprint_fits_between_the_footer_ends(self):
+        for page in renderResume.fit(self.model, 'Generated 28 Sep 2026 · ID 0123456789ab')[1]:
+            baseline = f' {renderResume.MARGIN_BOTTOM - 24:.2f} Td'.encode()
+            starts = [float(op.split(baseline)[0].rsplit(b' ', 1)[-1]) for op in page.ops if baseline in op]
+            self.assertEqual(len(starts), 3)
+            left, centre, right = starts
+            name = renderResume._encode(f'{self.model["name"]} — Curriculum Vitae')
+            imprint_width = renderResume.text_width('Generated 28 Sep 2026 · ID 0123456789ab', 'R', 7.5)
+            self.assertLess(left + renderResume._width(name, 'R', 7.5) + 12, centre)
+            self.assertLess(centre + imprint_width + 12, right)
 
     def test_links_are_annotated(self):
         for link in self.model['links']:

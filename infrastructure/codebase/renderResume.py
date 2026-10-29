@@ -29,7 +29,7 @@ import unicodedata
 import zlib
 from datetime import datetime, timezone
 
-RENDERER_VERSION = '4'
+RENDERER_VERSION = '5'
 
 # Advance widths per 1000 units of font size, for WinAnsi codes 32-255, taken from the Adobe
 # core-14 AFM metrics. Oblique shares the upright widths. The zero entries are the five code
@@ -380,6 +380,16 @@ def content_digest(model):
     """Cache key for a model: identical content and renderer always map to the same PDF."""
     canonical = json.dumps(model, sort_keys=True, separators=(',', ':'), ensure_ascii=False)
     return hashlib.sha256(f'{RENDERER_VERSION}\n{canonical}'.encode('utf-8')).hexdigest()
+
+
+def generation_id(model):
+    """The ID printed in the CV's footer: the head of its content digest.
+
+    It is also the start of the folder downloadResume stores the PDF under, so a copy that
+    turns up later can be matched to the render it came from, and two copies with the same
+    ID carry the same content.
+    """
+    return content_digest(model)[:12]
 
 
 def file_name(model):
@@ -792,7 +802,7 @@ _SECTION_RENDERERS = {
 }
 
 
-def _layout(model):
+def _layout(model, imprint=''):
     doc = _Layout()
     _header(doc, model)
     for section in model.get('sections', SECTIONS):
@@ -806,6 +816,9 @@ def _layout(model):
         left = _encode(f'{model["name"]} — Curriculum Vitae')
         right = _encode(f'Page {number} of {total}')
         doc.text([('R', left)], MARGIN_X, footer_y, 7.5, color=MUTED)
+        if imprint:
+            centre = _encode(imprint)
+            doc.text([('R', centre)], (PAGE_W - _width(centre, 'R', 7.5)) / 2, footer_y, 7.5, color=MUTED)
         doc.text([('R', right)], PAGE_W - MARGIN_X - _width(right, 'R', 7.5), footer_y, 7.5, color=MUTED)
 
     return doc.pages
@@ -866,7 +879,7 @@ def _trimmed(model, steps):
     return trimmed
 
 
-def fit(model):
+def fit(model, imprint=''):
     """Lay out `model`, trimming it to its page budget. Returns (fitted model, pages).
 
     Takes the fewest cuts that bring the CV within budget, found by binary search over the
@@ -877,8 +890,11 @@ def fit(model):
     The result is a pure function of the model and RENDERER_VERSION, so fitting happens at
     render time and the cache key stays the cheap digest of the untrimmed model. If even the
     fully trimmed CV is over budget it is returned as is: pinned content wins over the budget.
+
+    `imprint` is the generation line printed in the centre of every footer. It never affects
+    pagination.
     """
-    pages = _layout(model)
+    pages = _layout(model, imprint)
     budget = model.get('maxPages') or 0
     if not budget or len(pages) <= budget:
         return model, pages
@@ -889,14 +905,14 @@ def fit(model):
     while low <= high:
         mid = (low + high) // 2
         candidate = _trimmed(model, mid)
-        candidate_pages = _layout(candidate)
+        candidate_pages = _layout(candidate, imprint)
         if len(candidate_pages) <= budget:
             best, high = (candidate, candidate_pages), mid - 1
         else:
             low = mid + 1
     if best is None:
         candidate = _trimmed(model, total)
-        best = (candidate, _layout(candidate))
+        best = (candidate, _layout(candidate, imprint))
     return best
 
 
@@ -936,9 +952,15 @@ def _cjk_font(objects, reserve):
 
 
 def render_pdf(model, generated_at=None):
-    """Lay the model out and serialise it. Returns the PDF as bytes."""
+    """Lay the model out and serialise it. Returns the PDF as bytes.
+
+    Every page's footer carries an imprint of the render date and `generation_id`, taken
+    from the untrimmed model so that it matches the cache key downloadResume stores it under.
+    """
     generated_at = generated_at or datetime.now(timezone.utc)
-    model, pages = fit(model)
+    cv_id = generation_id(model)
+    imprint = f'Generated {generated_at.day} {_MONTHS[generated_at.month - 1]} {generated_at.year} · ID {cv_id}'
+    model, pages = fit(model, imprint)
 
     objects = []  # index i holds object number i + 1
 
@@ -1004,7 +1026,8 @@ def render_pdf(model, generated_at=None):
         + _text_string(keywords)
         + b' /Creator '
         + _text_string(next((k['label'] for k in model['links'] if k['url'].startswith('http')), 'CloudResume'))
-        + f' /Producer (CloudResume renderResume v{RENDERER_VERSION}) /CreationDate ({stamp}) >>'.encode('ascii')
+        + f' /Producer (CloudResume renderResume v{RENDERER_VERSION}) /CreationDate ({stamp})'.encode('ascii')
+        + f' /GenerationID ({cv_id}) >>'.encode('ascii')
     )
 
     out = bytearray(b'%PDF-1.4\n%\xe2\xe3\xcf\xd3\n')

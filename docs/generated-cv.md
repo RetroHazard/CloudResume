@@ -64,6 +64,23 @@ A few layout rules exist for parsers rather than for looks:
 - A bullet never splits across pages, and a technologies line stays with its last bullet.
   Otherwise the page footer lands in the middle of a sentence in the extracted text.
 
+### The footer imprint
+
+Every page's footer carries a line such as `Generated 29 Oct 2026 · ID 52d614bae667`, and the
+same ID is written to the PDF's document info as `/GenerationID`.
+
+- **The ID** (`generation_id`) is the first 12 hex characters of the content digest, which is
+  also the start of the S3 folder the PDF is stored under. Two copies with the same ID carry
+  the same content. To trace a copy back to its render, search the `downloadResume`
+  function's logs for `Rendered files/cv/<ID>`. While it is still the current CV,
+  `files/cv/<ID>…/` in the site bucket holds it too.
+- **The date** is when that version was rendered, not when it was downloaded. Every click
+  until the content next changes gets the same file. The forwarding address dates a copy to
+  its download month (see [`cv-contact.md`](cv-contact.md)).
+
+The ID is per version, not per download. A per-download ID would make every click a render
+and an S3 write, and a digest is enough to say which version of the CV someone is holding.
+
 ### Controlling the CV
 
 The site is the long form and the CV is the two-minute read. How hard the CV edits the site
