@@ -217,11 +217,11 @@ class CvCacheTests(Harness):
         self.assertEqual(status, 200)
         self.assertEqual(self.s3.count('put'), 1)
         [key] = self.cv_keys()
-        self.assertRegex(key, r'^files/cv/[0-9a-f]{24}/BRACKEN_ALEXANDER_Resume\.pdf$')
+        self.assertRegex(key, r'^files/cv/[0-9a-f]{24}/BRACKEN_ALEXANDER_CV\.pdf$')
         self.assertTrue(self.s3.objects[key][0].startswith(b'%PDF-'))
         self.assertEqual(self.s3.last_put['ContentType'], 'application/pdf')
         self.assertEqual(body['downloadUrl'].split('?')[0], f'https://example.com/{key}')
-        self.assertEqual(body['fileName'], 'BRACKEN_ALEXANDER_Resume.pdf')
+        self.assertEqual(body['fileName'], 'BRACKEN_ALEXANDER_CV.pdf')
         self.assertEqual(body['count'], 1)
 
     def test_repeat_clicks_on_a_warm_container_cost_one_conditional_get(self):

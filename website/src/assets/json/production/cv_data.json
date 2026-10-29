@@ -3,6 +3,7 @@
     "skillMinLevel": 50,
     "recentYears": 10,
     "projectBullets": 2,
+    "skillCategories": ["Identity Platforms", "Security", "Platform", "AI", "Development", "Workplace"],
     "sections": ["summary", "skills", "experience", "projects", "certifications", "education"],
     "contactEmail": true
 }

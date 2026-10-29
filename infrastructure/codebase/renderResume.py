@@ -22,13 +22,14 @@ or visitors keep receiving PDFs rendered by the previous layout until the site d
 
 import copy
 import hashlib
+import itertools
 import json
 import re
 import unicodedata
 import zlib
 from datetime import datetime, timezone
 
-RENDERER_VERSION = '3'
+RENDERER_VERSION = '4'
 
 # Advance widths per 1000 units of font size, for WinAnsi codes 32-255, taken from the Adobe
 # core-14 AFM metrics. Oblique shares the upright widths. The zero entries are the five code
@@ -77,6 +78,14 @@ _FONTS = {
     'I': ('F3', 'Helvetica-Oblique', _WIDTHS['Helvetica']),
 }
 
+# Japanese text (a visa status such as 永住権) is set in Heisei Kaku Gothic through the
+# predefined UniJIS-UCS2-H CMap, so the bytes shown are just UTF-16BE code units. Like the
+# Helvetica family it is not embedded: readers substitute their own Japanese gothic, which is
+# how reportlab's UnicodeCIDFont does it too. Every CJK glyph is full width (1000 units). It
+# is only written into a PDF that uses it.
+_CJK = ('F4', 'HeiseiKakuGo-W5')
+_RESOURCES = {**{style: font[0] for style, font in _FONTS.items()}, 'J': _CJK[0]}
+
 # A4: the site's owner is based in Japan, where Letter is the exception.
 PAGE_W, PAGE_H = 595.28, 841.89
 MARGIN_X, MARGIN_TOP, MARGIN_BOTTOM = 50.0, 48.0, 50.0
@@ -104,6 +113,9 @@ DEFAULT_SETTINGS = {
     # roles all fall outside the window drops out entirely.
     'recentYears': 10,
     'projectBullets': 2,
+    # Order of the tool rows in Skills, by category (or `cvCategory`). Categories left out
+    # follow in the order the data lists them.
+    'skillCategories': [],
     # Which sections print, and in what order. Unknown names are ignored.
     'sections': ['summary', 'skills', 'experience', 'projects', 'certifications', 'education', 'languages'],
     # Print the forwarding contact address in the header. The address itself is never in the
@@ -130,6 +142,8 @@ def settings_from(source):
             settings[key] = min(max(value, low), high)
         elif key == 'sections' and isinstance(value, list):
             settings[key] = [s for s in dict.fromkeys(value) if s in SECTIONS]
+        elif key == 'skillCategories' and isinstance(value, list):
+            settings[key] = [c for c in dict.fromkeys(value) if isinstance(c, str)]
     return settings
 
 
@@ -291,36 +305,37 @@ def build_model(source, site_url, today=None, contact_email=None):
         if _on_cv(project)
     ]
 
-    # Strongest first within each category, categories in the order the site lists them.
+    # Strongest first within each category. Categories follow the `skillCategories` setting,
+    # then the order the site lists them. `cvCategory` regroups a skill on the CV only.
+    def category(skill, default):
+        return skill.get('cvCategory') or skill.get('category') or default
+
     strong = [
         s for s in skills.get('core_skills', []) if _on_cv(s) and (_pinned(s) or _level(s) >= settings['skillMinLevel'])
     ]
     grouped = {}
     for skill in sorted(strong, key=_level, reverse=True):
-        grouped.setdefault(skill.get('category') or 'Other', []).append(skill['name'])
-    order = list(dict.fromkeys(s.get('category') or 'Other' for s in strong))
+        grouped.setdefault(category(skill, 'Other'), []).append(skill['name'])
+    order = [c for c in settings['skillCategories'] if c in grouped]
+    order += [c for c in dict.fromkeys(category(s, 'Other') for s in strong) if c not in order]
     technical = [{'category': c, 'items': grouped[c]} for c in order]
+
+    competencies = {}
+    for item in skills.get('industry_knowledge', []):
+        if _on_cv(item) and str(item.get('name', '')).strip():
+            competencies.setdefault(category(item, 'Core Competencies'), []).append(str(item['name']).strip())
 
     certifications = []
     for cert in (source.get('certifications') or {}).get('Certifications', []):
         if not _on_cv(cert):
             continue
-        expired = _is_expired(cert.get('expiry_date'), today)
-        issued = format_date(cert.get('issued_date'))
-        expires = format_date(cert.get('expiry_date'))
-        if expired:
-            # A lapsed credential still belongs on a CV, but only as history.
-            note = f'{issued} – {expires}'
-        elif expires:
-            note = f'{issued} · valid through {expires}'
-        else:
-            note = issued
         certifications.append(
             {
                 'name': cert.get('certification', ''),
                 'issuer': cert.get('issuer', ''),
-                'dates': note,
-                'active': not expired,
+                # Only the grant date: an expiry reads like a job's date range to a parser.
+                'issued': format_date(cert.get('issued_date')),
+                'active': not _is_expired(cert.get('expiry_date'), today),
             }
         )
     # Current credentials first; the sort is stable, so the site's own order holds within each group.
@@ -343,8 +358,10 @@ def build_model(source, site_url, today=None, contact_email=None):
         'headline': personal.get('jobTitle', ''),
         'location': personal.get('location', ''),
         'links': links,
-        'summary': _texts(personal.get('summary')),
-        'competencies': _names([k for k in skills.get('industry_knowledge', []) if _on_cv(k)]),
+        'authorization': _texts(personal.get('workAuthorization')),
+        # `cvSummary`, when present, replaces the site's summary on the CV only.
+        'summary': _texts(personal.get('cvSummary') or personal.get('summary')),
+        'competencies': [{'category': c, 'items': items} for c, items in competencies.items()],
         'technical': technical,
         'experience': experience,
         'projects': projects,
@@ -367,12 +384,12 @@ def content_digest(model):
 
 
 def file_name(model):
-    """`BRACKEN_ALEXANDER_Resume.pdf` — the surname-first convention the old static file used."""
+    """`BRACKEN_ALEXANDER_CV.pdf` — surname first, as the old static file was named."""
     words = [re.sub(r'[^A-Za-z0-9]', '', _ascii(w)).upper() for w in model.get('name', '').split()]
     words = [w for w in words if w]
     if not words:
-        return 'Resume.pdf'
-    return '_'.join([words[-1]] + words[:-1] + ['Resume']) + '.pdf'
+        return 'CV.pdf'
+    return '_'.join([words[-1]] + words[:-1] + ['CV']) + '.pdf'
 
 
 # ---------------------------------------------------------------------------
@@ -413,7 +430,24 @@ def _encode(text):
     return bytes(out)
 
 
+def _is_cjk(char):
+    return unicodedata.east_asian_width(char) in ('W', 'F') and ord(char) <= 0xFFFF
+
+
+def _pieces(text, style='R'):
+    """Text -> [(style, bytes)], setting CJK runs in the Japanese font instead of folding them."""
+    pieces = []
+    for cjk, run in ((k, ''.join(g)) for k, g in itertools.groupby(text, _is_cjk)):
+        if cjk:
+            pieces.append(('J', run.encode('utf-16-be')))
+        elif run:
+            pieces.append((style, _encode(run)))
+    return pieces
+
+
 def _width(encoded, style, size):
+    if style == 'J':
+        return len(encoded) / 2 * size
     metrics = _FONTS[style][2]
     return sum(metrics[b - 32] if b >= 32 else 0 for b in encoded) * size / 1000.0
 
@@ -529,8 +563,9 @@ class _Layout:
                 merged.append((style, encoded))
         ops = [b'BT', self._color(color), f'{x:.2f} {baseline:.2f} Td'.encode('ascii')]
         for style, encoded in merged:
-            ops.append(f'/{_FONTS[style][0]} {size} Tf'.encode('ascii'))
-            ops.append(_pdf_string(encoded) + b' Tj')
+            ops.append(f'/{_RESOURCES[style]} {size} Tf'.encode('ascii'))
+            shown = b'<' + encoded.hex().upper().encode('ascii') + b'>' if style == 'J' else _pdf_string(encoded)
+            ops.append(shown + b' Tj')
         ops.append(b'ET')
         self.page.ops.append(b' '.join(ops))
 
@@ -546,11 +581,20 @@ class _Layout:
 
     # -- composite blocks ---------------------------------------------------
 
-    def paragraph(self, runs, size=BODY_SIZE, leading=BODY_LEADING, indent=0.0, color=INK, bullet=False):
+    @staticmethod
+    def _lines(runs, size, indent, bullet):
+        return wrap(runs, size, CONTENT_W - indent - (9.0 if bullet else 0.0))
+
+    def height(self, runs, size=BODY_SIZE, leading=BODY_LEADING, indent=0.0, bullet=False):
+        return len(self._lines(runs, size, indent, bullet)) * leading
+
+    def paragraph(self, runs, size=BODY_SIZE, leading=BODY_LEADING, indent=0.0, color=INK, bullet=False, keep=0.0):
+        """Never split across pages: a paragraph that doesn't fit, plus `keep` points of whatever
+        must stay with it, starts on the next page instead."""
         x = MARGIN_X + indent
-        width = CONTENT_W - indent
         hang = 9.0 if bullet else 0.0
-        lines = wrap(runs, size, width - hang)
+        lines = self._lines(runs, size, indent, bullet)
+        self.ensure(len(lines) * leading + keep)
         for i, line in enumerate(lines):
             self.ensure(leading)
             self.y -= leading
@@ -587,8 +631,8 @@ def _header(doc, model):
         doc.y -= 16
         doc.text([('R', _encode(model['headline']))], MARGIN_X, doc.y, 11.5, color=ACCENT)
 
-    # Contact lines: location, address and site first, then the social profiles on a line of
-    # their own. Each link gets its own annotation, so it stays clickable in every viewer while
+    # Contact lines: location, address and site first, then the social profiles, then work
+    # authorization, each on a line of its own. Each link gets its own annotation, so it stays clickable in every viewer while
     # the visible text remains plain, parseable text. A line that outgrows the page wraps
     # rather than running off it.
     size = SMALL_SIZE + 0.5
@@ -597,22 +641,23 @@ def _header(doc, model):
         link for link in model['links'] if not link.get('social')
     ]
     social = [link for link in model['links'] if link.get('social')]
+    authorization = [{'label': text} for text in model.get('authorization', [])]
     step = 14
-    for items in (contact, social):
+    for items in (contact, social, authorization):
         if not items:
             continue
         doc.y -= step
         step, x = SMALL_LEADING, MARGIN_X
         for i, item in enumerate(items):
-            label = _encode(item['label'])
-            label_w = _width(label, 'R', size)
+            label = _pieces(item['label'])
+            label_w = sum(_width(b, style, size) for style, b in label)
             if i and x + _width(sep, 'R', size) + label_w > PAGE_W - MARGIN_X:
                 doc.y -= SMALL_LEADING
                 x = MARGIN_X
             elif i:
                 doc.text([('R', sep)], x, doc.y, size, color=RULE)
                 x += _width(sep, 'R', size)
-            doc.text([('R', label)], x, doc.y, size, color=MUTED)
+            doc.text(label, x, doc.y, size, color=MUTED)
             if item.get('url'):
                 doc.link(x, doc.y, label_w, size, item['url'])
             x += label_w
@@ -633,23 +678,31 @@ def _skills(doc, model):
     if not (model['competencies'] or model['technical']):
         return
     doc.heading('Skills')
-    rows = []
-    if model['competencies']:
-        rows.append(('Core Competencies', model['competencies']))
-    rows.extend((group['category'], group['items']) for group in model['technical'])
-    for label, items in rows:
-        doc.paragraph([('B', f'{label}: '), ('R', ', '.join(items))], leading=BODY_LEADING - 0.4)
+    # What the candidate does, then a little air, then the tools they do it with.
+    for n, rows in enumerate((model['competencies'], model['technical'])):
+        if n and rows and model['competencies']:
+            doc.gap(3)
+        for group in rows:
+            doc.paragraph(
+                [('B', f'{group["category"]}: '), ('R', ', '.join(group['items']))], leading=BODY_LEADING - 0.4
+            )
 
 
-def _technologies(doc, names):
-    if names:
-        doc.paragraph(
-            [('B', 'Technologies: '), ('R', ', '.join(names))],
-            size=SMALL_SIZE,
-            leading=SMALL_LEADING,
-            indent=9.0,
-            color=MUTED,
-        )
+_TECH_STYLE = {'size': SMALL_SIZE, 'leading': SMALL_LEADING, 'indent': 9.0}
+
+
+def _tech_runs(names):
+    return [('B', 'Technologies: '), ('R', ', '.join(names))] if names else []
+
+
+def _bullets(doc, details, names):
+    """Bullets, then the technologies line, which is kept on the page of the last bullet."""
+    tech = _tech_runs(names)
+    keep = doc.height(tech, **_TECH_STYLE) if tech else 0.0
+    for i, detail in enumerate(details):
+        doc.paragraph([('R', detail)], bullet=True, keep=keep if i == len(details) - 1 else 0.0)
+    if tech:
+        doc.paragraph(tech, color=MUTED, **_TECH_STYLE)
 
 
 def _experience(doc, model):
@@ -665,15 +718,12 @@ def _experience(doc, model):
             doc.ensure(BODY_LEADING * (3 if r == 0 else 2))
             if r:
                 doc.gap(3)
-            title = [('B', role['title'])]
-            if r == 0:
-                title += [('R', ' — '), ('B', job['company'])]
-            doc.split_line(title, role['dates'])
+            # The company goes on every role, not just the first: a parser reads each title line
+            # as its own job, and a role without an employer gets merged into its neighbour.
+            doc.split_line([('B', role['title']), ('R', ' — '), ('B', job['company'])], role['dates'])
             if r == 0 and meta:
                 doc.paragraph([('I', meta)], size=SMALL_SIZE, leading=SMALL_LEADING, color=MUTED)
-            for detail in role['details']:
-                doc.paragraph([('R', detail)], bullet=True)
-            _technologies(doc, role['technologies'])
+            _bullets(doc, role['details'], role['technologies'])
 
 
 def _projects(doc, model):
@@ -688,18 +738,18 @@ def _projects(doc, model):
         if project['subtitle']:
             left += [('R', ' — ' + project['subtitle'])]
         doc.split_line(left, project['dates'])
-        for detail in project['details']:
-            doc.paragraph([('R', detail)], bullet=True)
-        _technologies(doc, project['technologies'])
+        _bullets(doc, project['details'], project['technologies'])
 
 
 def _certifications(doc, model):
     if not model['certifications']:
         return
     doc.heading('Certifications')
+    # The date stays on the name's line, in reading order. Right-aligned, a parser collects the
+    # dates as a column of their own and can no longer tell which belongs to which credential.
     for cert in model['certifications']:
-        left = [('B', cert['name'])] + ([('R', ' — ' + cert['issuer'])] if cert['issuer'] else [])
-        doc.split_line(left, cert['dates'])
+        tail = ' · '.join(p for p in (cert['issuer'], cert['issued']) if p)
+        doc.paragraph([('B', cert['name'])] + ([('R', ' — ' + tail)] if tail else []), leading=BODY_LEADING - 0.4)
 
 
 def _education(doc, model):
@@ -861,6 +911,31 @@ def _text_string(value):
     return b'<FEFF' + value.encode('utf-16-be').hex().upper().encode('ascii') + b'>'
 
 
+def _cjk_font(objects, reserve):
+    """Write the Japanese Type0 font and return its object number.
+
+    No ToUnicode map: with a predefined CMap, readers and text extractors derive Unicode from
+    the CMap name itself, and pdfminer misreads an explicit identity map as keyed by CID.
+    """
+    font, cid_font, descriptor = reserve(), reserve(), reserve()
+    name = _CJK[1]
+    objects[font - 1] = (
+        f'<< /Type /Font /Subtype /Type0 /BaseFont /{name}-UniJIS-UCS2-H /Encoding /UniJIS-UCS2-H '
+        f'/DescendantFonts [{cid_font} 0 R] >>'
+    ).encode('ascii')
+    objects[cid_font - 1] = (
+        f'<< /Type /Font /Subtype /CIDFontType0 /BaseFont /{name} '
+        f'/CIDSystemInfo << /Registry (Adobe) /Ordering (Japan1) /Supplement 2 >> '
+        f'/FontDescriptor {descriptor} 0 R /DW 1000 >>'
+    ).encode('ascii')
+    # Metrics as reportlab publishes them for this face.
+    objects[descriptor - 1] = (
+        f'<< /Type /FontDescriptor /FontName /{name} /Flags 4 /FontBBox [-92 -250 1010 922] '
+        f'/ItalicAngle 0 /Ascent 752 /Descent -221 /CapHeight 737 /StemV 114 >>'
+    ).encode('ascii')
+    return font
+
+
 def render_pdf(model, generated_at=None):
     """Lay the model out and serialise it. Returns the PDF as bytes."""
     generated_at = generated_at or datetime.now(timezone.utc)
@@ -880,6 +955,8 @@ def render_pdf(model, generated_at=None):
             f'<< /Type /Font /Subtype /Type1 /BaseFont /{base_font} /Encoding /WinAnsiEncoding >>'.encode('ascii')
         )
         font_refs[resource] = number
+    if any(f'/{_CJK[0]} '.encode('ascii') in op for page in pages for op in page.ops):
+        font_refs[_CJK[0]] = _cjk_font(objects, reserve)
     fonts = ' '.join(f'/{name} {num} 0 R' for name, num in font_refs.items())
 
     kids = []
@@ -915,7 +992,7 @@ def render_pdf(model, generated_at=None):
         f'<< /Type /Pages /Kids [{" ".join(f"{k} 0 R" for k in kids)}] /Count {len(kids)} >>'
     ).encode('ascii')
 
-    keywords = ', '.join(model['competencies'][:12])
+    keywords = ', '.join([item for group in model['competencies'] for item in group['items']][:12])
     stamp = generated_at.strftime('D:%Y%m%d%H%M%SZ')
     objects[info - 1] = (
         b'<< /Title '

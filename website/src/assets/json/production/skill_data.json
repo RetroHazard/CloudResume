@@ -5,7 +5,8 @@
             "category": "Cloud",
             "level": "70%",
             "logo": "skill-icons:aws-dark",
-            "website": "https://aws.amazon.com/"
+            "website": "https://aws.amazon.com/",
+            "cvCategory": "Platform"
         },
         {
             "name": "Microsoft Azure",
@@ -47,21 +48,33 @@
             "category": "Security",
             "level": "80%",
             "logo": "devicon:okta",
-            "website": "https://www.okta.com/"
+            "website": "https://www.okta.com/",
+            "cvCategory": "Identity Platforms"
         },
         {
             "name": "1Password",
             "category": "Security",
             "level": "80%",
             "logo": "simple-icons:1password",
-            "website": "https://1password.com/"
+            "website": "https://1password.com/",
+            "cvCategory": "Identity Platforms"
         },
         {
             "name": "Entra ID",
             "category": "Security",
             "level": "45%",
             "logo": "selfhst:microsoft-entra-id",
-            "website": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id"
+            "website": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id",
+            "cvCategory": "Identity Platforms",
+            "cv": "always"
+        },
+        {
+            "name": "Active Directory",
+            "category": "Security",
+            "cvCategory": "Identity Platforms",
+            "level": "65%",
+            "logo": "skill-icons:windows-dark",
+            "website": "https://learn.microsoft.com/en-us/windows-server/identity/ad-ds/get-started/virtual-dc/active-directory-domain-services-overview"
         },
         {
             "name": "Push Security",
@@ -292,7 +305,8 @@
             "category": "Creative",
             "level": "60%",
             "logo": "skill-icons:unrealengine",
-            "website": "https://www.unrealengine.com/"
+            "website": "https://www.unrealengine.com/",
+            "cv": false
         },
         {
             "name": "GitHub",
@@ -376,28 +390,32 @@
             "category": "Development",
             "level": "50%",
             "logo": "skill-icons:tailwindcss-dark",
-            "website": "https://tailwindcss.com"
+            "website": "https://tailwindcss.com",
+            "cv": false
         },
         {
             "name": "SideFX Houdini",
             "category": "Creative",
             "level": "30%",
             "logo": "simple-icons:houdini",
-            "website": "https://www.sidefx.com/"
+            "website": "https://www.sidefx.com/",
+            "cv": false
         },
         {
             "name": "Blender",
             "category": "Creative",
             "level": "55%",
             "logo": "skill-icons:blender-dark",
-            "website": "https://www.blender.org/"
+            "website": "https://www.blender.org/",
+            "cv": false
         },
         {
             "name": "Creative Cloud",
             "category": "Creative",
             "level": "80%",
             "logo": "simple-icons:adobecreativecloud",
-            "website": "https://www.adobe.com/creativecloud.html"
+            "website": "https://www.adobe.com/creativecloud.html",
+            "cv": false
         },
         {
             "name": "Windows",
@@ -453,29 +471,30 @@
         }
     ],
     "industry_knowledge": [
-        { "name": "Identity & Access Management (IAM)" },
-        { "name": "Zero Trust Security Architecture" },
-        { "name": "PKI / Certificate Lifecycle Management" },
-        { "name": "Endpoint Security & Mobile Device Management (MDM)" },
-        { "name": "Cloud Security (AWS)" },
-        { "name": "Vulnerability Management" },
-        { "name": "Access Governance & Certification (Least-Privilege Audits)" },
-        { "name": "Application Allow-Listing / Binary Authorisation" },
-        { "name": "DevSecOps" },
-        { "name": "Software Supply-Chain Security" },
-        { "name": "Security Incident Response" },
-        { "name": "Kubernetes Access Control & RBAC" },
-        { "name": "Enterprise AI Governance & AI Tooling Security" },
-        { "name": "Agentic Workflows" },
-        { "name": "Agentic Development (AI-Assisted Software Engineering)" },
-        { "name": "AI Agent Identity & Access Control" },
-        { "name": "LLM Gateway & Model Access Management" },
-        { "name": "Model Context Protocol (MCP) & Tool Integration" },
-        { "name": "Identity Federation (SAML, OAuth 2.0, OIDC, SCIM)" },
-        { "name": "Threat Mitigation" },
-        { "name": "Risk Management" },
-        { "name": "Agile & DevOps" },
-        { "name": "Regulatory & Compliance Controls" }
+        { "name": "Identity & Access Management (IAM)", "cvCategory": "Identity & Access" },
+        { "name": "Zero Trust Security Architecture", "cvCategory": "Identity & Access" },
+        { "name": "PKI / Certificate Lifecycle Management", "cvCategory": "Identity & Access" },
+        { "name": "Endpoint Security & Mobile Device Management (MDM)", "cvCategory": "Security Operations" },
+        { "name": "Cloud Security (AWS)", "cvCategory": "Security Operations" },
+        { "name": "Vulnerability Management", "cvCategory": "Security Operations" },
+        { "name": "Access Governance & Certification (Least-Privilege Audits)", "cvCategory": "Identity & Access" },
+        { "name": "Privileged Access Management (PAM) & Just-in-Time Access", "cvCategory": "Identity & Access" },
+        { "name": "Application Allow-Listing / Binary Authorization", "cvCategory": "Security Operations" },
+        { "name": "DevSecOps", "cvCategory": "Security Operations" },
+        { "name": "Software Supply-Chain Security", "cvCategory": "Security Operations" },
+        { "name": "Security Incident Response", "cvCategory": "Security Operations" },
+        { "name": "Kubernetes Access Control & RBAC", "cvCategory": "Identity & Access" },
+        { "name": "Enterprise AI Governance & AI Tooling Security", "cvCategory": "AI Security" },
+        { "name": "Agentic Workflows", "cvCategory": "AI Security" },
+        { "name": "Agentic Development (AI-Assisted Software Engineering)", "cvCategory": "AI Security" },
+        { "name": "AI Agent Identity & Access Control", "cvCategory": "AI Security" },
+        { "name": "LLM Gateway & Model Access Management", "cvCategory": "AI Security" },
+        { "name": "Model Context Protocol (MCP) & Tool Integration", "cvCategory": "AI Security" },
+        { "name": "Identity Federation (SAML, OAuth 2.0, OIDC, SCIM)", "cvCategory": "Identity & Access" },
+        { "name": "Threat Mitigation", "cv": false },
+        { "name": "Risk Management", "cvCategory": "Security Operations" },
+        { "name": "Agile & DevOps", "cv": false },
+        { "name": "Regulatory & Compliance Controls", "cvCategory": "Security Operations" }
     ],
     "soft_skills": [
         { "name": "Cross-Functional Stakeholder Communication" },
