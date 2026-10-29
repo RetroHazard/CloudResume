@@ -111,8 +111,8 @@ Forwarding for aliases already issued keeps working.
   addresses. The destination has to be a verified identity either way (see below), so
   forwarding works in or out of the sandbox.
 - **The real inbox comes from a secret and is verified by hand.** The forwarding destination
-  (also the contact form's) is the `CONTACT_DESTINATION_EMAIL` repository secret, passed to
-  Terraform as the sensitive variable `contact_destination_email`. It isn't in the code, it's
+  (also the contact form's, and where its failure alerts go) is the `CONTACT_DESTINATION_EMAIL`
+  repository secret, passed to Terraform as the sensitive variable `contact_destination_email`. It isn't in the code, it's
   masked in logs, and it's redacted from the plans the pipeline publishes. That includes the
   IAM policies naming its SES identity, since that ARN embeds the address; review changes to
   those two policies with a local plan. A missing or malformed secret fails the plan.
@@ -130,6 +130,9 @@ Forwarding for aliases already issued keeps working.
   2. Update the `CONTACT_DESTINATION_EMAIL` secret.
   3. Re-run the pipeline on `main` (or merge anything) so the Lambdas pick it up. Verifying
      first means delivery never breaks. The old identity can be deleted from SES afterwards.
+  4. Follow the link in the SNS confirmation email the new address receives. The apply
+     replaces the contact form's alert subscription, and alerts stay off until it is confirmed
+     (see [`contact-form-recaptcha.md`](contact-form-recaptcha.md#failure-alerts)).
 
   For local Terraform runs, set `TF_VAR_contact_destination_email`. The previous `+alias`
   address remains in the repository's git history and in older workflow logs.
