@@ -145,12 +145,12 @@ variable "alias_abuse_alert_threshold" {
 }
 
 variable "contact_destination_email" {
-  description = "The real inbox behind the contact form and the CV's forwarding alias. Supplied from the CONTACT_DESTINATION_EMAIL Actions secret, so it is never committed, and marked sensitive so it is redacted from the plans the pipeline publishes"
+  description = "The real inbox behind the contact form and the CV's forwarding alias. Supplied from the CONTACT_DESTINATION_EMAIL Actions secret, so it is never committed, and marked sensitive so it is redacted from the plans the pipeline publishes. Must already be a verified SES identity: Terraform deliberately does not manage it (see docs/cv-contact.md)"
   type        = string
   sensitive   = true
 
-  # Without this, a missing secret would arrive as "" and the plan would replace the SES
-  # identity with an empty one instead of failing.
+  # Without this, a missing secret would arrive as "" and the Lambdas would be deployed
+  # pointing at an empty address instead of the plan failing.
   validation {
     condition     = can(regex("^[^@[:space:]]+@[^@[:space:]]+\\.[^@[:space:]]+$", var.contact_destination_email))
     error_message = "contact_destination_email is not an email address. In CI it comes from the CONTACT_DESTINATION_EMAIL repository secret; locally, set TF_VAR_contact_destination_email."

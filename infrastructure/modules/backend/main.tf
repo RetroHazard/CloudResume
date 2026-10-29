@@ -265,8 +265,21 @@ resource "aws_ses_domain_identity" "crc-mail-domain" {
   domain = var.domain-name
 }
 
-resource "aws_ses_email_identity" "crc-mail-destination" {
-  email = var.contact-destination-email
+# The real inbox's SES identity is verified by hand in the SES console, not managed here.
+# An email identity's resource ID *is* the address, and Terraform prints resource IDs in
+# every plan's refresh output ("Refreshing state... [id=...]") regardless of `sensitive`,
+# which on a public repository would publish it on every CI run. Everything that needs the
+# address (sendMessage, forwardMail, their IAM policies) reads var.contact-destination-email
+# instead. To change the destination: verify the new address in SES (Verified identities ->
+# Create identity -> Email address), then update the CONTACT_DESTINATION_EMAIL secret.
+#
+# This forgets the identity Terraform used to manage without deleting it from SES.
+removed {
+  from = aws_ses_email_identity.crc-mail-destination
+
+  lifecycle {
+    destroy = false
+  }
 }
 
 resource "aws_ses_domain_mail_from" "crc-mail-from-domain" {

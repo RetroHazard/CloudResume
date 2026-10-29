@@ -107,14 +107,28 @@ Forwarding for aliases already issued keeps working.
   and anything that isn't a live alias is dropped. If you ever want a real mailbox on the
   domain (Google Workspace, say), this needs to move to a subdomain first.
 - **SES sandbox.** If the account is still in the sandbox, SES only sends to verified
-  addresses. The destination is already a verified identity (the contact form uses it), so
-  forwarding works either way.
-- **The real inbox comes from a secret.** The forwarding destination (also the contact
-  form's) is the `CONTACT_DESTINATION_EMAIL` repository secret, passed to Terraform as the
-  sensitive variable `contact_destination_email`. It isn't in the code, it's masked in logs,
-  and it's redacted from the plans the pipeline publishes. That includes the IAM policies
-  naming its SES identity, since that ARN embeds the address; review changes to those two
-  policies with a local plan. A missing or malformed secret fails the plan rather than
-  replacing the SES identity. For local runs, set `TF_VAR_contact_destination_email`.
-  The address is still in the repository's git history from before this change. Only
-  switching to a different destination address takes it out of circulation.
+  addresses. The destination has to be a verified identity either way (see below), so
+  forwarding works in or out of the sandbox.
+- **The real inbox comes from a secret and is verified by hand.** The forwarding destination
+  (also the contact form's) is the `CONTACT_DESTINATION_EMAIL` repository secret, passed to
+  Terraform as the sensitive variable `contact_destination_email`. It isn't in the code, it's
+  masked in logs, and it's redacted from the plans the pipeline publishes. That includes the
+  IAM policies naming its SES identity, since that ARN embeds the address; review changes to
+  those two policies with a local plan. A missing or malformed secret fails the plan.
+
+  Terraform deliberately does **not** manage the destination's SES identity. An email
+  identity's resource ID is the address itself, and Terraform prints resource IDs in every
+  plan's refresh output whatever is marked sensitive, which on a public repository would
+  publish the address on every CI run. So the identity is created and verified in the SES
+  console instead.
+
+  **To change the destination address:**
+
+  1. In SES (us-east-1): **Verified identities → Create identity → Email address**, enter
+     the new address, and click the link in the verification email.
+  2. Update the `CONTACT_DESTINATION_EMAIL` secret.
+  3. Re-run the pipeline on `main` (or merge anything) so the Lambdas pick it up. Verifying
+     first means delivery never breaks. The old identity can be deleted from SES afterwards.
+
+  For local Terraform runs, set `TF_VAR_contact_destination_email`. The previous `+alias`
+  address remains in the repository's git history and in older workflow logs.
