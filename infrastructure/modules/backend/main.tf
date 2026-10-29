@@ -198,7 +198,7 @@ resource "aws_dynamodb_table" "crc-download-record" {
 }
 
 # The CV's forwarding addresses. Each alias row is keyed on its local part
-# ("alexander.k7q2mx") and carries a status: active (printed on the CV now), retired
+# ("abracken.<generated>") and carries a status: active (printed on the CV now), retired
 # (rotated out, still forwarded, so CVs already sent keep working) or revoked (dropped).
 # The row at id = "#current" points at the live alias; the CV contact workflow deletes it to
 # rotate or revoke, and the next CV download mints a replacement.

@@ -1,7 +1,7 @@
 # Manages the forwarding address printed on the generated CV.
 #
 # The CV never carries the real inbox. downloadResume prints a random alias
-# (abracken.k7q2mx@<domain>) and forwardMail relays mail sent to it. Aliases
+# (abracken.<generated>@<domain>) and forwardMail relays mail sent to it. Aliases
 # rotate on their own: the first CV download of each calendar month issues a new
 # one and retires the last, which keeps forwarding. This is the control panel:
 #
