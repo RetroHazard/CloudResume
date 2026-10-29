@@ -89,3 +89,27 @@ class ReplyToTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class FailureTests(unittest.TestCase):
+    def setUp(self):
+        self.module, _ = load()
+
+        def refuse(**_):
+            raise RuntimeError('Email address is not verified: real.inbox@gmail.example')
+
+        self.module.boto3.client = lambda name, **_: types.SimpleNamespace(send_email=refuse)
+
+    def test_a_send_failure_does_not_echo_the_error_to_the_caller(self):
+        with self.assertLogs(self.module.logger, level='ERROR') as logs:
+            response = submit(self.module)
+        self.assertEqual(response['statusCode'], 500)
+        self.assertNotIn('real.inbox', response['body'])
+        self.assertEqual(json.loads(response['body']), {'error': 'Message could not be sent'})
+        # The detail is kept, in the log.
+        self.assertIn('real.inbox@gmail.example', '\n'.join(logs.output))
+
+    def test_a_send_failure_carries_the_cors_header(self):
+        with self.assertLogs(self.module.logger, level='ERROR'):
+            response = submit(self.module)
+        self.assertEqual(response['headers'], {'Access-Control-Allow-Origin': ORIGIN})

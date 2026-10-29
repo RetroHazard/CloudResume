@@ -21,7 +21,7 @@ function Skills() {
     return (
         <>
             <title>Skills | Cloud Resume</title>
-            <SectionShell id='skills' kicker='Network Map · Capabilities' title='Skills' line={4}>
+            <SectionShell id='skills' kicker='Network Map · Capabilities' title='Skills' line={5}>
                 <div className='flex flex-col gap-10'>
                     <Reveal className='rounded-lg border border-border bg-background/40 p-4 sm:p-6'>
                         <Suspense fallback={<div className='h-72 animate-pulse rounded bg-secondary-700/40' />}>
