@@ -16,6 +16,21 @@ data "aws_iam_policy_document" "crc-lambda-TrackVisitors-logging-policy" {
       "${var.crc-cw-lambda-log-group-trackVisitors}:*"
     ]
   }
+
+  # CloudWatch Logs stops honouring log-stream ARNs (`<group>:*`) for log-group-level
+  # actions on 26 April 2027, so CreateLogGroup needs the bare log-group ARN as well.
+  # The statement above stays for the stream-scoped actions (CreateLogStream, PutLogEvents).
+  statement {
+    sid    = "AllowFunctionToCreateLogGroup"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+    resources = [
+      var.crc-cw-lambda-log-group-trackVisitors
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "crc-lambda-TrackVisitors-access-policy" {
@@ -46,6 +61,19 @@ data "aws_iam_policy_document" "crc-lambda-DownloadResume-logging-policy" {
     ]
     resources = [
       "${var.crc-cw-lambda-log-group-downloadResume}:*"
+    ]
+  }
+
+  # See crc-lambda-TrackVisitors-logging-policy for why this is a separate statement.
+  statement {
+    sid    = "AllowFunctionToCreateLogGroup"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+    resources = [
+      var.crc-cw-lambda-log-group-downloadResume
     ]
   }
 }
@@ -167,6 +195,19 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-logging-policy" {
       "${var.crc-cw-lambda-log-group-sendMessage}:*"
     ]
   }
+
+  # See crc-lambda-TrackVisitors-logging-policy for why this is a separate statement.
+  statement {
+    sid    = "AllowFunctionToCreateLogGroup"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+    resources = [
+      var.crc-cw-lambda-log-group-sendMessage
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
@@ -224,6 +265,19 @@ data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy
       "${var.crc-cw-lambda-log-group-cloudfrontInvalidation}:*"
     ]
   }
+
+  # See crc-lambda-TrackVisitors-logging-policy for why this is a separate statement.
+  statement {
+    sid    = "AllowFunctionToCreateLogGroup"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+    resources = [
+      var.crc-cw-lambda-log-group-cloudfrontInvalidation
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-access-policy" {
@@ -266,6 +320,19 @@ data "aws_iam_policy_document" "crc-lambda-UpdateContributions-logging-policy" {
     ]
     resources = [
       "${var.crc-cw-lambda-log-group-updateContributions}:*"
+    ]
+  }
+
+  # See crc-lambda-TrackVisitors-logging-policy for why this is a separate statement.
+  statement {
+    sid    = "AllowFunctionToCreateLogGroup"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+    resources = [
+      var.crc-cw-lambda-log-group-updateContributions
     ]
   }
 }
@@ -395,6 +462,19 @@ data "aws_iam_policy_document" "crc-lambda-ForwardMail-logging-policy" {
     ]
     resources = [
       "${var.crc-cw-lambda-log-group-forwardMail}:*"
+    ]
+  }
+
+  # See crc-lambda-TrackVisitors-logging-policy for why this is a separate statement.
+  statement {
+    sid    = "AllowFunctionToCreateLogGroup"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+    resources = [
+      var.crc-cw-lambda-log-group-forwardMail
     ]
   }
 }
