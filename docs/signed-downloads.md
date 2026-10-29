@@ -33,7 +33,7 @@ Download CV click
               ├─ ssm:GetParameter        private key, cached for the life of the container
               ├─ crc-download-record     dedupe on visitorId (24h TTL), bump download_count
               └─ returns { downloadUrl, fileName, expiresAt, count }
-  └─> browser downloads https://<domain>/files/cv/<digest>/<Name>_CV.pdf?Expires=…&Signature=…&Key-Pair-Id=…
+  └─> browser downloads https://<domain>/files/cv/<digest>/<Name>_CV_<id>.pdf?Expires=…&Signature=…&Key-Pair-Id=…
         └─> CloudFront validates against the trusted key group, then serves from cache
 ```
 

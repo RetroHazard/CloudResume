@@ -49,14 +49,18 @@ def page_streams(pdf):
     return streams
 
 
-def shown_text(pdf):
-    """The text each BT...ET block shows, decoded from WinAnsi, one block per line."""
+def page_text(stream):
+    """The text each BT...ET block of one page shows, decoded from WinAnsi, one block per line."""
     lines = []
-    for stream in page_streams(pdf):
-        for block in re.findall(rb'BT (.*?) ET', stream):
-            shown = re.findall(rb'\(((?:\\.|[^\\)])*)\) Tj', block)
-            lines.append(b''.join(re.sub(rb'\\(.)', rb'\1', raw) for raw in shown).decode('cp1252'))
+    for block in re.findall(rb'BT (.*?) ET', stream):
+        shown = re.findall(rb'\(((?:\\.|[^\\)])*)\) Tj', block)
+        lines.append(b''.join(re.sub(rb'\\(.)', rb'\1', raw) for raw in shown).decode('cp1252'))
     return '\n'.join(lines)
+
+
+def shown_text(pdf):
+    """`page_text` over every page, in order."""
+    return '\n'.join(page_text(stream) for stream in page_streams(pdf))
 
 
 class FormatDateTests(unittest.TestCase):
@@ -249,10 +253,20 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(model['education'][0]['minor'], 'East Asia Studies')
         self.assertIn('Minor in East Asia Studies · Calgary', shown_text(renderResume.render_pdf(model)))
 
-    def test_file_name_is_surname_first(self):
-        self.assertEqual(renderResume.file_name({'name': 'Alexander Bracken'}), 'BRACKEN_ALEXANDER_CV.pdf')
-        self.assertEqual(renderResume.file_name({'name': 'Zoë  de la Cruz'}), 'CRUZ_ZOE_DE_LA_CV.pdf')
-        self.assertEqual(renderResume.file_name({'name': ''}), 'CV.pdf')
+    def test_file_name_is_surname_first_then_the_generation_id(self):
+        def name(full):
+            model = {'name': full}
+            return renderResume.file_name(model).replace(renderResume.generation_id(model), '<id>')
+
+        self.assertEqual(name('Alexander Bracken'), 'BRACKEN_ALEXANDER_CV_<id>.pdf')
+        self.assertEqual(name('Zoë  de la Cruz'), 'CRUZ_ZOE_DE_LA_CV_<id>.pdf')
+        self.assertEqual(name(''), 'CV_<id>.pdf')
+
+    def test_each_version_downloads_under_its_own_name(self):
+        model = renderResume.build_model(minimal_source(), SITE, today=TODAY)
+        changed = renderResume.build_model(minimal_source(), SITE, today=TODAY, contact_email='a.next@example.com')
+        self.assertNotEqual(renderResume.file_name(model), renderResume.file_name(changed))
+        self.assertEqual(renderResume.file_name(model), renderResume.file_name(copy.deepcopy(model)))
 
 
 def minimal_source(**extra):
@@ -576,6 +590,44 @@ class PdfTests(unittest.TestCase):
         count = int(re.search(rb'/Type /Pages /Kids \[[^\]]*\] /Count (\d+)', self.pdf).group(1))
         self.assertEqual(len(page_streams(self.pdf)), count)
         self.assertIn(f'Page {count} of {count}', shown_text(self.pdf))
+
+    def test_every_footer_carries_the_generation_imprint(self):
+        cv_id = renderResume.generation_id(self.model)
+        self.assertRegex(cv_id, r'^[0-9a-f]{12}$')
+        imprint = re.compile(rf'Generated \d{{1,2}} [A-Z][a-z]{{2}} \d{{4}} · ID {cv_id}')
+        for stream in page_streams(self.pdf):
+            self.assertRegex(page_text(stream), imprint)
+        self.assertIn(f'/GenerationID ({cv_id})'.encode(), self.pdf)
+
+    def test_the_generation_id_is_the_head_of_the_cache_key(self):
+        self.assertTrue(renderResume.content_digest(self.model).startswith(renderResume.generation_id(self.model)))
+        changed = copy.deepcopy(self.model)
+        changed['summary'] = ['Reworded.']
+        self.assertNotEqual(renderResume.generation_id(changed), renderResume.generation_id(self.model))
+
+    def test_the_imprint_sits_small_under_the_name(self):
+        def footer_block(page, text):
+            return next(op for op in page.ops if renderResume._pdf_string(renderResume._encode(text)) in op)
+
+        name = f'{self.model["name"]} — Curriculum Vitae'
+        imprint = 'Generated 28 Sep 2026 · ID 0123456789ab'
+        for page in renderResume.fit(self.model, imprint)[1]:
+            name_x, name_y = map(float, re.search(rb'([\d.]+) ([\d.]+) Td', footer_block(page, name)).groups())
+            block = footer_block(page, imprint)
+            x, y = map(float, re.search(rb'([\d.]+) ([\d.]+) Td', block).groups())
+            size = float(re.search(rb'/\w+ ([\d.]+) Tf', block).group(1))
+            self.assertEqual(x, name_x)
+            self.assertLess(y, name_y)
+            self.assertLess(size, 7.5)
+            self.assertGreater(y - size, 12)  # clear of a printer's unprintable edge
+
+    def test_every_page_is_a4(self):
+        boxes = re.findall(rb'/MediaBox \[0 0 ([\d.]+) ([\d.]+)\]', self.pdf)
+        self.assertEqual(len(boxes), len(page_streams(self.pdf)))
+        for width, height in boxes:
+            # 210 x 297 mm in points. US Letter would be 612 x 792.
+            self.assertAlmostEqual(float(width), 210 / 25.4 * 72, places=1)
+            self.assertAlmostEqual(float(height), 297 / 25.4 * 72, places=1)
 
     def test_links_are_annotated(self):
         for link in self.model['links']:

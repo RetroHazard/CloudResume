@@ -16,7 +16,7 @@ Download CV click → GET /download → λ downloadResume
   │     304 → this container already resolved the CV: sign it, done
   ├─ renderResume.build_model()     project the data into exactly what the CV prints
   ├─ GetItem crc-mail-alias #current  the forwarding address to print (minted if none)
-  ├─ key = files/cv/<sha256(model + RENDERER_VERSION)[:24]>/BRACKEN_ALEXANDER_CV.pdf
+  ├─ key = files/cv/<sha256(model + RENDERER_VERSION)[:24]>/BRACKEN_ALEXANDER_CV_<id>.pdf
   ├─ ListObjectsV2 prefix=key       already rendered? sign it, done
   └─ render_pdf() → PutObject       only when the CV's content actually changed,
                                     then prune CVs rendered from older data
@@ -45,7 +45,7 @@ so in practice the first render after a content change happens in CI, not for a 
 the same reason the URL signer is hand-rolled: the Lambda runtime bundles nothing that can
 lay out a PDF, and functions here ship as bare `.py` files rather than layers.
 
-The output is built to get through applicant tracking systems: one column, real text in
+The output is A4 and built to get through applicant tracking systems: one column, real text in
 reading order, the standard Helvetica family (nothing embedded), clickable links, and
 document metadata (title, author, keywords). Characters outside WinAnsi are folded to their
 nearest ASCII equivalent, so a stray `→` turns into `->` rather than failing the render.
@@ -63,6 +63,23 @@ A few layout rules exist for parsers rather than for looks:
   as a separate column, and nothing ties a date back to its credential.
 - A bullet never splits across pages, and a technologies line stays with its last bullet.
   Otherwise the page footer lands in the middle of a sentence in the extracted text.
+
+### The footer imprint
+
+Every page's footer carries a line such as `Generated 29 Oct 2026 · ID 52d614bae667`, set
+small under the name, and the same ID is written to the PDF's document info as `/GenerationID`.
+
+- **The ID** (`generation_id`) is the first 12 hex characters of the content digest, which is
+  also the start of the S3 folder the PDF is stored under. Two copies with the same ID carry
+  the same content. To trace a copy back to its render, search the `downloadResume`
+  function's logs for `Rendered files/cv/<ID>`. While it is still the current CV,
+  `files/cv/<ID>…/` in the site bucket holds it too.
+- **The date** is when that version was rendered, not when it was downloaded. Every click
+  until the content next changes gets the same file. The forwarding address dates a copy to
+  its download month (see [`cv-contact.md`](cv-contact.md)).
+
+The ID is per version, not per download. A per-download ID would make every click a render
+and an S3 write, and a digest is enough to say which version of the CV someone is holding.
 
 ### Controlling the CV
 
