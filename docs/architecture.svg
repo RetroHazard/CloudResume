@@ -75,6 +75,7 @@
       <rect x="968.4" y="544" width="83.19999999999999" height="15" class="edge-label-bg"/>
       <text x="1010" y="555" text-anchor="middle" class="edge-text">GetParameter</text>
     </g>
+<path d="M 915 342 L 1075 342 L 1075 528 L 1130 528 L 1130 547" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/>
 <path d="M 890 545 L 890 520 L 1040 520 L 1040 465 L 1102 465" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
       <rect x="934" y="506" width="132" height="15" class="edge-label-bg"/>
       <text x="1000" y="517" text-anchor="middle" class="edge-text">downloads · CV alias</text>
@@ -258,10 +259,11 @@
 
   <g class="node">
     <rect x="1107" y="547" width="46" height="46" rx="13" class="badge" fill="#157A8C"/>
-    <g transform="translate(1130 570)" color="#FFFFFF" class="icon"><circle cx="-6" cy="-6" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
-    <path d="M-1.5 -1 L13 13 M9 9 L13 5 M5 13 L9 9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g transform="translate(1130 570)" color="#FFFFFF" class="icon"><circle cx="-7" cy="0" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <circle cx="-7" cy="0" r="1.8" fill="currentColor"/>
+    <path d="M-1 0 H14 M14 0 V6 M9 0 V5" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="1130" y="610" class="label" text-anchor="middle">SSM</text>
-    <text x="1130" y="625" class="sub" text-anchor="middle">signing key</text>
+    <text x="1130" y="625" class="sub" text-anchor="middle">signing key · reCAPTCHA</text>
     
   </g>
 
@@ -340,8 +342,9 @@
 
   <g class="node">
     <rect x="867" y="927" width="46" height="46" rx="13" class="badge" fill="#D64550"/>
-    <g transform="translate(890 950)" color="#FFFFFF" class="icon"><circle cx="-6" cy="-6" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
-    <path d="M-1.5 -1 L13 13 M9 9 L13 5 M5 13 L9 9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <g transform="translate(890 950)" color="#FFFFFF" class="icon"><circle cx="-7" cy="0" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <circle cx="-7" cy="0" r="1.8" fill="currentColor"/>
+    <path d="M-1 0 H14 M14 0 V6 M9 0 V5" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></g>
     <text x="890" y="990" class="label" text-anchor="middle">IAM</text>
     <text x="890" y="1005" class="sub" text-anchor="middle">least-privilege roles</text>
     

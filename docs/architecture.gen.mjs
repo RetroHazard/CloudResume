@@ -68,8 +68,9 @@ const icons = {
     <path d="M11 -11 A14 14 0 0 1 13 -2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>`,
   eye: `<path d="M-14 0 C-9 -9 9 -9 14 0 C9 9 -9 9 -14 0 Z" fill="none" stroke="currentColor" stroke-width="2.2"/>
     <circle cx="0" cy="0" r="4.5" fill="none" stroke="currentColor" stroke-width="2.2"/>`,
-  key: `<circle cx="-6" cy="-6" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
-    <path d="M-1.5 -1 L13 13 M9 9 L13 5 M5 13 L9 9" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>`,
+  key: `<circle cx="-7" cy="0" r="6" fill="none" stroke="currentColor" stroke-width="2.3"/>
+    <circle cx="-7" cy="0" r="1.8" fill="currentColor"/>
+    <path d="M-1 0 H14 M14 0 V6 M9 0 V5" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>`,
   cert: `<rect x="-12" y="-13" width="24" height="19" rx="2" fill="none" stroke="currentColor" stroke-width="2.3"/>
     <path d="M-7 -6 H7 M-7 -1 H1" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/>
     <circle cx="6" cy="9" r="4" fill="none" stroke="currentColor" stroke-width="2.1"/>
@@ -101,7 +102,7 @@ add('ses', 1130, 330, 'SES', 'mail · DKIM/SPF/DMARC', 'integ', 'mail');
 add('ddb', 1130, 450, 'DynamoDB', '4 tables', 'database', 'db');
 add('lforward', 1240, 160, 'λ forwardMail', 'CV alias → inbox', 'compute', 'lambda', 50);
 add('ldownload', 890, 570, 'λ downloadResume', 'GET /download', 'compute', 'lambda', 50);
-add('ssm', 1130, 570, 'SSM', 'signing key', 'mgmt', 'key', 46);
+add('ssm', 1130, 570, 'SSM', 'signing key · reCAPTCHA', 'mgmt', 'key', 46);
 add('health', 260, 150, 'R53 Health Check', 'HTTPS /index.html', 'edge', 'pulse', 46);
 add('acm', 592, 560, 'ACM', 'site + api cert', 'security', 'cert', 46);
 add('logs', 890, 150, 'S3 Access Logs', 'site + CloudFront', 'storage', 'bucket', 50);
@@ -135,6 +136,7 @@ edge('lsend', 'ses', 'sync', 'send email', { x: 1010, y: 314 });
 edge('ltrack', 'ddb', 'sync', 'put / get item', { x: 1010, y: 434 });
 edge('apigw', 'ldownload', 'sync', null);
 edge('ldownload', 'ssm', 'sync', 'GetParameter', { x: 1010, y: 554 });
+edge('lsend', 'ssm', 'sync', null, null, { path: 'send-ssm' });
 edge('ldownload', 'ddb', 'sync', 'downloads · CV alias', { x: 1000, y: 516 }, { path: 'download-ddb' });
 edge('ses', 'lforward', 'event', 'inbound', { x: 1085, y: 236 }, { path: 'ses-forward' });
 edge('lforward', 'ses', 'sync', 'SendRawEmail', { x: 1190, y: 262 }, { path: 'forward-ses' });
@@ -202,6 +204,10 @@ function edgePath(e) {
     case 'forward-ses':
       // lforward -> ses: down from forwardMail's bottom-left, clear of its caption, into SES's top-right.
       return `M ${a.cx - ah} ${a.cy + 10} L ${b.cx + 10} ${a.cy + 10} L ${b.cx + 10} ${b.cy - bh}`;
+    case 'send-ssm':
+      // lsend -> ssm: right under the send-email arrow, down the gap left of the
+      // SES/DynamoDB column, then into SSM's top below DynamoDB's caption.
+      return `M ${a.cx + ah} ${a.cy + 12} L 1075 ${a.cy + 12} L 1075 528 L ${b.cx} 528 L ${b.cx} ${b.cy - bh}`;
     case 'download-s3':
       // ldownload -> s3: leave the left edge just under the API Gateway arrow, rise in the
       // channel between the API fan-out trunk and lupdate's return, into S3's right edge.
