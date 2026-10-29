@@ -440,13 +440,13 @@ class PageBreakTests(unittest.TestCase):
 class ContactLineTests(unittest.TestCase):
     def test_contact_address_leads_the_header_and_is_a_mailto_link(self):
         model = renderResume.build_model(
-            minimal_source(), SITE, today=TODAY, contact_email='alexander.k7q2mx@example.com'
+            minimal_source(), SITE, today=TODAY, contact_email='abracken.k7q2mx@example.com'
         )
         self.assertEqual(
-            model['links'][0], {'label': 'alexander.k7q2mx@example.com', 'url': 'mailto:alexander.k7q2mx@example.com'}
+            model['links'][0], {'label': 'abracken.k7q2mx@example.com', 'url': 'mailto:abracken.k7q2mx@example.com'}
         )
         pdf = renderResume.render_pdf(model)
-        self.assertIn(b'/URI (mailto:alexander.k7q2mx@example.com)', pdf)
+        self.assertIn(b'/URI (mailto:abracken.k7q2mx@example.com)', pdf)
         # The site, not the address, is what the document metadata names as its origin.
         self.assertIn(renderResume._text_string('example.com'), pdf)
 

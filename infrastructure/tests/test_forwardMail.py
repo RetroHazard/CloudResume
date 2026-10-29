@@ -21,7 +21,7 @@ RAW = (
     b'DKIM-Signature: v=1; a=rsa-sha256; d=recruiter.example;\r\n'
     b'\tb=abc123\r\n'
     b'From: =?utf-8?q?Zo=C3=AB_Recruiter?= <zoe@recruiter.example>\r\n'
-    b'To: alexander.k7q2mx@example.com\r\n'
+    b'To: abracken.k7q2mx@example.com\r\n'
     b'Subject: Senior role at Example Corp\r\n'
     b'Message-ID: <original@recruiter.example>\r\n'
     b'MIME-Version: 1.0\r\n'
@@ -33,7 +33,7 @@ RAW = (
 PASS = {'status': 'PASS'}
 
 
-def receipt(recipients=('alexander.k7q2mx@example.com',), **verdicts):
+def receipt(recipients=('abracken.k7q2mx@example.com',), **verdicts):
     base = {
         'recipients': list(recipients),
         'spamVerdict': PASS,
@@ -115,9 +115,9 @@ class Harness(unittest.TestCase):
     def setUp(self):
         self.module, self.sent, self.table, self.objects = load(
             {
-                'alexander.k7q2mx': {'id': 'alexander.k7q2mx', 'status': 'active', 'month': '2026-11'},
-                'alexander.old111': {'id': 'alexander.old111', 'status': 'retired'},
-                'alexander.bad999': {'id': 'alexander.bad999', 'status': 'revoked'},
+                'abracken.k7q2mx': {'id': 'abracken.k7q2mx', 'status': 'active', 'month': '2026-11'},
+                'abracken.old111': {'id': 'abracken.old111', 'status': 'retired'},
+                'abracken.bad999': {'id': 'abracken.bad999', 'status': 'revoked'},
             }
         )
 
@@ -132,14 +132,14 @@ class ForwardingTests(Harness):
         call, message = self.forwarded()
         self.assertEqual(call['Destinations'], ['real.inbox@gmail.example'])
         self.assertEqual(call['Source'], 'noreply@example.com')
-        self.assertEqual(self.table.updates[0][0], 'alexander.k7q2mx')
+        self.assertEqual(self.table.updates[0][0], 'abracken.k7q2mx')
 
     def test_reply_goes_to_the_original_sender(self):
         deliver(self.module)
         _, message = self.forwarded()
         self.assertEqual(message['Reply-To'].addresses[0].addr_spec, 'zoe@recruiter.example')
         self.assertEqual(message['From'].addresses[0].addr_spec, 'noreply@example.com')
-        self.assertEqual(message['X-CV-Alias'], 'alexander.k7q2mx@example.com')
+        self.assertEqual(message['X-CV-Alias'], 'abracken.k7q2mx@example.com')
 
     def test_the_forward_says_which_month_the_senders_cv_is_from(self):
         deliver(self.module)
@@ -148,7 +148,7 @@ class ForwardingTests(Harness):
         self.assertEqual(message['X-CV-Issued'], '2026-11')
 
     def test_an_alias_without_a_month_still_forwards_cleanly(self):
-        deliver(self.module, recipients=['alexander.old111@example.com'])
+        deliver(self.module, recipients=['abracken.old111@example.com'])
         _, message = self.forwarded()
         self.assertEqual(message['From'].addresses[0].display_name, 'Zoë Recruiter via CV')
         self.assertIsNone(message['X-CV-Issued'])
@@ -159,7 +159,7 @@ class ForwardingTests(Harness):
         raw = call['RawMessage']['Data']
         self.assertTrue(raw.endswith(b'\r\n\r\nHi Alexander,\r\n\r\nAre you open to a chat?\r\n'))
         self.assertEqual(message['Subject'], 'Senior role at Example Corp')
-        self.assertEqual(message['To'], 'alexander.k7q2mx@example.com')
+        self.assertEqual(message['To'], 'abracken.k7q2mx@example.com')
         self.assertIsNotNone(message['Received'])
 
     def test_headers_that_would_break_resending_are_removed(self):
@@ -173,16 +173,16 @@ class ForwardingTests(Harness):
         self.assertEqual(len(message.get_all('From')), 1)
 
     def test_retired_aliases_still_forward(self):
-        self.assertEqual(deliver(self.module, recipients=['Alexander.Old111@example.com']), ['forwarded'])
+        self.assertEqual(deliver(self.module, recipients=['ABracken.Old111@example.com']), ['forwarded'])
 
     def test_revoked_and_unknown_aliases_are_dropped_silently(self):
-        for recipient in ('alexander.bad999@example.com', 'admin@example.com', 'x@elsewhere.example'):
+        for recipient in ('abracken.bad999@example.com', 'admin@example.com', 'x@elsewhere.example'):
             with self.subTest(recipient=recipient):
                 self.assertEqual(deliver(self.module, recipients=[recipient]), ['dropped'])
         self.assertEqual(self.sent, [])
 
     def test_the_pointer_row_is_not_an_address(self):
-        self.table.items['#current'] = {'id': '#current', 'address': 'alexander.k7q2mx', 'status': 'active'}
+        self.table.items['#current'] = {'id': '#current', 'address': 'abracken.k7q2mx', 'status': 'active'}
         self.assertEqual(deliver(self.module, recipients=['#current@example.com']), ['dropped'])
 
     def test_failed_scans_are_dropped_and_counted(self):
@@ -221,7 +221,7 @@ class ForwardingTests(Harness):
 class AbuseAlertTests(Harness):
     """Drops are tallied per alias per day; reaching the threshold alerts, never revokes."""
 
-    def spam(self, times, recipient='alexander.k7q2mx@example.com'):
+    def spam(self, times, recipient='abracken.k7q2mx@example.com'):
         for _ in range(times):
             deliver(self.module, recipients=[recipient], spamVerdict={'status': 'FAIL'})
 
@@ -232,26 +232,26 @@ class AbuseAlertTests(Harness):
         [call] = self.sent
         message = email.message_from_bytes(call['RawMessage']['Data'], policy=default_policy)
         self.assertEqual(call['Destinations'], ['real.inbox@gmail.example'])
-        self.assertIn('alexander.k7q2mx@example.com', message['Subject'])
+        self.assertIn('abracken.k7q2mx@example.com', message['Subject'])
         body = message.get_content()
         self.assertIn('https://github.com/owner/repo/actions/workflows/cv-contact.yml', body)
         self.assertIn('issued 2026-11', body)
 
     def test_an_alert_never_revokes_anything(self):
         self.spam(5)
-        self.assertEqual(self.table.items['alexander.k7q2mx']['status'], 'active')
+        self.assertEqual(self.table.items['abracken.k7q2mx']['status'], 'active')
         self.assertEqual(deliver(self.module), ['forwarded'])
 
     def test_the_tally_starts_over_each_day(self):
-        self.table.items['alexander.k7q2mx'].update(abuse_day='2000-01-01', abuse_count=99)
+        self.table.items['abracken.k7q2mx'].update(abuse_day='2000-01-01', abuse_count=99)
         self.spam(2)
-        self.assertEqual(self.table.items['alexander.k7q2mx']['abuse_count'], 2)
+        self.assertEqual(self.table.items['abracken.k7q2mx']['abuse_count'], 2)
         self.assertEqual(self.sent, [])
 
     def test_only_scan_failures_count(self):
         for _ in range(5):
-            deliver(self.module, recipients=['alexander.bad999@example.com'])
-        self.assertNotIn('abuse_count', self.table.items['alexander.bad999'])
+            deliver(self.module, recipients=['abracken.bad999@example.com'])
+        self.assertNotIn('abuse_count', self.table.items['abracken.bad999'])
         self.assertEqual(self.sent, [])
 
     def test_alerts_can_be_turned_off(self):

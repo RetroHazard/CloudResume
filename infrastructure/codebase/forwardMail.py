@@ -1,7 +1,7 @@
 """Forwards mail sent to the CV's contact address on to the real inbox, and nothing else.
 
 The CV never prints the real address. downloadResume issues a random forwarding alias
-(`alexander.k7q2mx@<domain>`) and records it in the alias table. SES receives mail for the
+(`abracken.k7q2mx@<domain>`) and records it in the alias table. SES receives mail for the
 whole domain, stores the raw message in a private bucket and invokes this function, which:
 
   * drops anything SES scored as a virus or spam, or that fails authentication badly enough

@@ -2,7 +2,7 @@
 
 The generated CV has to give recruiters a way to reach you, but it is a freely downloadable
 document. So it prints neither a phone number nor the real inbox. It prints a random
-forwarding alias on the site's own domain, such as `alexander.k7q2mx@<domain>`. Mail sent to
+forwarding alias on the site's own domain, such as `abracken.k7q2mx@<domain>`. Mail sent to
 the alias is filtered and relayed to the real inbox. A new alias is issued every month, so
 each one dates the CV it was printed on, and any alias can be revoked by hand with one
 workflow run.
@@ -10,7 +10,7 @@ workflow run.
 ## How it works
 
 ```
-recruiter → alexander.k7q2mx@<domain>
+recruiter → abracken.k7q2mx@<domain>
   └─ MX (apex) → SES inbound, receipt rule "contact-forward" (spam + virus scanning on)
        ├─ stores the raw message in the private mail bucket (expires after 7 days)
        └─ invokes λ forwardMail
@@ -30,7 +30,7 @@ address is live to whoever is probing it.
 
 Nothing about the alias lives in the repository or in the site data. `downloadResume` reads
 the live alias from the `crc-mail-alias` table on each CV download and prints it in the CV
-header. Aliases are your first name plus six random characters, skipping lookalikes such as
+header. Aliases are your first initial and surname (`abracken`) plus six random characters, skipping lookalikes such as
 `l`/`1` and `o`/`0` since the address may be retyped from paper.
 
 ### Monthly rotation
