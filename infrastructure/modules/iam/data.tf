@@ -464,6 +464,19 @@ data "aws_iam_policy_document" "crc-lambda-ForwardMail-logging-policy" {
       "${var.crc-cw-lambda-log-group-forwardMail}:*"
     ]
   }
+
+  # See crc-lambda-TrackVisitors-logging-policy for why this is a separate statement.
+  statement {
+    sid    = "AllowFunctionToCreateLogGroup"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup"
+    ]
+    resources = [
+      var.crc-cw-lambda-log-group-forwardMail
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "crc-lambda-ForwardMail-access-policy" {
