@@ -253,10 +253,20 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(model['education'][0]['minor'], 'East Asia Studies')
         self.assertIn('Minor in East Asia Studies · Calgary', shown_text(renderResume.render_pdf(model)))
 
-    def test_file_name_is_surname_first(self):
-        self.assertEqual(renderResume.file_name({'name': 'Alexander Bracken'}), 'BRACKEN_ALEXANDER_CV.pdf')
-        self.assertEqual(renderResume.file_name({'name': 'Zoë  de la Cruz'}), 'CRUZ_ZOE_DE_LA_CV.pdf')
-        self.assertEqual(renderResume.file_name({'name': ''}), 'CV.pdf')
+    def test_file_name_is_surname_first_then_the_generation_id(self):
+        def name(full):
+            model = {'name': full}
+            return renderResume.file_name(model).replace(renderResume.generation_id(model), '<id>')
+
+        self.assertEqual(name('Alexander Bracken'), 'BRACKEN_ALEXANDER_CV_<id>.pdf')
+        self.assertEqual(name('Zoë  de la Cruz'), 'CRUZ_ZOE_DE_LA_CV_<id>.pdf')
+        self.assertEqual(name(''), 'CV_<id>.pdf')
+
+    def test_each_version_downloads_under_its_own_name(self):
+        model = renderResume.build_model(minimal_source(), SITE, today=TODAY)
+        changed = renderResume.build_model(minimal_source(), SITE, today=TODAY, contact_email='a.next@example.com')
+        self.assertNotEqual(renderResume.file_name(model), renderResume.file_name(changed))
+        self.assertEqual(renderResume.file_name(model), renderResume.file_name(copy.deepcopy(model)))
 
 
 def minimal_source(**extra):

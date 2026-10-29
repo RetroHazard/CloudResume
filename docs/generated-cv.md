@@ -16,7 +16,7 @@ Download CV click → GET /download → λ downloadResume
   │     304 → this container already resolved the CV: sign it, done
   ├─ renderResume.build_model()     project the data into exactly what the CV prints
   ├─ GetItem crc-mail-alias #current  the forwarding address to print (minted if none)
-  ├─ key = files/cv/<sha256(model + RENDERER_VERSION)[:24]>/BRACKEN_ALEXANDER_CV.pdf
+  ├─ key = files/cv/<sha256(model + RENDERER_VERSION)[:24]>/BRACKEN_ALEXANDER_CV_<id>.pdf
   ├─ ListObjectsV2 prefix=key       already rendered? sign it, done
   └─ render_pdf() → PutObject       only when the CV's content actually changed,
                                     then prune CVs rendered from older data

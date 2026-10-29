@@ -397,12 +397,15 @@ def generation_id(model):
 
 
 def file_name(model):
-    """`BRACKEN_ALEXANDER_CV.pdf` — surname first, as the old static file was named."""
+    """`BRACKEN_ALEXANDER_CV_52d614bae667.pdf` — surname first, then the footer's generation ID.
+
+    The ID keeps each version's download distinct, so someone collecting the CV every month
+    gets files they can tell apart rather than a browser's `(1)`, `(2)`, `(3)` copies of one
+    name. Downloading the same version twice still collides, which is right: they're identical.
+    """
     words = [re.sub(r'[^A-Za-z0-9]', '', _ascii(w)).upper() for w in model.get('name', '').split()]
     words = [w for w in words if w]
-    if not words:
-        return 'CV.pdf'
-    return '_'.join([words[-1]] + words[:-1] + ['CV']) + '.pdf'
+    return '_'.join([words[-1], *words[:-1], 'CV'] if words else ['CV']) + f'_{generation_id(model)}.pdf'
 
 
 # ---------------------------------------------------------------------------
