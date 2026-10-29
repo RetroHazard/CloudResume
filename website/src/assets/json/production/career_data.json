@@ -3,16 +3,17 @@
         {
             "company": "BitMEX",
             "job_title": "Senior IAM Solutions Engineer",
-            "location": "Remote, Tokyo, Japan",
+            "location": "Tokyo, Japan (Remote)",
             "type": "Contract",
             "start": "2025-09",
             "end": "---",
             "logo": "./images/logos/companies/bitmex.png",
             "website": "https://bitmex.com/",
             "details": [
-                "Owned Terraform-managed Okta infrastructure, driving architecture decisions across SSO, SAML, OIDC, and SCIM provisioning through ~85 merged pull requests and ~115 code reviews over 12 months, and produced the gap analysis (access certification, breakglass, IaC maturity, admin tooling) behind the security team's recommendation to retain Okta as the workforce identity provider.",
-                "Ran quarterly access-certification campaigns across cloud and Kubernetes (RBAC) environments, and replaced standing production admin access with approval-gated Okta Access Request breakglass catalogues, expanded from a limited proof of concept to 50+ items with automated or human-in-the-loop approval gates by criticality.",
-                "Built an internal fleet management platform and frontend (Go API, React SPA, OIDC/RBAC, Kubernetes/EKS) for North Pole Security's Santa binary-authorisation agent with Airbnb's Rudolph sync backend, growing device coverage 25x to 250+ endpoints within 3 months of general availability.",
+                "Owned Terraform-managed Okta infrastructure, driving architecture decisions across SSO, SAML, OIDC, and SCIM provisioning through ~85 merged pull requests and ~115 code reviews over 12 months.",
+                "Produced the identity-provider gap analysis (access certification, breakglass, IaC maturity, admin tooling) behind the security team's recommendation to retain Okta as the workforce identity provider.",
+                "Ran quarterly access-certification campaigns across cloud and Kubernetes (RBAC) environments, and replaced standing production admin access with just-in-time privileged access through approval-gated Okta Access Request breakglass catalogues, expanded from a limited proof of concept to 50+ items with automated or human-in-the-loop approval gates by criticality.",
+                "Built an internal fleet management platform and frontend (Go API, React SPA, OIDC/RBAC, Kubernetes/EKS) for North Pole Security's Santa binary-authorization agent with Airbnb's Rudolph sync backend, growing device coverage 25x to 250+ endpoints within 3 months of general availability.",
                 "Led a company-wide Mobile Device Management (MDM) re-architecture, migrating the entire device fleet to a new identity-integrated management model in 5 phases over ~6 weeks with zero business disruption, followed by a company-wide platform rebrand and communication rollout.",
                 "Built fleet-wide governance for AI developer tooling (Claude Code), covering configuration management, credential lifecycle, and security guardrails. Resolved supply-chain and connectivity incidents same-day, and closed an AI-agent sensitive-data access risk within 3 days through identity-group-scoped connector controls, without disrupting a business-critical internal tool.",
                 "Engineered and presented an identity-provider-based (OAuth) API key issuance proof of concept for the internal LLM gateway (AWS Bedrock via LiteLLM), covering interactive and headless clients, as the foundation for adopting Okta's AI gateway and agent-identity features."
@@ -84,7 +85,7 @@
                     "end": "2025-09",
                     "details": [
                         "Served as project lead and architect for a global enterprise printing solution across all regions outside the Americas, improving reliability and scalability for over 10,000 users, reducing print-related issues by 80%, lowering costs by 45%, and increasing user satisfaction by 25%.",
-                        "People manager for the IT Service Desk team in Japan, running quarterly performance cycles (reviews, scoring, and development feedback), mentoring engineers, and partnering with stakeholders to align support services with evolving business needs.",
+                        "Managed the IT Service Desk team in Japan, running quarterly performance cycles (reviews, scoring, and development feedback), mentoring engineers, and partnering with stakeholders to align support services with evolving business needs.",
                         "Led a cross-team development programme pairing each service desk engineer with a Tier 3 team and mentor based on their interests; engineers joined projects and regular syncs, carrying context between IT operations and core infrastructure teams to strengthen cooperation across the engineering organisation.",
                         "Led process improvement initiatives and streamlined workflows, reducing average ticket resolution time by 30% and increasing user satisfaction scores by 20%."
                     ],
@@ -137,7 +138,7 @@
                     "end": "2023-01",
                     "details": [
                         "Implemented a comprehensive IT asset and inventory management system, achieving 99% accuracy in asset tracking, reducing procurement costs by 15%, and ensuring 100% compliance with organisational policies.",
-                        "Delivered frontline technical support across hardware, software, and access issues for 2000 local users, consistently meeting SLA targets and maintaining high customer-satisfaction scores.",
+                        "Delivered frontline technical support across hardware, software, and access issues for 2,000 local users, consistently meeting SLA targets and maintaining high customer-satisfaction scores.",
                         "Contributed to the initial implementation and regional deployment of a global enterprise printing solution, standing up 4 sites in Japan and validating configurations that established the foundation for a company-wide rollout."
                     ],
                     "technologies": [
@@ -176,7 +177,7 @@
             "website": "https://www.ucalgary.ca/",
             "details": [
                 "Managed and supported Office 365 (now Microsoft 365) and Azure Active Directory (now Entra ID) environments, including user account provisioning, group management, and troubleshooting authentication issues to ensure seamless operations for the Faculty of Arts.",
-                "Administered Active Directory for user access control and resource management, reducing access-related incidents by 50% and improving user experience across Windows and Mac systems in a mixed-platform environment.",
+                "Administered Active Directory for user access control and resource management, reducing access-related incidents by 50% and improving user experience across Windows and macOS systems in a mixed-platform environment.",
                 "Planned and executed system updates, security patches, and hardware upgrades across departmental servers and workstations, achieving 99.9% uptime and reducing security vulnerabilities by 70%.",
                 "Delivered technical support to faculty and staff, resolving hardware, software, and connectivity issues efficiently while conducting training sessions to enhance user proficiency with enterprise tools."
             ],

@@ -96,7 +96,6 @@ class ModelTests(unittest.TestCase):
             with self.subTest(section=section):
                 self.assertTrue(self.model[section], section)
         self.assertEqual(self.model['name'], self.source['personal']['fullName'])
-        self.assertEqual(len(self.model['experience']), len(self.source['career']['Experience']))
 
     def test_development_data_also_builds(self):
         model = renderResume.build_model(load_source('development'), SITE, today=TODAY)
@@ -111,39 +110,134 @@ class ModelTests(unittest.TestCase):
     def test_weak_skills_are_left_on_the_site(self):
         listed = {name for group in self.model['technical'] for name in group['items']}
         for skill in self.source['skills']['core_skills']:
+            if 'cv' in skill:
+                continue  # flagged entries are covered by ItemFlagTests
             level = int(skill['level'].rstrip('%'))
             with self.subTest(skill=skill['name']):
                 self.assertEqual(
                     skill['name'] in listed, level >= renderResume.settings_from(self.source)['skillMinLevel']
                 )
 
-    def test_older_roles_are_condensed(self):
+    def test_production_cv_covers_only_the_recent_window(self):
+        window = renderResume.settings_from(self.source)['recentYears']
+        for job in self.model['experience']:
+            for role in job['roles']:
+                with self.subTest(role=role['title']):
+                    end = role['dates'].split(' – ')[-1]
+                    self.assertTrue(end == 'Present' or int(end[-4:]) >= TODAY.year - window, role['dates'])
+
+    def test_roles_outside_the_recent_window_are_left_off(self):
         source = {
             'personal': {'fullName': 'A B'},
             'career': {
                 'Experience': [
                     {'company': 'New', 'start': '2024-01', 'end': '---', 'details': list('abcd'), 'technologies': []},
                     {
-                        'company': 'Old',
-                        'start': '2010-01',
-                        'end': '2012-01',
-                        'details': list('abcd'),
-                        'technologies': [{'name': 'Perl'}],
+                        'company': 'Mixed',
+                        'roles': [
+                            {'job_title': 'Lead', 'start': '2015-01', 'end': '2017-01', 'details': list('ab')},
+                            {'job_title': 'Junior', 'start': '2012-01', 'end': '2015-01', 'details': list('ab')},
+                        ],
                     },
+                    {'company': 'Old', 'start': '2010-01', 'end': '2012-01', 'details': list('abcd')},
                 ]
             },
         }
         model = renderResume.build_model(source, SITE, today=TODAY)
-        new, old = (job['roles'][0] for job in model['experience'])
-        self.assertEqual(new['details'], list('abcd'))
-        self.assertEqual(old['details'], list('ab'))
-        self.assertEqual(old['technologies'], [])
+        self.assertEqual([job['company'] for job in model['experience']], ['New', 'Mixed'])
+        self.assertEqual([role['title'] for role in model['experience'][1]['roles']], ['Lead'])
+        self.assertEqual(model['experience'][0]['roles'][0]['details'], list('abcd'))
 
-    def test_lapsed_certifications_sort_after_current_ones(self):
-        active = [c['active'] for c in self.model['certifications']]
-        self.assertEqual(active, sorted(active, reverse=True))
-        lapsed = [c for c in self.model['certifications'] if not c['active']]
-        self.assertTrue(any('Systems Security Certified Practitioner' == c['name'] for c in lapsed))
+    def test_the_window_is_month_precise(self):
+        def kept(end):
+            source = {'career': {'Experience': [{'company': 'C', 'start': '2010-01', 'end': end}]}}
+            return bool(renderResume.build_model(source, SITE, today=TODAY)['experience'])
+
+        # TODAY is 2026-10-28, so a ten-year window opens at October 2016.
+        self.assertTrue(kept('2016-10'))
+        self.assertFalse(kept('2016-09'))
+        self.assertTrue(kept('2016'))  # a bare year counts as ending in December
+        self.assertFalse(kept('2015'))
+        self.assertTrue(kept('---'))
+
+    def test_certifications_are_newest_first_by_grant_date(self):
+        certs = {
+            'Certifications': [
+                {'certification': 'A+', 'issued_date': '2008-07-01', 'expiry_date': 'N/A'},
+                {'certification': 'SSCP', 'issued_date': '2014-11-07', 'expiry_date': '2017-11-30'},
+                {'certification': 'Undated'},
+                {'certification': 'AWS', 'issued_date': '2024-10-19', 'expiry_date': '2027-10-19'},
+            ]
+        }
+        model = renderResume.build_model({'certifications': certs}, SITE, today=TODAY)
+        self.assertEqual([c['name'] for c in model['certifications']], ['AWS', 'SSCP', 'A+', 'Undated'])
+
+    def test_cv_summary_replaces_the_site_summary_on_the_cv_only(self):
+        source = {'personal': {'summary': ['On the site.'], 'cvSummary': ['On the CV.']}}
+        self.assertEqual(renderResume.build_model(source, SITE, today=TODAY)['summary'], ['On the CV.'])
+        del source['personal']['cvSummary']
+        self.assertEqual(renderResume.build_model(source, SITE, today=TODAY)['summary'], ['On the site.'])
+
+    def test_skills_regroup_by_cv_category_in_the_configured_order(self):
+        source = {
+            'skills': {
+                'core_skills': [
+                    {'name': 'AWS', 'category': 'Cloud', 'cvCategory': 'Platform', 'level': '70%'},
+                    {'name': 'Terraform', 'category': 'Platform', 'level': '75%'},
+                    {'name': 'Okta', 'category': 'Security', 'cvCategory': 'Identity', 'level': '80%'},
+                    {'name': 'Iru', 'category': 'Security', 'level': '85%'},
+                ],
+                'industry_knowledge': [
+                    {'name': 'IAM', 'cvCategory': 'Identity & Access'},
+                    {'name': 'DevSecOps', 'cvCategory': 'Security Operations'},
+                    {'name': 'SAML', 'cvCategory': 'Identity & Access'},
+                    {'name': 'Filler', 'cv': False},
+                ],
+            },
+            'cv': {'skillCategories': ['Identity', 'Security']},
+        }
+        model = renderResume.build_model(source, SITE, today=TODAY)
+        self.assertEqual(
+            [(g['category'], g['items']) for g in model['technical']],
+            [('Identity', ['Okta']), ('Security', ['Iru']), ('Platform', ['Terraform', 'AWS'])],
+        )
+        self.assertEqual(
+            [(g['category'], g['items']) for g in model['competencies']],
+            [('Identity & Access', ['IAM', 'SAML']), ('Security Operations', ['DevSecOps'])],
+        )
+
+    def test_certifications_show_only_the_grant_date_on_the_name_line(self):
+        certs = {
+            'Certifications': [
+                {'certification': 'Current', 'issuer': 'AWS', 'issued_date': '2024-10-19', 'expiry_date': '2099-01-01'},
+                {'certification': 'Lapsed', 'issuer': 'ISC2', 'issued_date': '2014-11-07', 'expiry_date': '2017-11-30'},
+            ]
+        }
+        model = renderResume.build_model({'certifications': certs}, SITE, today=TODAY)
+        text = shown_text(renderResume.render_pdf(model))
+        # Name, issuer and date in one text block, in reading order; no expiry anywhere.
+        self.assertIn('Current — AWS · Oct 2024', text)
+        self.assertIn('Lapsed — ISC2 · Nov 2014', text)
+        self.assertNotIn('2017', text)
+        self.assertNotIn('2099', text)
+
+    def test_every_role_names_its_company(self):
+        source = {
+            'career': {
+                'Experience': [
+                    {
+                        'company': 'Indeed',
+                        'roles': [
+                            {'job_title': 'Lead', 'start': '2023-01', 'end': '---', 'details': ['a']},
+                            {'job_title': 'Specialist', 'start': '2021-04', 'end': '2023-01', 'details': ['b']},
+                        ],
+                    }
+                ]
+            }
+        }
+        text = shown_text(renderResume.render_pdf(renderResume.build_model(source, SITE, today=TODAY)))
+        self.assertIn('Lead — Indeed', text)
+        self.assertIn('Specialist — Indeed', text)
 
     def test_an_education_minor_is_printed_like_the_site_shows_it(self):
         source = {
@@ -156,9 +250,9 @@ class ModelTests(unittest.TestCase):
         self.assertIn('Minor in East Asia Studies · Calgary', shown_text(renderResume.render_pdf(model)))
 
     def test_file_name_is_surname_first(self):
-        self.assertEqual(renderResume.file_name({'name': 'Alexander Bracken'}), 'BRACKEN_ALEXANDER_Resume.pdf')
-        self.assertEqual(renderResume.file_name({'name': 'Zoë  de la Cruz'}), 'CRUZ_ZOE_DE_LA_Resume.pdf')
-        self.assertEqual(renderResume.file_name({'name': ''}), 'Resume.pdf')
+        self.assertEqual(renderResume.file_name({'name': 'Alexander Bracken'}), 'BRACKEN_ALEXANDER_CV.pdf')
+        self.assertEqual(renderResume.file_name({'name': 'Zoë  de la Cruz'}), 'CRUZ_ZOE_DE_LA_CV.pdf')
+        self.assertEqual(renderResume.file_name({'name': ''}), 'CV.pdf')
 
 
 def minimal_source(**extra):
@@ -264,6 +358,7 @@ class ItemFlagTests(unittest.TestCase):
         source['career']['Experience'][1]['cv'] = 'always'
         model = renderResume.build_model(source, SITE, today=TODAY)
         self.assertIn('Weak', model['technical'][0]['items'])
+        # A pinned role outside the recent window still prints, in full.
         self.assertEqual(len(model['experience'][1]['roles'][0]['details']), 5)
 
     def test_cv_bullets_sets_the_count(self):
@@ -277,7 +372,7 @@ class ItemFlagTests(unittest.TestCase):
 
 class PageBudgetTests(unittest.TestCase):
     def long_source(self, **cv):
-        source = minimal_source(cv=dict(cv))
+        source = minimal_source(cv={'recentYears': 30, **cv})
         bullet = 'Delivered a measurable outcome across a large and demanding engineering organisation. ' * 3
         for job in source['career']['Experience']:
             job['details'] = [bullet] * 6
@@ -328,16 +423,36 @@ class PageBudgetTests(unittest.TestCase):
         self.assertEqual(renderResume.content_digest(model), before)
 
 
+class PageBreakTests(unittest.TestCase):
+    def test_bullets_and_their_technologies_line_never_split_across_pages(self):
+        bullet = 'Delivered a measurable outcome across a large and demanding engineering organisation. ' * 3
+        source = minimal_source(cv={'maxPages': 0, 'recentYears': 30})
+        for job in source['career']['Experience']:
+            job['details'] = [bullet] * 6
+            job['technologies'] = [{'name': 'Terraform'}]
+        source['career']['Experience'] *= 3
+        model = renderResume.build_model(source, SITE, today=TODAY)
+        pages = renderResume.fit(model)[1]
+        self.assertGreater(len(pages), 1)
+        for page in pages[1:]:
+            first = next(op for op in page.ops if op.startswith(b'BT'))
+            with self.subTest(page=pages.index(page) + 1):
+                # A page opens on a bullet glyph or a title, never on a bullet's continuation or
+                # a technologies line left behind by its last bullet.
+                self.assertTrue(b'(\x95)' in first or b'/F2' in first, first[:120])
+                self.assertNotIn(b'Technologies:', first)
+
+
 class ContactLineTests(unittest.TestCase):
     def test_contact_address_leads_the_header_and_is_a_mailto_link(self):
         model = renderResume.build_model(
-            minimal_source(), SITE, today=TODAY, contact_email='alexander.k7q2mx@example.com'
+            minimal_source(), SITE, today=TODAY, contact_email='abracken.k7q2mx@example.com'
         )
         self.assertEqual(
-            model['links'][0], {'label': 'alexander.k7q2mx@example.com', 'url': 'mailto:alexander.k7q2mx@example.com'}
+            model['links'][0], {'label': 'abracken.k7q2mx@example.com', 'url': 'mailto:abracken.k7q2mx@example.com'}
         )
         pdf = renderResume.render_pdf(model)
-        self.assertIn(b'/URI (mailto:alexander.k7q2mx@example.com)', pdf)
+        self.assertIn(b'/URI (mailto:abracken.k7q2mx@example.com)', pdf)
         # The site, not the address, is what the document metadata names as its origin.
         self.assertIn(renderResume._text_string('example.com'), pdf)
 
@@ -346,6 +461,36 @@ class ContactLineTests(unittest.TestCase):
             minimal_source(cv={'contactEmail': False}), SITE, today=TODAY, contact_email='a.b@example.com'
         )
         self.assertNotIn('a.b@example.com', json.dumps(model))
+
+    def test_socials_get_their_own_line_under_the_contact_details(self):
+        source = minimal_source(
+            socials={
+                'Socials': [
+                    {'link': 'https://www.linkedin.com/in/someone/', 'display': True},
+                    {'link': 'https://github.com/someone', 'display': True},
+                ]
+            }
+        )
+        model = renderResume.build_model(source, SITE, today=TODAY, contact_email='a.b@example.com')
+        baseline = {url: y1 for _, y1, _, _, url in renderResume.fit(model)[1][0].links}
+        self.assertEqual(baseline['mailto:a.b@example.com'], baseline[SITE])
+        self.assertEqual(baseline['https://www.linkedin.com/in/someone/'], baseline['https://github.com/someone'])
+        self.assertAlmostEqual(
+            baseline[SITE] - baseline['https://github.com/someone'], renderResume.SMALL_LEADING, places=2
+        )
+
+    def test_work_authorization_prints_japanese_in_a_cjk_font(self):
+        source = minimal_source()
+        source['personal']['workAuthorization'] = ['Japan – Permanent Resident 永住権', 'Canada – Citizen']
+        pdf = renderResume.render_pdf(renderResume.build_model(source, SITE, today=TODAY))
+        stream = b''.join(page_streams(pdf))
+        self.assertIn(b'<' + '永住権'.encode('utf-16-be').hex().upper().encode() + b'>', stream)
+        self.assertIn(b'/Encoding /UniJIS-UCS2-H', pdf)
+        self.assertIn('Canada – Citizen', shown_text(pdf))
+
+    def test_the_japanese_font_is_only_written_when_used(self):
+        pdf = renderResume.render_pdf(renderResume.build_model(minimal_source(), SITE, today=TODAY))
+        self.assertNotIn(b'UniJIS', pdf)
 
     def test_the_header_wraps_instead_of_overflowing(self):
         model = renderResume.build_model(

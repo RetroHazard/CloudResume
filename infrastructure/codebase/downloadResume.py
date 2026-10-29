@@ -203,6 +203,15 @@ def _conditional_failed(err):
     return err.response.get('Error', {}).get('Code') == 'ConditionalCheckFailedException'
 
 
+def _alias_prefix(full_name):
+    """`Alexander Bracken` -> `abracken`: first initial and surname, the usual work-address shape."""
+    words = [re.sub(r'[^a-z0-9]', '', renderResume._ascii(w).lower()) for w in (full_name or '').split()]
+    words = [w for w in words if w]
+    if not words:
+        return 'contact'
+    return words[0] if len(words) == 1 else words[0][0] + words[-1]
+
+
 def _issue_alias(full_name, month, replacing=None):
     """Mint an alias for `month` and make it the live one. Returns its address.
 
@@ -212,8 +221,7 @@ def _issue_alias(full_name, month, replacing=None):
     read back. Only after a successful swap is the old alias retired, which keeps it
     forwarding for anyone holding a CV from its month.
     """
-    first = re.sub(r'[^a-z0-9]', '', renderResume._ascii((full_name or '').split(' ')[0]).lower()) or 'contact'
-    local = f'{first}.{"".join(secrets.choice(_ALIAS_ALPHABET) for _ in range(6))}'
+    local = f'{_alias_prefix(full_name)}.{"".join(secrets.choice(_ALIAS_ALPHABET) for _ in range(6))}'
     now = datetime.now(timezone.utc).isoformat()
     alias_table.put_item(
         Item={'id': local, 'status': 'active', 'month': month, 'created': now},

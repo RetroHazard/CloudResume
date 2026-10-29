@@ -217,11 +217,11 @@ class CvCacheTests(Harness):
         self.assertEqual(status, 200)
         self.assertEqual(self.s3.count('put'), 1)
         [key] = self.cv_keys()
-        self.assertRegex(key, r'^files/cv/[0-9a-f]{24}/BRACKEN_ALEXANDER_Resume\.pdf$')
+        self.assertRegex(key, r'^files/cv/[0-9a-f]{24}/BRACKEN_ALEXANDER_CV\.pdf$')
         self.assertTrue(self.s3.objects[key][0].startswith(b'%PDF-'))
         self.assertEqual(self.s3.last_put['ContentType'], 'application/pdf')
         self.assertEqual(body['downloadUrl'].split('?')[0], f'https://example.com/{key}')
-        self.assertEqual(body['fileName'], 'BRACKEN_ALEXANDER_Resume.pdf')
+        self.assertEqual(body['fileName'], 'BRACKEN_ALEXANDER_CV.pdf')
         self.assertEqual(body['count'], 1)
 
     def test_repeat_clicks_on_a_warm_container_cost_one_conditional_get(self):
@@ -307,10 +307,17 @@ class ContactAliasTests(Harness):
         click(self.module)
 
         local = self.aliases.live()
-        self.assertRegex(local, r'^alexander\.[a-z2-9]{6}$')
+        self.assertRegex(local, r'^abracken\.[a-z2-9]{6}$')
         self.assertEqual(self.aliases.items[local]['status'], 'active')
         [key] = self.cv_keys()
         self.assertIn(f'{local}@example.com', self.pdf_text(key))
+
+    def test_the_alias_is_first_initial_and_surname(self):
+        prefix = self.module._alias_prefix
+        self.assertEqual(prefix('Alexander Bracken'), 'abracken')
+        self.assertEqual(prefix('Zoë  de la Cruz'), 'zcruz')
+        self.assertEqual(prefix('Cher'), 'cher')
+        self.assertEqual(prefix(''), 'contact')
 
     def test_the_alias_is_stable_across_clicks_and_containers(self):
         click(self.module)
@@ -344,17 +351,17 @@ class ContactAliasTests(Harness):
 
     def test_a_concurrent_mint_loses_cleanly(self):
         def rival():
-            self.aliases.items['alexander.rival2'] = {'id': 'alexander.rival2', 'status': 'active'}
-            self.aliases.items['#current'] = {'id': '#current', 'address': 'alexander.rival2'}
+            self.aliases.items['abracken.rival2'] = {'id': 'abracken.rival2', 'status': 'active'}
+            self.aliases.items['#current'] = {'id': '#current', 'address': 'abracken.rival2'}
 
         self.aliases.on_pointer_write = rival
         click(self.module)
 
-        self.assertEqual(self.aliases.live(), 'alexander.rival2')
-        losers = [k for k, v in self.aliases.items.items() if k not in ('#current', 'alexander.rival2')]
+        self.assertEqual(self.aliases.live(), 'abracken.rival2')
+        losers = [k for k, v in self.aliases.items.items() if k not in ('#current', 'abracken.rival2')]
         self.assertEqual([self.aliases.items[k]['status'] for k in losers], ['revoked'])
         [key] = self.cv_keys()
-        self.assertIn('alexander.rival2@example.com', self.pdf_text(key))
+        self.assertIn('abracken.rival2@example.com', self.pdf_text(key))
 
     def test_an_unreachable_alias_table_still_serves_a_cv(self):
         self.aliases.down = True
@@ -435,16 +442,16 @@ class MonthlyRotationTests(Harness):
         november = self.aliases.live()
 
         def rival():
-            self.aliases.items['alexander.rival2'] = {'id': 'alexander.rival2', 'status': 'active', 'month': '2026-12'}
-            self.aliases.items['#current'] = {'id': '#current', 'address': 'alexander.rival2', 'month': '2026-12'}
+            self.aliases.items['abracken.rival2'] = {'id': 'abracken.rival2', 'status': 'active', 'month': '2026-12'}
+            self.aliases.items['#current'] = {'id': '#current', 'address': 'abracken.rival2', 'month': '2026-12'}
 
         self.aliases.on_pointer_write = rival
         at(self.module, datetime(2026, 12, 1, 0, 5))
         click(self.module, visitor='b')
 
-        self.assertEqual(self.aliases.live(), 'alexander.rival2')
+        self.assertEqual(self.aliases.live(), 'abracken.rival2')
         statuses = {k: v['status'] for k, v in self.aliases.aliases().items()}
-        self.assertEqual(statuses.pop('alexander.rival2'), 'active')
+        self.assertEqual(statuses.pop('abracken.rival2'), 'active')
         statuses.pop(november)
         self.assertEqual(list(statuses.values()), ['revoked'])
 

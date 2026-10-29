@@ -16,7 +16,7 @@ Download CV click → GET /download → λ downloadResume
   │     304 → this container already resolved the CV: sign it, done
   ├─ renderResume.build_model()     project the data into exactly what the CV prints
   ├─ GetItem crc-mail-alias #current  the forwarding address to print (minted if none)
-  ├─ key = files/cv/<sha256(model + RENDERER_VERSION)[:24]>/BRACKEN_ALEXANDER_Resume.pdf
+  ├─ key = files/cv/<sha256(model + RENDERER_VERSION)[:24]>/BRACKEN_ALEXANDER_CV.pdf
   ├─ ListObjectsV2 prefix=key       already rendered? sign it, done
   └─ render_pdf() → PutObject       only when the CV's content actually changed,
                                     then prune CVs rendered from older data
@@ -50,6 +50,20 @@ reading order, the standard Helvetica family (nothing embedded), clickable links
 document metadata (title, author, keywords). Characters outside WinAnsi are folded to their
 nearest ASCII equivalent, so a stray `→` turns into `->` rather than failing the render.
 
+Japanese is the exception, and only in the header. It is set in Heisei Kaku Gothic through the
+predefined `UniJIS-UCS2-H` CMap, which is also not embedded. Acrobat, Preview, Chrome, pdf.js,
+PDFBox and pdfminer all render or extract it. Poppler needs the `poppler-data` package for it,
+which desktop Linux installs by default. Without that package the characters are simply left
+out. The font objects are only written into a PDF that uses them.
+
+A few layout rules exist for parsers rather than for looks:
+
+- Every role line names its company, so a parser never files a promotion without an employer.
+- Certification dates sit on the name's line. Right-aligned, they come out of text extraction
+  as a separate column, and nothing ties a date back to its credential.
+- A bullet never splits across pages, and a technologies line stays with its last bullet.
+  Otherwise the page footer lands in the middle of a sentence in the extracted text.
+
 ### Controlling the CV
 
 The site is the long form and the CV is the two-minute read. How hard the CV edits the site
@@ -62,8 +76,8 @@ re-renders on the next click.
 | --- | --- | --- |
 | `maxPages` | `2` | Page budget. Over budget, content is trimmed in a fixed order until it fits (below). `0` turns it off. |
 | `skillMinLevel` | `50` | Core skills below this proficiency stay on the site only. |
-| `recentYears` | `10` | Roles that ended longer ago than this are condensed: |
-| `olderRoleBullets` | `2` | ...to this many bullets, without a technologies line. |
+| `skillCategories` | `[]` | Order of the tool rows in Skills, by category name (after any `cvCategory`). Categories not listed follow in data order. |
+| `recentYears` | `10` | Roles that ended longer ago than this many years stay on the site only, to the month where the data gives one. A job with no role in the window drops out entirely. |
 | `projectBullets` | `2` | Bullets kept per project. |
 | `sections` | all seven | Which sections print, in this order. Leave one out to drop it. Names: `summary`, `skills`, `experience`, `projects`, `certifications`, `education`, `languages`. |
 | `contactEmail` | `true` | Print the forwarding address in the header (see [`cv-contact.md`](cv-contact.md)). |
@@ -74,25 +88,32 @@ A missing key or a malformed value falls back to its default rather than failing
 a certification, a degree, a language, a social link):
 
 - `"cv": false` keeps it on the site and off the CV.
-- `"cv": "always"` exempts it from every rule: a skill under the threshold prints anyway, an
-  old role keeps all its bullets, and the page budget never trims it. On a multi-role job it
+- `"cv": "always"` exempts it from every rule: a skill under the threshold prints anyway, a
+  role outside the recent window prints in full, and the page budget never trims it. On a multi-role job it
   applies to all of that job's roles.
 - `"cvBullets": 3` (roles and projects) sets how many bullets that entry keeps.
+- `"cvCategory": "Identity Platforms"` (core skills and industry knowledge) regroups an entry
+  on the CV only. Industry knowledge with no `cvCategory` prints under "Core Competencies".
+
+**In `personal_data.json`**, two keys exist only for the CV:
+
+- `cvSummary`, when present, replaces `summary` on the CV, for wording that only makes sense on
+  the site (such as "this site"). Edits to `summary` won't reach the CV while it is set.
+- `workAuthorization` prints as a line of its own under the contact links. Japanese is fine here.
 
 Bullets are always taken in the order the JSON lists them, so put the strongest first.
 
 **The page budget** trims the least important content first, one step at a time, and stops
-as soon as the CV fits. It never drops a whole role, since a gap in a career reads worse than
-a long CV:
+as soon as the CV fits. It never drops a whole role inside the recent window, since a gap in
+a career reads worse than a long CV:
 
 1. Technologies lines under projects
 2. Project bullets beyond the first, last project first
 3. Technologies lines under roles, oldest first
-4. Bullets beyond the first on roles outside the recent window, oldest first
-5. Bullets beyond the third on any role, oldest first
-6. Whole projects, last listed first
-7. Bullets beyond the second on any role, oldest first
-8. Bullets beyond the first on any role, oldest first
+4. Bullets beyond the third on any role, oldest first
+5. Whole projects, last listed first
+6. Bullets beyond the second on any role, oldest first
+7. Bullets beyond the first on any role, oldest first
 
 If pinned content alone exceeds the budget, the CV runs long rather than dropping it. The
 search takes about six layouts (around 50 ms), and only on a render, never on a cached click.

@@ -1,9 +1,9 @@
 {
-    "maxPages": 2,
+    "maxPages": 3,
     "skillMinLevel": 50,
     "recentYears": 10,
-    "olderRoleBullets": 2,
     "projectBullets": 2,
-    "sections": ["summary", "skills", "experience", "projects", "certifications", "education", "languages"],
+    "skillCategories": ["Identity Platforms", "Security", "Platform", "AI", "Development", "Workplace"],
+    "sections": ["summary", "skills", "experience", "projects", "certifications", "education"],
     "contactEmail": true
 }
