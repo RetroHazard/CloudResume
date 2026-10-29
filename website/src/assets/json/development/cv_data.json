@@ -2,7 +2,6 @@
     "maxPages": 2,
     "skillMinLevel": 50,
     "recentYears": 10,
-    "olderRoleBullets": 3,
     "projectBullets": 3,
     "sections": ["summary", "skills", "experience", "projects", "certifications", "education"],
     "contactEmail": true

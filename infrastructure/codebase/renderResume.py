@@ -28,7 +28,7 @@ import unicodedata
 import zlib
 from datetime import datetime, timezone
 
-RENDERER_VERSION = '2'
+RENDERER_VERSION = '3'
 
 # Advance widths per 1000 units of font size, for WinAnsi codes 32-255, taken from the Adobe
 # core-14 AFM metrics. Oblique shares the upright widths. The zero entries are the five code
@@ -100,10 +100,9 @@ DEFAULT_SETTINGS = {
     'maxPages': 2,
     # core_skills below this proficiency stay on the site only.
     'skillMinLevel': 50,
-    # Roles that ended longer ago than this are condensed to their first N bullets, without
-    # a technologies line.
+    # Roles that ended longer ago than this many years stay on the site only. A job whose
+    # roles all fall outside the window drops out entirely.
     'recentYears': 10,
-    'olderRoleBullets': 2,
     'projectBullets': 2,
     # Which sections print, and in what order. Unknown names are ignored.
     'sections': ['summary', 'skills', 'experience', 'projects', 'certifications', 'education', 'languages'],
@@ -236,30 +235,36 @@ def build_model(source, site_url, today=None, contact_email=None):
     for social in (source.get('socials') or {}).get('Socials', []):
         if social.get('display') and social.get('link') and _on_cv(social):
             label = re.sub(r'^https?://(www\.)?', '', social['link']).rstrip('/')
-            links.append({'label': label, 'url': social['link']})
+            # Socials get a line of their own in the header, under the direct contact details.
+            links.append({'label': label, 'url': social['link'], 'social': True})
 
-    def recent(end):
-        year = str(end or '').strip()[:4]
-        return not year.isdigit() or int(year) >= today.year - settings['recentYears']
+    cutoff = (today.year - settings['recentYears'], today.month)
+
+    def recent(role):
+        # Month precision where the data has it; a bare year counts as ending in December.
+        parts = str(role.get('end') or '').strip().split('-')
+        if not re.fullmatch(r'\d{4}', parts[0]):
+            return True  # ongoing, or a date the data doesn't pin down
+        month = int(parts[1]) if len(parts) > 1 and parts[1].isdigit() and 1 <= int(parts[1]) <= 12 else 12
+        return (int(parts[0]), month) >= cutoff
 
     def role_model(role):
-        pinned, current = _pinned(role), recent(role.get('end'))
-        default_cap = None if (current or pinned) else settings['olderRoleBullets']
         return {
             'title': role.get('job_title', ''),
             'dates': format_range(role.get('start'), role.get('end')),
-            'details': _texts(role.get('details'))[: _bullet_cap(role, default_cap)],
-            'technologies': _names(role.get('technologies')) if (current or pinned) else [],
-            'pinned': pinned,
-            'older': not current,
+            'details': _texts(role.get('details'))[: _bullet_cap(role, None)],
+            'technologies': _names(role.get('technologies')),
+            'pinned': _pinned(role),
         }
 
     experience = []
     for entry in (source.get('career') or {}).get('Experience', []):
         if not _on_cv(entry):
             continue
-        # A single-role entry carries its role fields (and flags) on the entry itself.
-        roles = [r for r in (entry.get('roles') or [entry]) if _on_cv(r)]
+        # A single-role entry carries its role fields (and flags) on the entry itself, and a
+        # job's flag applies to each of its roles unless the role sets its own.
+        roles = [dict(role, cv=role.get('cv', entry.get('cv'))) for role in (entry.get('roles') or [entry])]
+        roles = [r for r in roles if _on_cv(r) and (_pinned(r) or recent(r))]
         if not roles:
             continue
         experience.append(
@@ -267,7 +272,7 @@ def build_model(source, site_url, today=None, contact_email=None):
                 'company': entry.get('company', ''),
                 'location': entry.get('location', ''),
                 'type': entry.get('type', ''),
-                'roles': [role_model(dict(role, cv=role.get('cv', entry.get('cv')))) for role in roles],
+                'roles': [role_model(role) for role in roles],
             }
         )
 
@@ -582,27 +587,35 @@ def _header(doc, model):
         doc.y -= 16
         doc.text([('R', _encode(model['headline']))], MARGIN_X, doc.y, 11.5, color=ACCENT)
 
-    # Contact line. Each link gets its own annotation, so it stays clickable in every
-    # viewer while the visible text remains plain, parseable text. It wraps onto a second
-    # line rather than running off the page once the email address joins it.
+    # Contact lines: location, address and site first, then the social profiles on a line of
+    # their own. Each link gets its own annotation, so it stays clickable in every viewer while
+    # the visible text remains plain, parseable text. A line that outgrows the page wraps
+    # rather than running off it.
     size = SMALL_SIZE + 0.5
     sep = _encode('  |  ')
-    doc.y -= 14
-    x = MARGIN_X
-    items = ([{'label': model['location']}] if model['location'] else []) + model['links']
-    for i, item in enumerate(items):
-        label = _encode(item['label'])
-        label_w = _width(label, 'R', size)
-        if i and x + _width(sep, 'R', size) + label_w > PAGE_W - MARGIN_X:
-            doc.y -= SMALL_LEADING
-            x = MARGIN_X
-        elif i:
-            doc.text([('R', sep)], x, doc.y, size, color=RULE)
-            x += _width(sep, 'R', size)
-        doc.text([('R', label)], x, doc.y, size, color=MUTED)
-        if item.get('url'):
-            doc.link(x, doc.y, label_w, size, item['url'])
-        x += label_w
+    contact = ([{'label': model['location']}] if model['location'] else []) + [
+        link for link in model['links'] if not link.get('social')
+    ]
+    social = [link for link in model['links'] if link.get('social')]
+    step = 14
+    for items in (contact, social):
+        if not items:
+            continue
+        doc.y -= step
+        step, x = SMALL_LEADING, MARGIN_X
+        for i, item in enumerate(items):
+            label = _encode(item['label'])
+            label_w = _width(label, 'R', size)
+            if i and x + _width(sep, 'R', size) + label_w > PAGE_W - MARGIN_X:
+                doc.y -= SMALL_LEADING
+                x = MARGIN_X
+            elif i:
+                doc.text([('R', sep)], x, doc.y, size, color=RULE)
+                x += _width(sep, 'R', size)
+            doc.text([('R', label)], x, doc.y, size, color=MUTED)
+            if item.get('url'):
+                doc.link(x, doc.y, label_w, size, item['url'])
+            x += label_w
     doc.y -= 6
 
 
@@ -764,14 +777,12 @@ def _cuts(model):
       1. Technologies lines under projects
       2. Project bullets beyond the first, last project first
       3. Technologies lines under roles, oldest first
-      4. Bullets beyond the first on roles outside the recent window, oldest first
-      5. Bullets beyond the third on any role, oldest first
-      6. Whole projects, last listed first
-      7. Bullets beyond the second on any role, oldest first
-      8. Bullets beyond the first on any role, oldest first
+      4. Bullets beyond the third on any role, oldest first
+      5. Whole projects, last listed first
+      6. Bullets beyond the second on any role, oldest first
+      7. Bullets beyond the first on any role, oldest first
     """
     roles = [role for job in reversed(model['experience']) for role in reversed(job['roles']) if not role['pinned']]
-    older = [role for role in roles if role['older']]
     projects = [p for p in reversed(model['projects']) if not p['pinned']]
 
     def trim(items, keep):
@@ -789,7 +800,6 @@ def _cuts(model):
         if role['technologies']:
             role['technologies'] = []
             yield
-    yield from trim(older, 1)
     yield from trim(roles, 3)
     for project in projects:
         model['projects'].remove(project)

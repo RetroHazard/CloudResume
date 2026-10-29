@@ -62,8 +62,7 @@ re-renders on the next click.
 | --- | --- | --- |
 | `maxPages` | `2` | Page budget. Over budget, content is trimmed in a fixed order until it fits (below). `0` turns it off. |
 | `skillMinLevel` | `50` | Core skills below this proficiency stay on the site only. |
-| `recentYears` | `10` | Roles that ended longer ago than this are condensed: |
-| `olderRoleBullets` | `2` | ...to this many bullets, without a technologies line. |
+| `recentYears` | `10` | Roles that ended longer ago than this many years stay on the site only, to the month where the data gives one. A job with no role in the window drops out entirely. |
 | `projectBullets` | `2` | Bullets kept per project. |
 | `sections` | all seven | Which sections print, in this order. Leave one out to drop it. Names: `summary`, `skills`, `experience`, `projects`, `certifications`, `education`, `languages`. |
 | `contactEmail` | `true` | Print the forwarding address in the header (see [`cv-contact.md`](cv-contact.md)). |
@@ -74,25 +73,24 @@ A missing key or a malformed value falls back to its default rather than failing
 a certification, a degree, a language, a social link):
 
 - `"cv": false` keeps it on the site and off the CV.
-- `"cv": "always"` exempts it from every rule: a skill under the threshold prints anyway, an
-  old role keeps all its bullets, and the page budget never trims it. On a multi-role job it
+- `"cv": "always"` exempts it from every rule: a skill under the threshold prints anyway, a
+  role outside the recent window prints in full, and the page budget never trims it. On a multi-role job it
   applies to all of that job's roles.
 - `"cvBullets": 3` (roles and projects) sets how many bullets that entry keeps.
 
 Bullets are always taken in the order the JSON lists them, so put the strongest first.
 
 **The page budget** trims the least important content first, one step at a time, and stops
-as soon as the CV fits. It never drops a whole role, since a gap in a career reads worse than
-a long CV:
+as soon as the CV fits. It never drops a whole role inside the recent window, since a gap in
+a career reads worse than a long CV:
 
 1. Technologies lines under projects
 2. Project bullets beyond the first, last project first
 3. Technologies lines under roles, oldest first
-4. Bullets beyond the first on roles outside the recent window, oldest first
-5. Bullets beyond the third on any role, oldest first
-6. Whole projects, last listed first
-7. Bullets beyond the second on any role, oldest first
-8. Bullets beyond the first on any role, oldest first
+4. Bullets beyond the third on any role, oldest first
+5. Whole projects, last listed first
+6. Bullets beyond the second on any role, oldest first
+7. Bullets beyond the first on any role, oldest first
 
 If pinned content alone exceeds the budget, the CV runs long rather than dropping it. The
 search takes about six layouts (around 50 ms), and only on a render, never on a cached click.
