@@ -229,6 +229,15 @@ html {
         @apply block w-full rounded border border-secondary-600 bg-secondary-800 p-2.5 text-base text-content-body shadow-sm transition-colors placeholder:text-content-accent focus:border-neon focus:ring-1 focus:ring-neon focus:outline-none sm:text-sm;
     }
 
+    /* Invisible reCAPTCHA floats a white "protected by" badge in the bottom-right
+       corner of the window. Google allows hiding it as long as the form carries
+       the attribution text instead (see the contact form); `visibility` rather
+       than `display: none` is what Google documents, and keeps the widget able
+       to run. */
+    .grecaptcha-badge {
+        visibility: hidden;
+    }
+
     /* ── Board typography (used across list rows) ──────────────────────── */
     .card-title {
         @apply mb-0 font-heading text-base leading-none font-bold tracking-wide text-content-title uppercase sm:text-lg md:text-xl;

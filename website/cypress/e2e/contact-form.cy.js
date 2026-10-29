@@ -31,7 +31,7 @@ describe('Contact form', () => {
         });
     });
 
-    it('shows reCAPTCHA error when captcha is not completed (site key configured)', () => {
+    it('shows reCAPTCHA error when verification fails (site key configured)', () => {
         // This test only applies when VITE_RECAPTCHA_SITE_KEY is set (production build).
         // When the key is absent, reCAPTCHA does not render and the check is skipped.
         cy.env(['VITE_RECAPTCHA_SITE_KEY']).then(({ VITE_RECAPTCHA_SITE_KEY: siteKey }) => {
@@ -45,9 +45,9 @@ describe('Contact form', () => {
                 }
 
                 fillForm();
-                // Do NOT call cy.completeRecaptcha() — token stays empty.
+                // Do NOT call cy.completeRecaptcha() — the stub fails verification.
                 cy.get('button[type="submit"]').click();
-                cy.contains('Please complete the reCAPTCHA.').should('be.visible');
+                cy.contains('reCAPTCHA verification failed.').should('be.visible');
             });
         });
     });
@@ -74,7 +74,8 @@ describe('Contact form', () => {
         fillForm();
         cy.completeRecaptcha();
         cy.get('button[type="submit"]').click();
-        cy.wait('@contactSubmit');
+        // The backend rejects any submission without a token it can verify.
+        cy.wait('@contactSubmit').its('request.body.token').should('eq', 'test-recaptcha-token');
 
         // Component enforces a 5-second minimum display of the loading state before
         // showing the result message. Wait up to 10 seconds for the real timer to fire.

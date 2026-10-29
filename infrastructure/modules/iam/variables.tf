@@ -48,6 +48,10 @@ variable "crc-cf-signing-key-parameter-name" {
   type = string
 }
 
+variable "crc-recaptcha-secret-parameter-name" {
+  type = string
+}
+
 variable "crc-contribution-object-key" {
   type = string
 }

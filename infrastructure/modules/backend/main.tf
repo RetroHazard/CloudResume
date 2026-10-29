@@ -353,6 +353,8 @@ resource "aws_lambda_function" "crc-sendMessage" {
       sendFromAddress = "noreply@${aws_ses_domain_identity.crc-mail-domain.domain}"
       sendToAddress   = aws_ses_email_identity.crc-mail-destination.email
       allowedOrigin   = "https://${var.domain-name}"
+
+      recaptchaSecretParameter = var.recaptcha-secret-parameter-name
     }
   }
 
@@ -378,7 +380,9 @@ resource "aws_lambda_function" "crc-sendMessage" {
   role                           = var.iam-role-message-sender-arn
   runtime                        = "python3.12"
   skip_destroy                   = "false"
-  timeout                        = "3"
+  # 6s rather than 3s: before SES, each request now waits on Google's siteverify (capped
+  # at 3s in the handler), and a cold start adds an ssm:GetParameter for the secret.
+  timeout = "6"
 
   depends_on = [
     aws_cloudwatch_log_group.crc-sendMessage-log-group

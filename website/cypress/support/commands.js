@@ -23,6 +23,9 @@ Cypress.Commands.add('stubDownloadApi', (overrides = {}) => {
 
 // Intercepts the reCAPTCHA script load and injects a controllable stub.
 // Works whether VITE_RECAPTCHA_SITE_KEY is set (production) or not (local dev).
+// The form uses the invisible widget, which calls execute() on submit: the stub
+// answers with the token cy.completeRecaptcha() set, or with the widget's error
+// callback when none was set — standing in for a visitor who fails verification.
 Cypress.Commands.add('mockRecaptcha', () => {
     cy.intercept('GET', '**/recaptcha/api.js*', {
         statusCode: 200,
@@ -31,19 +34,23 @@ Cypress.Commands.add('mockRecaptcha', () => {
             'window.grecaptcha = {',
             '  ready: function(cb) { setTimeout(cb, 0); },',
             '  render: function(container, opts) { window.__recaptchaOpts = opts; return 0; },',
+            '  execute: function() {',
+            '    var opts = window.__recaptchaOpts;',
+            '    setTimeout(function() {',
+            '      if (window.__recaptchaToken) opts.callback(window.__recaptchaToken);',
+            '      else opts["error-callback"]();',
+            '    }, 0);',
+            '  },',
             '  getResponse: function() { return window.__recaptchaToken || ""; },',
-            '  reset: function() { window.__recaptchaToken = ""; }',
+            '  reset: function() {}',
             '};',
         ].join('\n'),
     });
 });
 
-// Sets a fake reCAPTCHA token so the form's captchaRef.current.getValue() returns it.
+// Sets the token the stubbed execute() hands back when the form is submitted.
 Cypress.Commands.add('completeRecaptcha', (token = 'test-recaptcha-token') => {
     cy.window().then((win) => {
         win.__recaptchaToken = token;
-        if (win.__recaptchaOpts && win.__recaptchaOpts.callback) {
-            win.__recaptchaOpts.callback(token);
-        }
     });
 });

@@ -55,6 +55,7 @@ module "iam" {
   crc-cw-lambda-log-group-updateContributions    = module.backend.aws_cloudwatch_log_group_crc-updateContributions_arn
   crc-cw-lambda-log-group-downloadResume         = module.backend.aws_cloudwatch_log_group_crc-downloadResume_arn
   crc-cf-signing-key-parameter-name              = var.cloudfront_signing_key_parameter
+  crc-recaptcha-secret-parameter-name            = var.recaptcha_secret_parameter
   crc-contribution-object-key                    = var.contribution_object_key
   crc-ses-configuration-set                      = module.backend.aws_ses_configuration_set_crc-contact-mail_arn
   crc-ses-mail-destination                       = module.backend.aws_ses_email_identity_crc-mail-destination_arn
@@ -107,6 +108,8 @@ module "backend" {
   cf-signing-key-parameter-name = var.cloudfront_signing_key_parameter
   resume-object-key             = var.resume_object_key
   signed-url-ttl-seconds        = var.signed_url_ttl_seconds
+
+  recaptcha-secret-parameter-name = var.recaptcha_secret_parameter
 
   contribution-accounts         = var.contribution_accounts
   contribution-object-key       = var.contribution_object_key

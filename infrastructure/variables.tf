@@ -81,6 +81,12 @@ variable "cloudfront_signing_public_key_parameter" {
   default     = "/CloudResume/cloudfront/signing-key.pub"
 }
 
+variable "recaptcha_secret_parameter" {
+  description = "SSM SecureString Parameter holding the reCAPTCHA secret key that sendMessage verifies tokens with. Populated out of band, like the signing key — Terraform reads the name only, never the value"
+  type        = string
+  default     = "/CloudResume/recaptcha/secret-key"
+}
+
 variable "signed_url_ttl_seconds" {
   description = "Lifetime of a signed CV download URL. Gates only the initial request, not the transfer"
   type        = number

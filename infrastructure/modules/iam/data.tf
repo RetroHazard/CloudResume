@@ -128,6 +128,30 @@ data "aws_iam_policy_document" "crc-lambda-SendMessage-access-policy" {
       var.crc-ses-mail-domain
     ]
   }
+
+  # Same arrangement as the CloudFront signing key above: read at runtime, never through a
+  # data source, so the secret stays out of Terraform state.
+  statement {
+    sid    = "AllowFunctionToReadRecaptchaSecret"
+    effect = "Allow"
+    actions = [
+      "ssm:GetParameter"
+    ]
+    resources = [
+      "arn:aws:ssm:${data.aws_region.current.region}:${var.account_id}:parameter${var.crc-recaptcha-secret-parameter-name}"
+    ]
+  }
+
+  statement {
+    sid    = "AllowFunctionToDecryptRecaptchaSecret"
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = [
+      data.aws_kms_alias.ssm.target_key_arn
+    ]
+  }
 }
 
 data "aws_iam_policy_document" "crc-lambda-CloudfrontInvalidation-logging-policy" {
