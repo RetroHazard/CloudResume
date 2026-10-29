@@ -18,6 +18,9 @@ renders as `data/cv-source.json`, and this function compiles that into a CV (ren
 on demand, caching the result in S3 under a digest of its content. A click only pays for a
 render when the site has changed since the last one; otherwise it costs a conditional GET
 that S3 answers with a 304.
+
+The CV's contact address is a forwarding alias issued here as well (see _contact_address and
+forwardMail.py), so revoking one shows up on the next download.
 """
 
 import base64
@@ -25,6 +28,8 @@ import hashlib
 import json
 import logging
 import os
+import re
+import secrets
 import time
 from datetime import datetime, timedelta, timezone
 
@@ -41,6 +46,7 @@ ssm = boto3.client('ssm')
 s3 = boto3.client('s3')
 
 record_table = dynamodb.Table(os.environ['recordTableName'])
+alias_table = dynamodb.Table(os.environ['aliasTableName'])
 ALLOWED_ORIGIN = os.environ['allowedOrigin']
 BASE_URL = os.environ['downloadBaseUrl'].rstrip('/')
 SITE_BUCKET = os.environ['siteBucket']
@@ -49,6 +55,10 @@ CV_PREFIX = os.environ['cvObjectPrefix'].strip('/')
 KEY_PARAMETER = os.environ['signingKeyParameter']
 KEY_PAIR_ID = os.environ['signingKeyPairId']
 URL_TTL = int(os.environ['signedUrlTtl'])
+CONTACT_DOMAIN = os.environ['contactDomain']
+
+# The alias table's pointer to the live address. Rotating or revoking deletes it.
+ALIAS_POINTER = '#current'
 
 # The counter shares the dedupe table. It deliberately carries no `ttl` attribute —
 # DynamoDB's TTL sweeper ignores items that lack one, so this row never expires while the
@@ -60,9 +70,10 @@ COUNTER_ID = 'download_count'
 # real exception reaches CloudWatch.
 _signing_key = None
 
-# What this container last resolved the CV to: the source object's ETag, the UTC day the
-# model was built on (certification expiry is date-dependent), and the PDF key it mapped to.
-_cv = {'etag': None, 'day': None, 'key': None}
+# What this container last resolved the CV to: the source object's ETag and parsed body, the
+# UTC day the model was built on (certification expiry is date-dependent), the contact alias
+# it printed, and the PDF key all of that mapped to.
+_cv = {'etag': None, 'source': None, 'day': None, 'contact': None, 'key': None}
 
 
 def _read_tlv(buf, index):
@@ -183,32 +194,102 @@ def _prune_superseded(current_folder):
         logger.exception('Failed to prune superseded CVs')
 
 
+# Unambiguous lowercase letters and digits: the address may be read off paper and retyped.
+_ALIAS_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789'
+
+
+def _mint_alias(full_name):
+    """Create a new forwarding alias and make it the live one. Returns its address.
+
+    Two containers can race here, e.g. on the first clicks after a rotation. The pointer is
+    written with a condition, so exactly one alias wins; a loser's alias is revoked before
+    anyone can have seen it, and the winner is read back.
+    """
+    first = re.sub(r'[^a-z0-9]', '', renderResume._ascii((full_name or '').split(' ')[0]).lower()) or 'contact'
+    local = f'{first}.{"".join(secrets.choice(_ALIAS_ALPHABET) for _ in range(6))}'
+    now = datetime.now(timezone.utc).isoformat()
+    alias_table.put_item(
+        Item={'id': local, 'status': 'active', 'created': now},
+        ConditionExpression='attribute_not_exists(id)',
+    )
+    try:
+        alias_table.put_item(
+            Item={'id': ALIAS_POINTER, 'address': local, 'since': now},
+            ConditionExpression='attribute_not_exists(id)',
+        )
+    except ClientError as err:
+        if err.response.get('Error', {}).get('Code') != 'ConditionalCheckFailedException':
+            raise
+        alias_table.update_item(
+            Key={'id': local},
+            UpdateExpression='SET #s = :revoked, #t = :now, #r = :why',
+            ExpressionAttributeNames={'#s': 'status', '#t': 'revoked', '#r': 'reason'},
+            ExpressionAttributeValues={':revoked': 'revoked', ':now': now, ':why': 'lost a concurrent mint'},
+        )
+        return _contact_address(full_name, mint=False)
+    logger.info('Minted CV contact alias %s', local)
+    return f'{local}@{CONTACT_DOMAIN}'
+
+
+def _contact_address(full_name, mint=True):
+    """The forwarding address the CV should print right now, minting one if there is none.
+
+    Revoking or rotating an alias (the CV contact workflow) deletes the pointer, so the next
+    click mints a replacement. Because the address is part of the CV model, that also changes
+    the content digest and the CV is re-rendered with the new address.
+
+    Fails open: if the table is unreachable the CV goes out without an address rather than
+    not at all. The digest then differs from the with-address CV, so the address returns on
+    the first click after the table recovers.
+    """
+    try:
+        pointer = alias_table.get_item(Key={'id': ALIAS_POINTER}).get('Item')
+        if pointer:
+            return f'{pointer["address"]}@{CONTACT_DOMAIN}'
+        return _mint_alias(full_name) if mint else None
+    except Exception:
+        logger.exception('Could not resolve the CV contact alias; rendering without one')
+        return None
+
+
 def _current_cv_key():
     """Return the S3 key of a CV matching what the site is serving now, rendering one if needed.
 
     Three tiers, cheapest first:
 
       1. The source is unchanged since this container last looked (S3 answers the
-         conditional GET with a 304) -> reuse the key already resolved. No body, no render.
+         conditional GET with a 304), and so is the contact alias -> reuse the key already
+         resolved. No body, no render.
       2. The source changed, but its CV content did not (a new logo, an icon, a link) ->
          the digest matches a PDF that is already in the bucket. One LIST, no render.
       3. The content changed -> render once, store it, and every later click is tier 1 or 2.
+
+    The contact alias is looked up on every click (one GetItem) so that revoking it takes
+    effect on the very next download rather than whenever a container recycles.
 
     The key embeds a digest of the rendered content, so a stored PDF is immutable and can
     never be served stale from CloudFront's cache.
     """
     today = datetime.now(timezone.utc).date()
     request = {'Bucket': SITE_BUCKET, 'Key': CV_SOURCE_KEY}
-    if _cv['etag'] and _cv['day'] == today:
+    if _cv['etag']:
         request['IfNoneMatch'] = _cv['etag']
     try:
-        source = s3.get_object(**request)
+        response = s3.get_object(**request)
+        source, etag, unchanged = json.loads(response['Body'].read()), response['ETag'], False
     except ClientError as err:
-        if err.response.get('ResponseMetadata', {}).get('HTTPStatusCode') == 304:
-            return _cv['key']
-        raise
+        if err.response.get('ResponseMetadata', {}).get('HTTPStatusCode') != 304:
+            raise
+        source, etag, unchanged = _cv['source'], _cv['etag'], True
 
-    model = renderResume.build_model(json.loads(source['Body'].read()), BASE_URL, today=today)
+    contact = None
+    if renderResume.settings_from(source)['contactEmail']:
+        contact = _contact_address((source.get('personal') or {}).get('fullName', ''))
+
+    if unchanged and _cv['day'] == today and _cv['contact'] == contact:
+        return _cv['key']
+
+    model = renderResume.build_model(source, BASE_URL, today=today, contact_email=contact)
     folder = f'{CV_PREFIX}/{renderResume.content_digest(model)[:24]}/'
     key = folder + renderResume.file_name(model)
 
@@ -226,7 +307,7 @@ def _current_cv_key():
         logger.info('Rendered %s (%d bytes) in %.0f ms', key, len(pdf), (time.monotonic() - started) * 1000)
         _prune_superseded(folder)
 
-    _cv.update(etag=source['ETag'], day=today, key=key)
+    _cv.update(etag=etag, source=source, day=today, contact=contact, key=key)
     return key
 
 

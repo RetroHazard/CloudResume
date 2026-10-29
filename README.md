@@ -42,7 +42,12 @@ is shaped the way it is.
 The Download CV button serves a PDF compiled from the same JSON the site renders, so the CV can
 never drift from the site. The `downloadResume` Lambda keys a cached copy in S3 by a digest of
 the CV's content, and only renders a new one, with a dependency-free PDF writer, when that
-content has changed. See [`docs/generated-cv.md`](docs/generated-cv.md).
+content has changed. Page budget, section order and trimming rules are set in the site data
+too. See [`docs/generated-cv.md`](docs/generated-cv.md).
+
+The CV's contact address is a disposable forwarding alias rather than a real inbox: SES
+receives the mail, filters it, and relays it on, and the alias can be rotated or revoked from
+a workflow. See [`docs/cv-contact.md`](docs/cv-contact.md).
 
 ## Architectural Overview
 

@@ -386,6 +386,17 @@ resource "aws_route53_record" "crc-dns-zone-ses-record-MX" {
   zone_id = aws_route53_zone.crc-new-hosted-zone.zone_id
 }
 
+# Routes mail for the apex to SES, which hands it to forwardMail. This is what makes the CV's
+# forwarding alias deliverable. The apex had no MX before this, so nothing else is displaced;
+# any address at the domain that is not a live alias is dropped by the forwarder.
+resource "aws_route53_record" "crc-dns-zone-inbound-MX" {
+  name    = var.domain-name
+  records = ["10 inbound-smtp.${data.aws_region.current.region}.amazonaws.com"]
+  ttl     = "3600"
+  type    = "MX"
+  zone_id = aws_route53_zone.crc-new-hosted-zone.zone_id
+}
+
 resource "aws_route53_record" "crc-dns-zone-ses-record-TXT" {
   name    = var.ses-mail-from-domain
   records = ["v=spf1 include:amazonses.com -all"]

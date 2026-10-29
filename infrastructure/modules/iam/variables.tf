@@ -64,6 +64,18 @@ variable "crc-cv-object-prefix" {
   type = string
 }
 
+variable "crc-mail-alias_arn" {
+  type = string
+}
+
+variable "crc-mail-bucket-arn" {
+  type = string
+}
+
+variable "crc-cw-lambda-log-group-forwardMail" {
+  type = string
+}
+
 variable "crc-ses-configuration-set" {
   type = string
 }

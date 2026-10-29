@@ -34,6 +34,10 @@ variable "iam-role-download-issuer-arn" {
   type = string
 }
 
+variable "iam-role-mail-forwarder-arn" {
+  type = string
+}
+
 variable "contribution-accounts" {
   type = list(string)
 }
@@ -110,4 +114,10 @@ variable "signed-url-ttl-seconds" {
 
 variable "recaptcha-secret-parameter-name" {
   type = string
+}
+
+# CV Contact Forwarding
+
+variable "mail-retention-days" {
+  type = number
 }

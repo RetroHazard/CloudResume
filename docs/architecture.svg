@@ -40,7 +40,7 @@
 </defs>
 
 <text x="30" y="34" class="title">CloudResume — Serverless Architecture</text>
-<text x="30" y="56" class="subtitle">v9 · single AWS account · us-east-1 · fully serverless, no idle compute</text>
+<text x="30" y="56" class="subtitle">v10 · single AWS account · us-east-1 · fully serverless, no idle compute</text>
 
 <rect x="20" y="90" width="1280" height="550" rx="14" class="zone-rect"/><text x="34" y="110" class="zone-label">REQUEST PATH</text>
 <rect x="20" y="670" width="1280" height="200" rx="14" class="zone-rect"/><text x="34" y="690" class="zone-label">EVENT-DRIVEN AUTOMATION</text>
@@ -76,8 +76,16 @@
       <text x="1010" y="555" text-anchor="middle" class="edge-text">GetParameter</text>
     </g>
 <path d="M 890 545 L 890 520 L 1040 520 L 1040 465 L 1102 465" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
-      <rect x="949.25" y="506" width="101.5" height="15" class="edge-label-bg"/>
-      <text x="1000" y="517" text-anchor="middle" class="edge-text">record download</text>
+      <rect x="934" y="506" width="132" height="15" class="edge-label-bg"/>
+      <text x="1000" y="517" text-anchor="middle" class="edge-text">downloads · CV alias</text>
+    </g>
+<path d="M 1120 302 L 1120 152 L 1215 152" class="edge edge-event" marker-end="url(#arrow-event)" fill="none"/><g class="edge-label">
+      <rect x="1058.65" y="226" width="52.699999999999996" height="15" class="edge-label-bg"/>
+      <text x="1085" y="237" text-anchor="middle" class="edge-text">inbound</text>
+    </g>
+<path d="M 1215 170 L 1140 170 L 1140 302" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
+      <rect x="1148.4" y="252" width="83.19999999999999" height="15" class="edge-label-bg"/>
+      <text x="1190" y="263" text-anchor="middle" class="edge-text">SendRawEmail</text>
     </g>
 <path d="M 865 580 L 722 580 L 722 260 L 708 260" class="edge edge-sync" marker-end="url(#arrow-sync)" fill="none"/><g class="edge-label">
       <rect x="686" y="602" width="132" height="15" class="edge-label-bg"/>
@@ -130,6 +138,7 @@
 <path d="M 495 750 L 562 750 L 562 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 890 775 L 890 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 493 140 L 558 140 L 558 910 L 680 910" class="edge edge-log" fill="none"/>
+<path d="M 1265 160 L 1290 160 L 1290 910 L 680 910" class="edge edge-log" fill="none"/>
 <path d="M 680 910 L 680 922" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
 <path d="M 490 232 L 490 212 L 680 212" class="edge edge-log" fill="none"/>
 <path d="M 680 232 L 680 150 L 865 150" class="edge edge-log" marker-end="url(#arrow-log)" fill="none"/>
@@ -227,7 +236,15 @@
     <path d="M-12 -9 V9 A12 4.2 0 0 0 12 9 V-9" fill="none" stroke="currentColor" stroke-width="2.3"/>
     <path d="M-12 0 A12 4.2 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="2"/></g>
     <text x="1130" y="495" class="label" text-anchor="middle">DynamoDB</text>
-    <text x="1130" y="510" class="sub" text-anchor="middle">3 tables</text>
+    <text x="1130" y="510" class="sub" text-anchor="middle">4 tables</text>
+    
+  </g>
+
+  <g class="node">
+    <rect x="1215" y="135" width="50" height="50" rx="13" class="badge" fill="#E07B29"/>
+    <g transform="translate(1240 160)" color="#FFFFFF" class="icon"><path d="M-9 14 L-1.5 -14 M-1.5 -14 L2 -14 M-4.5 2 L7 14 M-4.5 2 L-9.6 14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>
+    <text x="1240" y="202" class="label" text-anchor="middle">λ forwardMail</text>
+    <text x="1240" y="217" class="sub" text-anchor="middle">CV alias → inbox</text>
     
   </g>
 

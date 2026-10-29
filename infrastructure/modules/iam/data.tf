@@ -68,6 +68,20 @@ data "aws_iam_policy_document" "crc-lambda-DownloadResume-access-policy" {
     ]
   }
 
+  # Resolve the live contact alias, and mint a replacement after one is rotated or revoked.
+  statement {
+    sid    = "AllowFunctionToIssueContactAliases"
+    effect = "Allow"
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:PutItem",
+      "dynamodb:UpdateItem"
+    ]
+    resources = [
+      var.crc-mail-alias_arn
+    ]
+  }
+
   statement {
     sid    = "AllowFunctionToReadCvSource"
     effect = "Allow"
@@ -366,5 +380,62 @@ data "aws_iam_policy_document" "crc-github-terraform-limited-iam" {
       "iam:RemoveClientIDFromOpenIDConnectProvider"
     ]
     resources = ["*"]
+  }
+}
+
+data "aws_iam_policy_document" "crc-lambda-ForwardMail-logging-policy" {
+  statement {
+    sid    = "AllowFunctionToWriteToCloudwatch"
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [
+      "${var.crc-cw-lambda-log-group-forwardMail}:*"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "crc-lambda-ForwardMail-access-policy" {
+  statement {
+    sid    = "AllowFunctionToReadReceivedMail"
+    effect = "Allow"
+    actions = [
+      "s3:GetObject"
+    ]
+    resources = [
+      "${var.crc-mail-bucket-arn}/*"
+    ]
+  }
+
+  # Read an alias's status and count what happened to its mail. No PutItem or DeleteItem:
+  # the forwarder can never create, revive or remove an address.
+  statement {
+    sid    = "AllowFunctionToCheckAliases"
+    effect = "Allow"
+    actions = [
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem"
+    ]
+    resources = [
+      var.crc-mail-alias_arn
+    ]
+  }
+
+  # Only as the site's own domain, and only to the one verified destination. Even a bug
+  # here cannot turn the function into an open relay.
+  statement {
+    sid    = "AllowFunctionToForwardMail"
+    effect = "Allow"
+    actions = [
+      "ses:SendRawEmail"
+    ]
+    resources = [
+      var.crc-ses-mail-destination,
+      var.crc-ses-mail-domain
+    ]
   }
 }

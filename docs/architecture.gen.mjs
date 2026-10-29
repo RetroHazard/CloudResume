@@ -98,7 +98,8 @@ add('s3', 680, 260, 'S3', 'site + data', 'storage', 'bucket');
 add('lsend', 890, 330, 'λ sendMessage', 'POST /contact', 'compute', 'lambda', 50);
 add('ltrack', 890, 450, 'λ trackVisitors', 'GET /visitors', 'compute', 'lambda', 50);
 add('ses', 1130, 330, 'SES', 'mail · DKIM/SPF/DMARC', 'integ', 'mail');
-add('ddb', 1130, 450, 'DynamoDB', '3 tables', 'database', 'db');
+add('ddb', 1130, 450, 'DynamoDB', '4 tables', 'database', 'db');
+add('lforward', 1240, 160, 'λ forwardMail', 'CV alias → inbox', 'compute', 'lambda', 50);
 add('ldownload', 890, 570, 'λ downloadResume', 'GET /download', 'compute', 'lambda', 50);
 add('ssm', 1130, 570, 'SSM', 'signing key', 'mgmt', 'key', 46);
 add('health', 260, 150, 'R53 Health Check', 'HTTPS /index.html', 'edge', 'pulse', 46);
@@ -134,7 +135,9 @@ edge('lsend', 'ses', 'sync', 'send email', { x: 1010, y: 314 });
 edge('ltrack', 'ddb', 'sync', 'put / get item', { x: 1010, y: 434 });
 edge('apigw', 'ldownload', 'sync', null);
 edge('ldownload', 'ssm', 'sync', 'GetParameter', { x: 1010, y: 554 });
-edge('ldownload', 'ddb', 'sync', 'record download', { x: 1000, y: 516 }, { path: 'download-ddb' });
+edge('ldownload', 'ddb', 'sync', 'downloads · CV alias', { x: 1000, y: 516 }, { path: 'download-ddb' });
+edge('ses', 'lforward', 'event', 'inbound', { x: 1085, y: 236 }, { path: 'ses-forward' });
+edge('lforward', 'ses', 'sync', 'SendRawEmail', { x: 1190, y: 262 }, { path: 'forward-ses' });
 edge('ldownload', 's3', 'sync', 'cv-source · CV cache', { x: 752, y: 612 }, { path: 'download-s3' });
 
 edge('eventbridge', 'lupdate', 'event', 'invoke', { x: 365, y: 734 });
@@ -151,7 +154,7 @@ edge('acm', 'cf', 'sync', 'TLS cert', { x: 504, y: 520 }, { path: 'acm-cf' });
 edge('acm', 'apigw', 'sync', null, null, { path: 'acm-api' });
 edge('gha', 'tfstate', 'sync', 'state + lock', { x: 196, y: 986 }, { path: 'tf-state' });
 
-const logSources = ['lsend', 'ltrack', 'ldownload', 'lupdate', 'linvalidate', 'waf'];
+const logSources = ['lsend', 'ltrack', 'ldownload', 'lupdate', 'linvalidate', 'waf', 'lforward'];
 
 // ---- helpers ------------------------------------------------------------------
 function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
@@ -193,6 +196,12 @@ function edgePath(e) {
       // ldownload -> ddb: leave from the top, run under trackVisitors' caption, and enter
       // DynamoDB's left edge below the trackVisitors arrow so the two do not stack.
       return `M ${a.cx} ${a.cy - ah} L ${a.cx} 520 L 1040 520 L 1040 465 L ${b.cx - bh} 465`;
+    case 'ses-forward':
+      // ses -> lforward: up out of SES's top-left, then right into forwardMail's left edge.
+      return `M ${a.cx - 10} ${a.cy - ah} L ${a.cx - 10} ${b.cy - 8} L ${b.cx - bh} ${b.cy - 8}`;
+    case 'forward-ses':
+      // lforward -> ses: down from forwardMail's bottom-left, clear of its caption, into SES's top-right.
+      return `M ${a.cx - ah} ${a.cy + 10} L ${b.cx + 10} ${a.cy + 10} L ${b.cx + 10} ${b.cy - bh}`;
     case 'download-s3':
       // ldownload -> s3: leave the left edge just under the API Gateway arrow, rise in the
       // channel between the API fan-out trunk and lupdate's return, into S3's right edge.
@@ -253,6 +262,7 @@ function logLine(fromId) {
     lsend:       `M ${a.cx + a.size/2} ${a.cy} L 980 ${a.cy} L 980 ${busY} L ${cwNode.cx} ${busY}`,
     ltrack:      `M ${a.cx + a.size/2} ${a.cy} L 1000 ${a.cy} L 1000 ${busY} L ${cwNode.cx} ${busY}`,
     ldownload:   `M ${a.cx + a.size/2} ${a.cy} L 1020 ${a.cy} L 1020 ${busY} L ${cwNode.cx} ${busY}`,
+    lforward:    `M ${a.cx + a.size/2} ${a.cy} L 1290 ${a.cy} L 1290 ${busY} L ${cwNode.cx} ${busY}`,
     lupdate:     `M ${a.cx + a.size/2} ${a.cy} L 562 ${a.cy} L 562 ${busY} L ${cwNode.cx} ${busY}`,
     linvalidate: `M ${a.cx} ${a.cy + a.size/2} L ${a.cx} ${busY} L ${cwNode.cx} ${busY}`,
   };
@@ -323,7 +333,7 @@ const svg = `<?xml version="1.0" encoding="UTF-8"?>
 </defs>
 
 <text x="30" y="34" class="title">CloudResume — Serverless Architecture</text>
-<text x="30" y="56" class="subtitle">v9 · single AWS account · us-east-1 · fully serverless, no idle compute</text>
+<text x="30" y="56" class="subtitle">v10 · single AWS account · us-east-1 · fully serverless, no idle compute</text>
 
 ${zones.map(z => `<rect x="${z.x}" y="${z.y}" width="${z.w}" height="${z.h}" rx="14" class="zone-rect"/><text x="${z.x + 14}" y="${z.y + 20}" class="zone-label">${esc(z.label)}</text>`).join('\n')}
 

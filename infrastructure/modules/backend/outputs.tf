@@ -25,6 +25,18 @@ output "aws_dynamodb_table_crc-download-record_arn" {
   value = aws_dynamodb_table.crc-download-record.arn
 }
 
+output "aws_dynamodb_table_crc-mail-alias_arn" {
+  value = aws_dynamodb_table.crc-mail-alias.arn
+}
+
+output "aws_dynamodb_table_crc-mail-alias_name" {
+  value = aws_dynamodb_table.crc-mail-alias.id
+}
+
+output "aws_s3_bucket_crc-agb-s3-mail_arn" {
+  value = aws_s3_bucket.crc-agb-s3-mail.arn
+}
+
 #  End DynamoDB Block  #
 ########################
 
@@ -92,6 +104,10 @@ output "aws_cloudwatch_log_group_crc-updateContributions_arn" {
 
 output "aws_cloudwatch_log_group_crc-downloadResume_arn" {
   value = aws_cloudwatch_log_group.crc-downloadResume-log-group.arn
+}
+
+output "aws_cloudwatch_log_group_crc-forwardMail_arn" {
+  value = aws_cloudwatch_log_group.crc-forwardMail-log-group.arn
 }
 
 output "aws_lambda_function_crc-downloadResume_uri" {

@@ -82,12 +82,55 @@ class FakeTable:
         return {'Attributes': {'download_count': item['download_count']}}
 
 
-def load_handler():
-    """Import downloadResume against fresh fakes, as a new Lambda container would."""
-    s3, table = FakeS3(), FakeTable()
+class FakeAliasTable:
+    """The contact-alias table, with the one condition downloadResume relies on."""
+
+    def __init__(self):
+        self.items = {}
+        self.down = False
+        self.on_pointer_write = None  # lets a test slip a competing mint in first
+
+    def _check(self):
+        if self.down:
+            raise RuntimeError('DynamoDB unavailable')
+
+    def get_item(self, Key, **_):
+        self._check()
+        item = self.items.get(Key['id'])
+        return {'Item': dict(item)} if item else {}
+
+    def put_item(self, Item, ConditionExpression=None):
+        self._check()
+        if Item['id'] == '#current' and self.on_pointer_write:
+            hook, self.on_pointer_write = self.on_pointer_write, None
+            hook()
+        if ConditionExpression == 'attribute_not_exists(id)' and Item['id'] in self.items:
+            raise ClientError(400, 'ConditionalCheckFailedException')
+        self.items[Item['id']] = dict(Item)
+
+    def update_item(self, Key, ExpressionAttributeNames, ExpressionAttributeValues, **_):
+        self._check()
+        item = self.items[Key['id']]
+        for placeholder, name in ExpressionAttributeNames.items():
+            value = ExpressionAttributeValues.get(':' + {'status': 'revoked', 'revoked': 'now'}.get(name, 'why'))
+            item[name] = value
+
+    def live(self):
+        pointer = self.items.get('#current')
+        return pointer and pointer['address']
+
+
+def load_handler(aliases=None):
+    """Import downloadResume against fresh fakes, as a new Lambda container would.
+
+    Pass `aliases` to share one alias table between containers, as production does.
+    """
+    s3, table, aliases = FakeS3(), FakeTable(), aliases or FakeAliasTable()
     fake_boto3 = types.ModuleType('boto3')
     fake_boto3.client = lambda name: s3 if name == 's3' else object()
-    fake_boto3.resource = lambda name: types.SimpleNamespace(Table=lambda _: table)
+    fake_boto3.resource = lambda name: types.SimpleNamespace(
+        Table=lambda table_name: aliases if table_name == 'aliases' else table
+    )
     fake_exceptions = types.ModuleType('botocore.exceptions')
     fake_exceptions.ClientError = ClientError
     sys.modules['boto3'] = fake_boto3
@@ -95,6 +138,8 @@ def load_handler():
     sys.modules['botocore.exceptions'] = fake_exceptions
     os.environ.update(
         recordTableName='records',
+        aliasTableName='aliases',
+        contactDomain='example.com',
         allowedOrigin='https://example.com',
         downloadBaseUrl='https://example.com',
         siteBucket='site-bucket',
@@ -117,9 +162,10 @@ def click(module, visitor='visitor-1'):
     return response['statusCode'], json.loads(response['body'])
 
 
-class CvCacheTests(unittest.TestCase):
+class Harness(unittest.TestCase):
     def setUp(self):
         self.module, self.s3, self.table = load_handler()
+        self.aliases = self.module.alias_table
         self.source = load_source()
         self.publish(self.source)
 
@@ -130,6 +176,8 @@ class CvCacheTests(unittest.TestCase):
     def cv_keys(self):
         return sorted(k for k in self.s3.objects if k.startswith('files/cv/'))
 
+
+class CvCacheTests(Harness):
     def test_first_click_compiles_and_caches_the_cv(self):
         status, body = click(self.module)
 
@@ -158,7 +206,7 @@ class CvCacheTests(unittest.TestCase):
         rendered = self.cv_keys()
 
         objects = self.s3.objects
-        self.module, self.s3, self.table = load_handler()
+        self.module, self.s3, self.table = load_handler(aliases=self.aliases)
         self.s3.objects = objects
         status, _ = click(self.module)
 
@@ -212,6 +260,92 @@ class CvCacheTests(unittest.TestCase):
     def test_visitor_id_is_still_required(self):
         response = self.module.lambda_handler({'queryStringParameters': None}, None)
         self.assertEqual(response['statusCode'], 400)
+
+
+class ContactAliasTests(Harness):
+    """The forwarding address printed on the CV, and how revoking one reaches the PDF."""
+
+    def pdf_text(self, key):
+        from test_renderResume import shown_text
+
+        return shown_text(self.s3.objects[key][0])
+
+    def test_first_click_issues_an_alias_and_prints_it(self):
+        click(self.module)
+
+        local = self.aliases.live()
+        self.assertRegex(local, r'^alexander\.[a-z2-9]{6}$')
+        self.assertEqual(self.aliases.items[local]['status'], 'active')
+        [key] = self.cv_keys()
+        self.assertIn(f'{local}@example.com', self.pdf_text(key))
+
+    def test_the_alias_is_stable_across_clicks_and_containers(self):
+        click(self.module)
+        first = self.aliases.live()
+        click(self.module, visitor='b')
+        self.module, self.s3, self.table = load_handler(aliases=self.aliases)
+        self.publish(self.source)
+        click(self.module, visitor='c')
+        self.assertEqual(self.aliases.live(), first)
+        self.assertEqual(len([k for k in self.aliases.items if not k.startswith('#')]), 1)
+
+    def test_revoking_reissues_the_address_and_rerenders_on_the_next_click(self):
+        click(self.module)
+        old = self.aliases.live()
+        [old_key] = self.cv_keys()
+
+        # What the "revoke" workflow does.
+        self.aliases.items[old]['status'] = 'revoked'
+        del self.aliases.items['#current']
+        status, body = click(self.module, visitor='b')
+
+        new = self.aliases.live()
+        self.assertEqual(status, 200)
+        self.assertNotEqual(new, old)
+        [new_key] = self.cv_keys()
+        self.assertNotEqual(new_key, old_key)
+        self.assertIn(new_key, body['downloadUrl'])
+        text = self.pdf_text(new_key)
+        self.assertIn(f'{new}@example.com', text)
+        self.assertNotIn(old, text)
+
+    def test_a_concurrent_mint_loses_cleanly(self):
+        def rival():
+            self.aliases.items['alexander.rival2'] = {'id': 'alexander.rival2', 'status': 'active'}
+            self.aliases.items['#current'] = {'id': '#current', 'address': 'alexander.rival2'}
+
+        self.aliases.on_pointer_write = rival
+        click(self.module)
+
+        self.assertEqual(self.aliases.live(), 'alexander.rival2')
+        losers = [k for k, v in self.aliases.items.items() if k not in ('#current', 'alexander.rival2')]
+        self.assertEqual([self.aliases.items[k]['status'] for k in losers], ['revoked'])
+        [key] = self.cv_keys()
+        self.assertIn('alexander.rival2@example.com', self.pdf_text(key))
+
+    def test_an_unreachable_alias_table_still_serves_a_cv(self):
+        self.aliases.down = True
+        status, _ = click(self.module)
+        self.assertEqual(status, 200)
+        [key] = self.cv_keys()
+        self.assertNotIn('@example.com', self.pdf_text(key))
+
+        # Once the table is back, the address returns without waiting for a deploy.
+        self.aliases.down = False
+        click(self.module, visitor='b')
+        [key] = self.cv_keys()
+        self.assertIn(f'{self.aliases.live()}@example.com', self.pdf_text(key))
+
+    def test_settings_can_leave_the_address_off(self):
+        source = copy.deepcopy(self.source)
+        source['cv'] = {'contactEmail': False}
+        self.publish(source)
+
+        click(self.module)
+
+        self.assertEqual(self.aliases.items, {})
+        [key] = self.cv_keys()
+        self.assertNotIn('@example.com', self.pdf_text(key))
 
 
 if __name__ == '__main__':

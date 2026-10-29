@@ -15,6 +15,7 @@ Download CV click → GET /download → λ downloadResume
   ├─ GetObject data/cv-source.json  If-None-Match: <ETag seen last time>
   │     304 → this container already resolved the CV: sign it, done
   ├─ renderResume.build_model()     project the data into exactly what the CV prints
+  ├─ GetItem crc-mail-alias #current  the forwarding address to print (minted if none)
   ├─ key = files/cv/<sha256(model + RENDERER_VERSION)[:24]>/BRACKEN_ALEXANDER_Resume.pdf
   ├─ ListObjectsV2 prefix=key       already rendered? sign it, done
   └─ render_pdf() → PutObject       only when the CV's content actually changed,
@@ -26,7 +27,7 @@ What a click costs, cheapest first:
 
 | Situation | S3 requests | Renders |
 | --- | --- | --- |
-| Warm container, site unchanged | 1 conditional GET (304, no body) | 0 |
+| Warm container, site unchanged | 1 conditional GET (304, no body) + 1 alias GetItem | 0 |
 | Deploy that didn't change CV content (a logo, an icon, a link) | GET + LIST | 0 |
 | Cold container, CV already cached | GET + LIST | 0 |
 | First click after the CV content changed | GET + LIST + PUT (+ prune) | 1 |
@@ -49,27 +50,61 @@ reading order, the standard Helvetica family (nothing embedded), clickable links
 document metadata (title, author, keywords). Characters outside WinAnsi are folded to their
 nearest ASCII equivalent, so a stray `→` turns into `->` rather than failing the render.
 
-### Editorial rules
+### Controlling the CV
 
-The site is the long form and the CV is the two-minute read. These are the only places the
-CV leaves out content the site shows. Each is a named constant at the top of
-`renderResume.py`:
+The site is the long form and the CV is the two-minute read. How hard the CV edits the site
+is set in data, not code, so a change goes out with a normal site deploy and the cache
+re-renders on the next click.
 
-- `SKILL_MIN_LEVEL = 50`: core skills below 50% proficiency stay on the site. The rest are
-  grouped by category, strongest first. Target skills and soft skills aren't printed.
-- `RECENT_YEARS = 10` and `OLDER_ROLE_BULLETS = 2`: roles that ended more than ten years
-  ago keep only their first two bullets and drop their technologies line.
-- `PROJECT_BULLETS = 2`: each project keeps its first two bullets.
+**`cv_data.json`** (one per data set, next to the other résumé JSON):
+
+| Key | Default | Effect |
+| --- | --- | --- |
+| `maxPages` | `2` | Page budget. Over budget, content is trimmed in a fixed order until it fits (below). `0` turns it off. |
+| `skillMinLevel` | `50` | Core skills below this proficiency stay on the site only. |
+| `recentYears` | `10` | Roles that ended longer ago than this are condensed: |
+| `olderRoleBullets` | `2` | ...to this many bullets, without a technologies line. |
+| `projectBullets` | `2` | Bullets kept per project. |
+| `sections` | all seven | Which sections print, in this order. Leave one out to drop it. Names: `summary`, `skills`, `experience`, `projects`, `certifications`, `education`, `languages`. |
+| `contactEmail` | `true` | Print the forwarding address in the header (see [`cv-contact.md`](cv-contact.md)). |
+
+A missing key or a malformed value falls back to its default rather than failing a render.
+
+**Per-item flags**, on any entry in the other JSON files (a job, a role, a project, a skill,
+a certification, a degree, a language, a social link):
+
+- `"cv": false` keeps it on the site and off the CV.
+- `"cv": "always"` exempts it from every rule: a skill under the threshold prints anyway, an
+  old role keeps all its bullets, and the page budget never trims it. On a multi-role job it
+  applies to all of that job's roles.
+- `"cvBullets": 3` (roles and projects) sets how many bullets that entry keeps.
 
 Bullets are always taken in the order the JSON lists them, so put the strongest first.
+
+**The page budget** trims the least important content first, one step at a time, and stops
+as soon as the CV fits. It never drops a whole role, since a gap in a career reads worse than
+a long CV:
+
+1. Technologies lines under projects
+2. Project bullets beyond the first, last project first
+3. Technologies lines under roles, oldest first
+4. Bullets beyond the first on roles outside the recent window, oldest first
+5. Bullets beyond the third on any role, oldest first
+6. Whole projects, last listed first
+7. Bullets beyond the second on any role, oldest first
+8. Bullets beyond the first on any role, oldest first
+
+If pinned content alone exceeds the budget, the CV runs long rather than dropping it. The
+search takes about six layouts (around 50 ms), and only on a render, never on a cached click.
 
 ### Things to know when editing
 
 - **The summary is data now.** It moved from `PersonalSummary` into
   `personal_data.json` → `summary`, written with `**bold**` and `*italic*`. The site
   (`src/utils/markup.js`) and the CV (`parse_markup`) use the same pattern for both.
-- **Bump `RENDERER_VERSION` when you change the layout.** It is part of the cache key.
-  Without a bump, visitors keep getting the old layout until the site content next changes.
+- **Bump `RENDERER_VERSION` when you change the layout or the trimming order in code.** It
+  is part of the cache key. Settings and flags in the data don't need a bump: they are in
+  the model, so changing them already changes the key.
 - **The keys in `cv-source.mjs` are a contract** with `build_model`. Renaming one silently
   drops that section from the CV. Both sides are covered by tests
   (`src/__tests__/cvSource.test.js`, `infrastructure/tests/`).

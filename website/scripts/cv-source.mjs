@@ -24,6 +24,9 @@ export const CV_SOURCE_FILES = {
     projects: 'project_data.json',
     skills: 'skill_data.json',
     socials: 'socials_data.json',
+    // Not rendered by the site. It holds the CV's own editorial settings (page budget,
+    // section order, trimming rules); see docs/generated-cv.md.
+    cv: 'cv_data.json',
 };
 
 const DATA_ROOT = fileURLToPath(new URL('../src/assets/json/', import.meta.url));

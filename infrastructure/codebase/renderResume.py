@@ -20,6 +20,7 @@ stays small because of what it deliberately leaves out:
 or visitors keep receiving PDFs rendered by the previous layout until the site data changes.
 """
 
+import copy
 import hashlib
 import json
 import re
@@ -27,7 +28,7 @@ import unicodedata
 import zlib
 from datetime import datetime, timezone
 
-RENDERER_VERSION = '1'
+RENDERER_VERSION = '2'
 
 # Advance widths per 1000 units of font size, for WinAnsi codes 32-255, taken from the Adobe
 # core-14 AFM metrics. Oblique shares the upright widths. The zero entries are the five code
@@ -89,13 +90,66 @@ RULE = (0.75, 0.78, 0.82)
 BODY_SIZE, BODY_LEADING = 9.5, 12.6
 SMALL_SIZE, SMALL_LEADING = 8.5, 11.2
 
-# The site is the long form; the CV is the edit a recruiter reads in two minutes. These are
-# the only editorial rules applied, and they key off fields the site already carries, so the
-# data stays the single source of truth. Bullets are taken in the order the JSON lists them.
-SKILL_MIN_LEVEL = 50  # core_skills below this proficiency stay on the site only
-RECENT_YEARS = 10  # roles that ended longer ago than this are condensed...
-OLDER_ROLE_BULLETS = 2  # ...to their first N bullets, without a technologies line
-PROJECT_BULLETS = 2
+# The site is the long form; the CV is the edit a recruiter reads in two minutes. How hard it
+# is edited is data, not code: website/src/assets/json/<set>/cv_data.json, published with the
+# rest of the site as the `cv` key of data/cv-source.json. Anything missing or malformed there
+# falls back to these defaults, so a typo degrades to the stock CV rather than failing a render.
+DEFAULT_SETTINGS = {
+    # Page budget. When the CV runs longer, render_pdf trims in a fixed order until it fits
+    # (see _cuts). 0 turns the budget off.
+    'maxPages': 2,
+    # core_skills below this proficiency stay on the site only.
+    'skillMinLevel': 50,
+    # Roles that ended longer ago than this are condensed to their first N bullets, without
+    # a technologies line.
+    'recentYears': 10,
+    'olderRoleBullets': 2,
+    'projectBullets': 2,
+    # Which sections print, and in what order. Unknown names are ignored.
+    'sections': ['summary', 'skills', 'experience', 'projects', 'certifications', 'education', 'languages'],
+    # Print the forwarding contact address in the header. The address itself is never in the
+    # data: downloadResume supplies it at render time.
+    'contactEmail': True,
+}
+
+SECTIONS = ('summary', 'skills', 'experience', 'projects', 'certifications', 'education', 'languages')
+_LIMITS = {'maxPages': (0, 10), 'skillMinLevel': (0, 100), 'recentYears': (0, 60)}
+
+
+def settings_from(source):
+    """Merge the data's `cv` settings over the defaults, discarding anything malformed."""
+    raw = source.get('cv') if isinstance(source.get('cv'), dict) else {}
+    settings = dict(DEFAULT_SETTINGS)
+    for key, default in DEFAULT_SETTINGS.items():
+        value = raw.get(key, default)
+        if isinstance(default, bool):
+            settings[key] = value if isinstance(value, bool) else default
+        elif isinstance(default, int):
+            if isinstance(value, bool) or not isinstance(value, int):
+                continue
+            low, high = _LIMITS.get(key, (0, 50))
+            settings[key] = min(max(value, low), high)
+        elif key == 'sections' and isinstance(value, list):
+            settings[key] = [s for s in dict.fromkeys(value) if s in SECTIONS]
+    return settings
+
+
+def _on_cv(item):
+    """Per-item opt-out: `"cv": false` on any entry keeps it on the site and off the CV."""
+    return not (isinstance(item, dict) and item.get('cv') is False)
+
+
+def _pinned(item):
+    """`"cv": "always"` exempts an entry from every editorial rule and from the page budget."""
+    return isinstance(item, dict) and item.get('cv') == 'always'
+
+
+def _bullet_cap(item, default):
+    """`"cvBullets": N` on a role or project overrides the rule-derived bullet count."""
+    value = item.get('cvBullets') if isinstance(item, dict) else None
+    if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+        return value
+    return default
 
 
 # ---------------------------------------------------------------------------
@@ -157,49 +211,63 @@ def _names(items):
     return [str(item['name']).strip() for item in items or [] if str(item.get('name', '')).strip()]
 
 
-def build_model(source, site_url, today=None):
+def build_model(source, site_url, today=None, contact_email=None):
     """Project the site's JSON into exactly the content the CV prints.
 
     The projection is also the cache key (see `content_digest`), so it carries only what
-    reaches the page. A new logo, icon or link on the site leaves it unchanged and reuses
-    the cached PDF; a reworded bullet or a new role does not.
+    reaches the page, plus the settings that decide how it is laid out. A new logo, icon or
+    link on the site leaves it unchanged and reuses the cached PDF; a reworded bullet, a new
+    role, a changed rule in cv_data.json or a rotated contact address does not.
 
-    `today` only decides whether a certification has lapsed. Pass it explicitly in tests so
-    the model does not drift with the calendar.
+    `today` only decides which certifications have lapsed and which roles count as recent.
+    Pass it explicitly in tests so the model does not drift with the calendar.
+
+    `contact_email` is the forwarding address downloadResume issues. It is printed only when
+    the settings ask for it.
     """
     today = today or datetime.now(timezone.utc).date()
+    settings = settings_from(source)
     personal = source.get('personal') or {}
     skills = source.get('skills') or {}
 
     links = [{'label': re.sub(r'^https?://', '', site_url).rstrip('/'), 'url': site_url}]
+    if contact_email and settings['contactEmail']:
+        links.insert(0, {'label': contact_email, 'url': f'mailto:{contact_email}'})
     for social in (source.get('socials') or {}).get('Socials', []):
-        if social.get('display') and social.get('link'):
+        if social.get('display') and social.get('link') and _on_cv(social):
             label = re.sub(r'^https?://(www\.)?', '', social['link']).rstrip('/')
             links.append({'label': label, 'url': social['link']})
 
     def recent(end):
         year = str(end or '').strip()[:4]
-        return not year.isdigit() or int(year) >= today.year - RECENT_YEARS
+        return not year.isdigit() or int(year) >= today.year - settings['recentYears']
+
+    def role_model(role):
+        pinned, current = _pinned(role), recent(role.get('end'))
+        default_cap = None if (current or pinned) else settings['olderRoleBullets']
+        return {
+            'title': role.get('job_title', ''),
+            'dates': format_range(role.get('start'), role.get('end')),
+            'details': _texts(role.get('details'))[: _bullet_cap(role, default_cap)],
+            'technologies': _names(role.get('technologies')) if (current or pinned) else [],
+            'pinned': pinned,
+            'older': not current,
+        }
 
     experience = []
     for entry in (source.get('career') or {}).get('Experience', []):
-        roles = entry.get('roles') or [entry]
+        if not _on_cv(entry):
+            continue
+        # A single-role entry carries its role fields (and flags) on the entry itself.
+        roles = [r for r in (entry.get('roles') or [entry]) if _on_cv(r)]
+        if not roles:
+            continue
         experience.append(
             {
                 'company': entry.get('company', ''),
                 'location': entry.get('location', ''),
                 'type': entry.get('type', ''),
-                'roles': [
-                    {
-                        'title': role.get('job_title', ''),
-                        'dates': format_range(role.get('start'), role.get('end')),
-                        'details': _texts(role.get('details'))[
-                            : None if recent(role.get('end')) else OLDER_ROLE_BULLETS
-                        ],
-                        'technologies': _names(role.get('technologies')) if recent(role.get('end')) else [],
-                    }
-                    for role in roles
-                ],
+                'roles': [role_model(dict(role, cv=role.get('cv', entry.get('cv')))) for role in roles],
             }
         )
 
@@ -208,15 +276,21 @@ def build_model(source, site_url, today=None):
             'name': project.get('name', ''),
             'subtitle': ' · '.join(p for p in (project.get('category'), project.get('role')) if p),
             'dates': format_range(project.get('start'), project.get('end')),
-            'details': _texts(project.get('details'))[:PROJECT_BULLETS],
+            'details': _texts(project.get('details'))[
+                : _bullet_cap(project, None if _pinned(project) else settings['projectBullets'])
+            ],
             'technologies': _names(project.get('technologies')),
+            'pinned': _pinned(project),
         }
         for project in (source.get('projects') or {}).get('Projects', [])
+        if _on_cv(project)
     ]
 
     # Strongest first within each category, categories in the order the site lists them.
+    strong = [
+        s for s in skills.get('core_skills', []) if _on_cv(s) and (_pinned(s) or _level(s) >= settings['skillMinLevel'])
+    ]
     grouped = {}
-    strong = [s for s in skills.get('core_skills', []) if _level(s) >= SKILL_MIN_LEVEL]
     for skill in sorted(strong, key=_level, reverse=True):
         grouped.setdefault(skill.get('category') or 'Other', []).append(skill['name'])
     order = list(dict.fromkeys(s.get('category') or 'Other' for s in strong))
@@ -224,6 +298,8 @@ def build_model(source, site_url, today=None):
 
     certifications = []
     for cert in (source.get('certifications') or {}).get('Certifications', []):
+        if not _on_cv(cert):
+            continue
         expired = _is_expired(cert.get('expiry_date'), today)
         issued = format_date(cert.get('issued_date'))
         expires = format_date(cert.get('expiry_date'))
@@ -253,6 +329,7 @@ def build_model(source, site_url, today=None):
             'dates': format_range(entry.get('start'), entry.get('end')),
         }
         for entry in (source.get('education') or {}).get('Education', [])
+        if _on_cv(entry)
     ]
 
     return {
@@ -261,7 +338,7 @@ def build_model(source, site_url, today=None):
         'location': personal.get('location', ''),
         'links': links,
         'summary': _texts(personal.get('summary')),
-        'competencies': _names(skills.get('industry_knowledge')),
+        'competencies': _names([k for k in skills.get('industry_knowledge', []) if _on_cv(k)]),
         'technical': technical,
         'experience': experience,
         'projects': projects,
@@ -270,7 +347,10 @@ def build_model(source, site_url, today=None):
         'languages': [
             {'language': lang.get('language', ''), 'level': lang.get('level', '')}
             for lang in skills.get('language_skills', [])
+            if _on_cv(lang)
         ],
+        'sections': settings['sections'],
+        'maxPages': settings['maxPages'],
     }
 
 
@@ -494,10 +574,7 @@ class _Layout:
                 self.text([('R', note)], PAGE_W - MARGIN_X - note_w, self.y, size - 0.5, color=MUTED)
 
 
-def _layout(model):
-    doc = _Layout()
-
-    # Header
+def _header(doc, model):
     doc.y -= 20
     doc.text([('B', _encode(model['name']))], MARGIN_X, doc.y, 21, color=INK)
     if model['headline']:
@@ -505,114 +582,155 @@ def _layout(model):
         doc.text([('R', _encode(model['headline']))], MARGIN_X, doc.y, 11.5, color=ACCENT)
 
     # Contact line. Each link gets its own annotation, so it stays clickable in every
-    # viewer while the visible text remains plain, parseable text.
+    # viewer while the visible text remains plain, parseable text. It wraps onto a second
+    # line rather than running off the page once the email address joins it.
+    size = SMALL_SIZE + 0.5
+    sep = _encode('  |  ')
     doc.y -= 14
     x = MARGIN_X
     items = ([{'label': model['location']}] if model['location'] else []) + model['links']
     for i, item in enumerate(items):
-        if i:
-            sep = _encode('  |  ')
-            doc.text([('R', sep)], x, doc.y, SMALL_SIZE + 0.5, color=RULE)
-            x += _width(sep, 'R', SMALL_SIZE + 0.5)
         label = _encode(item['label'])
-        doc.text([('R', label)], x, doc.y, SMALL_SIZE + 0.5, color=MUTED)
-        label_w = _width(label, 'R', SMALL_SIZE + 0.5)
+        label_w = _width(label, 'R', size)
+        if i and x + _width(sep, 'R', size) + label_w > PAGE_W - MARGIN_X:
+            doc.y -= SMALL_LEADING
+            x = MARGIN_X
+        elif i:
+            doc.text([('R', sep)], x, doc.y, size, color=RULE)
+            x += _width(sep, 'R', size)
+        doc.text([('R', label)], x, doc.y, size, color=MUTED)
         if item.get('url'):
-            doc.link(x, doc.y, label_w, SMALL_SIZE + 0.5, item['url'])
+            doc.link(x, doc.y, label_w, size, item['url'])
         x += label_w
     doc.y -= 6
 
-    if model['summary']:
-        doc.heading('Summary')
-        for i, text in enumerate(model['summary']):
-            if i:
+
+def _summary(doc, model):
+    if not model['summary']:
+        return
+    doc.heading('Summary')
+    for i, text in enumerate(model['summary']):
+        if i:
+            doc.gap(3)
+        doc.paragraph(parse_markup(text))
+
+
+def _skills(doc, model):
+    if not (model['competencies'] or model['technical']):
+        return
+    doc.heading('Skills')
+    rows = []
+    if model['competencies']:
+        rows.append(('Core Competencies', model['competencies']))
+    rows.extend((group['category'], group['items']) for group in model['technical'])
+    for label, items in rows:
+        doc.paragraph([('B', f'{label}: '), ('R', ', '.join(items))], leading=BODY_LEADING - 0.4)
+
+
+def _technologies(doc, names):
+    if names:
+        doc.paragraph(
+            [('B', 'Technologies: '), ('R', ', '.join(names))],
+            size=SMALL_SIZE,
+            leading=SMALL_LEADING,
+            indent=9.0,
+            color=MUTED,
+        )
+
+
+def _experience(doc, model):
+    if not model['experience']:
+        return
+    doc.heading('Experience')
+    for n, job in enumerate(model['experience']):
+        if n:
+            doc.gap(6)
+        meta = ' · '.join(p for p in (job['location'], job['type']) if p)
+        for r, role in enumerate(job['roles']):
+            # Keep each role's title with at least its first bullet.
+            doc.ensure(BODY_LEADING * (3 if r == 0 else 2))
+            if r:
                 doc.gap(3)
-            doc.paragraph(parse_markup(text))
-
-    if model['competencies'] or model['technical']:
-        doc.heading('Skills')
-        rows = []
-        if model['competencies']:
-            rows.append(('Core Competencies', model['competencies']))
-        rows.extend((group['category'], group['items']) for group in model['technical'])
-        for label, items in rows:
-            doc.paragraph([('B', f'{label}: '), ('R', ', '.join(items))], leading=BODY_LEADING - 0.4)
-
-    if model['experience']:
-        doc.heading('Experience')
-        for n, job in enumerate(model['experience']):
-            if n:
-                doc.gap(6)
-            meta = ' · '.join(p for p in (job['location'], job['type']) if p)
-            for r, role in enumerate(job['roles']):
-                # Keep each role's title with at least its first bullet.
-                doc.ensure(BODY_LEADING * (3 if r == 0 else 2))
-                if r:
-                    doc.gap(3)
-                title = [('B', role['title'])]
-                if r == 0:
-                    title += [('R', ' — '), ('B', job['company'])]
-                doc.split_line(title, role['dates'])
-                if r == 0 and meta:
-                    doc.paragraph([('I', meta)], size=SMALL_SIZE, leading=SMALL_LEADING, color=MUTED)
-                for detail in role['details']:
-                    doc.paragraph([('R', detail)], bullet=True)
-                if role['technologies']:
-                    doc.paragraph(
-                        [('B', 'Technologies: '), ('R', ', '.join(role['technologies']))],
-                        size=SMALL_SIZE,
-                        leading=SMALL_LEADING,
-                        indent=9.0,
-                        color=MUTED,
-                    )
-
-    if model['projects']:
-        doc.heading('Projects')
-        for n, project in enumerate(model['projects']):
-            if n:
-                doc.gap(5)
-            doc.ensure(BODY_LEADING * 3)
-            left = [('B', project['name'])]
-            if project['subtitle']:
-                left += [('R', ' — ' + project['subtitle'])]
-            doc.split_line(left, project['dates'])
-            for detail in project['details']:
+            title = [('B', role['title'])]
+            if r == 0:
+                title += [('R', ' — '), ('B', job['company'])]
+            doc.split_line(title, role['dates'])
+            if r == 0 and meta:
+                doc.paragraph([('I', meta)], size=SMALL_SIZE, leading=SMALL_LEADING, color=MUTED)
+            for detail in role['details']:
                 doc.paragraph([('R', detail)], bullet=True)
-            if project['technologies']:
-                doc.paragraph(
-                    [('B', 'Technologies: '), ('R', ', '.join(project['technologies']))],
-                    size=SMALL_SIZE,
-                    leading=SMALL_LEADING,
-                    indent=9.0,
-                    color=MUTED,
-                )
+            _technologies(doc, role['technologies'])
 
-    if model['certifications']:
-        doc.heading('Certifications')
-        for cert in model['certifications']:
-            left = [('B', cert['name'])] + ([('R', ' — ' + cert['issuer'])] if cert['issuer'] else [])
-            doc.split_line(left, cert['dates'])
 
-    if model['education']:
-        doc.heading('Education')
-        for n, entry in enumerate(model['education']):
-            if n:
-                doc.gap(3)
-            doc.ensure(BODY_LEADING * 2)
-            doc.split_line([('B', entry['degree']), ('R', ' — ' + entry['school'])], entry['dates'])
-            if entry['location']:
-                doc.paragraph([('I', entry['location'])], size=SMALL_SIZE, leading=SMALL_LEADING, color=MUTED)
+def _projects(doc, model):
+    if not model['projects']:
+        return
+    doc.heading('Projects')
+    for n, project in enumerate(model['projects']):
+        if n:
+            doc.gap(5)
+        doc.ensure(BODY_LEADING * 3)
+        left = [('B', project['name'])]
+        if project['subtitle']:
+            left += [('R', ' — ' + project['subtitle'])]
+        doc.split_line(left, project['dates'])
+        for detail in project['details']:
+            doc.paragraph([('R', detail)], bullet=True)
+        _technologies(doc, project['technologies'])
 
-    if model['languages']:
-        doc.heading('Languages')
-        parts = []
-        for i, lang in enumerate(model['languages']):
-            if i:
-                parts.append(('R', '   ·   '))
-            parts.append(('B', lang['language']))
-            if lang['level']:
-                parts.append(('R', f' ({lang["level"]})'))
-        doc.paragraph(parts)
+
+def _certifications(doc, model):
+    if not model['certifications']:
+        return
+    doc.heading('Certifications')
+    for cert in model['certifications']:
+        left = [('B', cert['name'])] + ([('R', ' — ' + cert['issuer'])] if cert['issuer'] else [])
+        doc.split_line(left, cert['dates'])
+
+
+def _education(doc, model):
+    if not model['education']:
+        return
+    doc.heading('Education')
+    for n, entry in enumerate(model['education']):
+        if n:
+            doc.gap(3)
+        doc.ensure(BODY_LEADING * 2)
+        doc.split_line([('B', entry['degree']), ('R', ' — ' + entry['school'])], entry['dates'])
+        if entry['location']:
+            doc.paragraph([('I', entry['location'])], size=SMALL_SIZE, leading=SMALL_LEADING, color=MUTED)
+
+
+def _languages(doc, model):
+    if not model['languages']:
+        return
+    doc.heading('Languages')
+    parts = []
+    for i, lang in enumerate(model['languages']):
+        if i:
+            parts.append(('R', '   ·   '))
+        parts.append(('B', lang['language']))
+        if lang['level']:
+            parts.append(('R', f' ({lang["level"]})'))
+    doc.paragraph(parts)
+
+
+_SECTION_RENDERERS = {
+    'summary': _summary,
+    'skills': _skills,
+    'experience': _experience,
+    'projects': _projects,
+    'certifications': _certifications,
+    'education': _education,
+    'languages': _languages,
+}
+
+
+def _layout(model):
+    doc = _Layout()
+    _header(doc, model)
+    for section in model.get('sections', SECTIONS):
+        _SECTION_RENDERERS[section](doc, model)
 
     # Footers go on last, once the page count is known.
     total = len(doc.pages)
@@ -628,6 +746,98 @@ def _layout(model):
 
 
 # ---------------------------------------------------------------------------
+# Page budget
+# ---------------------------------------------------------------------------
+
+
+def _cuts(model):
+    """Trim `model` in place, one step at a time, least important content first.
+
+    A generator, so the caller can apply any number of steps and measure the result. The
+    order below is the editorial policy. Entries marked `"cv": "always"` are never touched,
+    and whole roles are never dropped, since a gap in a career reads worse than a long CV.
+
+      1. Technologies lines under projects
+      2. Project bullets beyond the first, last project first
+      3. Technologies lines under roles, oldest first
+      4. Bullets beyond the first on roles outside the recent window, oldest first
+      5. Bullets beyond the third on any role, oldest first
+      6. Whole projects, last listed first
+      7. Bullets beyond the second on any role, oldest first
+      8. Bullets beyond the first on any role, oldest first
+    """
+    roles = [role for job in reversed(model['experience']) for role in reversed(job['roles']) if not role['pinned']]
+    older = [role for role in roles if role['older']]
+    projects = [p for p in reversed(model['projects']) if not p['pinned']]
+
+    def trim(items, keep):
+        for item in items:
+            while len(item['details']) > keep:
+                item['details'].pop()
+                yield
+
+    if any(p['technologies'] for p in projects):
+        for project in projects:
+            project['technologies'] = []
+        yield
+    yield from trim(projects, 1)
+    for role in roles:
+        if role['technologies']:
+            role['technologies'] = []
+            yield
+    yield from trim(older, 1)
+    yield from trim(roles, 3)
+    for project in projects:
+        model['projects'].remove(project)
+        yield
+    yield from trim(roles, 2)
+    yield from trim(roles, 1)
+
+
+def _trimmed(model, steps):
+    """A copy of `model` with the first `steps` cuts applied."""
+    trimmed = copy.deepcopy(model)
+    # zip draws from range first, so it stops after exactly `steps` cuts and never runs one more.
+    for _ in zip(range(steps), _cuts(trimmed)):
+        pass
+    return trimmed
+
+
+def fit(model):
+    """Lay out `model`, trimming it to its page budget. Returns (fitted model, pages).
+
+    Takes the fewest cuts that bring the CV within budget, found by binary search over the
+    number of steps `_cuts` yields: each extra step only removes content, so page count never
+    rises with it. That costs a handful of layouts rather than one per step, which matters on
+    a fraction of a vCPU.
+
+    The result is a pure function of the model and RENDERER_VERSION, so fitting happens at
+    render time and the cache key stays the cheap digest of the untrimmed model. If even the
+    fully trimmed CV is over budget it is returned as is: pinned content wins over the budget.
+    """
+    pages = _layout(model)
+    budget = model.get('maxPages') or 0
+    if not budget or len(pages) <= budget:
+        return model, pages
+
+    total = sum(1 for _ in _cuts(copy.deepcopy(model)))
+    low, high = 1, total
+    best = None
+    while low <= high:
+        mid = (low + high) // 2
+        candidate = _trimmed(model, mid)
+        candidate_pages = _layout(candidate)
+        if len(candidate_pages) <= budget:
+            best, high = (candidate, candidate_pages), mid - 1
+        else:
+            low = mid + 1
+    if best is None:
+        candidate = _trimmed(model, total)
+        best = (candidate, _layout(candidate))
+    return best
+
+
+# ---------------------------------------------------------------------------
 # PDF serialisation
 # ---------------------------------------------------------------------------
 
@@ -640,7 +850,7 @@ def _text_string(value):
 def render_pdf(model, generated_at=None):
     """Lay the model out and serialise it. Returns the PDF as bytes."""
     generated_at = generated_at or datetime.now(timezone.utc)
-    pages = _layout(model)
+    model, pages = fit(model)
 
     objects = []  # index i holds object number i + 1
 
@@ -703,7 +913,7 @@ def render_pdf(model, generated_at=None):
         + b' /Keywords '
         + _text_string(keywords)
         + b' /Creator '
-        + _text_string(model['links'][0]['label'] if model['links'] else 'CloudResume')
+        + _text_string(next((k['label'] for k in model['links'] if k['url'].startswith('http')), 'CloudResume'))
         + f' /Producer (CloudResume renderResume v{RENDERER_VERSION}) /CreationDate ({stamp}) >>'.encode('ascii')
     )
 

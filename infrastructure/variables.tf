@@ -127,3 +127,8 @@ variable "api_throttle_download_burst_limit" {
   type        = number
   default     = 5
 }
+variable "mail_retention_days" {
+  description = "Days a message received for the CV contact alias is kept in the private mail bucket after forwarding"
+  type        = number
+  default     = 7
+}

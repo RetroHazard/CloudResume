@@ -29,6 +29,7 @@ SOURCE_FILES = {
     'projects': 'project_data.json',
     'skills': 'skill_data.json',
     'socials': 'socials_data.json',
+    'cv': 'cv_data.json',
 }
 
 SITE = 'https://example.com'
@@ -112,7 +113,9 @@ class ModelTests(unittest.TestCase):
         for skill in self.source['skills']['core_skills']:
             level = int(skill['level'].rstrip('%'))
             with self.subTest(skill=skill['name']):
-                self.assertEqual(skill['name'] in listed, level >= renderResume.SKILL_MIN_LEVEL)
+                self.assertEqual(
+                    skill['name'] in listed, level >= renderResume.settings_from(self.source)['skillMinLevel']
+                )
 
     def test_older_roles_are_condensed(self):
         source = {
@@ -146,6 +149,203 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(renderResume.file_name({'name': 'Alexander Bracken'}), 'BRACKEN_ALEXANDER_Resume.pdf')
         self.assertEqual(renderResume.file_name({'name': 'Zoë  de la Cruz'}), 'CRUZ_ZOE_DE_LA_Resume.pdf')
         self.assertEqual(renderResume.file_name({'name': ''}), 'Resume.pdf')
+
+
+def minimal_source(**extra):
+    """A small, fully controlled source: two jobs, three projects, a handful of skills."""
+    source = {
+        'personal': {'fullName': 'Alexander Bracken', 'jobTitle': 'Engineer', 'location': 'Tokyo'},
+        'career': {
+            'Experience': [
+                {'company': 'Now', 'job_title': 'Lead', 'start': '2024-01', 'end': '---', 'details': list('abcde')},
+                {
+                    'company': 'Then',
+                    'job_title': 'Analyst',
+                    'start': '2008-01',
+                    'end': '2010-01',
+                    'details': list('vwxyz'),
+                },
+            ]
+        },
+        'projects': {
+            'Projects': [
+                {
+                    'name': f'P{n}',
+                    'start': '2024',
+                    'end': 'NOW',
+                    'details': list('pqr'),
+                    'technologies': [{'name': 'Go'}],
+                }
+                for n in range(3)
+            ]
+        },
+        'skills': {
+            'core_skills': [
+                {'name': 'Strong', 'category': 'Cloud', 'level': '90%'},
+                {'name': 'Weak', 'category': 'Cloud', 'level': '20%'},
+            ]
+        },
+    }
+    source.update(extra)
+    return source
+
+
+class SettingsTests(unittest.TestCase):
+    def test_defaults_apply_without_a_settings_file(self):
+        self.assertEqual(renderResume.settings_from({}), renderResume.DEFAULT_SETTINGS)
+
+    def test_published_settings_files_are_well_formed(self):
+        # Every key in cv_data.json must survive validation unchanged; a typo would otherwise
+        # fall back to the default silently.
+        for data_set in ('production', 'development'):
+            raw = json.loads((DATA / data_set / 'cv_data.json').read_text('utf-8'))
+            with self.subTest(data_set=data_set):
+                self.assertEqual(set(raw) - set(renderResume.DEFAULT_SETTINGS), set())
+                settings = renderResume.settings_from({'cv': raw})
+                self.assertEqual({k: settings[k] for k in raw}, raw)
+
+    def test_malformed_values_fall_back_rather_than_fail(self):
+        settings = renderResume.settings_from(
+            {'cv': {'maxPages': 'two', 'skillMinLevel': 900, 'contactEmail': 'yes', 'sections': ['skills', 'bogus']}}
+        )
+        self.assertEqual(settings['maxPages'], renderResume.DEFAULT_SETTINGS['maxPages'])
+        self.assertEqual(settings['skillMinLevel'], 100)
+        self.assertIs(settings['contactEmail'], True)
+        self.assertEqual(settings['sections'], ['skills'])
+
+    def test_rules_come_from_the_data(self):
+        cv = {'skillMinLevel': 10, 'recentYears': 30, 'projectBullets': 3}
+        model = renderResume.build_model(minimal_source(cv=cv), SITE, today=TODAY)
+        self.assertEqual(model['technical'][0]['items'], ['Strong', 'Weak'])
+        self.assertEqual(len(model['experience'][1]['roles'][0]['details']), 5)
+        self.assertEqual(len(model['projects'][0]['details']), 3)
+
+    def test_section_order_and_omission(self):
+        cv = {'sections': ['experience', 'summary'], 'maxPages': 0}
+        source = minimal_source(cv=cv)
+        source['personal']['summary'] = ['Hello there.']
+        text = shown_text(renderResume.render_pdf(renderResume.build_model(source, SITE, today=TODAY)))
+        self.assertLess(text.index('EXPERIENCE'), text.index('SUMMARY'))
+        self.assertNotIn('SKILLS', text)
+        self.assertNotIn('PROJECTS', text)
+
+    def test_a_settings_change_is_a_new_cv(self):
+        before = renderResume.content_digest(renderResume.build_model(minimal_source(), SITE, today=TODAY))
+        after = renderResume.content_digest(
+            renderResume.build_model(minimal_source(cv={'maxPages': 3}), SITE, today=TODAY)
+        )
+        self.assertNotEqual(before, after)
+
+
+class ItemFlagTests(unittest.TestCase):
+    def test_cv_false_keeps_an_entry_off_the_cv(self):
+        source = minimal_source()
+        source['projects']['Projects'][1]['cv'] = False
+        source['career']['Experience'][1]['cv'] = False
+        source['skills']['core_skills'][0]['cv'] = False
+        model = renderResume.build_model(source, SITE, today=TODAY)
+        self.assertEqual([p['name'] for p in model['projects']], ['P0', 'P2'])
+        self.assertEqual([j['company'] for j in model['experience']], ['Now'])
+        self.assertEqual(model['technical'], [])
+
+    def test_always_overrides_the_rules(self):
+        source = minimal_source()
+        source['skills']['core_skills'][1]['cv'] = 'always'
+        source['career']['Experience'][1]['cv'] = 'always'
+        model = renderResume.build_model(source, SITE, today=TODAY)
+        self.assertIn('Weak', model['technical'][0]['items'])
+        self.assertEqual(len(model['experience'][1]['roles'][0]['details']), 5)
+
+    def test_cv_bullets_sets_the_count(self):
+        source = minimal_source()
+        source['career']['Experience'][0]['cvBullets'] = 1
+        source['projects']['Projects'][0]['cvBullets'] = 3
+        model = renderResume.build_model(source, SITE, today=TODAY)
+        self.assertEqual(model['experience'][0]['roles'][0]['details'], ['a'])
+        self.assertEqual(model['projects'][0]['details'], list('pqr'))
+
+
+class PageBudgetTests(unittest.TestCase):
+    def long_source(self, **cv):
+        source = minimal_source(cv=dict(cv))
+        bullet = 'Delivered a measurable outcome across a large and demanding engineering organisation. ' * 3
+        for job in source['career']['Experience']:
+            job['details'] = [bullet] * 6
+            job['technologies'] = [{'name': 'Terraform'}]
+        for project in source['projects']['Projects']:
+            project['details'] = [bullet] * 3
+        source['career']['Experience'] *= 4
+        return source
+
+    def pages(self, model):
+        return len(renderResume.fit(model)[1])
+
+    def test_an_over_budget_cv_is_trimmed_to_fit(self):
+        model = renderResume.build_model(self.long_source(maxPages=0), SITE, today=TODAY)
+        self.assertGreater(self.pages(model), 1)
+        model['maxPages'] = 1
+        fitted, pages = renderResume.fit(model)
+        self.assertEqual(len(pages), 1)
+        # Never drops a role, however tight the budget.
+        self.assertEqual(sum(len(j['roles']) for j in fitted['experience']), 8)
+
+    def test_trims_the_least_important_content_first(self):
+        model = renderResume.build_model(self.long_source(maxPages=0), SITE, today=TODAY)
+        model['maxPages'] = self.pages(model) - 1 or 1
+        fitted, _ = renderResume.fit(model)
+        # Project technologies go before anything in Experience is touched.
+        self.assertTrue(all(not p['technologies'] for p in fitted['projects']))
+        self.assertEqual(len(fitted['experience'][0]['roles'][0]['details']), 6)
+
+    def test_trims_no_more_than_needed(self):
+        model = renderResume.build_model(self.long_source(maxPages=0), SITE, today=TODAY)
+        model['maxPages'] = self.pages(model)
+        self.assertEqual(renderResume.fit(model)[0], model)
+
+    def test_pinned_entries_are_never_trimmed(self):
+        source = self.long_source(maxPages=1)
+        source['career']['Experience'][1]['cv'] = 'always'
+        source['projects']['Projects'][2]['cv'] = 'always'
+        model = renderResume.build_model(source, SITE, today=TODAY)
+        fitted, _ = renderResume.fit(model)
+        self.assertEqual(fitted['experience'][1]['roles'][0]['details'], model['experience'][1]['roles'][0]['details'])
+        self.assertIn('P2', [p['name'] for p in fitted['projects']])
+
+    def test_fitting_does_not_mutate_the_cache_key(self):
+        model = renderResume.build_model(self.long_source(maxPages=1), SITE, today=TODAY)
+        before = renderResume.content_digest(model)
+        renderResume.render_pdf(model)
+        self.assertEqual(renderResume.content_digest(model), before)
+
+
+class ContactLineTests(unittest.TestCase):
+    def test_contact_address_leads_the_header_and_is_a_mailto_link(self):
+        model = renderResume.build_model(
+            minimal_source(), SITE, today=TODAY, contact_email='alexander.k7q2mx@example.com'
+        )
+        self.assertEqual(
+            model['links'][0], {'label': 'alexander.k7q2mx@example.com', 'url': 'mailto:alexander.k7q2mx@example.com'}
+        )
+        pdf = renderResume.render_pdf(model)
+        self.assertIn(b'/URI (mailto:alexander.k7q2mx@example.com)', pdf)
+        # The site, not the address, is what the document metadata names as its origin.
+        self.assertIn(renderResume._text_string('example.com'), pdf)
+
+    def test_settings_can_suppress_the_address(self):
+        model = renderResume.build_model(
+            minimal_source(cv={'contactEmail': False}), SITE, today=TODAY, contact_email='a.b@example.com'
+        )
+        self.assertNotIn('a.b@example.com', json.dumps(model))
+
+    def test_the_header_wraps_instead_of_overflowing(self):
+        model = renderResume.build_model(
+            minimal_source(), SITE, today=TODAY, contact_email='a-very-long-forwarding-address.k7q2mx@example.com'
+        )
+        model['links'] += [{'label': 'linkedin.com/in/a-rather-long-profile-name', 'url': 'https://x'}] * 2
+        renderResume.render_pdf(model)
+        page = renderResume.fit(model)[1][0]
+        for x1, _, x2, _, _ in page.links:
+            self.assertLessEqual(x2, renderResume.PAGE_W - renderResume.MARGIN_X + 0.01)
 
 
 class DigestTests(unittest.TestCase):

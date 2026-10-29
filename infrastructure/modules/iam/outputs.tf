@@ -26,6 +26,10 @@ output "aws_iam_role_crc-DownloadIssuer_arn" {
   value = aws_iam_role.crc-DownloadIssuer.arn
 }
 
+output "aws_iam_role_crc-MailForwarder_arn" {
+  value = aws_iam_role.crc-MailForwarder.arn
+}
+
 // IAM Policy Documents
 output "aws_iam_policy_document_crc-github-s3-actions_arn" {
   value = aws_iam_policy.crc-GitHub-S3Actions.arn
