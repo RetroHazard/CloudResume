@@ -49,18 +49,6 @@ resource "aws_wafv2_web_acl" "crc-web-acl" {
       managed_rule_group_statement {
         name        = "AWSManagedRulesAnonymousIpList"
         vendor_name = "AWS"
-
-        # Counted, not blocked. HostingProviderIPList matches cloud and hosting address
-        # space, which is where the production smoke test runs from (GitHub-hosted
-        # runners) and where every link-preview crawler lives — LinkedIn's and Slack's
-        # included, which for a CV is most of the point of having a URL. The VPN, Tor and
-        # proxy matches in the same group still block.
-        rule_action_override {
-          name = "HostingProviderIPList"
-          action_to_use {
-            count {}
-          }
-        }
       }
     }
 

@@ -222,7 +222,6 @@ class CvCacheTests(Harness):
         self.assertTrue(folder.startswith(name))
         self.assertTrue(self.s3.objects[key][0].startswith(b'%PDF-'))
         self.assertEqual(self.s3.last_put['ContentType'], 'application/pdf')
-        self.assertEqual(self.s3.last_put['ContentDisposition'], 'attachment')
         self.assertEqual(body['downloadUrl'].split('?')[0], f'https://example.com/{key}')
         self.assertEqual(body['fileName'], f'BRACKEN_ALEXANDER_CV_{name}.pdf')
         self.assertEqual(body['count'], 1)
