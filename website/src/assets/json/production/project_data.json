@@ -146,6 +146,72 @@
             "cvBullets": 1
         },
         {
+            "name": "Animatic",
+            "company": "Hollow Souls",
+            "category": "Desktop Application",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2026",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Building a native Rust successor to AniDB O'Matic, a Windows anime-library manager, for Windows and Linux: an egui desktop app over a SQLite library that hashes local media in a single pass (ED2K, CRC32, MD5, SHA-1), identifies files against AniDB, and keeps the user's MyList in sync.",
+                "Designed a durable, offline-first synchronization queue that coalesces repeated edits to the latest intent, retains failures for review, and persists cooldowns across restarts, with AniDB's UDP and HTTP request spacing and once-a-day limits enforced program-wide and saved before every request, so a restart never resets them.",
+                "Implemented a read-only importer for the legacy application's encrypted databanks that never modifies the originals, a reviewable migration of its settings, and a compatible implementation of its file-renaming expression language with diagnostics, preview, and explicit confirmation.",
+                "Split the codebase into three crates (a storage-free AniDB protocol client, a core library, and the desktop app) covered by more than 600 Rust tests, with credentials kept in the operating-system keystore, validated library backup and restore, and explicit, checksum-verified in-app updates from GitHub releases."
+            ],
+            "links": [
+                {
+                    "repo": [
+                        {
+                            "website": "https://github.com/RetroHazard/animatic",
+                            "icon": "simple-icons:git"
+                        }
+                    ],
+                    "docs": [
+                        {
+                            "website": "https://github.com/RetroHazard/animatic/wiki",
+                            "icon": "fa6-solid:book"
+                        }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/animatic",
+                            "icon": "fa6-solid:ghost"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Rust",
+                    "logo": "simple-icons:rust",
+                    "website": "https://www.rust-lang.org/"
+                },
+                {
+                    "name": "SQLite",
+                    "logo": "simple-icons:sqlite",
+                    "website": "https://www.sqlite.org/"
+                },
+                {
+                    "name": "Windows",
+                    "logo": "simple-icons:windows",
+                    "website": "https://www.microsoft.com/windows"
+                },
+                {
+                    "name": "Linux",
+                    "logo": "simple-icons:linux",
+                    "website": "https://www.kernel.org/"
+                },
+                {
+                    "name": "GitHub Actions",
+                    "logo": "simple-icons:githubactions",
+                    "website": "https://github.com/features/actions"
+                }
+            ],
+            "cv": false
+        },
+        {
             "name": "Japan Immigration Statistics Dashboard",
             "company": "Hollow Souls",
             "category": "Frontend",
