@@ -146,6 +146,72 @@
             "cvBullets": 1
         },
         {
+            "name": "Animatic",
+            "company": "Hollow Souls",
+            "category": "Desktop Application",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2026",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Building a native Rust successor to AniDB O'Matic, a Windows anime-library manager, for Windows and Linux: an egui desktop app over a SQLite library that hashes local media in a single pass (ED2K, CRC32, MD5, SHA-1), identifies files against AniDB, and keeps the user's MyList in sync.",
+                "Designed a durable, offline-first synchronization queue that coalesces repeated edits to the latest intent, retains failures for review, and persists cooldowns across restarts, with AniDB's UDP and HTTP request spacing and once-a-day limits enforced program-wide and saved before every request, so a restart never resets them.",
+                "Implemented a read-only importer for the legacy application's encrypted databanks that never modifies the originals, a reviewable migration of its settings, and a compatible implementation of its file-renaming expression language with diagnostics, preview, and explicit confirmation.",
+                "Split the codebase into three crates (a storage-free AniDB protocol client, a core library, and the desktop app) covered by more than 600 Rust tests, with credentials kept in the operating-system keystore, validated library backup and restore, and explicit, checksum-verified in-app updates from GitHub releases."
+            ],
+            "links": [
+                {
+                    "repo": [
+                        {
+                            "website": "https://github.com/RetroHazard/animatic",
+                            "icon": "simple-icons:git"
+                        }
+                    ],
+                    "docs": [
+                        {
+                            "website": "https://github.com/RetroHazard/animatic/wiki",
+                            "icon": "fa6-solid:book"
+                        }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/animatic",
+                            "icon": "fa6-solid:ghost"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Rust",
+                    "logo": "simple-icons:rust",
+                    "website": "https://www.rust-lang.org/"
+                },
+                {
+                    "name": "SQLite",
+                    "logo": "simple-icons:sqlite",
+                    "website": "https://www.sqlite.org/"
+                },
+                {
+                    "name": "Windows",
+                    "logo": "simple-icons:windows",
+                    "website": "https://www.microsoft.com/windows"
+                },
+                {
+                    "name": "Linux",
+                    "logo": "simple-icons:linux",
+                    "website": "https://www.kernel.org/"
+                },
+                {
+                    "name": "GitHub Actions",
+                    "logo": "simple-icons:githubactions",
+                    "website": "https://github.com/features/actions"
+                }
+            ],
+            "cv": false
+        },
+        {
             "name": "Japan Immigration Statistics Dashboard",
             "company": "Hollow Souls",
             "category": "Frontend",
@@ -225,7 +291,75 @@
                     "logo": "simple-icons:github",
                     "website": "https://github.com"
                 }
-            ]
+            ],
+            "cvBullets": 1
+        },
+        {
+            "name": "Handoff for UMG",
+            "company": "Hollow Souls",
+            "category": "Commercial Editor Plugin",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2026",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Designed and shipped a commercial Unreal Engine 5.7/5.8 editor plugin on Fab that turns Figma designs into ordinary UMG Widget Blueprints and re-imports later design revisions as a per-property three-way merge, so the Blueprint graphs, bindings, and hand edits built on top of an import survive every design change.",
+                "Built the re-import planner around a deterministic manifest of per-property hashes (last design value, value written, accepted local edit): design-only changes apply, Unreal-only edits are kept, and changes on both sides surface as conflicts in a reviewable diff window that defaults to keeping the Unreal edit; re-importing an unchanged package plans zero changes.",
+                "Engineered stable widget identity with frozen names derived from an FNV-1a hash of each design node id and deterministic widget GUIDs, plus a weighted fallback matcher (hierarchy path, layer name, type, geometry) that re-links copy-pasted or re-identified frames automatically only above a strict threshold and offers weaker matches as suggestions.",
+                "Protected projects with a safety net that backs up affected assets and the manifest before every apply and restores them byte for byte, locks widgets referenced by graphs, bindings, animations, or BindWidget members against removal, and checks files out of source control when needed.",
+                "Shipped a free companion Figma exporter and a documented, tool-neutral package format, an optional CommonUI mode generating text and button styles, CommonButtonBase buttons, and CommonActivatableWidget screens, and automation through a Python API, a CI commandlet with exit codes, 16 built-in setup health checks, and one-click support bundles."
+            ],
+            "links": [
+                {
+                    "product": [
+                        {
+                            "website": "https://www.fab.com/listings/bb22393f-f7ad-4123-a827-58b9562d9363",
+                            "icon": "material-symbols:package-2-sharp"
+                        }
+                    ],
+                    "docs": [
+                        {
+                            "website": "https://github.com/Hollow-Soul-Studios/Handoff/blob/main/docs/umg/plugin-readme.md",
+                            "icon": "fa6-solid:book"
+                        }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/handoff-for-umg",
+                            "icon": "fa6-solid:ghost"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Unreal Engine",
+                    "logo": "simple-icons:unrealengine",
+                    "website": "https://www.unrealengine.com/"
+                },
+                {
+                    "name": "C++",
+                    "logo": "ph:file-cpp-fill",
+                    "website": "https://cplusplus.com/"
+                },
+                {
+                    "name": "Python",
+                    "logo": "simple-icons:python",
+                    "website": "https://www.python.org"
+                },
+                {
+                    "name": "Figma",
+                    "logo": "simple-icons:figma",
+                    "website": "https://www.figma.com/"
+                },
+                {
+                    "name": "GitHub",
+                    "logo": "simple-icons:github",
+                    "website": "https://github.com"
+                }
+            ],
+            "cvBullets": 1
         },
         {
             "name": "Keystone Prefabs",
