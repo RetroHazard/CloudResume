@@ -225,7 +225,75 @@
                     "logo": "simple-icons:github",
                     "website": "https://github.com"
                 }
-            ]
+            ],
+            "cvBullets": 1
+        },
+        {
+            "name": "Handoff for UMG",
+            "company": "Hollow Souls",
+            "category": "Commercial Editor Plugin",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2026",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Designed and shipped a commercial Unreal Engine 5.7/5.8 editor plugin on Fab that turns Figma designs into ordinary UMG Widget Blueprints and re-imports later design revisions as a per-property three-way merge, so the Blueprint graphs, bindings, and hand edits built on top of an import survive every design change.",
+                "Built the re-import planner around a deterministic manifest of per-property hashes (last design value, value written, accepted local edit): design-only changes apply, Unreal-only edits are kept, and changes on both sides surface as conflicts in a reviewable diff window that defaults to keeping the Unreal edit; re-importing an unchanged package plans zero changes.",
+                "Engineered stable widget identity with frozen names derived from an FNV-1a hash of each design node id and deterministic widget GUIDs, plus a weighted fallback matcher (hierarchy path, layer name, type, geometry) that re-links copy-pasted or re-identified frames automatically only above a strict threshold and offers weaker matches as suggestions.",
+                "Protected projects with a safety net that backs up affected assets and the manifest before every apply and restores them byte for byte, locks widgets referenced by graphs, bindings, animations, or BindWidget members against removal, and checks files out of source control when needed.",
+                "Shipped a free companion Figma exporter and a documented, tool-neutral package format, an optional CommonUI mode generating text and button styles, CommonButtonBase buttons, and CommonActivatableWidget screens, and automation through a Python API, a CI commandlet with exit codes, 16 built-in setup health checks, and one-click support bundles."
+            ],
+            "links": [
+                {
+                    "product": [
+                        {
+                            "website": "https://www.fab.com/listings/bb22393f-f7ad-4123-a827-58b9562d9363",
+                            "icon": "material-symbols:package-2-sharp"
+                        }
+                    ],
+                    "docs": [
+                        {
+                            "website": "https://github.com/Hollow-Soul-Studios/Handoff/blob/main/docs/umg/plugin-readme.md",
+                            "icon": "fa6-solid:book"
+                        }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/handoff-for-umg",
+                            "icon": "fa6-solid:ghost"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Unreal Engine",
+                    "logo": "simple-icons:unrealengine",
+                    "website": "https://www.unrealengine.com/"
+                },
+                {
+                    "name": "C++",
+                    "logo": "ph:file-cpp-fill",
+                    "website": "https://cplusplus.com/"
+                },
+                {
+                    "name": "Python",
+                    "logo": "simple-icons:python",
+                    "website": "https://www.python.org"
+                },
+                {
+                    "name": "Figma",
+                    "logo": "simple-icons:figma",
+                    "website": "https://www.figma.com/"
+                },
+                {
+                    "name": "GitHub",
+                    "logo": "simple-icons:github",
+                    "website": "https://github.com"
+                }
+            ],
+            "cvBullets": 1
         },
         {
             "name": "Keystone Prefabs",
