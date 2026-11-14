@@ -209,7 +209,7 @@
                     "website": "https://github.com/features/actions"
                 }
             ],
-            "cv": false
+            "cvBullets": 1
         },
         {
             "name": "Japan Immigration Statistics Dashboard",
@@ -291,8 +291,7 @@
                     "logo": "simple-icons:github",
                     "website": "https://github.com"
                 }
-            ],
-            "cvBullets": 1
+            ]
         },
         {
             "name": "Handoff for Slate",
@@ -425,7 +424,7 @@
                     "website": "https://github.com"
                 }
             ],
-            "cvBullets": 1
+            "cv": false
         },
         {
             "name": "Keystone Prefabs",
@@ -487,7 +486,7 @@
                     "website": "https://github.com"
                 }
             ],
-            "cvBullets": 1
+            "cv": false
         },
         {
             "name": "Interactive Switches",
@@ -559,7 +558,7 @@
                     "website": "https://www.adobe.com/creativecloud.html"
                 }
             ],
-            "cvBullets": 1
+            "cv": false
         }
     ]
 }
