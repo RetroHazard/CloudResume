@@ -209,7 +209,7 @@
                     "website": "https://github.com/features/actions"
                 }
             ],
-            "cv": false
+            "cvBullets": 1
         },
         {
             "name": "Japan Immigration Statistics Dashboard",
@@ -291,8 +291,73 @@
                     "logo": "simple-icons:github",
                     "website": "https://github.com"
                 }
+            ]
+        },
+        {
+            "name": "Handoff for Slate",
+            "company": "Hollow Souls",
+            "category": "Commercial Editor Plugin",
+            "role": "Solo Dev",
+            "size": "1",
+            "start": "2026",
+            "end": "NOW",
+            "logo": "./images/logos/companies/hollowsouls.png",
+            "details": [
+                "Designed and shipped a commercial Unreal Engine 5.7/5.8 editor plugin on Fab that generates readable Slate C++ from Figma designs, one SCompoundWidget class per screen and component plus a style class, depending only on Slate and SlateCore, and re-imports design revisions as a line-level three-way merge so hand-written code survives every design change.",
+                "Applied the generation-gap pattern so each class is split into regenerated Generated/S<Name>Base files owned by the tool and S<Name> files owned by the developer, written once and never touched again, with deterministic output so the same package always produces the same files, in the same order, with the same names.",
+                "Built the merge around per-file baselines of what the last import generated: design-only changes apply, hand edits inside generated files are kept, and overlapping changes surface as conflicts in a reviewable diff window that defaults to keeping the developer's lines; members referenced by the developer's code are never removed or silently retyped.",
+                "Shared the package format, companion Figma exporter, identity and re-link matching, and safety net with Handoff for UMG, and added a pre-compile preview that builds the screens with live widgets, a Python API, a CI commandlet with exit codes, and 16 setup health checks that verify module dependencies and packaging."
             ],
-            "cvBullets": 1
+            "links": [
+                {
+                    "product": [
+                        {
+                            "website": "https://www.fab.com/listings/eac04466-088a-424e-8edb-c99a8bf6b968",
+                            "icon": "material-symbols:package-2-sharp"
+                        }
+                    ],
+                    "docs": [
+                        {
+                            "website": "https://github.com/Hollow-Soul-Studios/Handoff/blob/main/docs/slate/plugin-readme.md",
+                            "icon": "fa6-solid:book"
+                        }
+                    ],
+                    "studio": [
+                        {
+                            "website": "https://www.hollowsouls.com/work/handoff-for-slate",
+                            "icon": "fa6-solid:ghost"
+                        }
+                    ]
+                }
+            ],
+            "technologies": [
+                {
+                    "name": "Unreal Engine",
+                    "logo": "simple-icons:unrealengine",
+                    "website": "https://www.unrealengine.com/"
+                },
+                {
+                    "name": "C++",
+                    "logo": "ph:file-cpp-fill",
+                    "website": "https://cplusplus.com/"
+                },
+                {
+                    "name": "Python",
+                    "logo": "simple-icons:python",
+                    "website": "https://www.python.org"
+                },
+                {
+                    "name": "Figma",
+                    "logo": "simple-icons:figma",
+                    "website": "https://www.figma.com/"
+                },
+                {
+                    "name": "GitHub",
+                    "logo": "simple-icons:github",
+                    "website": "https://github.com"
+                }
+            ],
+            "cv": false
         },
         {
             "name": "Handoff for UMG",
@@ -359,7 +424,7 @@
                     "website": "https://github.com"
                 }
             ],
-            "cvBullets": 1
+            "cv": false
         },
         {
             "name": "Keystone Prefabs",
@@ -421,7 +486,7 @@
                     "website": "https://github.com"
                 }
             ],
-            "cvBullets": 1
+            "cv": false
         },
         {
             "name": "Interactive Switches",
@@ -493,7 +558,7 @@
                     "website": "https://www.adobe.com/creativecloud.html"
                 }
             ],
-            "cvBullets": 1
+            "cv": false
         }
     ]
 }
