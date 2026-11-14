@@ -409,7 +409,7 @@ jobs:
       # `pnpm preview` pins --port 5173 because vite preview defaults to 4173
       # while cypress.config.js targets 5173.
       - name: Run Cypress against the preview build
-        uses: cypress-io/github-action@c541a95ea92d9239347a2355f2e895cd4b3f8060 # v6
+        uses: cypress-io/github-action@4ce68f262a3888d22cf3175d62010a145ba737ee # v6
         with:
           working-directory: website
           install: false
@@ -420,7 +420,7 @@ jobs:
 
       - name: Upload screenshots on failure
         if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: cypress-screenshots
           path: website/cypress/screenshots
@@ -775,7 +775,7 @@ jobs:
           ${{ needs.changes.outputs.website == 'true'
               && needs.web-checks.result != 'failure' && needs.web-checks.result != 'cancelled'
               && needs.web-e2e.result    != 'failure' && needs.web-e2e.result    != 'cancelled' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: verified-web-${{ needs.changes.outputs.web_digest }}
           path: marker.txt
@@ -792,7 +792,7 @@ jobs:
         if: >-
           ${{ needs.changes.outputs.python == 'true'
               && needs.py-lint.result != 'failure' && needs.py-lint.result != 'cancelled' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: verified-ruff-${{ needs.changes.outputs.ruff_digest }}
           path: marker.txt
@@ -803,7 +803,7 @@ jobs:
         if: >-
           ${{ needs.changes.outputs.github == 'true'
               && needs.actionlint.result != 'failure' && needs.actionlint.result != 'cancelled' }}
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: verified-actionlint-${{ needs.changes.outputs.actionlint_digest }}
           path: marker.txt
@@ -1076,7 +1076,7 @@ jobs:
       # Both secrets are registered, so Actions masks them in the run banner
       # Cypress prints on start.
       - name: Smoke test production
-        uses: cypress-io/github-action@c541a95ea92d9239347a2355f2e895cd4b3f8060 # v6
+        uses: cypress-io/github-action@4ce68f262a3888d22cf3175d62010a145ba737ee # v6
         with:
           working-directory: website
           install: false
@@ -1098,7 +1098,7 @@ jobs:
 
       - name: Upload screenshots on failure
         if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: smoke-screenshots
           path: website/cypress/screenshots
