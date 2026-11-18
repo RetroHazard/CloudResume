@@ -376,15 +376,15 @@
             "category": "Development",
             "level": "35%",
             "logo": "skill-icons:svelte",
-            "website": "https://svelte.dev/"
+            "website": "https://svelte.dev/",
+            "cv": "always"
         },
         {
             "name": "Tailwind CSS",
             "category": "Development",
             "level": "60%",
             "logo": "skill-icons:tailwindcss-dark",
-            "website": "https://tailwindcss.com",
-            "cv": false
+            "website": "https://tailwindcss.com"
         },
         {
             "name": "SideFX Houdini",
