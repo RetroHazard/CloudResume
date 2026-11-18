@@ -376,8 +376,7 @@
             "category": "Development",
             "level": "35%",
             "logo": "skill-icons:svelte",
-            "website": "https://svelte.dev/",
-            "cv": "always"
+            "website": "https://svelte.dev/"
         },
         {
             "name": "Tailwind CSS",
