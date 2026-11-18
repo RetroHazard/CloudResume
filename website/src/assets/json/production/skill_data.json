@@ -18,7 +18,7 @@
         {
             "name": "Google Cloud Platform",
             "category": "Cloud",
-            "level": "25%",
+            "level": "20%",
             "logo": "skill-icons:gcp-dark",
             "website": "https://cloud.google.com/"
         },
@@ -39,7 +39,7 @@
         {
             "name": "Kubernetes",
             "category": "Platform",
-            "level": "60%",
+            "level": "40%",
             "logo": "skill-icons:kubernetes",
             "website": "https://kubernetes.io/"
         },
@@ -62,7 +62,7 @@
         {
             "name": "Entra ID",
             "category": "Security",
-            "level": "45%",
+            "level": "35%",
             "logo": "selfhst:microsoft-entra-id",
             "website": "https://www.microsoft.com/en-us/security/business/identity-access/microsoft-entra-id",
             "cvCategory": "Identity Platforms",
@@ -86,7 +86,7 @@
         {
             "name": "Go",
             "category": "Development",
-            "level": "55%",
+            "level": "45%",
             "logo": "skill-icons:golang",
             "website": "https://go.dev/"
         },
@@ -107,35 +107,35 @@
         {
             "name": "Helm",
             "category": "Platform",
-            "level": "45%",
+            "level": "30%",
             "logo": "simple-icons:helm",
             "website": "https://helm.sh/"
         },
         {
             "name": "ArgoCD",
             "category": "Platform",
-            "level": "35%",
+            "level": "20%",
             "logo": "logos:argo-icon",
             "website": "https://argo-cd.readthedocs.io/"
         },
         {
             "name": "CrowdStrike",
             "category": "Security",
-            "level": "65%",
+            "level": "45%",
             "logo": "selfhst:crowdstrike",
             "website": "https://www.crowdstrike.com/"
         },
         {
             "name": "Zscaler",
             "category": "Security",
-            "level": "65%",
+            "level": "50%",
             "logo": "selfhst:zscaler",
             "website": "https://www.zscaler.com/"
         },
         {
             "name": "Qualys",
             "category": "Security",
-            "level": "60%",
+            "level": "50%",
             "logo": "simple-icons:qualys",
             "website": "https://www.qualys.com/"
         },
@@ -198,7 +198,7 @@
         {
             "name": "Splunk",
             "category": "Security",
-            "level": "45%",
+            "level": "35%",
             "logo": "simple-icons:splunk",
             "website": "https://www.splunk.com/"
         },
@@ -211,29 +211,15 @@
         },
         {
             "name": "Dependabot",
-            "category": "Security",
+            "category": "Platform",
             "level": "50%",
             "logo": "logos:dependabot",
             "website": "https://docs.github.com/en/code-security/dependabot"
         },
         {
-            "name": "AWS Certificate Manager",
-            "category": "Security",
-            "level": "40%",
-            "logo": "logos:aws-certificate-manager",
-            "website": "https://aws.amazon.com/certificate-manager/"
-        },
-        {
-            "name": "Trivy",
-            "category": "Security",
-            "level": "30%",
-            "logo": "simple-icons:trivy",
-            "website": "https://trivy.dev/"
-        },
-        {
             "name": "Grafana",
             "category": "Platform",
-            "level": "50%",
+            "level": "45%",
             "logo": "logos:grafana",
             "website": "https://grafana.com/"
         },
@@ -247,7 +233,7 @@
         {
             "name": "AWS Bedrock",
             "category": "AI",
-            "level": "50%",
+            "level": "45%",
             "logo": "skill-icons:aws-dark",
             "website": "https://aws.amazon.com/bedrock/"
         },
@@ -268,7 +254,7 @@
         {
             "name": "Codex",
             "category": "AI",
-            "level": "45%",
+            "level": "60%",
             "logo": "simple-icons:openai",
             "website": "https://openai.com/codex/"
         },
@@ -303,7 +289,7 @@
         {
             "name": "Unreal Engine",
             "category": "Creative",
-            "level": "60%",
+            "level": "65%",
             "logo": "skill-icons:unrealengine",
             "website": "https://www.unrealengine.com/",
             "cv": false
@@ -332,7 +318,7 @@
         {
             "name": "C++",
             "category": "Development",
-            "level": "35%",
+            "level": "40%",
             "logo": "skill-icons:cpp",
             "website": "https://cplusplus.com/"
         },
@@ -353,42 +339,49 @@
         {
             "name": "JavaScript",
             "category": "Development",
-            "level": "35%",
+            "level": "50%",
             "logo": "skill-icons:javascript",
             "website": "https://developer.mozilla.org/en-US/docs/Web/JavaScript"
         },
         {
             "name": "TypeScript",
             "category": "Development",
-            "level": "40%",
+            "level": "55%",
             "logo": "skill-icons:typescript",
             "website": "https://www.typescriptlang.org"
         },
         {
             "name": "Node.js",
             "category": "Development",
-            "level": "30%",
+            "level": "35%",
             "logo": "skill-icons:nodejs-dark",
             "website": "https://nodejs.org"
         },
         {
             "name": "Next.js",
             "category": "Development",
-            "level": "45%",
+            "level": "55%",
             "logo": "skill-icons:nextjs-dark",
             "website": "https://nextjs.org/"
         },
         {
             "name": "React",
             "category": "Development",
-            "level": "45%",
+            "level": "50%",
             "logo": "skill-icons:react-dark",
             "website": "https://react.dev/"
         },
         {
+            "name": "Svelte",
+            "category": "Development",
+            "level": "35%",
+            "logo": "skill-icons:svelte",
+            "website": "https://svelte.dev/"
+        },
+        {
             "name": "Tailwind CSS",
             "category": "Development",
-            "level": "50%",
+            "level": "60%",
             "logo": "skill-icons:tailwindcss-dark",
             "website": "https://tailwindcss.com",
             "cv": false
@@ -412,7 +405,7 @@
         {
             "name": "Creative Cloud",
             "category": "Creative",
-            "level": "80%",
+            "level": "70%",
             "logo": "simple-icons:adobecreativecloud",
             "website": "https://www.adobe.com/creativecloud.html",
             "cv": false
@@ -434,21 +427,21 @@
         {
             "name": "Microsoft 365",
             "category": "Workplace",
-            "level": "65%",
+            "level": "60%",
             "logo": "selfhst:microsoft-365",
             "website": "https://www.microsoft.com/en-us/microsoft-365"
         },
         {
             "name": "Kali Linux",
             "category": "Security",
-            "level": "40%",
+            "level": "35%",
             "logo": "skill-icons:kali-dark",
             "website": "https://www.kali.org/"
         },
         {
             "name": "macOS",
             "category": "Workplace",
-            "level": "75%",
+            "level": "80%",
             "logo": "skill-icons:apple-dark",
             "website": "https://www.apple.com"
         }
