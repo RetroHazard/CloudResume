@@ -7,7 +7,8 @@
 //
 //   --input <path|url>   contributions JSON (default: public/data/contributions.json)
 //   --out <path>         output STL (default: contributions-skyline.stl)
-//   --scale <mode>       linear | sqrt | level (default: linear)
+//   --scale <mode>       log | sqrt | linear | level (default: log — a one-off spike of
+//                        hundreds would otherwise flatten every ordinary day)
 //   --max-height <mm>    tallest column above the plate (default: 25)
 //   --pitch <mm>         cell pitch (default: 3.4)  --gap <mm>  gap between columns (default: 0.6)
 //   --label <text>       front caption (default: date range + total); --no-label / --no-months to omit
@@ -32,7 +33,7 @@ export const DEFAULTS = {
     base: 3, // plate thickness
     maxHeight: 25, // tallest column above the plate
     minHeight: 1, // shortest non-zero column, so a single contribution is still visible
-    scale: 'linear',
+    scale: 'log',
     pixel: 0.6, // lettering pixel size (5×7 font → 4.2 mm cap height)
     textHeight: 0.8, // how far lettering stands proud of the plate
     months: true,
@@ -144,7 +145,12 @@ export function columnHeight(count, maxCount, o) {
         const level = count <= 2 ? 1 : count <= 5 ? 2 : count <= 9 ? 3 : 4;
         return o.minHeight + (span * (level - 1)) / 3;
     }
-    const t = o.scale === 'sqrt' ? Math.sqrt(count / maxCount) : count / maxCount;
+    const t =
+        o.scale === 'log'
+            ? Math.log1p(count) / Math.log1p(maxCount)
+            : o.scale === 'sqrt'
+              ? Math.sqrt(count / maxCount)
+              : count / maxCount;
     return o.minHeight + span * t;
 }
 
@@ -384,8 +390,8 @@ function parseArgs(argv) {
     for (const k of ['pitch', 'gap', 'margin', 'base', 'maxHeight', 'minHeight', 'pixel', 'textHeight']) {
         if (args[k] !== undefined) args[k] = Number(args[k]);
     }
-    if (args.scale && !['linear', 'sqrt', 'level'].includes(args.scale)) {
-        throw new Error(`--scale must be linear, sqrt or level (got ${args.scale})`);
+    if (args.scale && !['log', 'sqrt', 'linear', 'level'].includes(args.scale)) {
+        throw new Error(`--scale must be log, sqrt, linear or level (got ${args.scale})`);
     }
     return args;
 }

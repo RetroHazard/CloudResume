@@ -64,7 +64,7 @@ describe('contribution skyline STL', () => {
         expect(edgeDefects(meshHeightfield(rects))).toBe(0);
     });
 
-    it.each(['linear', 'sqrt', 'level'])('builds a watertight model of the real data (%s scale)', (scale) => {
+    it.each(['log', 'sqrt', 'linear', 'level'])('builds a watertight model of the real data (%s scale)', (scale) => {
         const model = buildSkyline(data, { scale });
         expect(edgeDefects(model.tris)).toBe(0);
         expect(volume(model.tris)).toBeGreaterThan(model.width * model.depth * DEFAULTS.base);
@@ -85,12 +85,17 @@ describe('contribution skyline STL', () => {
     });
 
     it('scales column height monotonically from the minimum to the maximum', () => {
-        const o = { ...DEFAULTS };
+        const o = { ...DEFAULTS, scale: 'linear' };
         expect(columnHeight(0, 14, o)).toBe(0);
         expect(columnHeight(1, 14, o)).toBeGreaterThanOrEqual(o.minHeight);
         expect(columnHeight(14, 14, o)).toBeCloseTo(o.maxHeight, 6);
         expect(columnHeight(5, 14, { ...o, scale: 'sqrt' })).toBeGreaterThan(columnHeight(5, 14, o));
         expect(columnHeight(10, 14, { ...o, scale: 'level' })).toBeCloseTo(o.maxHeight, 6);
+        // log keeps an ordinary day visible next to a one-off spike
+        const log = { ...o, scale: 'log' };
+        expect(columnHeight(871, 871, log)).toBeCloseTo(o.maxHeight, 6);
+        expect(columnHeight(13, 871, log)).toBeGreaterThan(columnHeight(13, 871, { ...o, scale: 'sqrt' }));
+        expect(columnHeight(13, 871, log)).toBeGreaterThan(o.maxHeight / 3);
     });
 
     it('writes a binary STL whose size matches its triangle count', () => {
