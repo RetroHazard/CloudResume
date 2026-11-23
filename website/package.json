@@ -24,6 +24,7 @@
     "scripts": {
         "test": "vitest run --coverage",
         "typecheck": "tsc --noEmit",
+        "skyline-stl": "node scripts/contributions-stl.mjs",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
         "start-dev": "cross-env VITE_DATA_SET=development vite",
